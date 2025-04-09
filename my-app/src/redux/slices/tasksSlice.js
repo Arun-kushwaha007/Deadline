@@ -29,11 +29,12 @@ const tasksSlice = createSlice({
     },
     updateTaskStatus: (state, action) => {
       const { id, status } = action.payload;
-      const task = state.tasks.find((t) => t.id === id);
+      const task = state.tasks.find((task) => task.id === id);
       if (task) {
         task.status = status;
       }
     },
+    
   },
 });
 
