@@ -6,14 +6,28 @@ import { v4 as uuidv4 } from 'uuid';
 const NewTaskModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [status, setStatus] = useState('todo');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    dispatch(addTask({ id: uuidv4(), title, status }));
+    dispatch(
+      addTask({
+        id: uuidv4(),
+        title,
+        description,
+        dueDate,
+        status,
+      })
+    );
+
+    // Reset all fields
     setTitle('');
+    setDescription('');
+    setDueDate('');
     setStatus('todo');
     onClose();
   };
@@ -27,6 +41,7 @@ const NewTaskModal = ({ isOpen, onClose }) => {
         className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-lg w-96"
       >
         <h2 className="text-lg font-bold mb-4 text-gray-100">Create New Task</h2>
+
         <input
           type="text"
           placeholder="Task title"
@@ -34,6 +49,22 @@ const NewTaskModal = ({ isOpen, onClose }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
+
+        <textarea
+          placeholder="Description"
+          className="w-full p-2 mb-4 rounded bg-slate-700 text-white"
+          rows="3"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <input
+          type="date"
+          className="w-full p-2 mb-4 rounded bg-slate-700 text-white"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+
         <select
           className="w-full p-2 mb-4 rounded bg-slate-700 text-white"
           value={status}
@@ -43,6 +74,7 @@ const NewTaskModal = ({ isOpen, onClose }) => {
           <option value="inprogress">In Progress</option>
           <option value="done">Done</option>
         </select>
+
         <div className="flex justify-end gap-2">
           <button
             type="button"
