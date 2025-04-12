@@ -4,19 +4,18 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  useDraggable,
 } from '@dnd-kit/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { updateTaskStatus } from '../../redux/slices/tasksSlice';
+import { updateTaskStatus, deleteTask } from '../../redux/slices/tasksSlice';
 import NewTaskModal from '../molecules/NewTaskModal';
 import { Button } from '../atoms/Button';
 import DroppableColumn from '../atoms/DroppableColumn';
-import { useDraggable } from '@dnd-kit/core';
-// import TaskDetailsModal from '../molecules/TaskDetailsModal';
 import TaskDetailsModal from '../molecules/TaskDetailsModal';
+import TaskCard from '../molecules/TaskCard';
 
-
-const DraggableTask = ({ task }) => {
+const DraggableTask = ({ task, onView, onEdit, onDelete }) => {
   const { attributes, listeners, setNodeRef } = useDraggable({
     id: task.id.toString(),
   });
@@ -26,9 +25,15 @@ const DraggableTask = ({ task }) => {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className="bg-slate-700 p-3 rounded shadow-md cursor-move"
+      className="cursor-move"
     >
-      {task.title}
+      <TaskCard
+        title={task.title}
+        description={task.description}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
     </div>
   );
 };
@@ -38,7 +43,8 @@ const KanbanBoard = () => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  
+const [editTask, setEditTask] = useState(null);
+const [filterPriority, setFilterPriority] = useState('');
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -65,6 +71,19 @@ const KanbanBoard = () => {
         <h1 className="text-2xl font-bold">Task Board</h1>
         <Button onClick={() => setShowModal(true)}>+ New Task</Button>
       </div>
+<div className="mb-4 flex items-center gap-4">
+  <label className="text-sm">Filter by Priority:</label>
+  <select
+    value={filterPriority}
+    onChange={(e) => setFilterPriority(e.target.value)}
+    className="bg-slate-700 p-2 rounded text-white"
+  >
+    <option value="">All</option>
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+  </select>
+</div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="flex gap-4">
@@ -73,17 +92,22 @@ const KanbanBoard = () => {
               key={status}
               id={status}
               className="flex-1 bg-slate-800 rounded-lg p-4 min-h-[200px]"
-              onClick={() => setSelectedTask(task)}
-              
             >
               <h2 className="text-xl font-bold mb-4">{columnTitles[status]}</h2>
               <div className="space-y-3">
                 {tasks
-                  .filter((task) => task.status === status)
+                  .filter((task) => task.status === status && (!filterPriority || task.priority === filterPriority))
+                  
                   .map((task) => (
-                    <DraggableTask key={task.id} task={task}
-                    onClick={() => setSelectedTask(task)}
-                    
+                    <DraggableTask
+                      key={task.id}
+                      task={task}
+                      onView={() => setSelectedTask(task)}
+                      onEdit={() => {
+                        setEditTask(task);
+                        setShowModal(true);
+                      }}
+                      onDelete={() => dispatch(deleteTask(task.id))}
                     />
                     
                   ))}
@@ -93,9 +117,16 @@ const KanbanBoard = () => {
         </div>
       </DndContext>
 
-      <NewTaskModal isOpen={showModal} onClose={() => setShowModal(false)} />
-        <TaskDetailsModal task={selectedTask} onClose={() => setSelectedTask(null)} />
-        
+      <NewTaskModal
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setEditTask(null); // reset edit state
+        }}
+        taskToEdit={editTask}
+      />
+      
+      <TaskDetailsModal task={selectedTask} onClose={() => setSelectedTask(null)} />
     </div>
   );
 };

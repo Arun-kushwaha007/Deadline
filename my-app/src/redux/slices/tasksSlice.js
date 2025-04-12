@@ -21,28 +21,42 @@ const initialState = {
 };
 
 
+// import { createSlice } from '@reduxjs/toolkit';
+
 const tasksSlice = createSlice({
   name: 'tasks',
-  initialState,
+  initialState: {
+    tasks: [],
+  },
   reducers: {
     addTask: (state, action) => {
-      const newTask = {
-        id: Date.now().toString(),
-        title: action.payload.title,
-        description: action.payload.description || '',
-        dueDate: action.payload.dueDate || '',
-        status: 'todo',
-      };
-      state.tasks.push(newTask);
+      state.tasks.push({
+        ...action.payload,
+        id: Date.now().toString(), // simple unique ID
+        status: 'todo', // default status
+        createdAt: new Date().toISOString()
+      });
     },
-    
-    updateTaskStatus(state, action) {
+    updateTaskStatus: (state, action) => {
       const { id, status } = action.payload;
-      const task = state.tasks.find((t) => t.id === id);
+      const task = state.tasks.find(task => task.id === id);
       if (task) task.status = status;
     },
+   editTask: (state, action) => {
+     const { id, updatedTask } = action.payload;
+     const index = state.tasks.findIndex(task => task.id === id);
+     if (index !== -1) {
+       state.tasks[index] = { ...state.tasks[index], ...updatedTask };
+     }
+   },
+   deleteTask: (state, action) => {
+     const id = action.payload;
+     state.tasks = state.tasks.filter(task => task.id !== id);
+   }
+   
   },
 });
 
-export const { addTask, updateTaskStatus } = tasksSlice.actions;
+export const { addTask, updateTaskStatus, editTask, deleteTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
+
