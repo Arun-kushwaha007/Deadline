@@ -21,6 +21,7 @@ const initialState = {
 };
 
 
+
 // import { createSlice } from '@reduxjs/toolkit';
 
 const tasksSlice = createSlice({
@@ -49,14 +50,21 @@ const tasksSlice = createSlice({
        state.tasks[index] = { ...state.tasks[index], ...updatedTask };
      }
    },
+   reorderTasks: (state, action) => {
+     const { status, tasks: reorderedTasks } = action.payload;
+     const filteredOut = state.tasks.filter((t) => t.status !== status);
+     state.tasks = [...filteredOut, ...reorderedTasks];
+   },
+
    deleteTask: (state, action) => {
      const id = action.payload;
      state.tasks = state.tasks.filter(task => task.id !== id);
-   }
+   },
+   
    
   },
 });
 
-export const { addTask, updateTaskStatus, editTask, deleteTask } = tasksSlice.actions;
+export const { addTask, updateTaskStatus, editTask, reorderTasks, deleteTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
 

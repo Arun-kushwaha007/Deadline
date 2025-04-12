@@ -1,14 +1,14 @@
 // components/atoms/DroppableColumn.jsx
 import { useDroppable } from '@dnd-kit/core';
 
-const DroppableColumn = ({ id, children, className }) => {
-  const { setNodeRef } = useDroppable({ id });
+export default function DroppableColumn({ id, children, className }) {
+  const { setNodeRef } = useDroppable({
+    id, // allows dropping directly into column
+  });
 
   return (
-    <div ref={setNodeRef} id={id} className={className}>
+    <div ref={setNodeRef} className={className}>
       {children}
     </div>
   );
-};
-
-export default DroppableColumn;
+}
