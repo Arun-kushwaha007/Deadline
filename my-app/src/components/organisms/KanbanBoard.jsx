@@ -1,25 +1,14 @@
-import {
-  DndContext,
-  closestCenter,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+
 import { updateTaskStatus, reorderTasks, deleteTask } from '../../redux/slices/tasksSlice';
 import NewTaskModal from '../molecules/NewTaskModal';
 import { Button } from '../atoms/Button';
 import DroppableColumn from '../atoms/DroppableColumn';
 import TaskDetailsModal from '../molecules/TaskDetailsModal';
-import SortableTask from '../molecules/SortableTask'; // NEW component
+import SortableTask from '../molecules/SortableTask';
 import TaskCard from '../molecules/TaskCard';
 
 const KanbanBoard = () => {
@@ -41,44 +30,38 @@ const KanbanBoard = () => {
     done: 'Done',
   };
 
- const handleDragEnd = (event) => {
-   const { active, over } = event;
- 
-   if (!over || active.id === over.id) return;
- 
-   const activeTaskData = tasks.find((t) => t.id.toString() === active.id);
- 
-   if (!activeTaskData) return;
- 
-   const isOverAColumn = ['todo', 'inprogress', 'done'].includes(over.id);
-   const overTaskData = tasks.find((t) => t.id.toString() === over.id);
- 
-   if (isOverAColumn) {
-     // Dropped on a column directly
-     if (activeTaskData.status !== over.id) {
-       dispatch(updateTaskStatus({ id: activeTaskData.id, status: over.id }));
-     }
-   } else if (overTaskData) {
-     const activeStatus = activeTaskData.status;
-     const overStatus = overTaskData.status;
- 
-     if (activeStatus === overStatus) {
-       // Reorder within same column
-       const columnTasks = tasks.filter((t) => t.status === activeStatus);
-       const oldIndex = columnTasks.findIndex((t) => t.id === activeTaskData.id);
-       const newIndex = columnTasks.findIndex((t) => t.id === overTaskData.id);
- 
-       const reordered = arrayMove(columnTasks, oldIndex, newIndex);
-       dispatch(reorderTasks({ status: activeStatus, tasks: reordered }));
-     } else {
-       // Dragged over a task in another column
-       dispatch(updateTaskStatus({ id: activeTaskData.id, status: overStatus }));
-     }
-   }
- 
-   setActiveTask(null);
- };
- 
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const activeTaskData = tasks.find((t) => t.id.toString() === active.id);
+    if (!activeTaskData) return;
+
+    const isOverColumn = columns.includes(over.id);
+    const overTaskData = tasks.find((t) => t.id.toString() === over.id);
+
+    if (isOverColumn) {
+      if (activeTaskData.status !== over.id) {
+        dispatch(updateTaskStatus({ id: activeTaskData.id, status: over.id }));
+      }
+    } else if (overTaskData) {
+      const activeStatus = activeTaskData.status;
+      const overStatus = overTaskData.status;
+
+      if (activeStatus === overStatus) {
+        const columnTasks = tasks.filter((t) => t.status === activeStatus);
+        const oldIndex = columnTasks.findIndex((t) => t.id === activeTaskData.id);
+        const newIndex = columnTasks.findIndex((t) => t.id === overTaskData.id);
+
+        const reordered = arrayMove(columnTasks, oldIndex, newIndex);
+        dispatch(reorderTasks({ status: activeStatus, tasks: reordered }));
+      } else {
+        dispatch(updateTaskStatus({ id: activeTaskData.id, status: overStatus }));
+      }
+    }
+
+    setActiveTask(null);
+  };
 
   return (
     <div className="p-6 dark:bg-dark min-h-screen text-white">

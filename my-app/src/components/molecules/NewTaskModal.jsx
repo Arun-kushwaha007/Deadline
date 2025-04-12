@@ -10,6 +10,14 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const [dueDate, setDueDate] = useState('');
   const [status, setStatus] = useState('todo');
   const [priority, setPriority] = useState('');
+  const [labels, setLabels] = useState('');
+  const [subtasks, setSubtasks] = useState([{ title: '', done: false }]);
+  const [errors, setErrors] = useState({
+    title: '',
+    description: '',
+    dueDate: '',
+    priority: '',
+  });
 
   // Pre-fill fields when editing
   useEffect(() => {
@@ -19,52 +27,67 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setDueDate(taskToEdit.dueDate || '');
       setStatus(taskToEdit.status || 'todo');
       setPriority(taskToEdit.priority || '');
+      setLabels((taskToEdit.labels || []).join(', '));
+      setSubtasks(taskToEdit.subtasks || [{ title: '', done: false }]);
     } else {
       setTitle('');
       setDescription('');
       setDueDate('');
       setStatus('todo');
       setPriority('');
+      setLabels('');
+      setSubtasks([{ title: '', done: false }]);
     }
   }, [taskToEdit]);
 
+  // Validate the form inputs
+  const validateForm = () => {
+    const newErrors = {
+      title: title.trim() === '' ? 'Title is required' : '',
+      description: description.trim() === '' ? 'Description is required' : '',
+      dueDate: dueDate === '' ? 'Due date is required' : '',
+      priority: priority === '' ? 'Priority is required' : '',
+    };
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === '');
+  };
+
+  const handleSubtaskChange = (index, value) => {
+    const updated = [...subtasks];
+    updated[index].title = value;
+    setSubtasks(updated);
+  };
+
+  const addSubtask = () => {
+    setSubtasks([...subtasks, { title: '', done: false }]);
+  };
+
+  const removeSubtask = (index) => {
+    setSubtasks(subtasks.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+
+    if (!validateForm()) return; // Only submit if the form is valid
+
+    const taskPayload = {
+      title,
+      description,
+      priority,
+      dueDate,
+      status,
+      labels: labels.split(',').map((l) => l.trim()).filter(Boolean),
+      subtasks: subtasks.filter((s) => s.title.trim()),
+    };
 
     if (taskToEdit) {
-      dispatch(
-        editTask({
-          id: taskToEdit.id,
-          updatedTask: {
-            title,
-            description,
-            priority,
-            dueDate,
-            status,
-          },
-        })
-      );
+      dispatch(editTask({ id: taskToEdit.id, ...taskPayload }));
     } else {
-      dispatch(
-        addTask({
-          id: uuidv4(),
-          title,
-          description,
-          priority,
-          dueDate,
-          status,
-        })
-      );
+      dispatch(addTask({ id: uuidv4(), ...taskPayload }));
     }
 
-    // Reset all fields
-    setTitle('');
-    setDescription('');
-    setDueDate('');
-    setPriority('');
-    setStatus('todo');
-    onClose();
+    onClose(); // Close the modal after submission
   };
 
   if (!isOpen) return null;
@@ -86,6 +109,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           onChange={(e) => setTitle(e.target.value)}
           className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
         />
+        {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
+
         <textarea
           placeholder="Description"
           value={description}
@@ -93,12 +118,53 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
           rows={3}
         />
+        {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
+
         <input
           type="date"
           value={dueDate}
           onChange={(e) => setDueDate(e.target.value)}
           className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
         />
+        {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
+
+        <input
+          type="text"
+          placeholder="Labels (comma-separated)"
+          value={labels}
+          onChange={(e) => setLabels(e.target.value)}
+          className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
+        />
+
+        <div className="mb-4">
+          <p className="text-sm text-white mb-2">Subtasks</p>
+          {subtasks.map((subtask, index) => (
+            <div key={index} className="flex gap-2 mb-2">
+              <input
+                type="text"
+                value={subtask.title}
+                onChange={(e) => handleSubtaskChange(index, e.target.value)}
+                className="flex-1 p-2 rounded bg-slate-700 text-white"
+                placeholder={`Subtask ${index + 1}`}
+              />
+              <button
+                type="button"
+                onClick={() => removeSubtask(index)}
+                className="text-red-400 hover:underline"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addSubtask}
+            className="text-blue-400 hover:underline text-sm"
+          >
+            + Add Subtask
+          </button>
+        </div>
+
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
@@ -109,7 +175,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
-        
+        {errors.priority && <p className="text-red-500 text-sm">{errors.priority}</p>}
 
         <select
           className="w-full p-2 mb-4 rounded bg-slate-700 text-white"
