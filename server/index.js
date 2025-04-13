@@ -1,10 +1,10 @@
-// index.js
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { Server as socketIO } from 'socket.io';  // Import socket.io correctly
+import { Server as socketIO } from 'socket.io';
+import { createClient } from 'redis';
 
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
@@ -15,62 +15,78 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// Socket.IO setup
+// Redis setup
+const redisClient = createClient();
+await redisClient.connect().catch(console.error);
+
+// Socket.IO
 const io = new socketIO(server, {
   cors: {
-    origin: '*', // Adjust for production
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true, // You can keep this true even if not using cookies
+}));
+
 app.use(express.json());
 
+// Attach to app
+app.set('io', io);
+app.set('redis', redisClient);
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// MongoDB connection
+// MongoDB
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.log(err));
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => console.error('❌ MongoDB Error:', err));
 
-// Store connected users
-const connectedUsers = {};
-
+// Socket.IO handling
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+  console.log('🟢 User connected:', socket.id);
 
-  socket.on('register', (userId) => {
-    connectedUsers[userId] = socket.id;
-    console.log(`User ${userId} registered with socket ${socket.id}`);
+  socket.on('register', async (userId) => {
+    await redisClient.set(userId, socket.id);
+    console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
   });
 
-  socket.on('disconnect', () => {
-    const userId = Object.keys(connectedUsers).find(
-      (key) => connectedUsers[key] === socket.id
-    );
-    if (userId) delete connectedUsers[userId];
-    console.log(`User ${socket.id} disconnected`);
+  socket.on('disconnect', async () => {
+    const keys = await redisClient.keys('*');
+    for (const key of keys) {
+      const socketId = await redisClient.get(key);
+      if (socketId === socket.id) {
+        await redisClient.del(key);
+        console.log(`🔴 User ${key} disconnected`);
+        break;
+      }
+    }
   });
 });
 
-app.set('io', io); // Make io accessible in routes
-
-// ✅ Test route to trigger notification manually
-app.get('/api/test-notification/:userId', (req, res) => {
-  const userId = req.params.userId;
-  const socketId = connectedUsers[userId];
+// 🔔 Test notification route
+app.get('/api/test-notification/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const socketId = await redisClient.get(userId);
 
   if (socketId) {
     io.to(socketId).emit('taskAssigned', {
-      message: `🎉 Hello User ${userId}, you have a new test task!`
+      message: `🎉 Hello User ${userId}, you have a new test task!`,
     });
     return res.status(200).json({ success: true, message: 'Notification sent!' });
-  } else {
-    return res.status(404).json({ success: false, message: 'User not connected' });
   }
+
+  return res.status(404).json({ success: false, message: 'User not connected' });
 });
 
+// Start server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

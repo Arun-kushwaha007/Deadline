@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { io } from 'socket.io-client';
@@ -9,27 +8,28 @@ import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 import { SocketProvider } from './context/SocketContext';
 
-const socket = io('http://localhost:5000'); // your backend URL
+const socket = io('http://localhost:5000', {
+  withCredentials: true,
+});
 
 function App() {
   useEffect(() => {
-    console.log('Connecting to socket...');
-
+    console.log('📡 Connecting to socket...');
     const user = JSON.parse(localStorage.getItem('Profile'));
 
     if (user?.result?._id) {
-      console.log('Registering user:', user.result._id);
+      console.log('📨 Registering user:', user.result._id);
       socket.emit('register', user.result._id);
     }
 
     socket.on('taskAssigned', (data) => {
-      console.log('Received taskAssigned:', data);
-      toast.success(data.message); // Use toast for notification
+      console.log('🔔 Task Assigned:', data);
+      toast.success(data.message);
     });
 
     return () => {
       socket.disconnect();
-      console.log('Socket disconnected');
+      console.log('🔌 Socket disconnected');
     };
   }, []);
 
