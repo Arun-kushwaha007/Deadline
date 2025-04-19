@@ -1,69 +1,120 @@
 // redux/slices/tasksSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
-  tasks: [
-    {
-      id: '1',
-      title: 'Finish UI',
-      description: 'Create Kanban UI using Tailwind & DnD Kit.',
-      status: 'todo',
-      priority: 'medium',
-      dueDate: '2025-04-15',
-    },
-    {
-      id: '2',
-      title: 'Set up Redux',
-      description: 'Configure store and slices for task management.',
-      status: 'inprogress',
-      priority: 'high',
-      dueDate: '2025-04-18',
-    },
-  ],
+  tasks: [],
+  loading: false,
+  error: null,
 };
+
+// Async thunk for fetching tasks
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get('http://localhost:5000/api/tasks', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+});
+
+// Async thunk for creating a task
+export const createTask = createAsyncThunk('tasks/createTask', async (taskData) => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post('http://localhost:5000/api/tasks', taskData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+});
+
+// Async thunk for updating a task
+export const updateTask = createAsyncThunk(
+  'tasks/updateTask',
+  async ({ id, ...taskData } ) => {
+    const token = localStorage.getItem('token');
+    const response = await axios.put(`http://localhost:5000/api/tasks/${id}`, taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+);
+
+// Async thunk for deleting a task
+export const deleteTask = createAsyncThunk('tasks/deleteTask', async (taskId) => {
+  const token = localStorage.getItem('token');
+  await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return taskId; // Return the id for reducer
+});
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {
-    addTask: (state, action) => {
-      const newTask = {
-        ...action.payload,
-        id: Date.now(),
-        status: 'todo',
-        labels: action.payload.labels || [],
-        dueDate: action.payload.dueDate || '',
-        subtasks: action.payload.subtasks || [],
-      };
-      state.tasks.push(newTask);
-    },
-    
-    editTask: (state, action) => {
-      const index = state.tasks.findIndex((task) => task.id === action.payload.id);
-      if (index !== -1) {
-        state.tasks[index] = {
-          ...state.tasks[index],
-          ...action.payload,
-        };
-      }
-    },
-    
-    updateTaskStatus: (state, action) => {
-      const { id, status } = action.payload;
-      const task = state.tasks.find((task) => task.id === id);
-      if (task) task.status = status;
-    },
-    
-    reorderTasks: (state, action) => {
-      const { status, tasks: reorderedTasks } = action.payload;
-      const filteredOut = state.tasks.filter((t) => t.status !== status);
-      state.tasks = [...filteredOut, ...reorderedTasks];
-    },
-    deleteTask: (state, action) => {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-    },
+  reducers: {}, // No synchronous reducers needed now
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTasks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks = action.payload;
+      })
+      .addCase(fetchTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(createTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks.push(action.payload);
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(updateTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTask.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks = state.tasks.map((task) =>
+          task._id === action.payload._id ? action.payload : task
+        );
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(deleteTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tasks = state.tasks.filter((task) => task._id !== action.payload);
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
-export const { addTask, updateTaskStatus, editTask, reorderTasks, deleteTask } = tasksSlice.actions;
 export default tasksSlice.reducer;

@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTask, editTask } from '../../redux/slices/tasksSlice';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { SocketContext } from '../../context/SocketContext';
 
 const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
+  const { user } = useContext(SocketContext);
   const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -11,6 +14,9 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const [status, setStatus] = useState('todo');
   const [priority, setPriority] = useState('');
   const [labels, setLabels] = useState('');
+  const [tags, setTags] = useState('');
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
   const [subtasks, setSubtasks] = useState([{ title: '', done: false }]);
   const [errors, setErrors] = useState({
     title: '',
@@ -19,6 +25,26 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
     priority: '',
   });
 
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/teams/${user.teamId}/members`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setTeamMembers(response.data);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+        // Handle error appropriately, e.g., display an error message
+      }
+    };
+
+    if (user && user.teamId) {
+      fetchTeamMembers();
+    }
+  }, [user]);
   // Pre-fill fields when editing
   useEffect(() => {
     if (taskToEdit) {
@@ -28,6 +54,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setStatus(taskToEdit.status || 'todo');
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
+      setTags((taskToEdit.tags || []).join(', '));
+      setAssignedTo(taskToEdit.assignedTo || []);
       setSubtasks(taskToEdit.subtasks || [{ title: '', done: false }]);
     } else {
       setTitle('');
@@ -36,6 +64,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setStatus('todo');
       setPriority('');
       setLabels('');
+      setTags('');
+      setAssignedTo([]);
       setSubtasks([{ title: '', done: false }]);
     }
   }, [taskToEdit]);
@@ -78,7 +108,9 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       dueDate,
       status,
       labels: labels.split(',').map((l) => l.trim()).filter(Boolean),
+      tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
       subtasks: subtasks.filter((s) => s.title.trim()),
+      assignedTo,
     };
 
     if (taskToEdit) {
@@ -136,6 +168,13 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
         />
 
+        <input
+          type="text"
+          placeholder="Tags (comma-separated)"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+          className="w-full mb-2 p-2 rounded bg-slate-700 text-white"
+        />
         <div className="mb-4">
           <p className="text-sm text-white mb-2">Subtasks</p>
           {subtasks.map((subtask, index) => (
@@ -186,6 +225,21 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           <option value="inprogress">In Progress</option>
           <option value="done">Done</option>
         </select>
+
+        <select
+          multiple
+          value={assignedTo}
+          onChange={(e) => setAssignedTo(Array.from(e.target.selectedOptions, (option) => option.value))}
+          className="w-full p-2 mb-4 rounded bg-slate-700 text-white"
+        >
+          <option value="" disabled>Assign to</option>
+          {teamMembers.map((member) => (
+            <option key={member._id} value={member._id}>
+              {member.name}
+            </option>
+          ))}
+        </select>
+
 
         <div className="flex justify-end gap-2">
           <button

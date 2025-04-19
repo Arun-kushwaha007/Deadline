@@ -17,6 +17,17 @@ DeadlineX is a full-stack collaborative task management and communication platfo
 - View tasks by team or by user.
 
 ### 🧑‍🤝‍🧑 Team Collaboration
+- Real-time Notifications *(Coming Soon)*
+- Get instant updates when tasks are assigned, updated, or nearing deadlines.
+- Browser and in-app notifications (WebSocket-based).
+
+---
+
+## 📸 Screenshots
+
+| Dashboard | Task Page | Chat Room |
+|----------|-----------|-----------|
+| *(Add screenshots here later)* |
 - Team creation and management.
 - Assign tasks to team members.
 - Track team productivity with task insights.
@@ -26,9 +37,6 @@ DeadlineX is a full-stack collaborative task management and communication platfo
 - Invite specific users to chat.
 - Chat rooms get auto-deleted when all users leave (ephemeral design).
 
-### 🔔 Real-time Notifications *(Coming Soon)*
-- Get instant updates when tasks are assigned, updated, or nearing deadlines.
-- Browser and in-app notifications (WebSocket-based).
 
 ---
 
@@ -58,6 +66,17 @@ DeadlineX is a full-stack collaborative task management and communication platfo
 - **RESTful API** structure
 
 ---
+
+## Drag-and-Drop Reordering Implementation
+
+This project now supports drag-and-drop reordering of tasks within columns on the Kanban board. The implementation involves the following:
+
+-   When a task is reordered within a column, the frontend sends a PUT request to `/api/tasks/:taskId`.
+-   This request includes an `order` parameter in the request body.
+-   The `order` parameter is an array of task IDs representing the new order of tasks in that column.
+-   The relevant frontend files are `my-app/src/components/organisms/KanbanBoard.jsx` and `my-app/src/redux/slices/tasksSlice.js`.
+-   The backend needs to be updated to handle this `order` parameter. It should interpret the array of task IDs and persist the new order of tasks in the database.  A possible implementation would involve updating an `order` or `position` field on each task within the column to reflect its new position in the array.
+
 
 ---
 

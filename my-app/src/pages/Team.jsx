@@ -1,70 +1,149 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import axios from 'axios';
+import { SocketContext } from '../context/SocketContext';
 
 const Team = () => {
-  const [team, setTeam] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [team, setTeam] = useState(null);
+    const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [newTeamName, setNewTeamName] = useState('');
+    const [newMemberEmail, setNewMemberEmail] = useState('');
+    const { user } = useContext(SocketContext); // Assuming user info is in context
 
-  useEffect(() => {
-    const fetchTeamTasks = async () => {
-      const token = localStorage.getItem('token'); // ✅ Get token from localStorage
+    const fetchTeamData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const token = localStorage.getItem('token');
+            const teamResponse = await axios.get(`http://localhost:5000/api/users/${user._id}/team`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setTeam(teamResponse.data);
 
-      if (!token) {
-        setError('User not authenticated.');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await axios.get('http://localhost:5000/api/team/tasks', {
-          headers: {
-            Authorization: `Bearer ${token}`, // ✅ Send token in headers
-          },
-        });
-
-        setTasks(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching team tasks:', error);
-        setError('Failed to fetch team tasks.');
-        setLoading(false);
-      }
+            if (teamResponse.data) {
+                const membersResponse = await axios.get(`http://localhost:5000/api/teams/${teamResponse.data._id}/members`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setMembers(membersResponse.data);
+            }
+        } catch (err) {
+            console.error('Error fetching team data:', err);
+            setError('Failed to fetch team data.');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    fetchTeamTasks();
-  }, []);
+    useEffect(() => {
+        if (user) {
+            fetchTeamData();
+        }
+    }, [user]);
 
-  if (loading) return <p>Loading tasks...</p>;
+    const handleCreateTeam = async (e) => {
+        e.preventDefault();
+        setError(null);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:5000/api/teams', { name: newTeamName }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setTeam(response.data);
+            fetchTeamData(); // Refresh team data
+        } catch (err) {
+            console.error('Error creating team:', err);
+            setError('Failed to create team.');
+        }
+    };
 
-  return (
-    <DashboardLayout>
-      <h1 className="text-3xl font-bold mb-4">Your Team</h1>
-      <h2 className="text-2xl font-semibold">Tasks</h2>
-      {error ? (
-        <p className="text-red-500">{error}</p>
-      ) : tasks.length === 0 ? (
-        <p>No tasks assigned to this team yet.</p>
-      ) : (
-        <ul className="space-y-4">
-          {tasks.map((task) => (
-            <li key={task._id} className="p-4 border rounded-lg shadow-sm">
-              <h2 className="font-semibold text-lg">{task.title}</h2>
-              <p>{task.description}</p>
-              <p>Assigned to: {task.assignedTo?.name || 'Unknown'}</p>
-              <p>Priority: {task.priority}</p>
-              <p>Deadline: {task.deadline}</p>
-              <a href={`/task/${task._id}`} className="text-blue-500 hover:underline">
-                View Details
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </DashboardLayout>
-  );
+    const handleAddMember = async (e) => {
+        e.preventDefault();
+        setError(null);
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`http://localhost:5000/api/teams/${team._id}/members`, { email: newMemberEmail }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setNewMemberEmail('');
+            fetchTeamData(); // Refresh team data
+        } catch (err) {
+            console.error('Error adding member:', err);
+            setError('Failed to add member.');
+        }
+    };
+
+    if (loading) return <p>Loading team data...</p>;
+
+    return (
+        <DashboardLayout>
+            <h1 className="text-3xl font-bold mb-4">Your Team</h1>
+
+            {error && <p className="text-red-500">{error}</p>}
+
+            {!team ? (
+                <div>
+                    <h2 className="text-2xl font-semibold mb-2">Create a Team</h2>
+                    <form onSubmit={handleCreateTeam} className="mb-4">
+                        <input
+                            type="text"
+                            placeholder="Team Name"
+                            value={newTeamName}
+                            onChange={(e) => setNewTeamName(e.target.value)}
+                            className="border rounded-md px-3 py-2 mr-2"
+                            required
+                        />
+                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                            Create Team
+                        </button>
+                    </form>
+                </div>
+            ) : (
+                <div>
+                    <h2 className="text-2xl font-semibold mb-2">{team.name}</h2>
+
+                    <h3 className="text-lg font-semibold mt-4 mb-2">Team Members</h3>
+                    <ul>
+                        {members.map((member) => (
+                            <li key={member._id} className="mb-1">
+                                {member.name} ({member._id === team.leader ? 'Leader' : 'Member'})  {/* Assuming members have name and _id */}
+                            </li>
+                        ))}
+                    </ul>
+
+                    {user._id === team.leader && (
+                        <div className="mt-4">
+                            <h3 className="text-lg font-semibold mb-2">Add Member</h3>
+                            <form onSubmit={handleAddMember}>
+                                <input
+                                    type="email"  // Or change to text if using invite links
+                                    placeholder="Member Email" // Or "Email/Invite Link"
+                                    value={newMemberEmail}
+                                    onChange={(e) => setNewMemberEmail(e.target.value)}
+                                    className="border rounded-md px-3 py-2 mr-2"
+                                    required
+                                />
+                                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                                  Add Member
+                                </button>
+                            </form>
+                        </div>
+                    )}
+
+                    {/*  You might want to display tasks here as well, or link to a team-specific task view  */}
+                </div>
+            )}
+        </DashboardLayout>
+    );
 };
 
 export default Team;

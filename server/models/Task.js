@@ -13,7 +13,7 @@ const taskSchema = new mongoose.Schema({
   assignedTo: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-  }],
+  }],  
   deadline: {
     type: Date,
     required: true,
@@ -28,6 +28,9 @@ const taskSchema = new mongoose.Schema({
     enum: ['pending', 'in-progress', 'completed'],
     default: 'pending',
   },
+  tags: [{
+    type: String,
+  }],
 });
 
 export default mongoose.model('Task', taskSchema);
