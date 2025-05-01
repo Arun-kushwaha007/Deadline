@@ -40,6 +40,8 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/team" element={<Team />} />
+        {/* <Route path="/task/:id" element={<TaskDetails />} /> */}
+        {/* <Route path="/profile" element={<Profile />} /> */}
       </Routes>
     </SocketProvider>
   );
