@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 import { SocketProvider } from './context/SocketContext';
-
+import Profile from './pages/Profile';
 const socket = io('http://localhost:5000', {
   withCredentials: true,
 });
@@ -41,7 +41,7 @@ function App() {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/team" element={<Team />} />
         {/* <Route path="/task/:id" element={<TaskDetails />} /> */}
-        {/* <Route path="/profile" element={<Profile />} /> */}
+       <Route path="/profile" element={<Profile />} />
       </Routes>
     </SocketProvider>
   );
