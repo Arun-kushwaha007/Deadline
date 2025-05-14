@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const navigate = useNavigate(); // 🚀 Initialize navigate
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,13 +15,16 @@ const Login = () => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       if (parsedUser.password === data.password) {
+        // ✅ Store logged-in user's identifier
+        localStorage.setItem('loggedInUser', data.email);
+
         console.log(`${parsedUser.name}, you are successfully logged in.`);
-        navigate('/'); // ✅ Redirect to home
+        navigate('/'); // ✅ Redirect to dashboard/home
       } else {
-        console.log("Incorrect email or password.");
+        alert("Incorrect password.");
       }
     } else {
-      console.log("User not found. Please check your credentials.");
+      alert("User not found. Please register first.");
     }
   };
 
