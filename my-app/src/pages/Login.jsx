@@ -1,7 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate(); // 🚀 Initialize navigate
   const {
     register,
     handleSubmit,
@@ -14,6 +16,7 @@ const Login = () => {
       const parsedUser = JSON.parse(storedUser);
       if (parsedUser.password === data.password) {
         console.log(`${parsedUser.name}, you are successfully logged in.`);
+        navigate('/'); // ✅ Redirect to home
       } else {
         console.log("Incorrect email or password.");
       }
@@ -23,7 +26,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center text-black ">
+    <div className="h-screen flex justify-center items-center text-black">
       <div>
         <p className="text-center w-[30vw] bg-purple-300 py-[2vw] px-[1vw] rounded-t-[10px] text-2xl font-[Verdana]">
           Login Form
@@ -59,6 +62,13 @@ const Login = () => {
             className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
             style={{ backgroundColor: "#a1eafb" }}
           />
+
+          <p className="mt-4 text-sm">
+            Not registered yet?{' '}
+            <Link to="/register" className="text-blue-600 hover:underline">
+              Register here
+            </Link>
+          </p>
         </form>
       </div>
     </div>
