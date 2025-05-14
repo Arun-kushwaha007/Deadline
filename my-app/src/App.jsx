@@ -6,6 +6,8 @@ import { Toaster, toast } from 'react-hot-toast';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Team from './pages/Team';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import { SocketProvider } from './context/SocketContext';
 import Profile from './pages/Profile';
 const socket = io('http://localhost:5000', {
@@ -41,6 +43,14 @@ function App() {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/team" element={<Team />} />
         {/* <Route path="/task/:id" element={<TaskDetails />} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+        {/* <Route path="/settings" element={<Settings />} /> */}
+        {/* <Route path="/notifications" element={<Notifications />} /> */}
+        {/* <Route path="/messages" element={<Messages />} /> */}
+        {/* <Route path="/search" element={<Search />} /> */}
        <Route path="/profile" element={<Profile />} />
       </Routes>
     </SocketProvider>
