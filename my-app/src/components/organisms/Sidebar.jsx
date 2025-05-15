@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ListTodo, Users, LogOut, User ,Group,CircleHelp,CirclePlus} from 'lucide-react';
+import { Home, ListTodo, Users, LogOut, User ,Group,CircleHelp,CirclePlus,UserPen} from 'lucide-react';
 import { useEffect, useState } from 'react';
+
 
 const menu = [
   { to: '/', label: 'Dashboard', icon: <Home size={20} /> },
@@ -16,6 +17,7 @@ const menu = [
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -61,7 +63,7 @@ const Sidebar = () => {
           onClick={handleProfileClick}
           className="flex items-center gap-3 p-2 rounded hover:bg-zinc-700 w-full"
         >
-          <User size={20} /> Profile
+          <UserPen size={20} /> Profile
         </button>
         <button
           onClick={handleLogout}
