@@ -1,12 +1,17 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ListTodo, Users, LogOut, User } from 'lucide-react';
+import { Home, ListTodo, Users, LogOut, User ,Group,CircleHelp,CirclePlus} from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const menu = [
   { to: '/', label: 'Dashboard', icon: <Home size={20} /> },
   { to: '/tasks', label: 'Tasks', icon: <ListTodo size={20} /> },
   { to: '/team', label: 'Team', icon: <Users size={20} /> },
+  { to: '/create_team', label: 'Create Team', icon: <Group size={20} /> },
+  { to: '/join_team', label: 'Join Team', icon: <CirclePlus size={20} /> },
+  { to: '/help', label: 'Help', icon: <CircleHelp size={20} /> },
+
 ];
+
 
 const Sidebar = () => {
   const navigate = useNavigate();

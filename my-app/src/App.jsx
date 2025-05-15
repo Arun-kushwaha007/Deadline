@@ -7,6 +7,9 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 import Login from './pages/Login';
+import CreateTeam from './pages/CreateTeam';
+import JoinTeam from './pages/JoinTeam';
+import Help from './pages/Help';
 import Register from './pages/Register';
 import { SocketProvider } from './context/SocketContext';
 import Profile from './pages/Profile';
@@ -45,12 +48,11 @@ function App() {
         {/* <Route path="/task/:id" element={<TaskDetails />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
-        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
-        {/* <Route path="/settings" element={<Settings />} /> */}
-        {/* <Route path="/notifications" element={<Notifications />} /> */}
-        {/* <Route path="/messages" element={<Messages />} /> */}
-        {/* <Route path="/search" element={<Search />} /> */}
+        <Route path="/create_team" element={<CreateTeam />} />
+        <Route path="/join_team" element={<JoinTeam />} />
+        <Route path="/help" element={<Help />} />
+        {/* <Route path="/profile/:id" element={<Profile />} /> */}
+        {/* <Route path="/profile/:id/edit" element={<EditProfile />} /> */}
        <Route path="/profile" element={<Profile />} />
       </Routes>
     </SocketProvider>
