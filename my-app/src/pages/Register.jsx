@@ -10,14 +10,35 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    localStorage.setItem(
-      data.email,
-      JSON.stringify({ name: data.name, password: data.password })
-    );
-    console.log("User registered:", JSON.parse(localStorage.getItem(data.email)));
-    navigate('/login'); // ✅ Redirect to login after registration
-  };
+const onSubmit = async (data) => {
+  try {
+    // Send POST request to backend
+    const response = await fetch('http://localhost:5000/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Save to localStorage (optional — for your local use)
+      localStorage.setItem(
+        data.email,
+        JSON.stringify({ name: data.name, password: data.password })
+      );
+
+      console.log('✅ User registered on backend:', result);
+      navigate('/login');
+    } else {
+      alert(`❌ Registration failed: ${result.message}`);
+    }
+  } catch (error) {
+    console.error('❌ Error registering:', error);
+    alert('An unexpected error occurred.');
+  }
+};
+
 
   return (
     <div className="h-screen flex justify-center items-center text-black">

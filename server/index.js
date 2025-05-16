@@ -17,9 +17,9 @@ const server = http.createServer(app);
 
 // Redis setup
 const redisClient = createClient();
-await redisClient.connect().catch(console.error);
+redisClient.connect().catch(console.error);
 
-// Socket.IO
+// Socket.IO setup
 const io = new socketIO(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -31,9 +31,8 @@ const io = new socketIO(server, {
 // Middleware
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true, // You can keep this true even if not using cookies
+  credentials: true,
 }));
-
 app.use(express.json());
 
 // Attach to app
@@ -45,12 +44,24 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch((err) => console.error('❌ MongoDB Error:', err));
+// MongoDB Connection
+const startServer = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('✅ MongoDB Atlas connected');
 
-// Socket.IO handling
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+  } catch (err) {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1);
+  }
+};
+
+// Socket.IO logic
 io.on('connection', (socket) => {
   console.log('🟢 User connected:', socket.id);
 
@@ -72,7 +83,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// 🔔 Test notification route
+// Test Notification Route
 app.get('/api/test-notification/:userId', async (req, res) => {
   const { userId } = req.params;
   const socketId = await redisClient.get(userId);
@@ -87,6 +98,5 @@ app.get('/api/test-notification/:userId', async (req, res) => {
   return res.status(404).json({ success: false, message: 'User not connected' });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+// Start everything
+startServer();

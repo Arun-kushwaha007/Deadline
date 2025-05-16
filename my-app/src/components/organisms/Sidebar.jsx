@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, ListTodo, Users, LogOut, User ,Group,CircleHelp,CirclePlus,UserPen} from 'lucide-react';
+import {
+  Home, ListTodo, Users, LogOut, User, Group,
+  CircleHelp, CirclePlus, UserPen
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
-
 
 const menu = [
   { to: '/', label: 'Dashboard', icon: <Home size={20} /> },
@@ -10,9 +12,7 @@ const menu = [
   { to: '/create_team', label: 'Create Team', icon: <Group size={20} /> },
   { to: '/join_team', label: 'Join Team', icon: <CirclePlus size={20} /> },
   { to: '/help', label: 'Help', icon: <CircleHelp size={20} /> },
-
 ];
-
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,6 +22,8 @@ const Sidebar = () => {
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      setUser(parsedUser);
       setIsLoggedIn(true);
     } else {
       alert('Please log in to access the dashboard.');
@@ -42,6 +44,13 @@ const Sidebar = () => {
   return (
     <div className="w-64 h-screen bg-zinc-900 text-white p-5 flex flex-col gap-6">
       <h1 className="text-2xl font-bold">TaskFlow AI</h1>
+      
+      {user && (
+        <div className="text-sm text-gray-300 mb-4">
+          Welcome, <span className="font-semibold">{user.name}</span>
+        </div>
+      )}
+
       <nav className="flex flex-col gap-3">
         {menu.map(({ to, label, icon }) => (
           <NavLink
@@ -58,6 +67,7 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </nav>
+
       <div className="mt-auto">
         <button
           onClick={handleProfileClick}

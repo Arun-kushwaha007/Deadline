@@ -10,21 +10,28 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const storedUser = localStorage.getItem(data.email);
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      if (parsedUser.password === data.password) {
-        // ✅ Store logged-in user's identifier
-        localStorage.setItem('loggedInUser', data.email);
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-        console.log(`${parsedUser.name}, you are successfully logged in.`);
-        navigate('/'); // ✅ Redirect to dashboard/home
+      const result = await response.json();
+
+      if (response.ok) {
+        // ✅ Save user info in localStorage (optional)
+        localStorage.setItem('loggedInUser', JSON.stringify(result.user));
+
+        console.log(`${result.user.name}, you are successfully logged in.`);
+        navigate('/');
       } else {
-        alert("Incorrect password.");
+        alert(result.message);
       }
-    } else {
-      alert("User not found. Please register first.");
+    } catch (error) {
+      console.error('Login error:', error.message);
+      alert('An unexpected error occurred.');
     }
   };
 

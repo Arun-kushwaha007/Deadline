@@ -10,16 +10,14 @@ const Topbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedInUserEmail = localStorage.getItem('loggedInUser');
-    if (loggedInUserEmail) {
-      const storedData = localStorage.getItem(loggedInUserEmail);
-      if (storedData) {
-        const parsedUser = JSON.parse(storedData);
-        setUser(parsedUser);
-        setIsLoggedIn(true); // ✅ Set login state
-      }
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      setUser(parsedUser);
+      setIsLoggedIn(true);
     }
   }, []);
+  
 
   return (
     <div className="flex justify-between items-center h-16 px-6 bg-zinc-800 text-white">
