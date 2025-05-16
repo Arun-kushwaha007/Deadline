@@ -1,10 +1,27 @@
-/* @import './utils/theme.jsx'; */
+/* index.css */
 @import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Optional custom CSS */
-body {
+/* ❌ REMOVE this line — it's using Tailwind's 'dark:' which won't work without config */
+/* body {
   @apply bg-white dark:bg-gray-800 text-black dark:text-white;
+} */
+
+/* ✅ Use your own theme system */
+.custom-light {
+  --bg-color: #f8fafc;
+  --text-color: #1e293b;
+}
+
+.custom-dark {
+  --bg-color: #0f172a;
+  --text-color: #f1f5f9;
+}
+
+body, .app-wrapper {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }

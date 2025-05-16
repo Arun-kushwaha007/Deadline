@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  Home, ListTodo, Users, LogOut, User, Group,
-  CircleHelp, CirclePlus, UserPen
+  Home, ListTodo, Users, LogOut, UserPen, Group, CircleHelp, CirclePlus
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -42,11 +41,15 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-64 h-screen bg-zinc-900 text-white p-5 flex flex-col gap-6">
+    <div className="w-64 h-screen p-5 flex flex-col gap-6" style={{
+      backgroundColor: 'var(--bg-color)',
+      color: 'var(--text-color)',
+      transition: 'background-color 0.3s, color 0.3s'
+    }}>
       <h1 className="text-2xl font-bold">TaskFlow AI</h1>
       
       {user && (
-        <div className="text-sm text-gray-300 mb-4">
+        <div className="text-sm opacity-80 mb-4">
           Welcome, <span className="font-semibold">{user.name}</span>
         </div>
       )}
@@ -57,10 +60,11 @@ const Sidebar = () => {
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex items-center gap-3 p-2 rounded hover:bg-zinc-700 transition ${
-                isActive ? 'bg-zinc-800' : ''
+              `flex items-center gap-3 p-2 rounded transition ${
+                isActive ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-800'
               }`
             }
+            style={{ color: 'inherit' }}
           >
             {icon}
             {label}
@@ -71,13 +75,15 @@ const Sidebar = () => {
       <div className="mt-auto">
         <button
           onClick={handleProfileClick}
-          className="flex items-center gap-3 p-2 rounded hover:bg-zinc-700 w-full"
+          className="flex items-center gap-3 p-2 rounded w-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          style={{ color: 'inherit' }}
         >
           <UserPen size={20} /> Profile
         </button>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 p-2 rounded hover:bg-zinc-700 w-full"
+          className="flex items-center gap-3 p-2 rounded w-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          style={{ color: 'inherit' }}
         >
           <LogOut size={20} /> Logout
         </button>
