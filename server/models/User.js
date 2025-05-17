@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -15,6 +16,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    unique: true,
+    default: () => uuidv4(), 
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -28,4 +34,4 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 const User = mongoose.model('User', userSchema);
 
-export default User; // Use ES6 export
+export default User;

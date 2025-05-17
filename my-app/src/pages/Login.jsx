@@ -21,8 +21,15 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // ✅ Save user info in localStorage (optional)
-        localStorage.setItem('loggedInUser', JSON.stringify(result.user));
+        // ✅ Save user info including userId in localStorage
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({
+            name: result.user.name,
+            email: result.user.email,
+            userId: result.user.userId, // Store userId from backend response
+          })
+        );
 
         console.log(`${result.user.name}, you are successfully logged in.`);
         navigate('/');
@@ -48,7 +55,7 @@ const Login = () => {
         >
           <input
             type="email"
-            {...register("email", { required: true })}
+            {...register('email', { required: true })}
             placeholder="Email"
             className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
           />
@@ -58,7 +65,7 @@ const Login = () => {
 
           <input
             type="password"
-            {...register("password", { required: true })}
+            {...register('password', { required: true })}
             placeholder="Password"
             className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
           />
@@ -70,7 +77,7 @@ const Login = () => {
             type="submit"
             value="Login"
             className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
-            style={{ backgroundColor: "#a1eafb" }}
+            style={{ backgroundColor: '#a1eafb' }}
           />
 
           <p className="mt-4 text-sm">

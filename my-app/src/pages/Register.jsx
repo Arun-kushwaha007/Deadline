@@ -10,35 +10,38 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-const onSubmit = async (data) => {
-  try {
-    // Send POST request to backend
-    const response = await fetch('http://localhost:5000/api/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data) => {
+    try {
+      // Send POST request to backend
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (response.ok) {
-      // Save to localStorage (optional — for your local use)
-      localStorage.setItem(
-        data.email,
-        JSON.stringify({ name: data.name, password: data.password })
-      );
+      if (response.ok) {
+        // Save userId and other details to localStorage
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({
+            name: data.name,
+            email: data.email,
+            userId: result.userId, // Save userId from backend response
+          })
+        );
 
-      console.log('✅ User registered on backend:', result);
-      navigate('/login');
-    } else {
-      alert(`❌ Registration failed: ${result.message}`);
+        console.log('✅ User registered on backend:', result);
+        navigate('/login');
+      } else {
+        alert(`❌ Registration failed: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('❌ Error registering:', error);
+      alert('An unexpected error occurred.');
     }
-  } catch (error) {
-    console.error('❌ Error registering:', error);
-    alert('An unexpected error occurred.');
-  }
-};
-
+  };
 
   return (
     <div className="h-screen flex justify-center items-center text-black">
@@ -53,14 +56,14 @@ const onSubmit = async (data) => {
         >
           <input
             type="text"
-            {...register("name")}
+            {...register('name')}
             placeholder="Name"
             className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
           />
 
           <input
             type="email"
-            {...register("email", { required: true })}
+            {...register('email', { required: true })}
             placeholder="Email"
             className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
           />
@@ -70,7 +73,7 @@ const onSubmit = async (data) => {
 
           <input
             type="password"
-            {...register("password", { required: true })}
+            {...register('password', { required: true })}
             placeholder="Password"
             className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
           />
@@ -82,7 +85,7 @@ const onSubmit = async (data) => {
             type="submit"
             value="Register"
             className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
-            style={{ backgroundColor: "#a1eafb" }}
+            style={{ backgroundColor: '#a1eafb' }}
           />
 
           <p className="mt-4 text-sm">
