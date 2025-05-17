@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  Home, ListTodo, Users, LogOut, UserPen, Group, CircleHelp, CirclePlus
+  Home, ListTodo, Users, LogOut, UserPen, Group, CircleHelp, CirclePlus, LayoutList
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -11,6 +11,7 @@ const menu = [
   { to: '/create_team', label: 'Create Team', icon: <Group size={20} /> },
   { to: '/join_team', label: 'Join Team', icon: <CirclePlus size={20} /> },
   { to: '/help', label: 'Help', icon: <CircleHelp size={20} /> },
+  { to: '/todo', label: 'To Do List', icon: <LayoutList size={20} /> },
 ];
 
 const Sidebar = () => {

@@ -9,6 +9,7 @@ import Team from './pages/Team';
 import Login from './pages/Login';
 import CreateTeam from './pages/CreateTeam';
 import JoinTeam from './pages/JoinTeam';
+import ToDoList from './pages/ToDoList';
 import Help from './pages/Help';
 import Register from './pages/Register';
 import { SocketProvider } from './context/SocketContext';
@@ -51,8 +52,10 @@ function App() {
         <Route path="/create_team" element={<CreateTeam />} />
         <Route path="/join_team" element={<JoinTeam />} />
         <Route path="/help" element={<Help />} />
+        <Route path="/todo" element={<ToDoList />} />
         {/* <Route path="/profile/:id" element={<Profile />} /> */}
         {/* <Route path="/profile/:id/edit" element={<EditProfile />} /> */}
+
        <Route path="/profile" element={<Profile />} />
       </Routes>
     </SocketProvider>
