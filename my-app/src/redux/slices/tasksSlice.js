@@ -53,6 +53,15 @@ const tasksSlice = createSlice({
       const task = state.tasks.find((task) => task.id === id);
       if (task) task.status = status;
     },
+     reorderOrgTasks: (state, action) => {
+          const { organization, tasks: reorderedTasks } = action.payload;
+          reorderedTasks.forEach((task, index) => {
+            const originalTask = state.tasks.find((t) => t.id === task.id);
+            if (originalTask && originalTask.organization === organization) {
+              originalTask.order = index;
+            }
+          });
+        },
     
     reorderTasks: (state, action) => {
       const { status, tasks: reorderedTasks } = action.payload;
@@ -62,8 +71,15 @@ const tasksSlice = createSlice({
     deleteTask: (state, action) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
+      updateTaskOrganization: (state, action) => {
+          const { id, organization } = action.payload;
+          const task = state.tasks.find((t) => t.id === id);
+          if (task) {
+            task.organization = organization;
+          }
+        },
   },
 });
 
-export const { addTask, updateTaskStatus, editTask, reorderTasks, deleteTask } = tasksSlice.actions;
+export const { addTask, updateTaskStatus, editTask,updateTaskOrganization, reorderTasks,reorderOrgTasks, deleteTask } = tasksSlice.actions;
 export default tasksSlice.reducer;
