@@ -9,6 +9,7 @@ import { createClient } from 'redis';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import organizationRoutes from './routes/organizationRoutes.js';
 
 dotenv.config();
 
@@ -43,7 +44,7 @@ app.set('redis', redisClient);
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
-
+app.use('/api/organization', organizationRoutes);
 // MongoDB Connection
 const startServer = async () => {
   try {

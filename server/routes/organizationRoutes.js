@@ -1,11 +1,18 @@
-const express = require('express');
+import express from 'express';
+import {
+  getAllOrganizations,
+  createOrganization,
+  getOrganizationById,
+  addMember,
+  assignTask,
+} from '../controllers/organizationController.js';
+
 const router = express.Router();
-const orgController = require('../controllers/organizationController');
 
-router.get('/', orgController.getAllOrganizations);
-router.post('/create', orgController.createOrganization);
-router.get('/:id', orgController.getOrganizationById);
-router.post('/:id/add-member', orgController.addMember);
-router.post('/:id/assign-task', orgController.assignTask);
+router.get('/', getAllOrganizations);
+router.post('/create', createOrganization);
+router.get('/:id', getOrganizationById);
+router.post('/:id/add-member', addMember);
+router.post('/:id/assign-task', assignTask);
 
-module.exports = router;
+export default router;

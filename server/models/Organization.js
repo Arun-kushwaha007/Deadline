@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const OrganizationSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -10,11 +10,11 @@ const OrganizationSchema = new mongoose.Schema({
   ],
   tasks: [
     {
-      title: String,
+      title: { type: String, required: true },
       assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       status: { type: String, default: 'To Do' },
     },
   ],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Organization', OrganizationSchema);
+export default mongoose.model('Organization', OrganizationSchema);

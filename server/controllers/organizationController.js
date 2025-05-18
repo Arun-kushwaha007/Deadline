@@ -1,7 +1,7 @@
-const Organization = require('../models/Organization');
-const User = require('../models/User');
+import Organization from '../models/Organization.js';
+import User from '../models/User.js';
 
-exports.getAllOrganizations = async (req, res) => {
+export const getAllOrganizations = async (req, res) => {
   try {
     const orgs = await Organization.find().populate('members.userId', 'name email');
     res.status(200).json(orgs);
@@ -10,7 +10,7 @@ exports.getAllOrganizations = async (req, res) => {
   }
 };
 
-exports.createOrganization = async (req, res) => {
+export const createOrganization = async (req, res) => {
   const { name } = req.body;
   try {
     const newOrg = new Organization({ name });
@@ -21,7 +21,7 @@ exports.createOrganization = async (req, res) => {
   }
 };
 
-exports.getOrganizationById = async (req, res) => {
+export const getOrganizationById = async (req, res) => {
   try {
     const org = await Organization.findById(req.params.id)
       .populate('members.userId', 'name email')
@@ -33,7 +33,7 @@ exports.getOrganizationById = async (req, res) => {
   }
 };
 
-exports.addMember = async (req, res) => {
+export const addMember = async (req, res) => {
   const { email } = req.body;
   const { id } = req.params;
   try {
@@ -56,7 +56,7 @@ exports.addMember = async (req, res) => {
   }
 };
 
-exports.assignTask = async (req, res) => {
+export const assignTask = async (req, res) => {
   const { title, assignedTo } = req.body;
   const { id } = req.params;
 
