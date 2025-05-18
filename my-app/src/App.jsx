@@ -14,6 +14,9 @@ import Help from './pages/Help';
 import Register from './pages/Register';
 import { SocketProvider } from './context/SocketContext';
 import Profile from './pages/Profile';
+import OrganizationDashboard from './components/Organization/OrganiationDashboard';
+
+
 const socket = io('http://localhost:5000', {
   withCredentials: true,
 });
@@ -55,6 +58,8 @@ function App() {
         <Route path="/todo" element={<ToDoList />} />
         {/* <Route path="/profile/:id" element={<Profile />} /> */}
         {/* <Route path="/profile/:id/edit" element={<EditProfile />} /> */}
+        <Route path="/organizations" element={<OrganizationDashboard />} />
+        
 
        <Route path="/profile" element={<Profile />} />
       </Routes>
