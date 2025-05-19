@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Replace with your actual backend base URL
-const API = 'http://localhost:5000/api/organization';
+// Backend base URL
+const API = 'http://localhost:5000/api/organizations';
 
 // Async Thunks
+
 export const fetchOrganizations = createAsyncThunk(
   'organization/fetchOrganizations',
   async (_, thunkAPI) => {
@@ -12,7 +13,7 @@ export const fetchOrganizations = createAsyncThunk(
       const { data } = await axios.get(`${API}/`);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -21,10 +22,11 @@ export const createOrganization = createAsyncThunk(
   'organization/createOrganization',
   async (orgName, thunkAPI) => {
     try {
+      // orgName should be a string, not an object
       const { data } = await axios.post(`${API}/create`, { name: orgName });
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -36,7 +38,7 @@ export const fetchOrganizationDetails = createAsyncThunk(
       const { data } = await axios.get(`${API}/${orgId}`);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -48,7 +50,7 @@ export const addMemberToOrganization = createAsyncThunk(
       const { data } = await axios.post(`${API}/${orgId}/add-member`, { email });
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -63,7 +65,7 @@ export const assignTaskToMember = createAsyncThunk(
       });
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );

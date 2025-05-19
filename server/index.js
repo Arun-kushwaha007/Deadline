@@ -44,8 +44,8 @@ app.set('redis', redisClient);
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/api/organization', organizationRoutes);
-// MongoDB Connection
+app.use('/api/organizations', organizationRoutes);
+// MongoDB Connectiond
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
