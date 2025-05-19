@@ -7,15 +7,16 @@ import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 import Login from './pages/Login';
-import CreateTeam from './pages/CreateTeam';
-import JoinTeam from './pages/JoinTeam';
+// import CreateTeam from './pages/CreateOrganization';
+// import JoinTeam from './pages/JoinOrganization';
 import ToDoList from './pages/ToDoList';
 import Help from './pages/Help';
 import Register from './pages/Register';
 import { SocketProvider } from './context/SocketContext';
 import Profile from './pages/Profile';
 import OrganizationDashboard from './components/Organization/OrganiationDashboard';
-
+import JoinOrganization from './pages/JoinOrganization';
+import CreateOrganization from './pages/CreateOrganization';
 
 const socket = io('http://localhost:5000', {
   withCredentials: true,
@@ -52,13 +53,14 @@ function App() {
         {/* <Route path="/task/:id" element={<TaskDetails />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/create_team" element={<CreateTeam />} />
-        <Route path="/join_team" element={<JoinTeam />} />
+        <Route path="/create_Organization" element={<CreateOrganization />} />
+        <Route path="/join_Organization" element={<JoinOrganization />} />
         <Route path="/help" element={<Help />} />
         <Route path="/todo" element={<ToDoList />} />
         {/* <Route path="/profile/:id" element={<Profile />} /> */}
         {/* <Route path="/profile/:id/edit" element={<EditProfile />} /> */}
         <Route path="/organizations" element={<OrganizationDashboard />} />
+
         
 
        <Route path="/profile" element={<Profile />} />

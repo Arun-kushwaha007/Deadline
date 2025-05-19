@@ -3,12 +3,12 @@ import DashboardLayout from "../components/organisms/DashboardLayout"
 
 
 
-const JoinTeam = () => {
+const JoinOrganization = () => {
   return (
     <DashboardLayout>
-    <div>JoinTeam</div>
+    <div>Join Organization</div>
     </DashboardLayout>
   )
 }
 
-export default JoinTeam
+export default JoinOrganization;

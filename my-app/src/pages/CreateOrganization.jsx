@@ -1,13 +1,17 @@
+// import React from 'react'
+import DashboardLayout from '../components/organisms/DashboardLayout'
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { fetchOrganizations } from '../../redux/organizationSlice';
-import OrganizationCard from './OrganizationCard';
-import CreateOrganizationModal from './CreateOrganizationModal';
+// import { fetchUserOrganizations } from '../../redux/organizationSlice';
+// import { fetchOrganizations } from '../../redux/organizationSlice';
+// import OrganizationCard from './OrganizationCard';
+// import CreateOrganizationModal from './CreateOrganizationModal';
+import CreateOrganizationModal from '../components/Organization/CreateOrganizationModal';
+import OrganizationCard from '../components/Organization/OrganizationCard';
+import { fetchOrganizations } from '../redux/organizationSlice';
 
-const OrganizationDashboard = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const CreateOrganization = () => {
+      const dispatch = useDispatch();
   const organizations = useSelector((state) => state.organization.organizations);
   const [showModal, setShowModal] = React.useState(false);
 
@@ -16,14 +20,17 @@ const OrganizationDashboard = () => {
   }, [dispatch]);
 
   return (
+    <DashboardLayout>
+  
+
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">My Organizations</h1>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded-md"
-          onClick={() => navigate('/create_Organization')}
+          onClick={() => setShowModal(true)}
         >
-         Create Organization
+          + Create Organization
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -33,7 +40,9 @@ const OrganizationDashboard = () => {
       </div>
       {showModal && <CreateOrganizationModal closeModal={() => setShowModal(false)} />}
     </div>
-  );
-};
+  
+    </DashboardLayout>
+  )
+}
 
-export default OrganizationDashboard;
+export default CreateOrganization
