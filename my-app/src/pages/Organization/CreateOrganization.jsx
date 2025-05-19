@@ -1,14 +1,14 @@
 // import React from 'react'
-import DashboardLayout from '../components/organisms/DashboardLayout'
+import DashboardLayout from '../../components/organisms/DashboardLayout'
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { fetchUserOrganizations } from '../../redux/organizationSlice';
 // import { fetchOrganizations } from '../../redux/organizationSlice';
 // import OrganizationCard from './OrganizationCard';
 // import CreateOrganizationModal from './CreateOrganizationModal';
-import CreateOrganizationModal from '../components/Organization/CreateOrganizationModal';
-import OrganizationCard from '../components/Organization/OrganizationCard';
-import { fetchOrganizations } from '../redux/organizationSlice';
+import CreateOrganizationModal from '../../components/Organization/CreateOrganizationModal';
+import OrganizationCard from '../../components/Organization/OrganizationCard';
+import { fetchOrganizations } from '../../redux/organizationSlice';
 
 const CreateOrganization = () => {
       const dispatch = useDispatch();

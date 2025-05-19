@@ -1,5 +1,5 @@
 import React from 'react'
-import DashboardLayout from "../components/organisms/DashboardLayout"
+import DashboardLayout from "../../components/organisms/DashboardLayout"
 
 
 
