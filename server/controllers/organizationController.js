@@ -43,22 +43,64 @@ export const createOrganization = async (req, res) => {
 };
 
 // GET /api/organizations/:id
+// GET /api/organizations/:id
 export const getOrganizationById = async (req, res) => {
   const { id } = req.params;
 
   try {
     const organization = await Organization.findById(id);
-
     if (!organization) {
       return res.status(404).json({ message: 'Organization not found' });
     }
 
-    res.status(200).json(organization);
+    // Fetch users for members by userId UUID string
+    const memberUserIds = organization.members.map(m => m.userId);
+    const membersUsers = await User.find({ userId: { $in: memberUserIds } }).select('userId name email');
+
+    // Map userId to user object for quick lookup
+    const userMap = {};
+    membersUsers.forEach(user => {
+      userMap[user.userId] = user;
+    });
+
+    // Attach user info to members
+    const membersWithUser = organization.members.map(member => ({
+      ...member.toObject(),
+      userId: userMap[member.userId] || { userId: member.userId, name: 'Unknown User' }
+    }));
+
+    // Do similar for tasks assignedTo
+    const taskAssignedUserIds = organization.tasks
+      .map(task => task.assignedTo)
+      .filter(id => id != null);
+
+    const assignedUsers = await User.find({ userId: { $in: taskAssignedUserIds } }).select('userId name');
+
+    const assignedUserMap = {};
+    assignedUsers.forEach(user => {
+      assignedUserMap[user.userId] = user;
+    });
+
+    // Attach user info to tasks
+    const tasksWithUser = organization.tasks.map(task => ({
+      ...task.toObject(),
+      assignedTo: task.assignedTo ? assignedUserMap[task.assignedTo] || { userId: task.assignedTo, name: 'Unknown User' } : null,
+    }));
+
+    // Build response object with populated members and tasks
+    const organizationWithDetails = {
+      ...organization.toObject(),
+      members: membersWithUser,
+      tasks: tasksWithUser,
+    };
+
+    res.status(200).json(organizationWithDetails);
   } catch (error) {
     console.error('Error fetching organization:', error);
     res.status(500).json({ message: 'Failed to fetch organization', error: error.message });
   }
 };
+
 
 // POST /api/organizations/:id/members
 export const addMember = async (req, res) => {
