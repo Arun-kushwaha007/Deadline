@@ -9,10 +9,19 @@ import {
 
 const router = express.Router();
 
+// GET all organizations
 router.get('/', getAllOrganizations);
+
+// POST create a new organization
 router.post('/create', createOrganization);
+
+// GET specific organization by ID
 router.get('/:id', getOrganizationById);
-router.post('/:id/add-member', addMember);
-router.post('/:id/assign-task', assignTask);
+
+// POST add a member to an organization
+router.post('/:id/members', addMember);
+
+// POST assign a task to a member
+router.post('/:id/tasks', assignTask);
 
 export default router;

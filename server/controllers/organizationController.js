@@ -1,88 +1,103 @@
 import Organization from '../models/Organization.js';
 import User from '../models/User.js';
 
-// Get all organizations
+// GET /api/organizations/
 export const getAllOrganizations = async (req, res) => {
   try {
-    const orgs = await Organization.find().populate('members.userId', 'name email');
-    res.status(200).json(orgs);
-  } catch (err) {
-    console.error('Error fetching organizations:', err);
-    res.status(500).json({ message: 'Failed to fetch organizations', error: err.message });
+    // For populate to work with string userId, you might want to refactor members schema to store ObjectId
+    // But since you're storing UUID string, you need to populate manually or handle client-side.
+    // Here just sending as is:
+    const organizations = await Organization.find();
+
+    res.status(200).json(organizations);
+  } catch (error) {
+    console.error('Error fetching organizations:', error);
+    res.status(500).json({ message: 'Failed to fetch organizations', error: error.message });
   }
 };
 
+// POST /api/organizations/create
 export const createOrganization = async (req, res) => {
   try {
-    // Check if name is nested
-    const name = typeof req.body.name === 'string' ? req.body.name : req.body.name?.name;
+    const name = typeof req.body.name === 'string'
+      ? req.body.name.trim()
+      : req.body.name?.name?.trim();
 
     if (!name) {
       return res.status(400).json({ message: 'Organization name is required' });
     }
 
-    const newOrg = new Organization({ name });
-    await newOrg.save();
-    res.status(201).json(newOrg);
+    const existingOrg = await Organization.findOne({ name });
+    if (existingOrg) {
+      return res.status(409).json({ message: 'Organization with this name already exists' });
+    }
+
+    const newOrganization = new Organization({ name });
+    await newOrganization.save();
+
+    res.status(201).json(newOrganization);
   } catch (error) {
     console.error('Error creating organization:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-// Get organization by ID
+// GET /api/organizations/:id
 export const getOrganizationById = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const org = await Organization.findById(id)
-      .populate('members.userId', 'name email')
-      .populate('tasks.assignedTo', 'name email');
+    const organization = await Organization.findById(id);
 
-    if (!org) {
+    if (!organization) {
       return res.status(404).json({ message: 'Organization not found' });
     }
 
-    res.status(200).json(org);
-  } catch (err) {
-    console.error('Error fetching organization:', err);
-    res.status(500).json({ message: 'Failed to fetch organization', error: err.message });
+    res.status(200).json(organization);
+  } catch (error) {
+    console.error('Error fetching organization:', error);
+    res.status(500).json({ message: 'Failed to fetch organization', error: error.message });
   }
 };
 
-// Add member to organization
+// POST /api/organizations/:id/members
 export const addMember = async (req, res) => {
-  const { email } = req.body;
+  const { joiningUserId } = req.body;  // UUID string
   const { id } = req.params;
 
-  if (!email) {
-    return res.status(400).json({ message: 'User email is required' });
+  if (!joiningUserId) {
+    return res.status(400).json({ message: 'User ID is required' });
   }
 
   try {
-    const user = await User.findOne({ email });
+    // Find user by userId (UUID string)
+    const user = await User.findOne({ userId: joiningUserId });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const org = await Organization.findById(id);
-    if (!org) return res.status(404).json({ message: 'Organization not found' });
+    // Find the organization by ID
+    const organization = await Organization.findById(id);
+    if (!organization) return res.status(404).json({ message: 'Organization not found' });
 
-    const isAlreadyMember = org.members.some(m => m.userId.toString() === user._id.toString());
-    if (isAlreadyMember) {
-      return res.status(400).json({ message: 'User is already a member of this organization' });
+    // Check if user is already a member by comparing UUID strings
+    const alreadyMember = organization.members.some(
+      m => m.userId === user.userId
+    );
+    if (alreadyMember) {
+      return res.status(409).json({ message: 'User is already a member of this organization' });
     }
 
-    org.members.push({ userId: user._id });
-    await org.save();
+    // Add member using UUID string
+    organization.members.push({ userId: user.userId });
+    await organization.save();
 
-    const updatedOrg = await Organization.findById(id).populate('members.userId', 'name email');
-    res.status(200).json(updatedOrg);
-  } catch (err) {
-    console.error('Error adding member:', err);
-    res.status(500).json({ message: 'Failed to add member', error: err.message });
+    res.status(200).json(organization);
+  } catch (error) {
+    console.error('Error adding member:', error);
+    res.status(500).json({ message: 'Failed to add member', error: error.message });
   }
 };
 
-// Assign task to a member in the organization
+// POST /api/organizations/:id/tasks
 export const assignTask = async (req, res) => {
   const { title, assignedTo } = req.body;
   const { id } = req.params;
@@ -92,30 +107,29 @@ export const assignTask = async (req, res) => {
   }
 
   try {
-    const org = await Organization.findById(id);
-    if (!org) return res.status(404).json({ message: 'Organization not found' });
+    const organization = await Organization.findById(id);
+    if (!organization) return res.status(404).json({ message: 'Organization not found' });
 
-    const isMember = org.members.some(m => m.userId.toString() === assignedTo);
+    // assignedTo is a UUID string here, check membership by UUID string
+    const isMember = organization.members.some(
+      m => m.userId === assignedTo
+    );
+
     if (!isMember) {
-      return res.status(400).json({ message: 'Assigned user is not a member of this organization' });
+      return res.status(403).json({ message: 'Assigned user is not a member of this organization' });
     }
 
-    const task = {
-      title,
+    organization.tasks.push({
+      title: title.trim(),
       assignedTo,
-      status: 'To Do'
-    };
+      status: 'To Do',
+    });
 
-    org.tasks.push(task);
-    await org.save();
+    await organization.save();
 
-    const updatedOrg = await Organization.findById(id)
-      .populate('members.userId', 'name email')
-      .populate('tasks.assignedTo', 'name email');
-
-    res.status(200).json(updatedOrg);
-  } catch (err) {
-    console.error('Error assigning task:', err);
-    res.status(500).json({ message: 'Failed to assign task', error: err.message });
+    res.status(200).json(organization);
+  } catch (error) {
+    console.error('Error assigning task:', error);
+    res.status(500).json({ message: 'Failed to assign task', error: error.message });
   }
 };

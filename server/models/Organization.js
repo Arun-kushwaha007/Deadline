@@ -4,14 +4,14 @@ const OrganizationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   members: [
     {
-      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      userId: { type: String, ref: 'User' },  // changed from ObjectId to String
       role: { type: String, default: 'member' },
     },
   ],
   tasks: [
     {
       title: { type: String, required: true },
-      assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      assignedTo: { type: String, ref: 'User' },  // changed from ObjectId to String
       status: { type: String, default: 'To Do' },
     },
   ],
