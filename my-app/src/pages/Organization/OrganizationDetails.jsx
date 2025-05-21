@@ -9,6 +9,8 @@ const OrganizationDetails = () => {
   const [organization, setOrganization] = useState(null);
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ name: '' });
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -19,6 +21,7 @@ const OrganizationDetails = () => {
       try {
         const res = await axios.get(`http://localhost:5000/api/organizations/${id}`);
         setOrganization(res.data);
+        setEditData({ name: res.data.name });
       } catch (err) {
         console.error('Failed to fetch organization:', err);
       } finally {
@@ -34,9 +37,22 @@ const OrganizationDetails = () => {
     navigate(`/organizations/${id}/add-member`);
   };
 
-  const handleEdit = (e) => {
-    e.stopPropagation();
-    navigate(`/organizations/${id}/edit`);
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleChange = (e) => {
+    setEditData({ ...editData, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await axios.put(`http://localhost:5000/api/organizations/${id}`, editData);
+      setOrganization(res.data);
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Failed to update organization:', err);
+    }
   };
 
   if (loading)
@@ -48,7 +64,17 @@ const OrganizationDetails = () => {
     <DashboardLayout>
       <div className="p-6 min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-4xl font-extrabold">{organization.name}</h1>
+          {isEditing ? (
+            <input
+              type="text"
+              name="name"
+              value={editData.name}
+              onChange={handleChange}
+              className="text-4xl font-extrabold px-3 py-2 border dark:bg-gray-800 dark:border-gray-700 rounded-md"
+            />
+          ) : (
+            <h1 className="text-4xl font-extrabold">{organization.name}</h1>
+          )}
           <div className="flex gap-3">
             <button
               onClick={handleAddMember}
@@ -56,29 +82,68 @@ const OrganizationDetails = () => {
             >
               Add Member
             </button>
-            <button
-              onClick={handleEdit}
-              className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
-            >
-              Edit
-            </button>
-           
+
+            {isEditing ? (
+              <>
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleEditToggle}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 transition"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleEditToggle}
+                className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
+              >
+                Edit
+              </button>
+            )}
           </div>
         </div>
 
-        <section className="mb-8">
-          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
-          <ul className="space-y-2">
-            {organization.members.map((member) => (
-              <li
-                key={member.userId._id}
-                className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-md shadow"
-              >
-                <strong>{member.userId.name}</strong> &mdash; <span className="italic">{member.role}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+      <section className="mb-8">
+  <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
+  <ul className="space-y-2">
+    {organization.members.map((member) => (
+      <li
+        key={member.userId._id}
+        className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-md shadow flex justify-between items-center"
+      >
+        <div>
+          <strong>{member.userId.name}</strong> &mdash; 
+          <span className="italic"> {member.role}</span>
+        </div>
+        {isEditing && (
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`http://localhost:5000/api/organizations/${id}/members/${member.userId._id}`);
+                setOrganization((prev) => ({
+                  ...prev,
+                  members: prev.members.filter((m) => m.userId._id !== member.userId._id)
+                }));
+              } catch (err) {
+                console.error('Failed to delete member:', err);
+              }
+            }}
+            className="ml-4 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Delete
+          </button>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
+
 
         <section>
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
