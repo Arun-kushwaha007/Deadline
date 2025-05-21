@@ -1,14 +1,16 @@
-// components/atoms/DroppableColumn.jsx
 import { useDroppable } from '@dnd-kit/core';
 
 export default function DroppableColumn({ id, children, className }) {
-  const { setNodeRef } = useDroppable({
-    id, // allows dropping directly into column
-  });
+  const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
-    <div ref={setNodeRef} className={className}>
+    <section
+      ref={setNodeRef}
+      className={`${className} transition-shadow ${isOver ? 'shadow-lg ring-2 ring-blue-500' : ''}`}
+      role="region"
+      aria-labelledby={`column-${id}`}
+    >
       {children}
-    </div>
+    </section>
   );
 }

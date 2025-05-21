@@ -36,13 +36,13 @@ const ToDoListLayout = () => {
                 <div className="max-w-xl mx-auto py-10 px-4">
                     <div className="flex justify-between items-center mb-6">
                         <h1 className="text-3xl font-bold">To-Do List</h1>
-                        <button
+                        {/* <button
                             onClick={() => setDarkMode(!darkMode)}
                             className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
                             aria-label="Toggle dark mode"
                         >
                             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
+                        </button> */}
                     </div>
 
                     <div className="flex gap-2 mb-4">
