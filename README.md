@@ -1,6 +1,6 @@
-# 🚀 DeadlineX – The Smart Team Task Manager
+# 🚀 CollabNest – Your team's workspace. Tasks, teams & conversations — all in one place.
 
-DeadlineX is a full-stack collaborative task management and communication platform built for fast-paced teams. It blends powerful task tracking, real-time notifications, team communication, and more.
+CollabNest is a full-stack collaborative task management and communication platform built for fast-paced teams. It blends powerful task tracking, real-time notifications, team communication, and more.
 
 ---
 
@@ -48,4 +48,4 @@ DeadlineX is a full-stack collaborative task management and communication platfo
 ---
 
 ## 🧭 Final Note
-Whether you’re a solo freelancer or a startup team, **DeadlineX** aims to give you a flexible and efficient tool to manage your productivity, communication, and collaboration—all in one place.
+Whether you’re a solo freelancer or a startup team, **CollabNest** aims to give you a flexible and efficient tool to manage your productivity, communication, and collaboration—all in one place.
