@@ -51,10 +51,10 @@ const Sidebar = () => {
       {/* <h1 className="text-2xl font-bold">TaskFlow AI</h1> */}
    
     <img
-  src={logoLight}
+  src={logoDark}
   alt="CollabNest"
-  className="h-22  w-32 mt-[-60px] ml-8 object-cover bg-white rounded-4xl shadow-lg"
-  style={{ objectPosition: 'top left' }}
+  className="h-22  w-42 mt-[-55px]  ml-8 object-contain bg-slate-600  rounded-4xl shadow-lg"
+  style={{ objectPosition: 'bottom center' }}
 />
       {user && (
         <div className="text-sm opacity-80 mb-4">
