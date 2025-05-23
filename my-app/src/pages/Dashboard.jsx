@@ -9,7 +9,7 @@ const Dashboard = () => {
     <DashboardLayout>
       <div className="transition-colors duration-300">
         <h1 className="text-3xl mb-3 font-bold text-black dark:text-white">
-          Welcome to TaskFlow AI - Deadline
+          Welcome to CollabNest - Deadline
         </h1>
         {/* <OrganizationBoard /> */}
         <OrganizationDashboard />

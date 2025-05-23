@@ -3,7 +3,8 @@ import {
   Home, ListTodo, Users, LogOut, UserPen, Group, CircleHelp, CirclePlus, LayoutList
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
+import logoDark from '../../assets/collabnest_logo_dark.png'; 
+import logoLight from '../../assets/collabnest_logo_light.png'; // Adjust the path as necessary
 const menu = [
   { to: '/', label: 'Dashboard', icon: <Home size={20} /> },
   { to: '/tasks', label: 'Tasks', icon: <ListTodo size={20} /> },
@@ -47,8 +48,14 @@ const Sidebar = () => {
       color: 'var(--text-color)',
       transition: 'background-color 0.3s, color 0.3s'
     }}>
-      <h1 className="text-2xl font-bold">TaskFlow AI</h1>
-      
+      {/* <h1 className="text-2xl font-bold">TaskFlow AI</h1> */}
+   
+    <img
+  src={logoLight}
+  alt="CollabNest"
+  className="h-22  w-32 mt-[-60px] ml-8 object-cover bg-white rounded-4xl shadow-lg"
+  style={{ objectPosition: 'top left' }}
+/>
       {user && (
         <div className="text-sm opacity-80 mb-4">
           Welcome, <span className="font-semibold">{user.name}</span>
