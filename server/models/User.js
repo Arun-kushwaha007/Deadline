@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
     unique: true,
     default: () => uuidv4(),
   },
+  resetToken: String,
+  resetTokenExpire: Date,
 });
 
 // Pre-save middleware to hash password if modified

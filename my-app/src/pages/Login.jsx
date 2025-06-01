@@ -21,13 +21,12 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // ✅ Save user info including userId in localStorage
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({
             name: result.user.name,
             email: result.user.email,
-            userId: result.user.userId, // Store userId from backend response
+            userId: result.user.userId,
           })
         );
 
@@ -72,6 +71,13 @@ const Login = () => {
           {errors.password && (
             <span className="text-red-600 text-sm mb-2">*Password* is mandatory</span>
           )}
+
+          {/* 🔗 Forgot Password Link */}
+          <div className="text-right mr-[5px] mb-2">
+            <Link to="/forgot-password" className="text-blue-600 text-sm hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
 
           <input
             type="submit"

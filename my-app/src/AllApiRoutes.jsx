@@ -17,6 +17,9 @@ import AddMember from './pages/Organization/AddMember';
 import EditOrganization from './pages/Organization/EditOrganization';
 import OrganizationDetails from './pages/Organization/OrganizationDetails';
 import CreateOrganization from './pages/Organization/CreateOrganization';
+import ForgotPassword from './pages/ForgetPassword';
+import ResetPassword from './pages/ResetPassword';
+
 
 const AllApiRoutes = () => {
   return (
@@ -35,6 +38,9 @@ const AllApiRoutes = () => {
       <Route path="/organizations/:id" element={<OrganizationDetails />} />
       <Route path="/organizations/:id/add-member" element={<AddMember />} />
       <Route path="/organizations/:id/edit" element={<EditOrganization />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+
 
 
       

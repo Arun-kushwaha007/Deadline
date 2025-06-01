@@ -27,6 +27,7 @@
     "react-router": "^7.5.0",
     "react-router-dom": "^7.5.0",
     "redis": "^4.7.0",
+    "resend": "^4.5.1",
     "socket.io-client": "^4.8.1",
     "uuid": "^11.1.0"
   },
