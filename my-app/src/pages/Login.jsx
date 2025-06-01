@@ -1,6 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
+// import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,6 +13,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  // ✅ Normal login form handler
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
@@ -38,6 +42,44 @@ const Login = () => {
     } catch (error) {
       console.error('Login error:', error.message);
       alert('An unexpected error occurred.');
+    }
+  };
+
+  // ✅ Google login success handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+
+      const response = await fetch('http://localhost:5000/api/auth/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: decoded.name,
+          email: decoded.email,
+          googleId: decoded.sub,
+          picture: decoded.picture,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({
+            name: result.user.name,
+            email: result.user.email,
+            userId: result.user.userId,
+          })
+        );
+        console.log(`${result.user.name}, you are successfully logged in with Google.`);
+        navigate('/');
+      } else {
+        alert(result.message || 'Google login failed.');
+      }
+    } catch (error) {
+      console.error('Google login error:', error.message);
+      alert('Google login failed.');
     }
   };
 
@@ -72,7 +114,6 @@ const Login = () => {
             <span className="text-red-600 text-sm mb-2">*Password* is mandatory</span>
           )}
 
-          {/* 🔗 Forgot Password Link */}
           <div className="text-right mr-[5px] mb-2">
             <Link to="/forgot-password" className="text-blue-600 text-sm hover:underline">
               Forgot Password?
@@ -85,6 +126,16 @@ const Login = () => {
             className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
             style={{ backgroundColor: '#a1eafb' }}
           />
+
+          <div className="my-4 text-center text-gray-500">or</div>
+
+          {/* ✅ Google Login Button */}
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => console.log('Google login failed')}
+            />
+          </div>
 
           <p className="mt-4 text-sm">
             Not registered yet?{' '}

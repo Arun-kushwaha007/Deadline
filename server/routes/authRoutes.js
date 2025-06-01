@@ -140,17 +140,22 @@ router.post('/reset-password/:token', async (req, res) => {
 });
 
 router.post('/google-login', async (req, res) => {
-  const { token } = req.body;
   try {
-    const decoded = jwtDecode(token);
-    const { name, email } = decoded;
+    const { name, email, googleId, picture } = req.body;
+
+    if (!email || !googleId) {
+      return res.status(400).json({ message: 'Missing required Google credentials.' });
+    }
 
     let user = await User.findOne({ email });
+
     if (!user) {
+      // Create a new user
       user = new User({
         name,
         email,
-        password: 'google_auth_no_password', // or some dummy string
+        password: googleId, // or generate a random password
+        profilePicture: picture, // optional
       });
       await user.save();
     }
@@ -158,15 +163,16 @@ router.post('/google-login', async (req, res) => {
     res.status(200).json({
       message: 'Google login successful',
       user: {
-        userId: user.userId,
         name: user.name,
         email: user.email,
+        userId: user._id,
       },
     });
   } catch (error) {
-    console.error('Google login error:', error.message);
-    res.status(500).json({ message: 'Google login failed' });
+    console.error('Google login error:', error);
+    res.status(500).json({ message: 'Internal server error during Google login.' });
   }
 });
+
 
 export default router;
