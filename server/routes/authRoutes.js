@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import {Resend} from 'resend';
+import {jwtDecode} from 'jwt-decode';
+
 
 
 const router = express.Router();
@@ -134,6 +136,36 @@ router.post('/reset-password/:token', async (req, res) => {
   } catch (error) {
     console.error('Reset password error:', error.message);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.post('/google-login', async (req, res) => {
+  const { token } = req.body;
+  try {
+    const decoded = jwtDecode(token);
+    const { name, email } = decoded;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        password: 'google_auth_no_password', // or some dummy string
+      });
+      await user.save();
+    }
+
+    res.status(200).json({
+      message: 'Google login successful',
+      user: {
+        userId: user.userId,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error('Google login error:', error.message);
+    res.status(500).json({ message: 'Google login failed' });
   }
 });
 
