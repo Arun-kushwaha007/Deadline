@@ -1,9 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
-  const navigate = useNavigate(); // 🚀 Initialize navigate
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -12,7 +13,6 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Send POST request to backend
       const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -22,17 +22,14 @@ const Register = () => {
       const result = await response.json();
 
       if (response.ok) {
-        // Save userId and other details to localStorage
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({
             name: data.name,
             email: data.email,
-            userId: result.userId, // Save userId from backend response
+            userId: result.user.userId,
           })
         );
-
-        console.log('✅ User registered on backend:', result);
         navigate('/login');
       } else {
         alert(`❌ Registration failed: ${result.message}`);
@@ -41,6 +38,39 @@ const Register = () => {
       console.error('❌ Error registering:', error);
       alert('An unexpected error occurred.');
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: credentialResponse.credential }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify({
+            name: result.user.name,
+            email: result.user.email,
+            userId: result.user.userId,
+          })
+        );
+        navigate('/');
+      } else {
+        alert(`Google login failed: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      alert('Google login failed');
+    }
+  };
+
+  const handleGoogleError = () => {
+    alert('Google login failed');
   };
 
   return (
@@ -81,6 +111,13 @@ const Register = () => {
             <span className="text-red-600 text-sm mb-2">*Password* is mandatory</span>
           )}
 
+          {/* Forgot Password Link */}
+          <div className="text-right text-sm mb-2 mr-2">
+            <Link to="/forgot-password" className="text-blue-600 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+
           <input
             type="submit"
             value="Register"
@@ -95,6 +132,10 @@ const Register = () => {
             </Link>
           </p>
         </form>
+
+        <div className="mt-6 w-[30vw] mx-auto text-center">
+          <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+        </div>
       </div>
     </div>
   );
