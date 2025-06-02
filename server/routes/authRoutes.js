@@ -98,11 +98,26 @@ router.post('/forgot-password', async (req, res) => {
     const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
     const emailResponse = await resend.emails.send({
-      from: 'YourApp <onboarding@resend.dev>',
-      to: email,
-      subject: 'Password Reset Request',
-      html: `<p>Click <a href="${resetLink}">here</a> to reset your password. This link expires in 30 minutes.</p>`,
-    });
+  from: 'CollabNest <onboarding@resend.dev>',
+  to: email,
+  subject: 'Reset Your Password – CollabNest',
+  html: `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <h2>Reset Your Password</h2>
+      <p>Hi there,</p>
+      <p>We received a request to reset the password for your <strong>CollabNest</strong> account.</p>
+      <p>Click the button below to reset your password. This link will expire in <strong>30 minutes</strong>:</p>
+      <p>
+        <a href="${resetLink}" style="background-color: #4f46e5; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+          Reset Password
+        </a>
+      </p>
+      <p>If you didn’t request this, you can safely ignore this email.</p>
+      <p>Thanks,<br />The CollabNest Team</p>
+    </div>
+  `,
+});
+
 
     console.log('Resend response:', emailResponse);
     res.status(200).json({ message: 'Password reset email sent.' });
