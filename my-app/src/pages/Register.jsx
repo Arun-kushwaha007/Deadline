@@ -69,73 +69,78 @@ const Register = () => {
     }
   };
 
-  const handleGoogleError = () => {
-    alert('Google login failed');
-  };
-
   return (
-    <div className="h-screen flex justify-center items-center text-black">
-      <div>
-        <p className="text-center w-[30vw] bg-purple-300 py-[2vw] px-[1vw] rounded-t-[10px] text-2xl font-[Verdana]">
-          Registration Form
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4 dark:bg-gray-900 dark:text-white">
+      <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-center text-orange-500">
+          Create Your Account
+        </h2>
 
-        <form
-          className="text-center flex flex-col mx-auto w-[30vw] py-[2vw] px-[1vw] bg-pink-200 rounded-b-[10px]"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <input
             type="text"
             {...register('name')}
             placeholder="Name"
-            className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-          <input
-            type="email"
-            {...register('email', { required: true })}
-            placeholder="Email"
-            className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
-          />
-          {errors.email && (
-            <span className="text-red-600 text-sm mb-2">*Email* is mandatory</span>
-          )}
+          <div>
+            <input
+              type="email"
+              {...register('email', { required: true })}
+              placeholder="Email"
+              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            {errors.email && (
+              <p className="text-red-400 text-sm mt-1">*Email* is mandatory</p>
+            )}
+          </div>
 
-          <input
-            type="password"
-            {...register('password', { required: true })}
-            placeholder="Password"
-            className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
-          />
-          {errors.password && (
-            <span className="text-red-600 text-sm mb-2">*Password* is mandatory</span>
-          )}
+          <div>
+            <input
+              type="password"
+              {...register('password', { required: true })}
+              placeholder="Password"
+              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            {errors.password && (
+              <p className="text-red-400 text-sm mt-1">*Password* is mandatory</p>
+            )}
+          </div>
 
-          {/* Forgot Password Link */}
-          <div className="text-right text-sm mb-2 mr-2">
-            <Link to="/forgot-password" className="text-blue-600 hover:underline">
+          <div className="text-right text-sm">
+            <Link to="/forgot-password" className="text-orange-400 hover:underline">
               Forgot Password?
             </Link>
           </div>
 
-          <input
+          <button
             type="submit"
-            value="Register"
-            className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
-            style={{ backgroundColor: '#a1eafb' }}
-          />
-
-          <p className="mt-4 text-sm">
-            Already registered?{' '}
-            <Link to="/login" className="text-blue-600 hover:underline">
-              Login here
-            </Link>
-          </p>
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-lg transition duration-200"
+          >
+            Register
+          </button>
         </form>
 
-        <div className="mt-6 w-[30vw] mx-auto text-center">
-          <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+        <div className="flex items-center justify-center gap-2">
+          <span className="h-px w-20 bg-gray-600"></span>
+          <span className="text-sm text-gray-400">or continue with</span>
+          <span className="h-px w-20 bg-gray-600"></span>
         </div>
+
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => alert('Google login failed')}
+          />
+        </div>
+
+        <p className="text-center text-sm text-gray-400">
+          Already registered?{' '}
+          <Link to="/login" className="text-orange-400 hover:underline font-medium">
+            Login here
+          </Link>
+        </p>
       </div>
     </div>
   );

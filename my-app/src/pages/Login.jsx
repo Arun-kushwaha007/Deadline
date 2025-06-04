@@ -1,8 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleLogin, googleLogout } from '@react-oauth/google';
-// import jwtDecode from 'jwt-decode';
+import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
@@ -13,7 +12,6 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // ✅ Normal login form handler
   const onSubmit = async (data) => {
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
@@ -25,7 +23,7 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', result.token); // Store the token
+        localStorage.setItem('token', result.token);
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({
@@ -34,8 +32,6 @@ const Login = () => {
             userId: result.user.userId,
           })
         );
-
-        console.log(`${result.user.name}, you are successfully logged in.`);
         navigate('/');
       } else {
         alert(result.message);
@@ -46,7 +42,6 @@ const Login = () => {
     }
   };
 
-  // ✅ Google login success handler
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
@@ -65,7 +60,7 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', result.token); // Store the token
+        localStorage.setItem('token', result.token);
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({
@@ -74,7 +69,6 @@ const Login = () => {
             userId: result.user.userId,
           })
         );
-        console.log(`${result.user.name}, you are successfully logged in with Google.`);
         navigate('/');
       } else {
         alert(result.message || 'Google login failed.');
@@ -86,66 +80,68 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center text-black">
-      <div>
-        <p className="text-center w-[30vw] bg-purple-300 py-[2vw] px-[1vw] rounded-t-[10px] text-2xl font-[Verdana]">
-          Login Form
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4 dark:bg-gray-900 dark:text-white">
+      <div className="w-full max-w-md bg-gray-800 dark:bg-gray-800 text-white rounded-2xl shadow-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-center text-orange-500">Login to Your Account</h2>
 
-        <form
-          className="text-center flex flex-col mx-auto w-[30vw] py-[2vw] px-[1vw] bg-pink-200 rounded-b-[10px]"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <input
-            type="email"
-            {...register('email', { required: true })}
-            placeholder="Email"
-            className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
-          />
-          {errors.email && (
-            <span className="text-red-600 text-sm mb-2">*Email* is mandatory</span>
-          )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <input
+              type="email"
+              {...register('email', { required: true })}
+              placeholder="Email"
+              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            {errors.email && (
+              <p className="text-red-400 text-sm mt-1">*Email* is mandatory</p>
+            )}
+          </div>
 
-          <input
-            type="password"
-            {...register('password', { required: true })}
-            placeholder="Password"
-            className="border border-gray-400 rounded-[10px] p-[1vw] outline-none m-[5px]"
-          />
-          {errors.password && (
-            <span className="text-red-600 text-sm mb-2">*Password* is mandatory</span>
-          )}
+          <div>
+            <input
+              type="password"
+              {...register('password', { required: true })}
+              placeholder="Password"
+              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            {errors.password && (
+              <p className="text-red-400 text-sm mt-1">*Password* is mandatory</p>
+            )}
+          </div>
 
-          <div className="text-right mr-[5px] mb-2">
-            <Link to="/forgot-password" className="text-blue-600 text-sm hover:underline">
+          <div className="text-right text-sm">
+            <Link to="/forgot-password" className="text-orange-400 hover:underline">
               Forgot Password?
             </Link>
           </div>
 
-          <input
+          <button
             type="submit"
-            value="Login"
-            className="rounded-[10px] p-[1vw] m-[5px] cursor-pointer"
-            style={{ backgroundColor: '#a1eafb' }}
-          />
-
-          <div className="my-4 text-center text-gray-500">or</div>
-
-          {/* ✅ Google Login Button */}
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => console.log('Google login failed')}
-            />
-          </div>
-
-          <p className="mt-4 text-sm">
-            Not registered yet?{' '}
-            <Link to="/register" className="text-blue-600 hover:underline">
-              Register here
-            </Link>
-          </p>
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-lg transition duration-200"
+          >
+            Login
+          </button>
         </form>
+
+        <div className="flex items-center justify-center gap-2">
+          <span className="h-px w-20 bg-gray-600"></span>
+          <span className="text-sm text-gray-400">or continue with</span>
+          <span className="h-px w-20 bg-gray-600"></span>
+        </div>
+
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => console.log('Google login failed')}
+          />
+        </div>
+
+        <p className="text-center text-sm text-gray-400">
+          Not registered yet?{' '}
+          <Link to="/register" className="text-orange-400 hover:underline font-medium">
+            Register here
+          </Link>
+        </p>
       </div>
     </div>
   );
