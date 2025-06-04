@@ -4,10 +4,15 @@ import User from '../models/User.js';
 // GET /api/organizations/
 export const getAllOrganizations = async (req, res) => {
   try {
-    // For populate to work with string userId, you might want to refactor members schema to store ObjectId
-    // But since you're storing UUID string, you need to populate manually or handle client-side.
-    // Here just sending as is:
-    const organizations = await Organization.find();
+    if (!req.user || !req.user.userId) {
+      // This should ideally be caught by authMiddleware, but as a safeguard:
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const userId = req.user.userId;
+
+    // Find organizations where the current user is a member
+    const organizations = await Organization.find({ "members.userId": userId });
 
     res.status(200).json(organizations);
   } catch (error) {
@@ -33,6 +38,16 @@ export const createOrganization = async (req, res) => {
     }
 
     const newOrganization = new Organization({ name });
+
+    // Add the creator as a member with admin role
+    if (req.user && req.user.userId) {
+      newOrganization.members.push({ userId: req.user.userId, role: 'admin' });
+    } else {
+      // This case should ideally not be reached if authMiddleware is effective
+      console.error('User ID not found in req.user for organization creator');
+      return res.status(400).json({ message: 'User information not found for organization creator.' });
+    }
+
     await newOrganization.save();
 
     res.status(201).json(newOrganization);

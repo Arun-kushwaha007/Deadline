@@ -2,6 +2,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'; // Added for JWT
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import {Resend} from 'resend';
@@ -48,10 +49,18 @@ router.post('/login', async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: 'Invalid password' });
 
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user.id }, // user.id is the MongoDB _id
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // Token expiration
+    );
+
     res.status(200).json({
       message: 'Login successful',
+      token: token, // Added token
       user: {
-        userId: user.userId,
+        userId: user.userId, // This is the string UUID
         name: user.name,
         email: user.email
       }
@@ -175,12 +184,20 @@ router.post('/google-login', async (req, res) => {
       await user.save();
     }
 
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user.id }, // user.id is the MongoDB _id
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // Token expiration
+    );
+
     res.status(200).json({
       message: 'Google login successful',
+      token: token, // Added token
       user: {
         name: user.name,
         email: user.email,
-        userId: user._id,
+        userId: user.userId, // This is the string UUID, changed from user._id for consistency
       },
     });
   } catch (error) {

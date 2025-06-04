@@ -9,11 +9,13 @@ import {
 
 const router = express.Router();
 
+import authMiddleware from '../middleware/authMiddleware.js';
+
 // GET all organizations
-router.get('/', getAllOrganizations);
+router.get('/', authMiddleware, getAllOrganizations);
 
 // POST create a new organization
-router.post('/create', createOrganization);
+router.post('/create', authMiddleware, createOrganization);
 
 // GET specific organization by ID
 router.get('/:id', getOrganizationById);

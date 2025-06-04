@@ -9,8 +9,16 @@ const API = 'http://localhost:5000/api/organizations';
 export const fetchOrganizations = createAsyncThunk(
   'organization/fetchOrganizations',
   async (_, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
     try {
-      const { data } = await axios.get(`${API}/`);
+      const { data } = await axios.get(`${API}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -21,9 +29,17 @@ export const fetchOrganizations = createAsyncThunk(
 export const createOrganization = createAsyncThunk(
   'organization/createOrganization',
   async (orgName, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
     try {
       // orgName should be a string, not an object
-      const { data } = await axios.post(`${API}/create`, { name: orgName });
+      const { data } = await axios.post(`${API}/create`, { name: orgName }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -34,8 +50,16 @@ export const createOrganization = createAsyncThunk(
 export const fetchOrganizationDetails = createAsyncThunk(
   'organization/fetchOrganizationDetails',
   async (orgId, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
     try {
-      const { data } = await axios.get(`${API}/${orgId}`);
+      const { data } = await axios.get(`${API}/${orgId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -46,8 +70,17 @@ export const fetchOrganizationDetails = createAsyncThunk(
 export const addMemberToOrganization = createAsyncThunk(
   'organization/addMemberToOrganization',
   async ({ orgId, email }, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
     try {
-      const { data } = await axios.post(`${API}/${orgId}/add-member`, { email });
+      // Corrected URL from /add-member to /members
+      const { data } = await axios.post(`${API}/${orgId}/members`, { email }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
@@ -58,10 +91,19 @@ export const addMemberToOrganization = createAsyncThunk(
 export const assignTaskToMember = createAsyncThunk(
   'organization/assignTaskToMember',
   async ({ orgId, title, assignedTo }, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
     try {
-      const { data } = await axios.post(`${API}/${orgId}/assign-task`, {
+      // Corrected URL from /assign-task to /tasks
+      const { data } = await axios.post(`${API}/${orgId}/tasks`, {
         title,
         assignedTo,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       return data;
     } catch (error) {
