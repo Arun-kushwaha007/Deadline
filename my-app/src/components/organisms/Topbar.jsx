@@ -4,7 +4,8 @@ import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../../utils/theme';
 import { Moon, Sun, LogIn, User,Bell } from 'lucide-react';
-
+import logoDark from '../../assets/collabnest_logo_dark.png';
+import logoLight from '../../assets/collabnest_logo_light.png';
 
 const testNotifications = [
   { id: 1, message: "Assignment 1 deadline tomorrow!" },
@@ -18,7 +19,7 @@ const Topbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
-
+ const [isDark, setIsDark] = useState(false);
 
 
   const navigate = useNavigate();
@@ -43,8 +44,12 @@ const Topbar = () => {
 
   return (
      <header className="flex justify-between items-center h-16 px-6 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white transition-colors duration-300">
-      <h2 className="text-xl font-semibold">Dashboard</h2>
-
+      {/* <h2 className="text-xl font-semibold">Dashboard</h2> */}
+ <img
+          src={isDark ? logoLight : logoDark}
+          alt="CollabNest"
+          className="h-12 object-contain mb-2"
+        />
       <div className="flex items-center gap-4">
         {/* Notification Button */}
         <div className="relative">

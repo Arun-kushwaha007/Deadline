@@ -9,13 +9,12 @@ const Profile = () => {
   const [section, setSection] = useState('');
   const [profilePic, setProfilePic] = useState('');
   const [preview, setPreview] = useState('');
-  const [isDarkMode, setIsDarkMode] = useState(false); // State for theme toggle
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default: dark mode
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
       const parsedUser = JSON.parse(loggedInUser);
-      console.log('Parsed User:', parsedUser); // Debug log
       if (!parsedUser.userId) {
         alert('User ID is missing. Please log in again.');
         navigate('/login');
@@ -40,8 +39,8 @@ const Profile = () => {
       profilePic: preview,
     };
     localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-    setUser(updatedUser); // Update local state too
-    alert('Profile updated successfully!');
+    setUser(updatedUser);
+    alert('✅ Profile updated successfully!');
   };
 
   const handleImageUpload = (e) => {
@@ -54,9 +53,9 @@ const Profile = () => {
   };
 
   const handleCopyUserId = () => {
-    if (user && user.userId) {
+    if (user?.userId) {
       navigator.clipboard.writeText(user.userId);
-      alert('User ID copied to clipboard!');
+      alert('🔗 User ID copied to clipboard!');
     }
   };
 
@@ -64,46 +63,47 @@ const Profile = () => {
     setIsDarkMode(!isDarkMode);
   };
 
-  if (!user) return <div className="p-4">Please log in to view your profile.</div>;
+  if (!user) return <div className="p-4 text-center text-lg">Please log in to view your profile.</div>;
 
   return (
     <DashboardLayout>
       <div
-        className={`max-w-2xl mx-auto p-4 shadow-md rounded-md mt-10 transition-colors duration-300 ${
-          isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-black'
+        className={`max-w-2xl mx-auto p-6 rounded-2xl mt-10 shadow-lg transition-all duration-300 ${
+          isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'
         }`}
       >
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Welcome, {user.name}</h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-orange-500">Hello, {user.name} 👋</h1>
           <button
             onClick={toggleTheme}
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded-lg font-medium transition ${
               isDarkMode
-                ? 'bg-gray-700 text-white hover:bg-gray-600'
-                : 'bg-gray-200 text-black hover:bg-gray-300'
+                ? 'bg-gray-700 hover:bg-gray-600 text-white'
+                : 'bg-gray-200 hover:bg-gray-300 text-black'
             }`}
           >
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            {isDarkMode ? '☀ Light Mode' : '🌙 Dark Mode'}
           </button>
         </div>
 
-        <div className="mb-4">
-          <label className="block font-medium">User ID</label>
+        {/* User ID */}
+        <div className="mb-5">
+          <label className="block mb-1 font-semibold">User ID</label>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={user.userId || 'N/A'}
               readOnly
-              className={`w-full border p-2 rounded cursor-not-allowed ${
-                isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'
+              className={`w-full border px-3 py-2 rounded-md cursor-not-allowed ${
+                isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'
               }`}
             />
             <button
               onClick={handleCopyUserId}
-              className={`px-4 py-2 rounded ${
+              className={`px-3 py-2 rounded-md font-medium ${
                 isDarkMode
-                  ? 'bg-blue-600 text-white hover:bg-blue-500'
-                  : 'bg-blue-500 text-white hover:bg-blue-400'
+                  ? 'bg-orange-600 hover:bg-orange-500 text-white'
+                  : 'bg-orange-500 hover:bg-orange-400 text-white'
               }`}
             >
               Copy
@@ -111,60 +111,66 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="mb-4">
-          <label className="block font-medium">Profile Picture</label>
+        {/* Profile Picture */}
+        <div className="mb-5">
+          <label className="block mb-1 font-semibold">Profile Picture</label>
           {preview && (
             <img
               src={preview}
-              alt="Profile"
-              className="h-24 w-24 rounded-full my-2"
+              alt="Profile Preview"
+              className="h-24 w-24 rounded-full my-2 border-2 border-orange-400"
             />
           )}
           <input
             type="file"
             onChange={handleImageUpload}
-            className={`p-2 rounded ${
-              isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'
+            className={`w-full px-3 py-2 rounded-md ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'
             }`}
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block font-medium">Bio</label>
+        {/* Bio */}
+        <div className="mb-5">
+          <label className="block mb-1 font-semibold">Bio</label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className={`w-full border p-2 rounded ${
-              isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'
-            }`}
             rows="3"
-            placeholder="Write something about yourself..."
+            className={`w-full border px-3 py-2 rounded-md resize-none ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'
+            }`}
+            placeholder="Tell us about yourself..."
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block font-medium">New Section</label>
+        {/* Section */}
+        <div className="mb-6">
+          <label className="block mb-1 font-semibold">Section (e.g., Skills, Achievements)</label>
           <input
             type="text"
             value={section}
             onChange={(e) => setSection(e.target.value)}
-            className={`w-full border p-2 rounded ${
-              isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-100 text-black'
+            className={`w-full border px-3 py-2 rounded-md ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'
             }`}
-            placeholder="E.g. Skills, Achievements"
+            placeholder="E.g. Full Stack Developer"
           />
         </div>
 
-        <button
-          onClick={handleUpdate}
-          className={`px-4 py-2 rounded ${
-            isDarkMode
-              ? 'bg-blue-600 text-white hover:bg-blue-500'
-              : 'bg-blue-500 text-white hover:bg-blue-400'
-          }`}
-        >
-          Update Profile
-        </button>
+        {/* Update Button */}
+        <div className="text-right">
+          <button
+            onClick={handleUpdate}
+            className={`px-6 py-2 rounded-lg font-semibold transition ${
+              isDarkMode
+                ? 'bg-orange-600 hover:bg-orange-500 text-white'
+                : 'bg-orange-500 hover:bg-orange-400 text-white'
+            }`}
+          >
+            Save Changes
+          </button>
+        </div>
       </div>
     </DashboardLayout>
   );
