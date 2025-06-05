@@ -6,3 +6,6 @@
 
 /my-app/.env
 /server/.env
+/my-app/.env.local
+/server/.env.local
+/my-app/.env 
