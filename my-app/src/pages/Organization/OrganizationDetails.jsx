@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DashboardLayout from '../../components/organisms/DashboardLayout';
+import KanbanBoard from '../../components/organisms/KanbanBoard'; // Assuming you have a KanbanBoard component
 
 const OrganizationDetails = () => {
   const { id } = useParams();
@@ -148,6 +149,7 @@ const OrganizationDetails = () => {
         <section>
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
           <ul className="space-y-2">
+            <KanbanBoard tasks={organization.tasks} /> {/* Assuming KanbanBoard accepts tasks as a prop */}
             {organization.tasks.map((task, index) => (
               <li
                 key={index}
