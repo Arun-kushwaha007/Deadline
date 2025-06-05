@@ -26,25 +26,26 @@ const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
+    // Assumes action.payload is a complete task object from the backend
+    // The backend uses _id, so we map it to id for frontend consistency
     addTask: (state, action) => {
-      const newTask = {
-        ...action.payload,
-        id: Date.now(),
-        status: 'todo',
-        labels: action.payload.labels || [],
-        dueDate: action.payload.dueDate || '',
-        subtasks: action.payload.subtasks || [],
-      };
-      state.tasks.push(newTask);
+      const newTask = { ...action.payload, id: action.payload._id || action.payload.id };
+      // Prevent duplicates if event is received multiple times or task already exists
+      if (!state.tasks.find(task => task.id === newTask.id)) {
+        state.tasks.push(newTask);
+      }
     },
     
-    editTask: (state, action) => {
-      const index = state.tasks.findIndex((task) => task.id === action.payload.id);
+    // Renamed from editTask for consistency. Assumes action.payload is the updated task object.
+    updateTask: (state, action) => {
+      const updatedTask = { ...action.payload, id: action.payload._id || action.payload.id };
+      const index = state.tasks.findIndex((task) => task.id === updatedTask.id);
       if (index !== -1) {
-        state.tasks[index] = {
-          ...state.tasks[index],
-          ...action.payload,
-        };
+        state.tasks[index] = updatedTask;
+      } else {
+        // Optionally, if the task doesn't exist, add it
+        // This could happen if the update event arrives before the add event
+        state.tasks.push(updatedTask);
       }
     },
     
@@ -68,8 +69,9 @@ const tasksSlice = createSlice({
       const filteredOut = state.tasks.filter((t) => t.status !== status);
       state.tasks = [...filteredOut, ...reorderedTasks];
     },
+    // Expects action.payload to be { id: 'taskId' }
     deleteTask: (state, action) => {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
     },
       updateTaskOrganization: (state, action) => {
           const { id, organization } = action.payload;
@@ -81,5 +83,5 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { addTask, updateTaskStatus, editTask,updateTaskOrganization, reorderTasks,reorderOrgTasks, deleteTask } = tasksSlice.actions;
+export const { addTask, updateTask, updateTaskStatus, editTask, updateTaskOrganization, reorderTasks, reorderOrgTasks, deleteTask } = tasksSlice.actions; // Ensure updateTask is exported
 export default tasksSlice.reducer;
