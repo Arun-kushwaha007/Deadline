@@ -1,19 +1,84 @@
 import Task from '../models/Task.js';
+import Notification from '../models/Notification.js'; // Import Notification model
 
 // Create Task
 export const createTask = async (req, res) => {
   try {
     const task = await Task.create(req.body);
+    const redisClient = req.app.get('redis');
+    const io = req.app.get('io');
+
+    if (redisClient) {
+      try {
+        await redisClient.del("tasks:all");
+        await redisClient.setEx(`task:${task._id}`, 3600, JSON.stringify(task));
+      } catch (error) {
+        console.error('Redis DEL/SETEX error:', error);
+        // Proceed even if Redis operations fail
+      }
+    }
+
+    // Save notification to DB
+    if (task.assignedTo) {
+      try {
+        const messageContent = `You have been assigned a new task: ${task.title}`;
+        await Notification.create({
+          userId: task.assignedTo,
+          message: messageContent,
+          taskId: task._id,
+        });
+
+        // Real-time notification for task assignment (Socket.io)
+        if (io && redisClient) {
+          const targetSocketId = await redisClient.get(task.assignedTo.toString());
+          if (targetSocketId) {
+            io.to(targetSocketId).emit('taskAssigned', {
+              message: messageContent, // Use the same message
+              task,
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error creating notification or emitting taskAssigned event:', error);
+        // Decide if the main operation should fail if notification fails.
+        // For now, we log the error and proceed with sending the response.
+      }
+    }
+
     res.status(201).json(task);
   } catch (error) {
+    // If task creation itself failed (e.g., DB error for Task.create)
     res.status(400).json({ error: error.message });
   }
 };
 
 // Get All Tasks
 export const getAllTasks = async (req, res) => {
+  const cacheKey = "tasks:all";
+  const redisClient = req.app.get('redis');
+
+  try {
+    if (redisClient) {
+      const cachedTasks = await redisClient.get(cacheKey);
+      if (cachedTasks) {
+        return res.status(200).json(JSON.parse(cachedTasks));
+      }
+    }
+  } catch (error) {
+    console.error('Redis GET error:', error);
+    // Proceed to fetch from DB if Redis fails
+  }
+
   try {
     const tasks = await Task.find().sort({ createdAt: -1 });
+    if (redisClient) {
+      try {
+        await redisClient.setEx(cacheKey, 3600, JSON.stringify(tasks));
+      } catch (error) {
+        console.error('Redis SETEX error:', error);
+        // Proceed to return tasks even if Redis SETEX fails
+      }
+    }
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -22,9 +87,34 @@ export const getAllTasks = async (req, res) => {
 
 // Get Task By ID
 export const getTaskById = async (req, res) => {
+  const taskId = req.params.id;
+  const cacheKey = `task:${taskId}`;
+  const redisClient = req.app.get('redis');
+
   try {
-    const task = await Task.findById(req.params.id);
+    if (redisClient) {
+      const cachedTask = await redisClient.get(cacheKey);
+      if (cachedTask) {
+        return res.status(200).json(JSON.parse(cachedTask));
+      }
+    }
+  } catch (error) {
+    console.error('Redis GET error:', error);
+    // Proceed to fetch from DB if Redis fails
+  }
+
+  try {
+    const task = await Task.findById(taskId);
     if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    if (redisClient) {
+      try {
+        await redisClient.setEx(cacheKey, 3600, JSON.stringify(task));
+      } catch (error) {
+        console.error('Redis SETEX error:', error);
+        // Proceed to return task even if Redis SETEX fails
+      }
+    }
     res.status(200).json(task);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,14 +123,42 @@ export const getTaskById = async (req, res) => {
 
 // Update Task
 export const updateTask = async (req, res) => {
+  const taskId = req.params.id;
+  const redisClient = req.app.get('redis');
+  const io = req.app.get('io');
+
   try {
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
       req.body,
       { new: true }
     );
-    if (!task) return res.status(404).json({ error: 'Task not found' });
-    res.status(200).json(task);
+    if (!updatedTask) return res.status(404).json({ error: 'Task not found' });
+
+    if (redisClient) {
+      try {
+        await redisClient.del("tasks:all");
+        await redisClient.del(`task:${taskId}`);
+        await redisClient.setEx(`task:${updatedTask._id}`, 3600, JSON.stringify(updatedTask));
+      } catch (error) {
+        console.error('Redis DEL/SETEX error:', error);
+        // Proceed even if Redis operations fail
+      }
+    }
+
+    // Real-time notification for task update
+    if (updatedTask.assignedTo && io && redisClient) {
+      try {
+        const targetSocketId = await redisClient.get(updatedTask.assignedTo.toString());
+        if (targetSocketId) {
+          io.to(targetSocketId).emit('taskUpdated', updatedTask);
+        }
+      } catch (error) {
+        console.error('Error emitting taskUpdated event:', error);
+      }
+    }
+
+    res.status(200).json(updatedTask);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -48,9 +166,46 @@ export const updateTask = async (req, res) => {
 
 // Delete Task
 export const deleteTask = async (req, res) => {
+  const taskId = req.params.id;
+  const redisClient = req.app.get('redis');
+  const io = req.app.get('io');
+  let deletedTaskInstance = null; // To store the task instance before deletion
+
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
+    // Fetch the task before deleting to get its details, especially assignedTo
+    deletedTaskInstance = await Task.findById(taskId);
+    if (!deletedTaskInstance) {
+      return res.status(404).json({ error: 'Task not found for deletion' });
+    }
+
+    const task = await Task.findByIdAndDelete(taskId);
+    // task here is the same as deletedTaskInstance if deletion was successful.
+    // If findByIdAndDelete returns null (though we checked above), something went wrong.
+    if (!task) return res.status(404).json({ error: 'Task not found or already deleted' });
+
+
+    if (redisClient) {
+      try {
+        await redisClient.del("tasks:all");
+        await redisClient.del(`task:${taskId}`);
+      } catch (error) {
+        console.error('Redis DEL error:', error);
+        // Proceed even if Redis operations fail
+      }
+    }
+
+    // Real-time notification for task deletion
+    if (deletedTaskInstance.assignedTo && io && redisClient) {
+      try {
+        const targetSocketId = await redisClient.get(deletedTaskInstance.assignedTo.toString());
+        if (targetSocketId) {
+          io.to(targetSocketId).emit('taskDeleted', { id: taskId });
+        }
+      } catch (error) {
+        console.error('Error emitting taskDeleted event:', error);
+      }
+    }
+
     res.status(200).json({ message: 'Task deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });

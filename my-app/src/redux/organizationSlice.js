@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Backend base URL
-const API = 'http://localhost:5000/api/organizations';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const API = `${backendUrl}/api/organizations`;
 
 // Async Thunks
 

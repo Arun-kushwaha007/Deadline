@@ -20,7 +20,8 @@ const OrganizationDetails = () => {
   useEffect(() => {
     const fetchOrganization = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/organizations/${id}`);
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+        const res = await axios.get(`${backendUrl}/api/organizations/${id}`);
         setOrganization(res.data);
         setEditData({ name: res.data.name });
       } catch (err) {
@@ -48,7 +49,8 @@ const OrganizationDetails = () => {
 
   const handleSave = async () => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/organizations/${id}`, editData);
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const res = await axios.put(`${backendUrl}/api/organizations/${id}`, editData);
       setOrganization(res.data);
       setIsEditing(false);
     } catch (err) {
@@ -126,7 +128,8 @@ const OrganizationDetails = () => {
           <button
             onClick={async () => {
               try {
-                await axios.delete(`http://localhost:5000/api/organizations/${id}/members/${member.userId._id}`);
+                const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+                await axios.delete(`${backendUrl}/api/organizations/${id}/members/${member.userId._id}`);
                 setOrganization((prev) => ({
                   ...prev,
                   members: prev.members.filter((m) => m.userId._id !== member.userId._id)
