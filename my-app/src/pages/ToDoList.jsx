@@ -34,18 +34,31 @@ const ToDoList = () => {
 
   return (
     <DashboardLayout>
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white transition-colors">
-            <div className="max-w-xl mx-auto py-10 px-4">
-           
-            <ToDoListLayout
-                tasks={tasks}
-                addTask={addTask}
-                toggleComplete={toggleComplete}
-                deleteTask={deleteTask}
-            />
-            </div>
-            <KanbanBoard/>
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-white transition-colors duration-300">
+        <div className="max-w-4xl mx-auto py-10 px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold tracking-tight">📝 My To-Do Board</h1>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-full bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 transition"
+              aria-label="Toggle Theme"
+            >
+              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+          </div>
+
+          <ToDoListLayout
+            tasks={tasks}
+            addTask={addTask}
+            toggleComplete={toggleComplete}
+            deleteTask={deleteTask}
+          />
         </div>
+
+        <div className="mt-10 border-t border-gray-300 dark:border-gray-700 pt-6">
+          <KanbanBoard />
+        </div>
+      </div>
     </DashboardLayout>
   );
 };
