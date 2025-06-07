@@ -26,6 +26,7 @@ import TaskDetailsModal from '../molecules/TaskDetailsModal';
 import SortableTask from '../molecules/SortableTask';
 import TaskCard from '../molecules/TaskCard';
 
+
 const KanbanBoard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
   const dispatch = useDispatch();
@@ -84,7 +85,7 @@ const KanbanBoard = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-br from-zinc-900 to-black text-white">
+    <div className="p-6 min-h-screen   text-white">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight">🗂️ Kanban Task Board</h1>
         <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">+ New Task</Button>
@@ -167,6 +168,7 @@ const KanbanBoard = () => {
             />
           )}
         </DragOverlay>
+        
       </DndContext>
 
       <NewTaskModal
@@ -181,6 +183,7 @@ const KanbanBoard = () => {
       {selectedTask && (
         <TaskDetailsModal task={selectedTask} onClose={() => setSelectedTask(null)} />
       )}
+      
     </div>
   );
 };
