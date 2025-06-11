@@ -21,7 +21,7 @@ const server = http.createServer(app);
 const redisClient = createClient();
 redisClient.connect().catch((err) => console.error('❌ Redis connection error:', err));
 
-// 🔹 Resend setup
+// 🔹 Resend setup  - for forgetpassword mail generator  
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // 🔹 Socket.IO setup
@@ -43,7 +43,7 @@ app.use(express.json());
 // 🔹 Attach global instances to app
 app.set('io', io);
 app.set('redis', redisClient);
-app.set('resend', resend); // 🔥 Now available in all route files via req.app.get('resend')
+app.set('resend', resend); // Now available in all route files via req.app.get('resend')
 
 // 🔹 Routes
 app.use('/api/auth', authRoutes);
