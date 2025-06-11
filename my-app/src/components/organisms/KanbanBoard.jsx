@@ -12,13 +12,18 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Explicitly ensure useEffect is imported from React
 
 import {
+  fetchTasks,
   updateTaskStatus,
   reorderTasks,
-  deleteTask,
-} from '../../redux/slices/tasksSlice';
+  deleteTaskThunk,
+} from '../../redux/slices/tasksSlice'; 
+// Note: deleteTask was synchronous, now we'll need deleteTaskThunk.
+// updateTaskStatus and reorderTasks might need to become thunks if they need to persist changes to backend immediately after drag/drop.
+// For now, let's assume they are handled optimistically or a separate "save layout" mechanism might exist.
+// The plan specified updating deleteTask later, but it's good to import the thunk now if we are touching this file.
 import NewTaskModal from '../molecules/NewTaskModal';
 import { Button } from '../atoms/Button';
 import DroppableColumn from '../atoms/DroppableColumn';
@@ -29,6 +34,9 @@ import TaskCard from '../molecules/TaskCard';
 
 const KanbanBoard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
+  // Optionally, get loading status and error from Redux state for UI feedback
+  const taskStatus = useSelector((state) => state.tasks.status);
+  const error = useSelector((state) => state.tasks.error);
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +44,13 @@ const KanbanBoard = () => {
   const [editTask, setEditTask] = useState(null);
   const [filterPriority, setFilterPriority] = useState('');
   const [activeTask, setActiveTask] = useState(null);
+
+  useEffect(() => {
+    // Fetch tasks only if they haven't been fetched yet or if status is idle
+    if (taskStatus === 'idle') {
+      dispatch(fetchTasks());
+    }
+  }, [taskStatus, dispatch]);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -149,7 +164,7 @@ const KanbanBoard = () => {
                           setEditTask(task);
                           setShowModal(true);
                         }}
-                        onDelete={() => dispatch(deleteTask(task.id))}
+                        onDelete={() => dispatch(deleteTaskThunk(task.id))} // task.id should be _id
                       />
                     ))}
                   </div>

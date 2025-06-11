@@ -46,30 +46,15 @@ router.get('/team/tasks', authMiddleware, async (req, res) => {
 // router.post('/', authMiddleware, createTaskControllerFunction);
 // I will remove the old content. The subtask implies cleaning this file.
 
-router.post('/', authMiddleware, (req, res) => {
-  // Logic is now in taskController.createTask.
-  // This route should be mapped to taskController.createTask in the main application router.
-  // For example, in app.js: `app.use('/api/tasks', taskRoutes);`
-  // and here: `router.post('/', authMiddleware, createTask);` where createTask is imported.
-  // Since the specific instruction was to clean up the old logic,
-  // and assuming the main router handles calling the controller, this can be simplified.
-  // If this file *is* the one defining the direct route->controller mapping, then it should be:
-  // router.post('/', authMiddleware, createTask); (imported from controller)
-  // Given the previous state, let's make it a comment indicating it's handled by the controller.
-  // The task was to ensure the *controller* has the logic, which it does.
-  // The route definition here is secondary to that, but for completeness:
-  // We'll leave it as a placeholder that doesn't perform the action itself.
-  // This is because the primary file being modified is the controller.
-  res.status(501).send({ message: "This route is handled by taskController.createTask. Ensure your main router is configured correctly." });
-});
+router.post('/', authMiddleware, createTask);
 
 
 // It's good practice to also route other HTTP methods to their respective controller functions.
 // Example:
 // router.get('/', authMiddleware, getAllTasks); // Assuming getAllTasks handles user-specific logic or it's a general admin endpoint
-// router.get('/:id', authMiddleware, getTaskById);
-// router.put('/:id', authMiddleware, updateTask);
-// router.delete('/:id', authMiddleware, deleteTask);
+router.get('/:id', authMiddleware, getTaskById);
+router.put('/:id', authMiddleware, updateTask);
+router.delete('/:id', authMiddleware, deleteTask);
 // The existing GET routes are specific and might need separate controller functions or adjustments in getAllTasks.
 
 export default router;

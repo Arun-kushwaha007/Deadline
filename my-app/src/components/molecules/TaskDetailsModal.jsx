@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { XMarkIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useDispatch } from 'react-redux';
-import { editTask, deleteTask } from '../../redux/slices/tasksSlice';
+import { updateTask, deleteTaskThunk } from '../../redux/slices/tasksSlice';
 
 const TaskDetailsModal = ({ task, onClose }) => {
   const dispatch = useDispatch();
@@ -13,12 +13,12 @@ const TaskDetailsModal = ({ task, onClose }) => {
   if (!task) return null;
 
   const handleSave = () => {
-    dispatch(editTask({ id: task.id, updatedTask: { title, description } }));
+    dispatch(updateTask({ id: task.id, title, description }));
     setEditMode(false);
   };
 
   const handleDelete = () => {
-    dispatch(deleteTask(task.id));
+    dispatch(deleteTaskThunk(task.id));
     onClose(); // Close after delete
   };
 

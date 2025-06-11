@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTask, editTask } from '../../redux/slices/tasksSlice';
-import { v4 as uuidv4 } from 'uuid';
+import { createTask, updateTask } from '../../redux/slices/tasksSlice';
 
 const orgMembers = [
   { id: '1', name: 'Alice Johnson' },
@@ -13,6 +12,7 @@ const orgMembers = [
 
 const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const dispatch = useDispatch();
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -24,22 +24,21 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const [assignedBy, setAssignedBy] = useState('');
   const [visibility, setVisibility] = useState('private');
   const [errors, setErrors] = useState({});
-
   const [assigneeSearch, setAssigneeSearch] = useState('');
   const [filteredMembers, setFilteredMembers] = useState(orgMembers);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (taskToEdit) {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
-      setDueDate(taskToEdit.dueDate || '');
+      setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : '');
       setStatus(taskToEdit.status || 'todo');
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
       setSubtasks(taskToEdit.subtasks || [{ title: '', done: false }]);
-      setAssignee(taskToEdit.assignee || null);
-      setAssignedBy(taskToEdit.assignedBy || '');
-      setVisibility(taskToEdit.visibility || 'private');
+      const member = orgMembers.find(m => m.id === taskToEdit.assignedTo);
+      setAssignee(member || null);
     } else {
       setTitle('');
       setDescription('');
@@ -55,15 +54,13 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   }, [taskToEdit]);
 
   useEffect(() => {
-    if (assigneeSearch.trim() === '') {
-      setFilteredMembers(orgMembers);
-    } else {
-      setFilteredMembers(
-        orgMembers.filter((m) =>
-          m.name.toLowerCase().includes(assigneeSearch.toLowerCase())
-        )
-      );
-    }
+    setFilteredMembers(
+      assigneeSearch.trim() === ''
+        ? orgMembers
+        : orgMembers.filter(m =>
+            m.name.toLowerCase().includes(assigneeSearch.toLowerCase())
+          )
+    );
   }, [assigneeSearch]);
 
   const validateForm = () => {
@@ -75,34 +72,59 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       assignee: !assignee ? 'Assignee is required' : '',
     };
     setErrors(newErrors);
-    return Object.values(newErrors).every((e) => e === '');
+    return Object.values(newErrors).every(e => e === '');
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setStatus('todo');
+    setPriority('');
+    setLabels('');
+    setSubtasks([{ title: '', done: false }]);
+    setAssignee(null);
+    setAssignedBy('');
+    setVisibility('private');
+    setErrors({});
+    setAssigneeSearch('');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    setLoading(true);
 
     const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     const assigner = assignedBy || user.name || 'Unknown';
 
-    const payload = {
+    const taskPayload = {
       title,
       description,
-      priority,
       dueDate,
       status,
-      labels: labels.split(',').map((l) => l.trim()).filter(Boolean),
-      subtasks: subtasks.filter((s) => s.title.trim()),
-      assignee,
+      priority,
+      labels: labels.split(',').map(l => l.trim()).filter(Boolean),
+      subtasks: subtasks.filter(s => s.title.trim()),
+      assignedTo: assignee?.id !== 'everyone' ? assignee.id : null,
       assignedBy: assigner,
       visibility,
     };
 
-    taskToEdit
-      ? dispatch(editTask({ id: taskToEdit.id, ...payload }))
-      : dispatch(addTask({ id: uuidv4(), ...payload }));
-
-    onClose();
+    try {
+      if (taskToEdit) {
+        await dispatch(updateTask({ id: taskToEdit.id, ...taskPayload }));
+      } else {
+        await dispatch(createTask(taskPayload));
+      }
+      resetForm();
+      onClose();
+    } catch (err) {
+      console.error('Task submission failed', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -125,7 +147,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
 
           <textarea
-            rows="3"
+            rows={3}
             placeholder="Task Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -149,7 +171,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
             className="w-full p-2 rounded bg-slate-700 text-white"
           />
 
-          {/* Assignee Dropdown */}
+          {/* Assignee Section */}
           <div>
             <label className="block text-sm mb-1 text-white">Assign To</label>
             <input
@@ -312,9 +334,10 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
             </button>
             <button
               type="submit"
+              disabled={loading}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
             >
-              {taskToEdit ? 'Update Task' : 'Add Task'}
+              {loading ? 'Saving...' : taskToEdit ? 'Update Task' : 'Add Task'}
             </button>
           </div>
         </form>

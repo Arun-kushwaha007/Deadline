@@ -1,87 +1,143 @@
-// redux/slices/tasksSlice.js
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const API_BASE_URL = `${backendUrl}/api`;
+
+const getAuthConfig = () => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  };
+};
 
 const initialState = {
-  tasks: [
-    {
-      id: '1',
-      title: 'Finish UI',
-      description: 'Create Kanban UI using Tailwind & DnD Kit.',
-      status: 'todo',
-      priority: 'medium',
-      dueDate: '2025-04-15',
-    },
-    {
-      id: '2',
-      title: 'Set up Redux',
-      description: 'Configure store and slices for task management.',
-      status: 'inprogress',
-      priority: 'high',
-      dueDate: '2025-04-18',
-    },
-  ],
+  tasks: [],
+  status: 'idle',
+  error: null,
 };
+
+// Async Thunks
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/tasks`, getAuthConfig());
+    return response.data.map(task => ({ ...task, id: task._id }));
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
+
+export const createTask = createAsyncThunk('tasks/createTask', async (taskData, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/tasks`, taskData, getAuthConfig());
+    return { ...response.data, id: response.data._id };
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
+
+export const updateTask = createAsyncThunk('tasks/updateTask', async (taskData, { rejectWithValue }) => {
+  try {
+    const { id, ...data } = taskData;
+    const response = await axios.put(`${API_BASE_URL}/tasks/${id}`, data, getAuthConfig());
+    return { ...response.data, id: response.data._id };
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
+
+export const deleteTaskThunk = createAsyncThunk('tasks/deleteTask', async (taskId, { rejectWithValue }) => {
+  try {
+    await axios.delete(`${API_BASE_URL}/tasks/${taskId}`, getAuthConfig());
+    return taskId;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
 
 const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    // Assumes action.payload is a complete task object from the backend
-    // The backend uses _id, so we map it to id for frontend consistency
-    addTask: (state, action) => {
-      const newTask = { ...action.payload, id: action.payload._id || action.payload.id };
-      // Prevent duplicates if event is received multiple times or task already exists
-      if (!state.tasks.find(task => task.id === newTask.id)) {
-        state.tasks.push(newTask);
-      }
-    },
-    
-    // Renamed from editTask for consistency. Assumes action.payload is the updated task object.
-    updateTask: (state, action) => {
-      const updatedTask = { ...action.payload, id: action.payload._id || action.payload.id };
-      const index = state.tasks.findIndex((task) => task.id === updatedTask.id);
-      if (index !== -1) {
-        state.tasks[index] = updatedTask;
-      } else {
-        // Optionally, if the task doesn't exist, add it
-        // This could happen if the update event arrives before the add event
-        state.tasks.push(updatedTask);
-      }
-    },
-    
     updateTaskStatus: (state, action) => {
       const { id, status } = action.payload;
-      const task = state.tasks.find((task) => task.id === id);
+      const task = state.tasks.find(task => task.id === id);
       if (task) task.status = status;
     },
-     reorderOrgTasks: (state, action) => {
-          const { organization, tasks: reorderedTasks } = action.payload;
-          reorderedTasks.forEach((task, index) => {
-            const originalTask = state.tasks.find((t) => t.id === task.id);
-            if (originalTask && originalTask.organization === organization) {
-              originalTask.order = index;
-            }
-          });
-        },
-    
     reorderTasks: (state, action) => {
       const { status, tasks: reorderedTasks } = action.payload;
-      const filteredOut = state.tasks.filter((t) => t.status !== status);
+      const filteredOut = state.tasks.filter(t => t.status !== status);
       state.tasks = [...filteredOut, ...reorderedTasks];
     },
-    // Expects action.payload to be { id: 'taskId' }
-    deleteTask: (state, action) => {
-      state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
+    updateTaskOrganization: (state, action) => {
+      const { id, organization } = action.payload;
+      const task = state.tasks.find(t => t.id === id);
+      if (task) {
+        task.organization = organization;
+      }
     },
-      updateTaskOrganization: (state, action) => {
-          const { id, organization } = action.payload;
-          const task = state.tasks.find((t) => t.id === id);
-          if (task) {
-            task.organization = organization;
-          }
-        },
+    reorderOrgTasks: (state, action) => {
+      const { organization, tasks: reorderedTasks } = action.payload;
+      reorderedTasks.forEach((task, index) => {
+        const originalTask = state.tasks.find(t => t.id === task.id);
+        if (originalTask && originalTask.organization === organization) {
+          originalTask.order = index;
+        }
+      });
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Fetch Tasks
+      .addCase(fetchTasks.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTasks.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.tasks = action.payload;
+      })
+      .addCase(fetchTasks.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
+      // Create Task
+      .addCase(createTask.fulfilled, (state, action) => {
+        state.tasks.push(action.payload);
+      })
+      .addCase(createTask.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      // Update Task
+      .addCase(updateTask.fulfilled, (state, action) => {
+        const index = state.tasks.findIndex(task => task.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        }
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+
+      // Delete Task
+      .addCase(deleteTaskThunk.fulfilled, (state, action) => {
+        state.tasks = state.tasks.filter(task => task.id !== action.payload);
+      })
+      .addCase(deleteTaskThunk.rejected, (state, action) => {
+        state.error = action.payload;
+      });
   },
 });
 
-export const { addTask, updateTask, updateTaskStatus, editTask, updateTaskOrganization, reorderTasks, reorderOrgTasks, deleteTask } = tasksSlice.actions; // Ensure updateTask is exported
+export const {
+  updateTaskStatus,
+  reorderTasks,
+  updateTaskOrganization,
+  reorderOrgTasks,
+} = tasksSlice.actions;
+
 export default tasksSlice.reducer;
