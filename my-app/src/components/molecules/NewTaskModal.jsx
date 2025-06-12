@@ -178,7 +178,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
 
           {/* Assignee Section */}
           <div>
-            <label className="block text-sm mb-1 text-white">Assign To</label>
+            {/* <label className="block text-sm mb-1 text-white">Assign To</label> */}
             <label className="block text-sm mb-1 text-white">Assign To</label>
             {usersStatus === 'loading' && <p className="text-blue-400">Loading users...</p>}
             {usersStatus === 'failed' && <p className="text-red-500">Error loading users: {usersError?.message || 'Unknown error'}</p>}
