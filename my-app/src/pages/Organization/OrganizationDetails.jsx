@@ -112,6 +112,28 @@ const OrganizationDetails = () => {
           </div>
         </div>
 
+
+
+        <section>
+          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
+          <ul className="space-y-2">
+            <KanbanBoard tasks={organization.tasks} /> {/* Assuming KanbanBoard accepts tasks as a prop */}
+            {organization.tasks.map((task, index) => (
+              <li
+                key={index}
+                className="bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-md shadow"
+              >
+                <div className="font-medium">{task.title}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">
+                  Assigned to: <span className="font-semibold">{task.assignedTo?.name || 'Unassigned'}</span> <br />
+                  Status: <span className="capitalize">{task.status}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+
       <section className="mb-8">
   <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
   <ul className="space-y-2">
@@ -148,25 +170,6 @@ const OrganizationDetails = () => {
   </ul>
 </section>
 
-
-        <section>
-          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
-          <ul className="space-y-2">
-            <KanbanBoard tasks={organization.tasks} /> {/* Assuming KanbanBoard accepts tasks as a prop */}
-            {organization.tasks.map((task, index) => (
-              <li
-                key={index}
-                className="bg-gray-100 dark:bg-gray-800 px-4 py-3 rounded-md shadow"
-              >
-                <div className="font-medium">{task.title}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-300">
-                  Assigned to: <span className="font-semibold">{task.assignedTo?.name || 'Unassigned'}</span> <br />
-                  Status: <span className="capitalize">{task.status}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
       </div>
     </DashboardLayout>
   );
