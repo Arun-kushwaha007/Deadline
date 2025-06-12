@@ -12,18 +12,14 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react'; // Explicitly ensure useEffect is imported from React
+import { useState, useEffect } from 'react';
 
 import {
   fetchTasks,
   updateTaskStatus,
   reorderTasks,
   deleteTaskThunk,
-} from '../../redux/slices/tasksSlice'; 
-// Note: deleteTask was synchronous, now we'll need deleteTaskThunk.
-// updateTaskStatus and reorderTasks might need to become thunks if they need to persist changes to backend immediately after drag/drop.
-// For now, let's assume they are handled optimistically or a separate "save layout" mechanism might exist.
-// The plan specified updating deleteTask later, but it's good to import the thunk now if we are touching this file.
+} from '../../redux/slices/tasksSlice';
 import NewTaskModal from '../molecules/NewTaskModal';
 import { Button } from '../atoms/Button';
 import DroppableColumn from '../atoms/DroppableColumn';
@@ -31,10 +27,8 @@ import TaskDetailsModal from '../molecules/TaskDetailsModal';
 import SortableTask from '../molecules/SortableTask';
 import TaskCard from '../molecules/TaskCard';
 
-
 const KanbanBoard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
-  // Optionally, get loading status and error from Redux state for UI feedback
   const taskStatus = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
   const dispatch = useDispatch();
@@ -44,9 +38,9 @@ const KanbanBoard = () => {
   const [editTask, setEditTask] = useState(null);
   const [filterPriority, setFilterPriority] = useState('');
   const [activeTask, setActiveTask] = useState(null);
+  const [viewOnly, setViewOnly] = useState(false);
 
   useEffect(() => {
-    // Fetch tasks only if they haven't been fetched yet or if status is idle
     if (taskStatus === 'idle') {
       dispatch(fetchTasks());
     }
@@ -100,10 +94,12 @@ const KanbanBoard = () => {
   };
 
   return (
-    <div className="p-6 min-h-screen   text-white">
+    <div className="p-6 min-h-screen text-white">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-extrabold tracking-tight">🗂️ Kanban Task Board</h1>
-        <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">+ New Task</Button>
+        <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">
+          + New Task
+        </Button>
       </div>
 
       <div className="mb-6 flex items-center gap-4">
@@ -124,7 +120,7 @@ const KanbanBoard = () => {
         </select>
       </div>
 
-      <DndContext
+     <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
@@ -159,12 +155,17 @@ const KanbanBoard = () => {
                       <SortableTask
                         key={task.id}
                         task={task}
-                        onView={() => setSelectedTask(task)}
+                        onView={() => {
+                          setEditTask(task);
+                          setShowModal(true);
+                          setViewOnly(true); // Set viewOnly to true for View button
+                        }}
                         onEdit={() => {
                           setEditTask(task);
                           setShowModal(true);
+                          setViewOnly(false); // Set viewOnly to false for Edit button
                         }}
-                        onDelete={() => dispatch(deleteTaskThunk(task.id))} // task.id should be _id
+                        onDelete={() => dispatch(deleteTaskThunk(task.id))}
                       />
                     ))}
                   </div>
@@ -183,22 +184,29 @@ const KanbanBoard = () => {
             />
           )}
         </DragOverlay>
-        
       </DndContext>
-
       <NewTaskModal
         isOpen={showModal}
         onClose={() => {
           setShowModal(false);
           setEditTask(null);
+          setViewOnly(false);
         }}
         taskToEdit={editTask}
+        viewOnly={viewOnly} // Pass viewOnly to modal
       />
 
+      {/* If you use a separate TaskDetailsModal for view, keep this block as well */}
       {selectedTask && (
-        <TaskDetailsModal task={selectedTask} onClose={() => setSelectedTask(null)} />
+        <TaskDetailsModal
+          task={selectedTask}
+          onClose={() => {
+            setSelectedTask(null);
+            setViewOnly(false);
+          }}
+          viewOnly={viewOnly}
+        />
       )}
-      
     </div>
   );
 };

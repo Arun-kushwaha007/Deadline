@@ -9,6 +9,11 @@ export function ViewButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
+      type="button"
+      tabIndex={0}
     >
       View
     </button>
@@ -23,6 +28,11 @@ export function EditButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
+      type="button"
+      tabIndex={0}
     >
       Edit
     </button>
@@ -37,6 +47,11 @@ export function DeleteButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+      }}
+      type="button"
+      tabIndex={0}
     >
       Delete
     </button>

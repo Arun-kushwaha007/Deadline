@@ -29,10 +29,9 @@ export default function SortableTask({ task, onView, onEdit, onDelete }) {
       role="listitem"
     >
       <TaskCard
-        {...task} // Spreads all properties from the task object
-        id={task.id} // Ensure id is correctly passed
-        assignee={task.assignedTo} // Map assignedTo to assignee
-        // Callbacks
+        {...task}
+        id={task.id}
+        assignee={task.assignee || task.assignedTo} // Support both assignee and assignedTo
         onView={onView}
         onEdit={onEdit}
         onDelete={onDelete}
