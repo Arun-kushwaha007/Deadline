@@ -59,8 +59,9 @@ const TaskSchema = new mongoose.Schema(
       default: null,
     },
     organization: {
-      type: String,
-      default: '',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Organization', // This assumes your Organization model is named 'Organization'
+      required: true,
     },
     order: {
       type: Number,

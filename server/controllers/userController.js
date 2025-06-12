@@ -6,7 +6,7 @@ import User from '../models/User.js'; // Add .js for ES modules
 export const getAllUsers = async (req, res) => {
   try {
     // Select only 'name' and '_id' fields. '_id' is included by default.
-    const users = await User.find({}, 'name');
+    const users = await User.find({}, 'name'); 
     res.status(200).json(users);
   } catch (error) {
     console.error('Error fetching users:', error);

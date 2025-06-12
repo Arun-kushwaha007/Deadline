@@ -1,11 +1,51 @@
 import express from 'express';
+import Task from '../models/Task.js';
+import Organization from '../models/Organization.js';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { createTask, getAllTasks, getTaskById, updateTask, deleteTask } from '../controllers/taskController.js';
+import { createTask, getTaskById, updateTask, deleteTask } from '../controllers/taskController.js';
 
 const router = express.Router();
 
-// GET: All tasks (for admin or for filtering, or for user if getAllTasks handles filtering)
-router.get('/', authMiddleware, getAllTasks);
+/**
+ * GET /api/tasks
+ * Fetch all tasks assigned to the logged-in user, or filter by organizationId if provided.
+ * Pass organizationId as a query param: /api/tasks?organizationId=ORG_ID
+ */
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id; // MongoDB _id of the user
+    const organizationId = req.query.organizationId;
+
+    let orgFilter = {};
+    if (organizationId) {
+      // Check if user is a member of this organization
+      const org = await Organization.findOne({ _id: organizationId, 'members.userId': req.user.userId });
+      if (!org) {
+        return res.status(403).json({ message: 'Not a member of this organization' });
+      }
+      orgFilter.organization = organizationId;
+    } else {
+      // Get all orgs the user is a member of
+      const userOrganizations = await Organization.find({ 'members.userId': req.user.userId }).select('_id');
+      const organizationIds = userOrganizations.map(org => org._id);
+      if (organizationIds.length === 0) {
+        return res.status(200).json([]);
+      }
+      orgFilter.organization = { $in: organizationIds };
+    }
+
+    // Fetch tasks assigned to the user within the selected organizations
+    const tasks = await Task.find({
+      assignedTo: userId,
+      ...orgFilter,
+    }).populate('assignedTo').populate('organization');
+
+    res.status(200).json(tasks);
+  } catch (err) {
+    console.error('Error fetching tasks for user:', err);
+    res.status(500).json({ message: 'Failed to fetch tasks' });
+  }
+});
 
 // GET: Tasks for a team (optional, if you want to keep this route)
 router.get('/team/tasks', authMiddleware, async (req, res) => {

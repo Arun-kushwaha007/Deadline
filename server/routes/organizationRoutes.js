@@ -5,14 +5,19 @@ import {
   getOrganizationById,
   addMember,
   assignTask,
+  getMyOrganizations, // Import the new function
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
 
 import authMiddleware from '../middleware/authMiddleware.js';
 
-// GET all organizations
-router.get('/', authMiddleware, getAllOrganizations);
+// GET all organizations (should this be /mine or a separate admin route?)
+// For now, keeping it as is, but /mine is more specific for user's orgs.
+router.get('/', authMiddleware, getAllOrganizations); 
+
+// GET organizations for the logged-in user
+router.get('/mine', authMiddleware, getMyOrganizations);
 
 // POST create a new organization
 router.post('/create', authMiddleware, createOrganization);

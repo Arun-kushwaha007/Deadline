@@ -19,13 +19,9 @@ const app = express();
 const server = http.createServer(app);
 
 // 🔹 Redis setup
-const redisClient = createClient({
-  url: 'redis://127.0.0.1:6379',
-});
+const redisClient = createClient();
+redisClient.connect().catch((err) => console.error('❌ Redis connection error:', err));
 
-redisClient.on('error', (err) => console.error('Redis Client Error', err));
-
-await redisClient.connect();
 // 🔹 Resend setup  - for forgetpassword mail generator  
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -43,10 +39,6 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
 }));
-// app.use(cors({
-//   origin: 'http://localhost:5000',
-//   credentials: true,
-// }));
 app.use(express.json());
 
 // 🔹 Attach global instances to app

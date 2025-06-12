@@ -113,14 +113,40 @@ export const assignTaskToMember = createAsyncThunk(
   }
 );
 
+// Define and Export fetchMyOrganizations Async Thunk first
+export const fetchMyOrganizations = createAsyncThunk(
+  'organization/fetchMyOrganizations', // Action type prefix consistent with the slice name 'organization'
+  async (_, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
+    try {
+      const { data } = await axios.get(`${API}/mine`, { // Uses the API constant from the existing slice
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 // Slice
 const organizationSlice = createSlice({
   name: 'organization',
   initialState: {
-    organizations: [],
+    organizations: [], 
     selectedOrganization: null,
-    loading: false,
-    error: null,
+    loading: false, 
+    error: null,    
+
+    // ADD THESE NEW STATE FIELDS:
+    currentUserOrganizations: [],
+    currentUserOrganizationsStatus: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+    currentUserOrganizationsError: null,
   },
   reducers: {
     clearSelectedOrganization: (state) => {
@@ -160,7 +186,21 @@ const organizationSlice = createSlice({
       // Assign task
       .addCase(assignTaskToMember.fulfilled, (state, action) => {
         state.selectedOrganization = action.payload;
-      });
+      })
+
+      // ADD THESE NEW CASES for Fetch Current User's Organizations:
+     .addCase(fetchMyOrganizations.pending, (state) => {
+       state.currentUserOrganizationsStatus = 'loading';
+       state.currentUserOrganizationsError = null; 
+     })
+     .addCase(fetchMyOrganizations.fulfilled, (state, action) => {
+       state.currentUserOrganizationsStatus = 'succeeded';
+       state.currentUserOrganizations = action.payload;
+     })
+     .addCase(fetchMyOrganizations.rejected, (state, action) => {
+       state.currentUserOrganizationsStatus = 'failed';
+       state.currentUserOrganizationsError = action.payload;
+     });
   },
 });
 

@@ -6,14 +6,12 @@ export function ViewButton({ onClick }) {
     <button
       className="text-blue-400 hover:text-blue-500"
       onClick={(e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Keep this as a good measure
         onClick?.();
       }}
-      onPointerDown={(e) => {
+      onPointerDown={(e) => { // Add this line
         e.stopPropagation();
       }}
-      type="button"
-      tabIndex={0}
     >
       View
     </button>
@@ -25,14 +23,12 @@ export function EditButton({ onClick }) {
     <button
       className="text-yellow-400 hover:text-yellow-500"
       onClick={(e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Keep this as a good measure
         onClick?.();
       }}
-      onPointerDown={(e) => {
+      onPointerDown={(e) => { // Add this line
         e.stopPropagation();
       }}
-      type="button"
-      tabIndex={0}
     >
       Edit
     </button>
@@ -44,14 +40,12 @@ export function DeleteButton({ onClick }) {
     <button
       className="text-red-400 hover:text-red-500"
       onClick={(e) => {
-        e.stopPropagation();
+        e.stopPropagation(); // Keep this as a good measure
         onClick?.();
       }}
-      onPointerDown={(e) => {
+      onPointerDown={(e) => { // Add this line
         e.stopPropagation();
       }}
-      type="button"
-      tabIndex={0}
     >
       Delete
     </button>

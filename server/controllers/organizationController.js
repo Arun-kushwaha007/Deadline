@@ -21,6 +21,26 @@ export const getAllOrganizations = async (req, res) => {
   }
 };
 
+// GET /api/organizations/mine
+// Fetches organizations where the logged-in user is a member
+export const getMyOrganizations = async (req, res) => {
+  try {
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ message: 'User not authenticated for fetching organizations.' });
+    }
+    const userUuid = req.user.userId; // Logged-in user's string UUID
+
+    const organizations = await Organization.find({ 
+      'members.userId': userUuid 
+    }).select('name _id'); // Select only name and _id
+
+    res.status(200).json(organizations);
+  } catch (error) {
+    console.error('Error fetching "my" organizations:', error);
+    res.status(500).json({ message: 'Server error while fetching your organizations', error: error.message });
+  }
+};
+
 // POST /api/organizations/create
 export const createOrganization = async (req, res) => {
   try {

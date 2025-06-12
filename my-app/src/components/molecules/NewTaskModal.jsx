@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask, updateTask, fetchUsers } from '../../redux/slices/tasksSlice';
+import { fetchMyOrganizations } from '../../redux/organizationSlice'; // Corrected import path
 
 const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const dispatch = useDispatch();
   const { users, usersStatus, error: usersError } = useSelector((state) => state.tasks);
+  // Updated to use currentUserOrganizations, currentUserOrganizationsStatus, currentUserOrganizationsError
+const { 
+  currentUserOrganizations, 
+  currentUserOrganizationsStatus, 
+  error: currentUserOrganizationsError 
+} = useSelector((state) => state.organization); // ✅ correct key
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -20,15 +27,22 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const [assigneeSearch, setAssigneeSearch] = useState('');
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [organizationId, setOrganizationId] = useState(''); // New state for selected organization
 
   useEffect(() => {
-    if (isOpen && usersStatus === 'idle') {
-      dispatch(fetchUsers());
+    if (isOpen) {
+      if (usersStatus === 'idle') {
+        dispatch(fetchUsers());
+      }
+      // Use currentUserOrganizationsStatus for the condition
+      if (currentUserOrganizationsStatus === 'idle') {
+        dispatch(fetchMyOrganizations()); 
+      }
     }
-  }, [isOpen, usersStatus, dispatch]);
+  }, [isOpen, usersStatus, currentUserOrganizationsStatus, dispatch]);
 
   useEffect(() => {
-    if (taskToEdit && users.length > 0) {
+    if (taskToEdit) {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
       setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : '');
@@ -36,10 +50,14 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
       setSubtasks(taskToEdit.subtasks || [{ title: '', done: false }]);
-      // Ensure users are loaded before finding the assignee
-      const member = users.find(u => u._id === taskToEdit.assignedTo);
-      setAssignee(member || null);
-    } else if (!taskToEdit) {
+      if (users.length > 0) {
+        const member = users.find(u => u._id === taskToEdit.assignedTo);
+        setAssignee(member || null);
+      }
+      if (taskToEdit.organization) { // Set organizationId if taskToEdit has it
+        setOrganizationId(taskToEdit.organization);
+      }
+    } else {
       // Reset form for new task
       setTitle('');
       setDescription('');
@@ -51,8 +69,9 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setAssignee(null);
       setAssignedBy('');
       setVisibility('private');
+      setOrganizationId(''); // Reset organizationId for new task
     }
-  }, [taskToEdit, users]); // Add users to dependency array
+  }, [taskToEdit, users, isOpen]); // Added isOpen to reset org on new task creation after modal opens
 
   useEffect(() => {
     if (usersStatus === 'succeeded') {
@@ -75,6 +94,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       dueDate: !dueDate ? 'Due date is required' : '',
       priority: !priority ? 'Priority is required' : '',
       assignee: !assignee ? 'Assignee is required' : '',
+      organizationId: !organizationId ? 'Organization is required' : '', // Add organization validation
     };
     setErrors(newErrors);
     return Object.values(newErrors).every(e => e === '');
@@ -93,6 +113,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
     setVisibility('private');
     setErrors({});
     setAssigneeSearch('');
+    setOrganizationId(''); // Reset organizationId in resetForm
   };
 
   const handleSubmit = async (e) => {
@@ -115,6 +136,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       assignedTo: assignee?._id !== 'everyone' ? assignee._id : null, // Use _id
       assignedBy: assigner,
       visibility,
+      organization: organizationId, // Add organization to taskPayload
     };
 
     try {
@@ -160,6 +182,31 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           />
           {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
 
+          {/* Organization Dropdown */}
+          <div>
+            <label className="block text-sm mb-1 text-white">Organization</label>
+            <select
+              value={organizationId}
+              onChange={(e) => setOrganizationId(e.target.value)}
+              className="w-full p-2 rounded bg-slate-700 text-white"
+              // Use currentUserOrganizationsStatus for disabled condition
+              disabled={currentUserOrganizationsStatus === 'loading' || currentUserOrganizationsStatus === 'failed'}
+            >
+              <option value="">Select Organization</option>
+              {/* Populate with currentUserOrganizations and check currentUserOrganizationsStatus */}
+              {currentUserOrganizationsStatus === 'succeeded' &&
+                currentUserOrganizations.map((org) => (
+                  <option key={org._id} value={org._id}>
+                    {org.name}
+                  </option>
+                ))}
+            </select>
+            {/* Display loading/error based on currentUserOrganizationsStatus and currentUserOrganizationsError */}
+            {currentUserOrganizationsStatus === 'loading' && <p className="text-blue-400 text-sm">Loading organizations...</p>}
+            {currentUserOrganizationsStatus === 'failed' && <p className="text-red-500 text-sm">Error loading organizations: {currentUserOrganizationsError?.message || 'Unknown error'}</p>}
+            {errors.organizationId && <p className="text-red-500 text-sm">{errors.organizationId}</p>}
+          </div>
+
           <input
             type="date"
             value={dueDate}
@@ -178,7 +225,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
 
           {/* Assignee Section */}
           <div>
-            {/* <label className="block text-sm mb-1 text-white">Assign To</label> */}
+            <label className="block text-sm mb-1 text-white">Assign To</label>
             <label className="block text-sm mb-1 text-white">Assign To</label>
             {usersStatus === 'loading' && <p className="text-blue-400">Loading users...</p>}
             {usersStatus === 'failed' && <p className="text-red-500">Error loading users: {usersError?.message || 'Unknown error'}</p>}
