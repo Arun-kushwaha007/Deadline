@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { createTask, updateTask } from '../../redux/slices/tasksSlice';
-
-const orgMembers = [
-  { id: '1', name: 'Alice Johnson' },
-  { id: '2', name: 'Bob Smith' },
-  { id: '3', name: 'Charlie Brown' },
-  { id: '4', name: 'David Lee' },
-  { id: '5', name: 'Eve Adams' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { createTask, updateTask, fetchUsers } from '../../redux/slices/tasksSlice';
 
 const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const dispatch = useDispatch();
+  const { users, usersStatus, error: usersError } = useSelector((state) => state.tasks);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -25,11 +18,17 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const [visibility, setVisibility] = useState('private');
   const [errors, setErrors] = useState({});
   const [assigneeSearch, setAssigneeSearch] = useState('');
-  const [filteredMembers, setFilteredMembers] = useState(orgMembers);
+  const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (taskToEdit) {
+    if (isOpen && usersStatus === 'idle') {
+      dispatch(fetchUsers());
+    }
+  }, [isOpen, usersStatus, dispatch]);
+
+  useEffect(() => {
+    if (taskToEdit && users.length > 0) {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
       setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : '');
@@ -37,9 +36,11 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
       setSubtasks(taskToEdit.subtasks || [{ title: '', done: false }]);
-      const member = orgMembers.find(m => m.id === taskToEdit.assignedTo);
+      // Ensure users are loaded before finding the assignee
+      const member = users.find(u => u._id === taskToEdit.assignedTo);
       setAssignee(member || null);
-    } else {
+    } else if (!taskToEdit) {
+      // Reset form for new task
       setTitle('');
       setDescription('');
       setDueDate('');
@@ -51,17 +52,21 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       setAssignedBy('');
       setVisibility('private');
     }
-  }, [taskToEdit]);
+  }, [taskToEdit, users]); // Add users to dependency array
 
   useEffect(() => {
-    setFilteredMembers(
-      assigneeSearch.trim() === ''
-        ? orgMembers
-        : orgMembers.filter(m =>
-            m.name.toLowerCase().includes(assigneeSearch.toLowerCase())
-          )
-    );
-  }, [assigneeSearch]);
+    if (usersStatus === 'succeeded') {
+      setFilteredMembers(
+        assigneeSearch.trim() === ''
+          ? users
+          : users.filter(u =>
+              u.name.toLowerCase().includes(assigneeSearch.toLowerCase())
+            )
+      );
+    } else {
+      setFilteredMembers([]);
+    }
+  }, [assigneeSearch, users, usersStatus]);
 
   const validateForm = () => {
     const newErrors = {
@@ -107,7 +112,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
       priority,
       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
       subtasks: subtasks.filter(s => s.title.trim()),
-      assignedTo: assignee?.id !== 'everyone' ? assignee.id : null,
+      assignedTo: assignee?._id !== 'everyone' ? assignee._id : null, // Use _id
       assignedBy: assigner,
       visibility,
     };
@@ -174,57 +179,67 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
           {/* Assignee Section */}
           <div>
             <label className="block text-sm mb-1 text-white">Assign To</label>
-            <input
-              type="text"
-              placeholder="Search members..."
-              value={assigneeSearch}
-              onChange={(e) => setAssigneeSearch(e.target.value)}
-              className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
-              disabled={assignee?.id === 'everyone'}
-            />
-            {assigneeSearch && (
-              <div className="border dark:border-slate-600 rounded max-h-32 overflow-y-auto bg-white dark:bg-slate-700">
-                {filteredMembers.length === 0 ? (
-                  <div className="p-2 text-sm text-gray-500">No members found</div>
-                ) : (
-                  filteredMembers.map((member) => (
-                    <div
-                      key={member.id}
-                      onClick={() => {
-                        setAssignee(member);
-                        setAssigneeSearch('');
-                      }}
-                      className="px-3 py-2 hover:bg-blue-100 dark:hover:bg-slate-600 cursor-pointer"
-                    >
-                      {member.name}
-                    </div>
-                  ))
+            <label className="block text-sm mb-1 text-white">Assign To</label>
+            {usersStatus === 'loading' && <p className="text-blue-400">Loading users...</p>}
+            {usersStatus === 'failed' && <p className="text-red-500">Error loading users: {usersError?.message || 'Unknown error'}</p>}
+            {usersStatus === 'succeeded' && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Search members..."
+                  value={assigneeSearch}
+                  onChange={(e) => setAssigneeSearch(e.target.value)}
+                  className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
+                  disabled={assignee?._id === 'everyone' || users.length === 0}
+                />
+                {assigneeSearch && filteredMembers.length > 0 && (
+                  <div className="border dark:border-slate-600 rounded max-h-32 overflow-y-auto bg-white dark:bg-slate-700">
+                    {filteredMembers.map((user) => (
+                      <div
+                        key={user._id} // Use user._id
+                        onClick={() => {
+                          setAssignee(user);
+                          setAssigneeSearch('');
+                        }}
+                        className="px-3 py-2 hover:bg-blue-100 dark:hover:bg-slate-600 cursor-pointer"
+                      >
+                        {user.name}
+                      </div>
+                    ))}
+                  </div>
                 )}
-              </div>
-            )}
+                {assigneeSearch && filteredMembers.length === 0 && users.length > 0 && (
+                  <div className="p-2 text-sm text-gray-500">No members found</div>
+                )}
+                 {users.length === 0 && usersStatus === 'succeeded' && (
+                   <p className="text-sm text-gray-400">No users available to assign.</p>
+                 )}
 
-            <button
-              type="button"
-              onClick={() => {
-                setAssignee({ id: 'everyone', name: 'Everyone' });
-                setAssigneeSearch('');
-              }}
-              className="mt-1 text-xs text-blue-400 hover:underline"
-            >
-              Assign to Everyone
-            </button>
-
-            {assignee && (
-              <div className="mt-2 text-sm text-green-400 flex justify-between items-center">
-                Assigned to: {assignee.name}
                 <button
                   type="button"
-                  onClick={() => setAssignee(null)}
-                  className="text-red-400 hover:underline text-xs ml-2"
+                  onClick={() => {
+                    setAssignee({ _id: 'everyone', name: 'Everyone' }); // Use _id
+                    setAssigneeSearch('');
+                  }}
+                  className="mt-1 text-xs text-blue-400 hover:underline"
+                  disabled={users.length === 0 && usersStatus !== 'loading'}
                 >
-                  ✕ Remove
+                  Assign to Everyone
                 </button>
-              </div>
+
+                {assignee && (
+                  <div className="mt-2 text-sm text-green-400 flex justify-between items-center">
+                    Assigned to: {assignee.name}
+                    <button
+                      type="button"
+                      onClick={() => setAssignee(null)}
+                      className="text-red-400 hover:underline text-xs ml-2"
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
+                )}
+              </>
             )}
             {errors.assignee && <p className="text-red-500 text-sm">{errors.assignee}</p>}
           </div>

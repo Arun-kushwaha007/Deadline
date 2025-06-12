@@ -18,6 +18,8 @@ const initialState = {
   tasks: [],
   status: 'idle',
   error: null,
+  users: [],
+  usersStatus: 'idle',
 };
 
 // Async Thunks
@@ -25,6 +27,15 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, { rejec
   try {
     const response = await axios.get(`${API_BASE_URL}/tasks`, getAuthConfig());
     return response.data.map(task => ({ ...task, id: task._id }));
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
+
+export const fetchUsers = createAsyncThunk('tasks/fetchUsers', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/users`, getAuthConfig());
+    return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
   }
@@ -129,6 +140,20 @@ const tasksSlice = createSlice({
       })
       .addCase(deleteTaskThunk.rejected, (state, action) => {
         state.error = action.payload;
+      })
+
+      // Fetch Users
+      .addCase(fetchUsers.pending, (state) => {
+        state.usersStatus = 'loading';
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.usersStatus = 'succeeded';
+        state.users = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.usersStatus = 'failed';
+        // Consider storing user-specific error, if different from task errors
+        state.error = action.payload; // Or state.usersError = action.payload
       });
   },
 });

@@ -11,6 +11,7 @@ import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import organizationRoutes from './routes/organizationRoutes.js';
+import userRoutes from './routes/userRoutes.js'; // Import user routes
 
 dotenv.config();
 
@@ -18,9 +19,13 @@ const app = express();
 const server = http.createServer(app);
 
 // 🔹 Redis setup
-const redisClient = createClient();
-redisClient.connect().catch((err) => console.error('❌ Redis connection error:', err));
+const redisClient = createClient({
+  url: 'redis://127.0.0.1:6379',
+});
 
+redisClient.on('error', (err) => console.error('Redis Client Error', err));
+
+await redisClient.connect();
 // 🔹 Resend setup  - for forgetpassword mail generator  
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -38,6 +43,10 @@ app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true,
 }));
+// app.use(cors({
+//   origin: 'http://localhost:5000',
+//   credentials: true,
+// }));
 app.use(express.json());
 
 // 🔹 Attach global instances to app
@@ -50,6 +59,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/organizations', organizationRoutes);
+app.use('/api/users', userRoutes); // Use user routes
 
 // 🔹 MongoDB Connection & Server Start
 const startServer = async () => {
