@@ -152,7 +152,7 @@ const KanbanBoard = () => {
                 >
                   <div className="space-y-4">
                     {columnTasks.map((task) => (
-                      <SortableTask
+                      <SortableTask  
                         key={task.id}
                         task={task}
                         onView={() => {
