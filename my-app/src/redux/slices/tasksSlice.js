@@ -26,9 +26,7 @@ const initialState = {
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/tasks`, getAuthConfig());
-    // Ensure the response is always an array
-    const data = Array.isArray(response.data) ? response.data : [response.data];
-    return data.map(task => ({ ...task, id: task._id }));
+    return response.data.map(task => ({ ...task, id: task._id }));
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
   }
@@ -110,8 +108,7 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // Always set as array
-        state.tasks = Array.isArray(action.payload) ? action.payload : [action.payload];
+        state.tasks = action.payload;
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = 'failed';
@@ -155,7 +152,8 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.usersStatus = 'failed';
-        state.error = action.payload;
+        // Consider storing user-specific error, if different from task errors
+        state.error = action.payload; // Or state.usersError = action.payload
       });
   },
 });
