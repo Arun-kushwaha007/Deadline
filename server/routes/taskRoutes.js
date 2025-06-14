@@ -11,6 +11,7 @@ const router = express.Router();
  * Fetch all tasks assigned to the logged-in user, or filter by organizationId if provided.
  * Pass organizationId as a query param: /api/tasks?organizationId=ORG_ID
  */
+
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id; // MongoDB _id of the user

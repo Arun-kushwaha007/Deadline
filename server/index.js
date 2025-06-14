@@ -11,24 +11,28 @@ import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import organizationRoutes from './routes/organizationRoutes.js';
-import userRoutes from './routes/userRoutes.js'; // Import user routes
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-// 🔹 Redis setup
-const redisClient = createClient();
-redisClient.connect().catch((err) => console.error('❌ Redis connection error:', err));
+// 🔹 Redis setup (cloud-based)
+const redisClient = createClient({
+  url: `redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+});
+redisClient.connect().catch((err) =>
+  console.error('❌ Redis connection error:', err)
+);
 
-// 🔹 Resend setup  - for forgetpassword mail generator  
+// 🔹 Resend setup - for forgot password email generator
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // 🔹 Socket.IO setup
 const io = new socketIO(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -36,7 +40,7 @@ const io = new socketIO(server, {
 
 // 🔹 Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
   credentials: true,
 }));
 app.use(express.json());
@@ -44,14 +48,14 @@ app.use(express.json());
 // 🔹 Attach global instances to app
 app.set('io', io);
 app.set('redis', redisClient);
-app.set('resend', resend); // Now available in all route files via req.app.get('resend')
+app.set('resend', resend);
 
 // 🔹 Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/organizations', organizationRoutes);
-app.use('/api/users', userRoutes); // Use user routes
+app.use('/api/users', userRoutes);
 
 // 🔹 MongoDB Connection & Server Start
 const startServer = async () => {
@@ -101,6 +105,17 @@ io.on('connection', (socket) => {
     }
   });
 });
+app.get('/api/test-redis', async (req, res) => {
+  const redis = req.app.get('redis');
+  try {
+    await redis.setEx('test:key', 300, JSON.stringify({ message: 'Hello Redis!' }));
+    const value = await redis.get('test:key');
+    res.json({ value });
+  } catch (err) {
+    console.error('Redis test error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // 🔹 Test Notification Route
 app.get('/api/test-notification/:userId', async (req, res) => {
@@ -122,5 +137,5 @@ app.get('/api/test-notification/:userId', async (req, res) => {
   }
 });
 
-// 🔹 Start Everything
+// 🔹 Start Server
 startServer();
