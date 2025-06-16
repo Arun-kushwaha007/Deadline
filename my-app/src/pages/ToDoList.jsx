@@ -3,10 +3,19 @@ import { Sun, Moon } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const ToDoList = () => {
+  const navigate = useNavigate();
+      
+        useEffect(() => {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            navigate('/login');
+          }
+        }, [navigate]);
   const [darkMode, setDarkMode] = useState(false);
   const [task, setTask] = useState('');
   const [tasks, setTasks] = useState([]);

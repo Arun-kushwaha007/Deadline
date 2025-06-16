@@ -13,6 +13,7 @@ import {
 } from '@dnd-kit/sortable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 import {
   fetchTasks,
@@ -29,6 +30,17 @@ import SortableTask from '../molecules/SortableTask';
 import TaskCard from '../molecules/TaskCard';
 
 const KanbanBoard = () => {
+
+      const navigate = useNavigate();
+    
+      useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          navigate('/login');
+        }
+      }, [navigate]);
+
+
   const tasks = useSelector((state) => state.tasks.tasks);
   const taskStatus = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
