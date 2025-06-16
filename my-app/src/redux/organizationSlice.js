@@ -176,6 +176,16 @@ const organizationSlice = createSlice({
       // Fetch single org
       .addCase(fetchOrganizationDetails.fulfilled, (state, action) => {
         state.selectedOrganization = action.payload;
+        state.loading = false; // Ensure loading is false on success
+        state.error = null; // Clear any previous error on success
+      })
+      .addCase(fetchOrganizationDetails.pending, (state) => { // Added pending case for fetchOrganizationDetails
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrganizationDetails.rejected, (state, action) => { // Added rejected case for fetchOrganizationDetails
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // Add member

@@ -19,6 +19,7 @@ import {
   updateTaskStatus,
   reorderTasks,
   deleteTaskThunk,
+  clearTasks, // Import clearTasks
 } from '../../redux/slices/tasksSlice';
 import NewTaskModal from '../molecules/NewTaskModal';
 import { Button } from '../atoms/Button';
@@ -31,6 +32,7 @@ const KanbanBoard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
   const taskStatus = useSelector((state) => state.tasks.status);
   const error = useSelector((state) => state.tasks.error);
+  const selectedOrganization = useSelector((state) => state.organization.selectedOrganization); // Added
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -41,10 +43,13 @@ const KanbanBoard = () => {
   const [viewOnly, setViewOnly] = useState(false);
 
   useEffect(() => {
-    if (taskStatus === 'idle') {
-      dispatch(fetchTasks());
+    const organizationId = selectedOrganization?._id;
+    if (organizationId) {
+      dispatch(fetchTasks(organizationId));
+    } else {
+      dispatch(clearTasks()); // Dispatch clearTasks if no org is selected
     }
-  }, [taskStatus, dispatch]);
+  }, [dispatch, selectedOrganization]); // selectedOrganization will trigger refetch on change
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -92,6 +97,16 @@ const KanbanBoard = () => {
 
     setActiveTask(null);
   };
+
+  // Conditional rendering based on selectedOrganization
+  if (!selectedOrganization) {
+    return (
+      <div className="p-6 text-white text-center">
+        <h1 className="text-2xl font-bold">Please select an organization to view its tasks.</h1>
+        {/* Optional: Add more guidance here */}
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 min-h-screen text-white">
@@ -152,7 +167,7 @@ const KanbanBoard = () => {
                 >
                   <div className="space-y-4">
                     {columnTasks.map((task) => (
-                      <SortableTask
+                      <SortableTask  
                         key={task.id}
                         task={task}
                         onView={() => {

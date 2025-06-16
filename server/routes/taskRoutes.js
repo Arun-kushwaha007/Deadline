@@ -11,7 +11,6 @@ const router = express.Router();
  * Fetch all tasks assigned to the logged-in user, or filter by organizationId if provided.
  * Pass organizationId as a query param: /api/tasks?organizationId=ORG_ID
  */
-
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id; // MongoDB _id of the user
@@ -35,11 +34,21 @@ router.get('/', authMiddleware, async (req, res) => {
       orgFilter.organization = { $in: organizationIds };
     }
 
-    // Fetch tasks assigned to the user within the selected organizations
-    const tasks = await Task.find({
-      assignedTo: userId,
-      ...orgFilter,
-    }).populate('assignedTo').populate('organization');
+    // Define queryConditions based on the presence of organizationId
+    let queryConditions = { ...orgFilter };
+
+    if (organizationId) {
+      // If organizationId is specified, fetch all tasks for that org.
+      // User membership check is already done.
+      // No filter by assignedTo: userId here.
+    } else {
+      // If no specific organization, fetch tasks assigned to the user across their orgs
+      queryConditions.assignedTo = userId;
+    }
+
+    const tasks = await Task.find(queryConditions)
+      .populate('assignedTo', 'name email') // Populate specific fields
+      .populate('organization', 'name'); // Populate specific fields
 
     res.status(200).json(tasks);
   } catch (err) {

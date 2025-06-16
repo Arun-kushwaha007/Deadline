@@ -23,10 +23,16 @@ const initialState = {
 };
 
 // Async Thunks
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (_, { rejectWithValue }) => {
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (organizationId, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/tasks`, getAuthConfig());
-    return response.data.map(task => ({ ...task, id: task._id }));
+    let apiUrl = `${API_BASE_URL}/tasks`;
+    if (organizationId) {
+      apiUrl += `?organizationId=${organizationId}`;
+    }
+    const response = await axios.get(apiUrl, getAuthConfig());
+    // Ensure the response is always an array
+    const data = Array.isArray(response.data) ? response.data : [response.data];
+    return data.map(task => ({ ...task, id: task._id }));
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
   }
@@ -99,6 +105,11 @@ const tasksSlice = createSlice({
         }
       });
     },
+    clearTasks: (state) => {
+      state.tasks = [];
+      state.status = 'idle';
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -108,7 +119,8 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.tasks = action.payload;
+        // Always set as array
+        state.tasks = Array.isArray(action.payload) ? action.payload : [action.payload];
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.status = 'failed';
@@ -152,8 +164,7 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.usersStatus = 'failed';
-        // Consider storing user-specific error, if different from task errors
-        state.error = action.payload; // Or state.usersError = action.payload
+        state.error = action.payload;
       });
   },
 });
@@ -163,6 +174,7 @@ export const {
   reorderTasks,
   updateTaskOrganization,
   reorderOrgTasks,
+  clearTasks, // Export the new action
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;
