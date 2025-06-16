@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Trash2 } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
-import KanbanBoard from '../components/organisms/KanbanBoard';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
+import axios from 'axios';
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const ToDoList = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -13,23 +15,50 @@ const ToDoList = () => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  const addTask = () => {
-    if (task.trim()) {
-      setTasks([...tasks, { id: Date.now(), text: task, completed: false }]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const res = await axios.get(`${backendUrl}/api/todos`);
+        setTasks(res.data);
+      } catch (err) {
+        console.error('❌ Failed to load tasks:', err);
+      }
+    };
+    fetchTasks();
+  }, []);
+
+  const addTask = async () => {
+    if (!task.trim()) return;
+    try {
+      const response = await axios.post(`${backendUrl}/api/todos`, {
+        text: task.trim(),
+      });
+      setTasks(prev => [response.data, ...prev]);
       setTask('');
+    } catch (error) {
+      console.error('Failed to add task:', error.response?.data || error.message);
     }
   };
 
-  const toggleComplete = (id) => {
-    setTasks(
-      tasks.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      )
-    );
+  const toggleComplete = async (id) => {
+    try {
+      const res = await axios.put(`${backendUrl}/api/todos/${id}/toggle`);
+      const updated = res.data;
+      setTasks((prev) =>
+        prev.map((t) => (t._id === id ? updated : t))
+      );
+    } catch (err) {
+      console.error('❌ Failed to toggle task:', err);
+    }
   };
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((t) => t.id !== id));
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`${backendUrl}/api/todos/${id}`);
+      setTasks((prev) => prev.filter((t) => t._id !== id));
+    } catch (err) {
+      console.error('❌ Failed to delete task:', err);
+    }
   };
 
   return (
@@ -52,11 +81,9 @@ const ToDoList = () => {
             addTask={addTask}
             toggleComplete={toggleComplete}
             deleteTask={deleteTask}
+            task={task}
+            setTask={setTask}
           />
-        </div>
-
-        <div className="mt-10 border-t border-gray-300 dark:border-gray-700 pt-6">
-          <KanbanBoard />
         </div>
       </div>
     </DashboardLayout>

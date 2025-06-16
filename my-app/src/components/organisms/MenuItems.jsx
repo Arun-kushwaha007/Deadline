@@ -6,8 +6,8 @@ import {
 
 const menu = [
   { to: '/', label: 'Dashboard', icon: <Home size={20} /> },
-  { to: '/tasks', label: 'Tasks', icon: <ListTodo size={20} /> },
-  { to: '/create_Organization', label: 'Create Organization', icon: <Group size={20} /> },
+  { to: '/tasks', label: 'All Tasks', icon: <ListTodo size={20} /> },
+  { to: '/create_Organization', label: 'Your Organization', icon: <Group size={20} /> },
   { to: '/join_Organization', label: 'Join Organization', icon: <CirclePlus size={20} /> },
   { to: '/todo', label: 'To Do List', icon: <LayoutList size={20} /> },
   { to: '/team', label: 'Team', icon: <Users size={20} /> },
