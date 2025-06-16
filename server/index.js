@@ -12,7 +12,7 @@ import taskRoutes from './routes/taskRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import organizationRoutes from './routes/organizationRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-
+import todoRoutes from './routes/todos.js';
 dotenv.config();
 
 const app = express();
@@ -56,6 +56,8 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
+
 
 // 🔹 MongoDB Connection & Server Start
 const startServer = async () => {
