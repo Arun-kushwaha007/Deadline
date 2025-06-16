@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask, updateTask, fetchUsers } from '../../redux/slices/tasksSlice';
-import { fetchMyOrganizations } from '../../redux/organizationSlice'; // Corrected import path
+import { 
+  fetchMyOrganizations, 
+  fetchOrganizationDetails, 
+  fetchOrganizationMembers,
+  clearOrganizationMembers 
+} from '../../redux/organizationSlice';
 
 const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
   const dispatch = useDispatch();
   const { users, usersStatus, error: usersError } = useSelector((state) => state.tasks);
-  // Updated to use currentUserOrganizations, currentUserOrganizationsStatus, currentUserOrganizationsError
-const { 
-  currentUserOrganizations, 
-  currentUserOrganizationsStatus, 
-  error: currentUserOrganizationsError 
-} = useSelector((state) => state.organization); // ✅ correct key
+  
+  const { 
+    currentUserOrganizations, 
+    currentUserOrganizationsStatus, 
+    selectedOrganization,
+    organizationMembers, // Add this for cached members
+    detailsLoading,
+    error: currentUserOrganizationsError 
+  } = useSelector((state) => state.organization);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -27,19 +35,36 @@ const {
   const [assigneeSearch, setAssigneeSearch] = useState('');
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [organizationId, setOrganizationId] = useState(''); // New state for selected organization
+  const [organizationId, setOrganizationId] = useState('');
 
   useEffect(() => {
     if (isOpen) {
       if (usersStatus === 'idle') {
         dispatch(fetchUsers());
       }
-      // Use currentUserOrganizationsStatus for the condition
       if (currentUserOrganizationsStatus === 'idle') {
         dispatch(fetchMyOrganizations()); 
       }
     }
   }, [isOpen, usersStatus, currentUserOrganizationsStatus, dispatch]);
+
+  // Fetch organization details when organizationId changes
+  useEffect(() => {
+    if (organizationId) {
+      // Check if we already have the organization details and members
+      const hasOrgDetails = selectedOrganization && selectedOrganization._id === organizationId;
+      const hasMembersCache = organizationMembers[organizationId]?.status === 'succeeded';
+      
+      if (!hasOrgDetails) {
+        dispatch(fetchOrganizationDetails(organizationId));
+      }
+      
+      // Fetch members separately if not cached
+      if (!hasMembersCache) {
+        dispatch(fetchOrganizationMembers(organizationId));
+      }
+    }
+  }, [organizationId, dispatch, selectedOrganization, organizationMembers]);
 
   useEffect(() => {
     if (taskToEdit) {
@@ -54,7 +79,7 @@ const {
         const member = users.find(u => u._id === taskToEdit.assignedTo);
         setAssignee(member || null);
       }
-      if (taskToEdit.organization) { // Set organizationId if taskToEdit has it
+      if (taskToEdit.organization) {
         setOrganizationId(taskToEdit.organization);
       }
     } else {
@@ -69,23 +94,67 @@ const {
       setAssignee(null);
       setAssignedBy('');
       setVisibility('private');
-      setOrganizationId(''); // Reset organizationId for new task
+      setOrganizationId('');
     }
-  }, [taskToEdit, users, isOpen]); // Added isOpen to reset org on new task creation after modal opens
+  }, [taskToEdit, users, isOpen]);
 
+  // Filter members based on selected organization and search term
   useEffect(() => {
-    if (usersStatus === 'succeeded') {
-      setFilteredMembers(
-        assigneeSearch.trim() === ''
-          ? users
-          : users.filter(u =>
-              u.name.toLowerCase().includes(assigneeSearch.toLowerCase())
-            )
-      );
+    let membersToFilter = [];
+
+    if (organizationId) {
+      // First try to get members from cache
+      const cachedMembers = organizationMembers[organizationId];
+      if (cachedMembers?.status === 'succeeded') {
+        membersToFilter = cachedMembers.members
+          .map(member => member.userId)
+          .filter(user => user && user._id);
+      }
+      // Fallback to selectedOrganization if cache not available
+      else if (selectedOrganization && selectedOrganization._id === organizationId) {
+        membersToFilter = selectedOrganization.members
+          .map(member => member.userId)
+          .filter(user => user && user._id);
+      }
     } else {
-      setFilteredMembers([]);
+      // If no organization selected, show all users (fallback)
+      membersToFilter = users;
     }
-  }, [assigneeSearch, users, usersStatus]);
+
+    // Apply search filter
+    const filtered = assigneeSearch.trim() === ''
+      ? membersToFilter
+      : membersToFilter.filter(user =>
+          user.name.toLowerCase().includes(assigneeSearch.toLowerCase())
+        );
+
+    setFilteredMembers(filtered);
+  }, [assigneeSearch, organizationId, selectedOrganization, organizationMembers, users]);
+
+  // Reset assignee when organization changes
+  useEffect(() => {
+    if (organizationId && assignee) {
+      let orgMembers = [];
+      
+      // Get members from cache or selectedOrganization
+      const cachedMembers = organizationMembers[organizationId];
+      if (cachedMembers?.status === 'succeeded') {
+        orgMembers = cachedMembers.members;
+      } else if (selectedOrganization && selectedOrganization._id === organizationId) {
+        orgMembers = selectedOrganization.members;
+      }
+      
+      // Check if current assignee is still a member of the selected organization
+      if (orgMembers.length > 0) {
+        const isAssigneeMember = orgMembers.some(
+          member => member.userId?._id === assignee._id
+        );
+        if (!isAssigneeMember && assignee._id !== 'everyone') {
+          setAssignee(null); // Reset assignee if they're not in the new org
+        }
+      }
+    }
+  }, [organizationId, selectedOrganization, organizationMembers, assignee]);
 
   const validateForm = () => {
     const newErrors = {
@@ -94,7 +163,7 @@ const {
       dueDate: !dueDate ? 'Due date is required' : '',
       priority: !priority ? 'Priority is required' : '',
       assignee: !assignee ? 'Assignee is required' : '',
-      organizationId: !organizationId ? 'Organization is required' : '', // Add organization validation
+      organizationId: !organizationId ? 'Organization is required' : '',
     };
     setErrors(newErrors);
     return Object.values(newErrors).every(e => e === '');
@@ -113,7 +182,9 @@ const {
     setVisibility('private');
     setErrors({});
     setAssigneeSearch('');
-    setOrganizationId(''); // Reset organizationId in resetForm
+    setOrganizationId('');
+    // Clear any cached members when form is reset
+    dispatch(clearOrganizationMembers());
   };
 
   const handleSubmit = async (e) => {
@@ -133,10 +204,10 @@ const {
       priority,
       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
       subtasks: subtasks.filter(s => s.title.trim()),
-      assignedTo: assignee?._id !== 'everyone' ? assignee._id : null, // Use _id
+      assignedTo: assignee?._id !== 'everyone' ? assignee._id : null,
       assignedBy: assigner,
       visibility,
-      organization: organizationId, // Add organization to taskPayload
+      organization: organizationId,
     };
 
     try {
@@ -155,6 +226,30 @@ const {
   };
 
   if (!isOpen) return null;
+
+  // Get available members count for display
+  const getAvailableMembersCount = () => {
+    if (!organizationId) return 0;
+    
+    const cachedMembers = organizationMembers[organizationId];
+    if (cachedMembers?.status === 'succeeded') {
+      return cachedMembers.members.filter(member => member.userId).length;
+    }
+    
+    if (selectedOrganization && selectedOrganization._id === organizationId) {
+      return selectedOrganization.members.filter(member => member.userId).length;
+    }
+    
+    return 0;
+  };
+
+  const availableMembersCount = getAvailableMembersCount();
+  
+  // Check if members are loading
+  const membersLoading = organizationId && (
+    organizationMembers[organizationId]?.status === 'loading' ||
+    (detailsLoading && (!selectedOrganization || selectedOrganization._id !== organizationId))
+  );
 
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
@@ -187,13 +282,15 @@ const {
             <label className="block text-sm mb-1 text-white">Organization</label>
             <select
               value={organizationId}
-              onChange={(e) => setOrganizationId(e.target.value)}
+              onChange={(e) => {
+                setOrganizationId(e.target.value);
+                setAssignee(null); // Reset assignee when org changes
+                setAssigneeSearch(''); // Clear search
+              }}
               className="w-full p-2 rounded bg-slate-700 text-white"
-              // Use currentUserOrganizationsStatus for disabled condition
               disabled={currentUserOrganizationsStatus === 'loading' || currentUserOrganizationsStatus === 'failed'}
             >
               <option value="">Select Organization</option>
-              {/* Populate with currentUserOrganizations and check currentUserOrganizationsStatus */}
               {currentUserOrganizationsStatus === 'succeeded' &&
                 currentUserOrganizations.map((org) => (
                   <option key={org._id} value={org._id}>
@@ -201,7 +298,6 @@ const {
                   </option>
                 ))}
             </select>
-            {/* Display loading/error based on currentUserOrganizationsStatus and currentUserOrganizationsError */}
             {currentUserOrganizationsStatus === 'loading' && <p className="text-blue-400 text-sm">Loading organizations...</p>}
             {currentUserOrganizationsStatus === 'failed' && <p className="text-red-500 text-sm">Error loading organizations: {currentUserOrganizationsError?.message || 'Unknown error'}</p>}
             {errors.organizationId && <p className="text-red-500 text-sm">{errors.organizationId}</p>}
@@ -225,11 +321,19 @@ const {
 
           {/* Assignee Section */}
           <div>
-           
-            <label className="block text-sm mb-1 text-white">Assign To</label>
-            {usersStatus === 'loading' && <p className="text-blue-400">Loading users...</p>}
-            {usersStatus === 'failed' && <p className="text-red-500">Error loading users: {usersError?.message || 'Unknown error'}</p>}
-            {usersStatus === 'succeeded' && (
+            <label className="block text-sm mb-1 text-white">
+              Assign To {organizationId && `(${availableMembersCount} members available)`}
+            </label>
+            
+            {!organizationId && (
+              <p className="text-yellow-400 text-sm mb-2">Please select an organization first to see available members.</p>
+            )}
+            
+            {membersLoading && (
+              <p className="text-blue-400 text-sm mb-2">Loading organization members...</p>
+            )}
+            
+            {organizationId && !membersLoading && availableMembersCount > 0 && (
               <>
                 <input
                   type="text"
@@ -237,13 +341,14 @@ const {
                   value={assigneeSearch}
                   onChange={(e) => setAssigneeSearch(e.target.value)}
                   className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
-                  disabled={assignee?._id === 'everyone' || users.length === 0}
+                  disabled={assignee?._id === 'everyone' || availableMembersCount === 0}
                 />
+                
                 {assigneeSearch && filteredMembers.length > 0 && (
                   <div className="border dark:border-slate-600 rounded max-h-32 overflow-y-auto bg-white dark:bg-slate-700">
                     {filteredMembers.map((user) => (
                       <div
-                        key={user._id} // Use user._id
+                        key={user._id}
                         onClick={() => {
                           setAssignee(user);
                           setAssigneeSearch('');
@@ -255,23 +360,25 @@ const {
                     ))}
                   </div>
                 )}
-                {assigneeSearch && filteredMembers.length === 0 && users.length > 0 && (
-                  <div className="p-2 text-sm text-gray-500">No members found</div>
+                
+                {assigneeSearch && filteredMembers.length === 0 && availableMembersCount > 0 && (
+                  <div className="p-2 text-sm text-gray-500">No members found in this organization</div>
                 )}
-                 {users.length === 0 && usersStatus === 'succeeded' && (
-                   <p className="text-sm text-gray-400">No users available to assign.</p>
-                 )}
+                
+                {availableMembersCount === 0 && (
+                  <p className="text-sm text-gray-400">No members available in this organization.</p>
+                )}
 
                 <button
                   type="button"
                   onClick={() => {
-                    setAssignee({ _id: 'everyone', name: 'Everyone' }); // Use _id
+                    setAssignee({ _id: 'everyone', name: 'Everyone' });
                     setAssigneeSearch('');
                   }}
                   className="mt-1 text-xs text-blue-400 hover:underline"
-                  disabled={users.length === 0 && usersStatus !== 'loading'}
+                  disabled={availableMembersCount === 0}
                 >
-                  Assign to Everyone
+                  Assign to Everyone in Organization
                 </button>
 
                 {assignee && (
@@ -288,6 +395,7 @@ const {
                 )}
               </>
             )}
+            
             {errors.assignee && <p className="text-red-500 text-sm">{errors.assignee}</p>}
           </div>
 

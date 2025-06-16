@@ -136,7 +136,8 @@ const OrganizationDetails = () => {
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
           <KanbanBoard tasks={selectedOrganization.tasks || []} />
         </section>
-
+ 
+ 
         {/* Members Section */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
