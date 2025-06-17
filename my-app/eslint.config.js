@@ -17,7 +17,7 @@ export default [
       },
     },
     plugins: {
-      'react-hooks': reactHooks,
+      'react-useFCMToken': reactHooks,
       'react-refresh': reactRefresh,
     },
     rules: {
