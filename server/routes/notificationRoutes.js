@@ -23,5 +23,20 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
     res.status(500).json({ message: 'Update failed' });
   }
 });
+// POST /api/notifications/token
+router.post('/token', authMiddleware, async (req, res) => {
+  const { token } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findById(userId);
+    user.fcmToken = token;
+    await user.save();
+
+    res.status(200).json({ message: 'Token saved' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error saving token' });
+  }
+});
 
 export default router;

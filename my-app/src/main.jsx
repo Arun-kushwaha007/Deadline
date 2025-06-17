@@ -8,6 +8,15 @@ import App from './App';
 import './index.css';
 import { ThemeProvider } from './utils/theme';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker registered:', registration);
+    });
+}
+
+
 <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID"></GoogleOAuthProvider>
 
 ReactDOM.createRoot(document.getElementById('root')).render(
