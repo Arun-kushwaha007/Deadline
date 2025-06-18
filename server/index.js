@@ -1,19 +1,24 @@
+import dotenv from 'dotenv';
+dotenv.config(); // ✅ Load env FIRST before any other imports
+
+// console.log('[ENV CHECK]', {
+//   FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
+//   FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
+//   FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY?.slice(0, 30) + '...',
+// });
+
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import { Server as socketIO } from 'socket.io';
 import { createClient } from 'redis';
 import { Resend } from 'resend';
-import './config/firebaseAdmin.js'; // Initialize Firebase Admin SDK
-
-// Load environment variables
-dotenv.config();
+import './config/firebaseAdmin.js'; // ✅ Now safe to run after env loaded
 
 // Firebase Admin Environment Check
 if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PROJECT_ID) {
-  console.warn('⚠️ Firebase Admin SDK not initialized properly. Missing environment variables.');
+  console.warn('⚠️ Firebase Admin SDK not initialized properly. Missing environment variables. correct it');
 }
 
 const app = express();
