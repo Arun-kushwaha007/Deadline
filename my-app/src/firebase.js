@@ -1,8 +1,7 @@
-// src/firebase.js
 import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage, isSupported } from 'firebase/messaging';
 
-// Replace with your actual Firebase project configuration using Vite environment variables
+// Firebase config using Vite environment variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_AI_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_AI_FIREBASE_AUTH_DOMAIN,
@@ -10,22 +9,29 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_AI_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_AI_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_AI_FIREBASE_APP_ID,
-  // measurementId: import.meta.env.VITE_AI_FIREBASE_MEASUREMENT_ID, // Optional
 };
 
 let messagingInstance = null;
+
 try {
   const app = initializeApp(firebaseConfig);
-  messagingInstance = getMessaging(app);
+
+  // Check if the browser supports Firebase messaging
+  isSupported().then((supported) => {
+    if (supported) {
+      messagingInstance = getMessaging(app);
+      console.log('✅ Firebase Messaging initialized.');
+    } else {
+      console.warn('🚫 Firebase Messaging is not supported in this browser.');
+    }
+  }).catch((err) => {
+    console.error('❌ Error checking Firebase messaging support:', err);
+  });
+
 } catch (error) {
-  console.error("Error initializing Firebase app or messaging:", error);
-  // Handle cases where Firebase config might be missing or invalid,
-  // especially if env vars are not set.
+  console.error('❌ Error initializing Firebase:', error);
+  // This typically happens if env vars are missing or misconfigured
 }
 
-// Export a potentially null messaging instance.
-// The consuming code (useFCMToken, App.jsx) should check if messagingInstance is truthy.
+// Export messagingInstance (may be null until support is confirmed)
 export { messagingInstance as messaging, getToken, onMessage };
-// Remove the redundant lines below, they were duplicated in the previous patch application.
-// const messaging = getMessaging(app);
-// export { messaging, getToken, onMessage };

@@ -7,7 +7,7 @@ import { messaging } from './firebase'; // messaging can be null
 import { SocketProvider } from './context/SocketContext';
 import AllApiRoutes from './AllApiRoutes';
 // import { addNotification } from './redux/slices/notificationsSlice'; // Added import
-import { addNotification } from './redux/slices/NotificationSlice';
+import { addNotification } from './redux/slices/notificationSlice';
 const socket = io('http://localhost:5000', {
   withCredentials: true,
 });

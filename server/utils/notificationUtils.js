@@ -1,44 +1,22 @@
 import Notification from '../models/Notification.js';
-import User from '../models/User.js'; // Import User model
-import { admin, firebaseAdminInitialized } from '../config/firebaseAdmin.js'; // Import Firebase admin instance
+import User from '../models/User.js';
+import { admin, firebaseAdminInitialized } from '../config/firebaseAdmin.js';
 
-// Helper to generate a title based on notification type
+// Title helper for various notification types
 const getNotificationTitle = (type) => {
   switch (type) {
-    case 'taskAssigned':
-      return 'New Task Assigned';
-    case 'invite':
-      return 'New Invitation';
-    case 'deadline':
-      return 'Approaching Deadline';
-    case 'newComment':
-      return 'New Comment';
-    case 'info':
-      return 'Information';
-    case 'warning':
-      return 'Warning';
-    case 'message':
-      return 'New Message';
-    case 'reminder':
-      return 'Reminder';
-    default:
-      return 'New Notification';
+    case 'taskAssigned': return 'New Task Assigned';
+    case 'invite': return 'New Invitation';
+    case 'deadline': return 'Approaching Deadline';
+    case 'newComment': return 'New Comment';
+    case 'info': return 'Information';
+    case 'warning': return 'Warning';
+    case 'message': return 'New Message';
+    case 'reminder': return 'Reminder';
+    default: return 'New Notification';
   }
 };
 
-/**
- * Creates and sends a notification via MongoDB, Socket.IO, and FCM.
- *
- * @param {object} params - The parameters for sending the notification.
- * @param {object} params.io - The Socket.IO instance.
- * @param {object} params.redisClient - The Redis client instance.
- * @param {string} params.userId - The ID of the user to notify.
- * @param {string} params.type - The type of notification (e.g., 'taskAssigned', 'newComment').
- * @param {string} params.message - The notification message.
- * @param {string} [params.entityId] - The ID of the related entity (e.g., task ID, comment ID).
- * @param {string} [params.entityModel] - The model of the related entity (e.g., 'Task', 'Comment').
- * @returns {Promise<object|null>} The saved notification object or null if an error occurred.
- */
 export const sendNotification = async ({
   io,
   redisClient,
@@ -49,86 +27,72 @@ export const sendNotification = async ({
   entityModel,
 }) => {
   try {
-    // 1. Create and save the notification to MongoDB
+    // 1. Save notification in MongoDB
     const notification = new Notification({
       userId,
       type,
       message,
       relatedEntity: entityId,
       entityModel,
-      isRead: false, // Default to unread
+      isRead: false,
     });
+
     const savedNotification = await notification.save();
+    console.log(`✅ Notification created: ${savedNotification._id} for user ${userId}`);
 
-    console.log(`Notification created: ${savedNotification._id} for user ${userId}`);
-
-    // 2. Retrieve the recipient's socket ID from Redis
-    // Assuming socket IDs are stored in Redis with a key like "socket:<userId>"
-    if (redisClient && typeof redisClient.get === 'function') {
-      const socketIdKey = `socket:${userId}`;
-      const socketId = await redisClient.get(socketIdKey);
-
+    // 2. Emit via Socket.IO if socket ID is available in Redis
+    if (redisClient?.get) {
+      const socketId = await redisClient.get(`socket:${userId}`);
       if (socketId) {
-        // 3. Emit a 'newNotification' event to the specific user's socket
         io.to(socketId).emit('newNotification', savedNotification);
-        console.log(`Notification event emitted to socket ${socketId} for user ${userId}`);
+        console.log(`📡 Notification emitted to socket ${socketId}`);
       } else {
-        console.log(`Socket ID not found for user ${userId}. Notification saved but not sent in real-time.`);
+        console.log(`ℹ️ No socket ID for user ${userId}, skipping real-time emit.`);
       }
     } else {
-      console.warn('Redis client not available or "get" method is missing. Skipping real-time notification.');
+      console.warn('⚠️ Redis client not available or misconfigured.');
     }
 
-    // 4. Send FCM Push Notification
+    // 3. Send push notification via FCM if initialized
     if (firebaseAdminInitialized) {
-      try {
-        const user = await User.findById(userId).select('fcmToken'); // Fetch user for FCM token
-        if (user && user.fcmToken) {
-          const messagePayload = {
-            notification: {
-              title: getNotificationTitle(savedNotification.type),
-              body: savedNotification.message,
-            },
-            token: user.fcmToken,
-            // Optional: Add data payload for custom handling in client
-            data: {
-              notificationId: savedNotification._id.toString(),
-              type: savedNotification.type,
-              relatedEntity: savedNotification.relatedEntity?.toString() || '',
-              entityModel: savedNotification.entityModel || '',
-              createdAt: savedNotification.createdAt.toISOString(),
-            },
-            // Optional: click_action to open a specific URL
-            // webpush: {
-            //   fcm_options: {
-            //     link: `https://your-app.com/notifications/${savedNotification._id}` 
-            //   }
-            // }
-          };
+      const user = await User.findById(userId).select('fcmToken');
+      if (user?.fcmToken) {
+        const fcmMessage = {
+          notification: {
+            title: getNotificationTitle(savedNotification.type),
+            body: savedNotification.message,
+          },
+          token: user.fcmToken,
+          data: {
+            notificationId: savedNotification._id.toString(),
+            type: savedNotification.type,
+            relatedEntity: savedNotification.relatedEntity?.toString() || '',
+            entityModel: savedNotification.entityModel || '',
+            createdAt: savedNotification.createdAt.toISOString(),
+          },
+        };
 
-          const response = await admin.messaging().send(messagePayload);
-          console.log(`Successfully sent FCM message to user ${userId}:`, response);
-
-        } else if (user) {
-          console.log(`User ${userId} found, but no FCM token available. Skipping FCM.`);
-        } else {
-          console.log(`User ${userId} not found. Skipping FCM.`);
+        try {
+          const fcmResponse = await admin.messaging().send(fcmMessage);
+          console.log(`📲 FCM message sent to user ${userId}:`, fcmResponse);
+        } catch (fcmError) {
+          console.error(`🔥 Error sending FCM to ${userId}:`, fcmError);
+          if (fcmError.code === 'messaging/registration-token-not-registered') {
+            console.warn(`⚠️ Invalid FCM token for ${userId}. Consider removing it.`);
+            // Optionally clean up:
+            // await User.findByIdAndUpdate(userId, { $unset: { fcmToken: 1 } });
+          }
         }
-      } catch (fcmError) {
-        console.error(`Error sending FCM message to user ${userId}:`, fcmError);
-        if (fcmError.code === 'messaging/registration-token-not-registered') {
-          console.log(`FCM token for user ${userId} is not registered. Consider removing it.`);
-          // Optional: Remove invalid token
-          // await User.findByIdAndUpdate(userId, { $unset: { fcmToken: 1 } });
-        }
+      } else {
+        console.log(`ℹ️ User ${userId} has no FCM token.`);
       }
     } else {
-      console.warn('Firebase Admin SDK not initialized. Skipping FCM notification.');
+      console.warn('⚠️ Firebase Admin SDK not initialized. Skipping FCM.');
     }
 
     return savedNotification;
   } catch (error) {
-    console.error('Error in sendNotification:', error);
+    console.error('❌ Error in sendNotification:', error);
     return null;
   }
 };

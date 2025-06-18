@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createTask, updateTask, deleteTaskThunk } from '../redux/slices/tasksSlice'; // Use thunks, not old reducers
 // import { addNotification } from '../redux/slices/notificationsSlice'; // Added import
-import { addNotification } from '../redux/slices/NotificationSlice';
+import { addNotification } from '../redux/slices/notificationSlice';
 import socket from '../socket';
 
 const SocketContext = createContext();

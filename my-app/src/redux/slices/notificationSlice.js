@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
+import api from '../../utils/api'; // Assuming api utility is in src/utils
 
-// Async Thunks
+// Thunks
 export const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async (_, { rejectWithValue }) => {
     try {
-      const data = await api.get('/notifications');
+      const { data } = await api.get('/notifications');
       return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch notifications');
@@ -40,13 +40,13 @@ export const markNotificationAsUnread = createAsyncThunk(
   }
 );
 
-// Initial State
 const initialState = {
   items: [],
   unreadCount: 0,
+  currentFilterType: 'all',
+  snoozedItems: [],
 };
 
-// Slice
 const notificationsSlice = createSlice({
   name: 'notifications',
   initialState,
@@ -60,16 +60,12 @@ const notificationsSlice = createSlice({
     },
     setNotifications: (state, action) => {
       state.items = action.payload;
-      state.unreadCount = action.payload.reduce(
-        (count, item) => (!item.isRead ? count + 1 : count),
-        0
-      );
+      state.unreadCount = action.payload.reduce((count, item) => item.isRead ? count : count + 1, 0);
+      state.snoozedItems = [];
     },
     markAsRead: (state, action) => {
       const { id } = action.payload;
-      const notification = state.items.find(
-        (item) => item._id === id || item.id === id
-      );
+      const notification = state.items.find(item => item._id === id || item.id === id);
       if (notification && !notification.isRead) {
         notification.isRead = true;
         state.unreadCount = Math.max(0, state.unreadCount - 1);
@@ -77,53 +73,69 @@ const notificationsSlice = createSlice({
     },
     markAsUnread: (state, action) => {
       const { id } = action.payload;
-      const notification = state.items.find(
-        (item) => item._id === id || item.id === id
-      );
+      const notification = state.items.find(item => item._id === id || item.id === id);
       if (notification && notification.isRead) {
         notification.isRead = false;
         state.unreadCount += 1;
       }
     },
     markAllAsRead: (state) => {
-      state.items.forEach((item) => {
-        if (!item.isRead) item.isRead = true;
-      });
+      state.items.forEach(item => { item.isRead = true; });
       state.unreadCount = 0;
+    },
+    setNotificationFilter: (state, action) => {
+      state.currentFilterType = action.payload;
+    },
+    snoozeNotification: (state, action) => {
+      const { id, snoozeDuration } = action.payload;
+      const index = state.items.findIndex(item => (item._id || item.id) === id);
+      if (index !== -1) {
+        const item = state.items.splice(index, 1)[0];
+        state.snoozedItems.push({
+          notification: item,
+          reShowAt: Date.now() + snoozeDuration,
+        });
+        if (!item.isRead) {
+          state.unreadCount = Math.max(0, state.unreadCount - 1);
+        }
+      }
+    },
+    unSnoozeNotification: (state, action) => {
+      const { notification } = action.payload;
+      const index = state.snoozedItems.findIndex(item => (item.notification._id || item.notification.id) === (notification._id || notification.id));
+      if (index !== -1) {
+        const snoozedItem = state.snoozedItems.splice(index, 1)[0];
+        state.items.unshift(snoozedItem.notification);
+        if (!snoozedItem.notification.isRead) {
+          state.unreadCount += 1;
+        }
+      }
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNotifications.fulfilled, (state, action) => {
         state.items = action.payload;
-        state.unreadCount = action.payload.reduce(
-          (count, item) => (!item.isRead ? count + 1 : count),
-          0
-        );
+        state.unreadCount = action.payload.reduce((count, item) => item.isRead ? count : count + 1, 0);
+        state.snoozedItems = [];
       });
-  },
+  }
 });
 
-// Actions
 export const {
   addNotification,
   setNotifications,
   markAsRead,
   markAsUnread,
   markAllAsRead,
+  setNotificationFilter,
+  snoozeNotification,
+  unSnoozeNotification,
 } = notificationsSlice.actions;
 
-// Reducer
-export default notificationsSlice.reducer;
-
-// Export all actions and thunks from one place (for cleaner imports)
-export const notificationActions = {
-  fetchNotifications,
-  markNotificationAsRead,
-  markNotificationAsUnread,
-  addNotification,
-  setNotifications,
-  markAsRead,
-  markAsUnread,
-  markAllAsRead,
+export const selectFilteredNotifications = (state) => {
+  const { items, currentFilterType } = state.notifications;
+  return currentFilterType === 'all' ? items : items.filter(item => item.type === currentFilterType);
 };
+
+export default notificationsSlice.reducer;

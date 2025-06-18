@@ -7,7 +7,7 @@ import organizationReducer from './organizationSlice';
 // import notificationsReducer from './slices/notificationsSlice';
 // import notificationsSlice from './slices/NotificationsSlice'; // Ensure this import matches your file structure
  // Ensure this import matches your file structure
- import notificationsSlice from './slices/NotificationSlice'; // Ensure this import matches your file structure
+ import notificationsSlice from './slices/notificationSlice'; // Ensure this import matches your file structure
 
 export const store = configureStore({
   reducer: {
