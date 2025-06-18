@@ -1,5 +1,6 @@
 import Organization from '../models/Organization.js';
 import User from '../models/User.js';
+import { sendNotification } from '../utils/notificationUtils.js'; // Added import
 
 // GET /api/organizations/
 export const getAllOrganizations = async (req, res) => {
@@ -164,8 +165,25 @@ export const addMember = async (req, res) => {
     }
 
     // Add member using UUID string
-    organization.members.push({ userId: user.userId });
+    organization.members.push({ userId: user.userId, role: 'member' }); // Assuming default role 'member'
     await organization.save();
+
+    // Send notification to the newly added member
+    const io = req.app.get('io');
+    const redisClient = req.app.get('redis');
+    if (io && redisClient && user) {
+      await sendNotification({
+        io,
+        redisClient,
+        userId: user._id, // ObjectId of the added user
+        type: 'info', // Or a more specific type like 'addedToOrganization'
+        message: `You have been added to the organization '${organization.name}'.`,
+        entityId: organization._id,
+        entityModel: 'Organization',
+      });
+    } else {
+      console.warn('Socket.IO or Redis client not available, or user not found. Skipping real-time notification for add member.');
+    }
 
     res.status(200).json(organization);
   } catch (error) {
@@ -203,6 +221,30 @@ export const assignTask = async (req, res) => {
     });
 
     await organization.save();
+
+    // Send notification to the assignee
+    const assigneeUser = await User.findOne({ userId: assignedTo }); // Find user by UUID to get ObjectId
+    const io = req.app.get('io');
+    const redisClient = req.app.get('redis');
+
+    if (io && redisClient && assigneeUser) {
+      const newTask = organization.tasks[organization.tasks.length - 1]; // Get the newly added task
+      if (newTask) {
+        await sendNotification({
+          io,
+          redisClient,
+          userId: assigneeUser._id, // ObjectId of the assignee
+          type: 'taskAssigned',
+          message: `You have been assigned a new task '${newTask.title}' in organization '${organization.name}'.`,
+          entityId: newTask._id, // ObjectId of the sub-document task
+          entityModel: 'OrgTask', 
+        });
+      } else {
+        console.warn('Could not find the newly created task in organization for notification.');
+      }
+    } else {
+      console.warn('Socket.IO or Redis client not available, or assignee user not found. Skipping real-time notification for task assignment.');
+    }
 
     res.status(200).json(organization);
   } catch (error) {

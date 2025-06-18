@@ -1,6 +1,8 @@
 import Task from '../models/Task.js';
-import Notification from '../models/Notification.js';
+// Notification model import is not directly needed here anymore, as sendNotification handles it.
+// import Notification from '../models/Notification.js'; 
 import Organization from '../models/Organization.js';
+import { sendNotification } from '../utils/notificationUtils.js';
 
 // Helper Redis keys
 const taskKey = (id) => `task:${id}`;
@@ -26,25 +28,17 @@ export const createTask = async (req, res) => {
       }
     }
 
-    // Create Notification + Emit
+    // Send notification if task is assigned upon creation
     if (task.assignedTo) {
-      try {
-        const messageContent = `You have been assigned a new task: ${task.title}`;
-        await Notification.create({
-          userId: task.assignedTo,
-          message: messageContent,
-          taskId: task._id,
-        });
-
-        if (io && redisClient) {
-          const targetSocketId = await redisClient.get(task.assignedTo.toString());
-          if (targetSocketId) {
-            io.to(targetSocketId).emit('taskAssigned', { message: messageContent, task });
-          }
-        }
-      } catch (error) {
-        console.error('Notification/socket emit error:', error);
-      }
+      await sendNotification({
+        io,
+        redisClient,
+        userId: task.assignedTo.toString(),
+        type: 'taskAssigned',
+        message: `You have been assigned a new task: ${task.title}`,
+        entityId: task._id,
+        entityModel: 'Task',
+      });
     }
 
     res.status(201).json(task);
@@ -138,8 +132,15 @@ export const updateTask = async (req, res) => {
   const taskId = req.params.id;
   const redisClient = req.app.get('redis');
   const io = req.app.get('io');
+  const { assignedTo: newAssignee } = req.body; // Get the new assignee from the request body
 
   try {
+    // Fetch the task before updating to check the old assignee
+    const taskBeforeUpdate = await Task.findById(taskId);
+    if (!taskBeforeUpdate) return res.status(404).json({ error: 'Task not found' });
+
+    const oldAssignee = taskBeforeUpdate.assignedTo ? taskBeforeUpdate.assignedTo.toString() : null;
+
     const updatedTask = await Task.findByIdAndUpdate(taskId, req.body, {
       new: true,
       runValidators: true,
@@ -159,16 +160,53 @@ export const updateTask = async (req, res) => {
       }
     }
 
-    if (updatedTask.assignedTo && io && redisClient) {
-      try {
-        const targetSocketId = await redisClient.get(updatedTask.assignedTo.toString());
-        if (targetSocketId) {
-          io.to(targetSocketId).emit('taskUpdated', updatedTask);
-        }
-      } catch (error) {
-        console.error('Socket emit error:', error);
-      }
+    // Check if 'assignedTo' field was updated and is different from the old assignee
+    const currentAssignee = updatedTask.assignedTo ? updatedTask.assignedTo.toString() : null;
+
+    if (newAssignee && currentAssignee === newAssignee && newAssignee !== oldAssignee) {
+      await sendNotification({
+        io,
+        redisClient,
+        userId: newAssignee,
+        type: 'taskAssigned', // Or a more specific type like 'taskReassigned' if you add it
+        message: `You have been assigned a task: ${updatedTask.title}`,
+        entityId: updatedTask._id,
+        entityModel: 'Task',
+      });
+    } else if (currentAssignee && !oldAssignee) {
+      // This case handles if the task was previously unassigned and now is assigned.
+      // The previous condition (newAssignee && currentAssignee === newAssignee && newAssignee !== oldAssignee)
+      // might already cover this if newAssignee is part of req.body. Let's be explicit.
+       await sendNotification({
+        io,
+        redisClient,
+        userId: currentAssignee,
+        type: 'taskAssigned',
+        message: `You have been assigned a task: ${updatedTask.title}`,
+        entityId: updatedTask._id,
+        entityModel: 'Task',
+      });
     }
+    // If you want to notify about other updates (not just assignment), that logic would go here.
+    // For example, notifying the previous assignee that the task was reassigned.
+    // The current 'taskUpdated' emit is generic. If sendNotification is comprehensive,
+    // you might not need the old io.to(targetSocketId).emit('taskUpdated', updatedTask); line,
+    // or you might want to make it more specific.
+
+    // For now, let's keep a general update event for other changes if needed,
+    // but ensure it doesn't duplicate the assignment notification.
+    if (io && redisClient && currentAssignee && currentAssignee !== newAssignee) { // Example: notify if assignee changed
+        const targetSocketId = await redisClient.get(currentAssignee);
+        if (targetSocketId) {
+            // Emitting a generic 'taskUpdated' event to the current assignee if they weren't just newly assigned
+            // This might be redundant if sendNotification covers all cases, or could be for other types of updates.
+            // Consider the overall notification strategy.
+            // For this subtask, the primary goal is the 'taskAssigned' notification via sendNotification.
+            // io.to(targetSocketId).emit('taskUpdated', updatedTask);
+            // console.log(`Sent generic taskUpdated to ${currentAssignee}`);
+        }
+    }
+
 
     res.status(200).json(updatedTask);
   } catch (error) {

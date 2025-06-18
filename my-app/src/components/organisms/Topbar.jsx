@@ -2,19 +2,27 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'; // Added Redux hooks
 import { ThemeContext } from '../../utils/theme';
+// import {
+//   fetchNotifications,
+//   markNotificationAsRead,
+//   markAllAsRead,
+//   // markNotificationAsUnread, // Available if needed later
+// } from '../../redux/slices/NotificationsSlice'; // Added Redux actions/thunks
+import { fetchNotifications,markAllAsRead,markNotificationAsRead } from '../../redux/slices/NotificationSlice';
 import {
   Moon, Sun, LogIn, User, Bell, Menu, LogOut, UserPen,
-  Home, ListTodo, Users, Group, CirclePlus, LayoutList, CircleHelp
-} from 'lucide-react';
+  Home, ListTodo, Users, Group, CirclePlus, LayoutList, CircleHelp, CheckCheck
+} from 'lucide-react'; // Added CheckCheck for Mark all as read
 import logoDark from '../../assets/collabnest_logo_dark.png';
 import logoLight from '../../assets/collabnest_logo_light.png';
 
-const testNotifications = [
-  { id: 1, message: "Assignment 1 deadline tomorrow!" },
-  { id: 2, message: "Project meeting at 3 PM." },
-  { id: 3, message: "New message from John." },
-];
+// const testNotifications = [
+//   { id: 1, message: "Assignment 1 deadline tomorrow!" },
+//   { id: 2, message: "Project meeting at 3 PM." },
+//   { id: 3, message: "New message from John." },
+// ];
 
 const Topbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -24,6 +32,13 @@ const Topbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { items: notifications, unreadCount } = useSelector(state => state.notifications);
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('loggedInUser');
@@ -74,24 +89,58 @@ const Topbar = () => {
               title="Notifications"
             >
               <Bell size={20} />
-              {testNotifications.length > 0 && (
+              {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1">
-                  {testNotifications.length}
+                  {unreadCount}
                 </span>
               )}
             </button>
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded shadow-lg z-50">
-                <div className="p-2 border-b border-zinc-200 dark:border-zinc-700 font-semibold">
-                  Notifications
+              <div className="absolute right-0 mt-2 w-72 md:w-80 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded shadow-lg z-50">
+                <div className="flex justify-between items-center p-2 border-b border-zinc-200 dark:border-zinc-700">
+                  <span className="font-semibold">Notifications</span>
+                  {notifications.length > 0 && unreadCount > 0 && (
+                    <button
+                      onClick={() => dispatch(markAllAsRead())}
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                      title="Mark all as read"
+                    >
+                      <CheckCheck size={14} /> Mark all read
+                    </button>
+                  )}
                 </div>
-                <ul className="max-h-60 overflow-y-auto">
-                  {testNotifications.length === 0 ? (
-                    <li className="p-2 text-sm text-zinc-500">No notifications</li>
+                <ul className="max-h-80 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <li className="p-3 text-sm text-zinc-500 dark:text-zinc-400 text-center">No new notifications</li>
                   ) : (
-                    testNotifications.map((notif) => (
-                      <li key={notif.id} className="p-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition">
-                        {notif.message}
+                    notifications.map((notif) => (
+                      <li 
+                        key={notif._id || notif.id} 
+                        className={`p-3 text-sm border-b border-zinc-100 dark:border-zinc-800 last:border-b-0 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition cursor-pointer ${!notif.isRead ? 'font-semibold bg-blue-50 dark:bg-blue-900/30' : 'text-zinc-600 dark:text-zinc-300'}`}
+                        onClick={() => {
+                          if (!notif.isRead) {
+                            dispatch(markNotificationAsRead(notif._id || notif.id));
+                          }
+                          // Optional: navigate to related entity
+                          // if (notif.relatedEntity && notif.entityModel) {
+                          //   if (notif.entityModel === 'Task' && notif.relatedEntity) {
+                          //     navigate(`/tasks/${notif.relatedEntity}`); // Adjust path as needed
+                          //   } // Add other entity model navigations
+                          //   setShowNotifications(false); // Close dropdown on click
+                          // }
+                        }}
+                      >
+                        <div className="flex items-start gap-2">
+                          {!notif.isRead && (
+                            <span className="mt-1 w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></span>
+                          )}
+                          <span className="flex-grow">{notif.message}</span>
+                        </div>
+                        <div className={`text-xs text-zinc-400 dark:text-zinc-500 mt-1 ${!notif.isRead ? 'pl-4' : ''}`}>
+                          {new Date(notif.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {/* Display entity type if useful, e.g., Task, Invite */}
+                          {/* {notif.type && <span className="ml-2 capitalize text-blue-500">{notif.type}</span>} */}
+                        </div>
                       </li>
                     ))
                   )}

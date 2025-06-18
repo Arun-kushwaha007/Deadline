@@ -1,6 +1,7 @@
 import Invitation from '../models/Invitation.js';
 import Organization from '../models/Organization.js';
 import User from '../models/User.js'; // Assuming User model is for user details
+import { sendNotification } from '../utils/notificationUtils.js'; // Added import
 
 // Create an invitation
 // POST /api/invitations/send
@@ -56,6 +57,25 @@ export const createInvitation = async (req, res) => {
     const populatedInvitation = await Invitation.findById(invitation.id)
         .populate('organization', 'name')
         .populate('inviter', 'name email userId'); // Added userId to inviter population
+
+    // Send notification to the invitee if they are an existing user
+    if (inviteeUserDoc) {
+      const io = req.app.get('io');
+      const redisClient = req.app.get('redis');
+      if (io && redisClient) { // Ensure io and redisClient are available
+        await sendNotification({
+          io,
+          redisClient,
+          userId: inviteeUserDoc._id, // ObjectId of the invitee
+          type: 'invite',
+          message: `You have been invited to join '${populatedInvitation.organization.name}' by '${populatedInvitation.inviter.name}'.`,
+          entityId: populatedInvitation._id,
+          entityModel: 'Invitation',
+        });
+      } else {
+        console.warn('Socket.IO or Redis client not available. Skipping real-time notification for invitation.');
+      }
+    }
 
     res.status(201).json(populatedInvitation);
   } catch (error) {
