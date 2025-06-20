@@ -2,7 +2,6 @@ import Notification from '../models/Notification.js';
 import User from '../models/User.js';
 import { admin, firebaseAdminInitialized } from '../config/firebaseAdmin.js';
 
-// Title helper for various notification types
 const getNotificationTitle = (type) => {
   switch (type) {
     case 'taskAssigned': return 'New Task Assigned';
@@ -20,7 +19,7 @@ const getNotificationTitle = (type) => {
 export const sendNotification = async ({
   io,
   redisClient,
-  userId,
+  userId, // UUID string
   type,
   message,
   entityId,
@@ -29,7 +28,7 @@ export const sendNotification = async ({
   try {
     // 1. Save notification in MongoDB
     const notification = new Notification({
-      userId,
+      userId, // string UUID
       type,
       message,
       relatedEntity: entityId,
@@ -40,7 +39,7 @@ export const sendNotification = async ({
     const savedNotification = await notification.save();
     console.log(`✅ Notification created: ${savedNotification._id} for user ${userId}`);
 
-    // 2. Emit via Socket.IO if socket ID is available in Redis
+    // 2. Emit via Socket.IO
     if (redisClient?.get) {
       const socketId = await redisClient.get(`socket:${userId}`);
       if (socketId) {
@@ -49,13 +48,11 @@ export const sendNotification = async ({
       } else {
         console.log(`ℹ️ No socket ID for user ${userId}, skipping real-time emit.`);
       }
-    } else {
-      console.warn('⚠️ Redis client not available or misconfigured.');
     }
 
-    // 3. Send push notification via FCM if initialized
+    // 3. Push via FCM
     if (firebaseAdminInitialized) {
-      const user = await User.findById(userId).select('fcmToken');
+      const user = await User.findOne({ userId }).select('fcmToken');
       if (user?.fcmToken) {
         const fcmMessage = {
           notification: {
@@ -78,16 +75,12 @@ export const sendNotification = async ({
         } catch (fcmError) {
           console.error(`🔥 Error sending FCM to ${userId}:`, fcmError);
           if (fcmError.code === 'messaging/registration-token-not-registered') {
-            console.warn(`⚠️ Invalid FCM token for ${userId}. Consider removing it.`);
-            // Optionally clean up:
-            // await User.findByIdAndUpdate(userId, { $unset: { fcmToken: 1 } });
+            console.warn(`⚠️ Invalid FCM token for ${userId}.`);
           }
         }
       } else {
         console.log(`ℹ️ User ${userId} has no FCM token.`);
       }
-    } else {
-      console.warn('⚠️ Firebase Admin SDK not initialized. Skipping FCM.');
     }
 
     return savedNotification;

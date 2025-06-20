@@ -66,7 +66,7 @@ export const createInvitation = async (req, res) => {
         await sendNotification({
           io,
           redisClient,
-          userId: inviteeUserDoc._id, // ObjectId of the invitee
+          userId: inviteeUserDoc.userId,
           type: 'invite',
           message: `You have been invited to join '${populatedInvitation.organization.name}' by '${populatedInvitation.inviter.name}'.`,
           entityId: populatedInvitation._id,

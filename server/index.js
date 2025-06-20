@@ -130,13 +130,10 @@ io.on('connection', (socket) => {
   console.log('🟢 User connected:', socket.id);
 
   socket.on('register', async (userId) => {
-    try {
-      await redisClient.set(userId, socket.id);
-      console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
-    } catch (err) {
-      console.error('Redis register error:', err);
-    }
+    await redisClient.set(`socket:${userId}`, socket.id);
+    console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
   });
+  
 
   socket.on('disconnect', async () => {
     try {

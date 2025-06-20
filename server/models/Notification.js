@@ -1,20 +1,29 @@
 import mongoose from 'mongoose';
 
-const notificationSchema = mongoose.Schema(
+const notificationSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String, // <-- UUID string
       required: true,
     },
     type: {
       type: String,
-      enum: ['info', 'warning', 'deadline', 'message', 'invite', 'reminder', 'taskAssigned', 'newComment'],
       required: true,
+      enum: [
+        'info',
+        'warning',
+        'deadline',
+        'message',
+        'invite',
+        'reminder',
+        'taskAssigned',
+        'newComment',
+      ],
     },
     message: {
       type: String,
       required: true,
+      trim: true,
     },
     relatedEntity: {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,17 +31,12 @@ const notificationSchema = mongoose.Schema(
     },
     entityModel: {
       type: String,
-      enum: ['Task', 'Organization', 'User', 'Comment', 'Invitation'], // Added Invitation
+      enum: ['Task', 'Organization', 'User', 'Comment', 'Invitation'],
     },
     isRead: {
       type: Boolean,
       default: false,
     },
-    // taskId is deprecated, replaced by relatedEntity and entityModel
-    // taskId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Task',
-    // },
   },
   { timestamps: true }
 );
