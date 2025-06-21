@@ -70,7 +70,11 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
     if (taskToEdit) {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
-      setDueDate(taskToEdit.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : '');
+      setDueDate(taskToEdit.dueDate 
+        ? new Date(taskToEdit.dueDate).toISOString().slice(0, 16) // "YYYY-MM-DDTHH:MM"
+        : ''
+      );
+      
       setStatus(taskToEdit.status || 'todo');
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
@@ -199,7 +203,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
     const taskPayload = {
       title,
       description,
-      dueDate,
+     dueDate: new Date(dueDate).toISOString(), // ensure ISO format is stored in DB
+     
       status,
       priority,
       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
@@ -303,12 +308,13 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
             {errors.organizationId && <p className="text-red-500 text-sm">{errors.organizationId}</p>}
           </div>
 
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          />
+         <input
+           type="datetime-local"
+           value={dueDate}
+           onChange={(e) => setDueDate(e.target.value)}
+           className="w-full p-2 rounded bg-slate-700 text-white"
+         />
+         
           {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
 
           <input

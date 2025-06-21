@@ -26,6 +26,7 @@ const TaskSchema = new mongoose.Schema(
       required: [true, 'Description is required'],
       trim: true,
     },
+    // ✅ Due date now supports full date & time — no changes needed here
     dueDate: {
       type: Date,
       required: [true, 'Due date is required'],
@@ -60,7 +61,7 @@ const TaskSchema = new mongoose.Schema(
     },
     organization: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Organization', // This assumes your Organization model is named 'Organization'
+      ref: 'Organization',
       required: true,
     },
     order: {
@@ -69,6 +70,7 @@ const TaskSchema = new mongoose.Schema(
     },
   },
   {
+    // ✅ This automatically adds `createdAt` and `updatedAt` fields
     timestamps: true,
   }
 );
