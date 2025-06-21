@@ -10,11 +10,16 @@ import { ThemeProvider } from './utils/theme';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+  navigator.serviceWorker
+    .register('./firebase-messaging-sw.js')
     .then((registration) => {
-      console.log('Service Worker registered:', registration);
+      console.log('🔥 Service Worker registered:', registration);
+    })
+    .catch((err) => {
+      console.error('Service Worker registration failed:', err);
     });
 }
+
 
 
 <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID"></GoogleOAuthProvider>

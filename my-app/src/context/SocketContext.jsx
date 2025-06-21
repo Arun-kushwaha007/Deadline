@@ -13,7 +13,10 @@ export const SocketProvider = ({ children }) => {
  useEffect(() => {
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     if (user?.userId) {
+      console.log(`[SocketContext] Attempting to register user with userId: ${user.userId}`); // Added log
       socket.emit('register', user.userId);
+    } else {
+      console.warn('[SocketContext] No user.userId found in localStorage for socket registration.'); // Added log
     }
     
       

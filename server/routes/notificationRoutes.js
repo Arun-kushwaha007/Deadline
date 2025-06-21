@@ -1,6 +1,6 @@
 import express from 'express';
 import Notification from '../models/Notification.js';
-import User from '../models/User.js'; // Added import for User model
+import User from '../models/User.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,17 +9,19 @@ const router = express.Router();
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const { type, isRead } = req.query;
-    const query = { userId: req.user._id };
-
+    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
+    const query = { userId: req.user.userId };
+    
     if (type) {
       query.type = type;
     }
-
+    
     if (isRead !== undefined) {
       query.isRead = isRead === 'true'; // Convert string to boolean
     }
-
+    
     const notifications = await Notification.find(query).sort({ createdAt: -1 });
+    console.log(`[NotificationRoutes] Found ${notifications.length} notifications for user ${req.user.userId}`);
     res.status(200).json(notifications);
   } catch (err) {
     console.error('Error fetching notifications:', err);
@@ -30,8 +32,9 @@ router.get('/', authMiddleware, async (req, res) => {
 // Mark as read
 router.put('/:id/read', authMiddleware, async (req, res) => {
   try {
+    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
     const notification = await Notification.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id }, // Ensure user owns the notification
+      { _id: req.params.id, userId: req.user.userId }, // Use UUID for matching
       { isRead: true },
       { new: true } // Return the updated document
     );
@@ -48,8 +51,9 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 // Mark as unread
 router.put('/:id/unread', authMiddleware, async (req, res) => {
   try {
+    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
     const notification = await Notification.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user._id }, // Ensure user owns the notification
+      { _id: req.params.id, userId: req.user.userId }, // Use UUID for matching
       { isRead: false },
       { new: true } // Return the updated document
     );
@@ -66,21 +70,28 @@ router.put('/:id/unread', authMiddleware, async (req, res) => {
 // POST /api/notifications/token - Save FCM token for push notifications
 router.post('/token', authMiddleware, async (req, res) => {
   const { token } = req.body;
-  const userId = req.user.id; // Assuming req.user.id is available from authMiddleware
-
+  
   if (!token) {
     return res.status(400).json({ message: 'Token is required' });
   }
-
+  
   try {
-    const user = await User.findById(userId);
+    // Find user by their MongoDB _id (this is correct since we have the user object from auth middleware)
+    const user = await User.findById(req.user._id);
+    
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    user.fcmToken = token;
-    await user.save();
-
+    
+    // Check if token has changed to avoid unnecessary updates
+    if (user.fcmToken !== token) {
+      user.fcmToken = token;
+      await user.save();
+      console.log(`[NotificationRoutes] ✅ FCM token updated for user ${user.userId}: ${token.slice(0, 20)}...`);
+    } else {
+      console.log(`[NotificationRoutes] ℹ️ FCM token unchanged for user ${user.userId}`);
+    }
+    
     res.status(200).json({ message: 'Token saved successfully' });
   } catch (err) {
     console.error('Error saving FCM token:', err);

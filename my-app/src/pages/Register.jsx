@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,15 +24,22 @@ const Register = () => {
       const result = await response.json();
 
       if (response.ok) {
+        // Store token if registration returns one
+        if (result.token) {
+          localStorage.setItem('token', result.token);
+        }
+        
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({
-            name: data.name,
-            email: data.email,
+            name: result.user?.name || data.name,
+            email: result.user?.email || data.email,
             userId: result.user.userId,
           })
         );
-        navigate('/login');
+
+        // Navigate to home if token exists, otherwise to login
+        navigate(result.token ? '/' : '/login');
       } else {
         alert(`❌ Registration failed: ${result.message}`);
       }
@@ -43,16 +51,25 @@ const Register = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
+      // Decode the Google credential to extract user info
+      const decoded = jwtDecode(credentialResponse.credential);
+
       const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
       const response = await fetch(`${backendUrl}/api/auth/google-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: credentialResponse.credential }),
+        body: JSON.stringify({
+          name: decoded.name,
+          email: decoded.email,
+          googleId: decoded.sub,
+          picture: decoded.picture,
+        }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
+        localStorage.setItem('token', result.token);
         localStorage.setItem(
           'loggedInUser',
           JSON.stringify({

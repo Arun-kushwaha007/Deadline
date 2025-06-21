@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage, isSupported } from 'firebase/messaging';
 
-// Firebase config using Vite environment variables
+// ✅ Firebase config using Vite environment variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_AI_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_AI_FIREBASE_AUTH_DOMAIN,
@@ -11,27 +11,28 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_AI_FIREBASE_APP_ID,
 };
 
-let messagingInstance = null;
+// ✅ Initialize Firebase app once
+const firebaseApp = initializeApp(firebaseConfig);
 
-try {
-  const app = initializeApp(firebaseConfig);
-
-  // Check if the browser supports Firebase messaging
-  isSupported().then((supported) => {
-    if (supported) {
-      messagingInstance = getMessaging(app);
-      console.log('✅ Firebase Messaging initialized.');
-    } else {
+/**
+ * ✅ Returns a messaging instance if supported; otherwise, returns null.
+ */
+const getMessagingInstance = async () => {
+  try {
+    const supported = await isSupported();
+    if (!supported) {
       console.warn('🚫 Firebase Messaging is not supported in this browser.');
+      return null;
     }
-  }).catch((err) => {
-    console.error('❌ Error checking Firebase messaging support:', err);
-  });
 
-} catch (error) {
-  console.error('❌ Error initializing Firebase:', error);
-  // This typically happens if env vars are missing or misconfigured
-}
+    const messaging = getMessaging(firebaseApp);
+    console.log('✅ Firebase Messaging initialized.');
+    return messaging;
+  } catch (err) {
+    console.error('❌ Error initializing Firebase Messaging:', err);
+    return null;
+  }
+};
 
-// Export messagingInstance (may be null until support is confirmed)
-export { messagingInstance as messaging, getToken, onMessage };
+// ✅ Export utility functions for usage in your hooks
+export { getMessagingInstance, getToken, onMessage };

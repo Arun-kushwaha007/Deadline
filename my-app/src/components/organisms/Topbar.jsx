@@ -1,31 +1,27 @@
 // components/organisms/Topbar.jsx
 
-import { useContext, useState, useEffect, useRef } from 'react'; // Added useRef
+import { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeContext } from '../../utils/theme';
-// import {
-//   fetchNotifications,
-//   markNotificationAsRead,
-//   markAllAsRead,
-//   setNotificationFilter,
-//   selectFilteredNotifications,
-//   snoozeNotification,   // Added import
-//   unSnoozeNotification, // Added import
-// } from '../../redux/slices/notificationsSlice';
-import { fetchNotifications,markNotificationAsRead,
+import {
+  fetchNotifications,
+  markNotificationAsRead,
   markAllAsRead,
   setNotificationFilter,
   selectFilteredNotifications,
-  snoozeNotification,   // Added import
-  unSnoozeNotification, } from '../../redux/slices/notificationSlice';
+  snoozeNotification,
+  unSnoozeNotification,
+  loadPersistedNotifications, // New action to load from localStorage
+  persistNotifications, // New action to save to localStorage
+} from '../../redux/slices/notificationSlice';
 import {
-  Moon, Sun, LogIn, User, Bell, Menu, LogOut, UserPen, AlarmClockCheck, // Added ClockSnooze
+  Moon, Sun, LogIn, User, Bell, Menu, LogOut, UserPen, AlarmClockCheck,
   Home, ListTodo, Users, Group, CirclePlus, LayoutList, CircleHelp, CheckCheck, Filter
 } from 'lucide-react';
 import logoDark from '../../assets/collabnest_logo_dark.png';
 import logoLight from '../../assets/collabnest_logo_light.png';
-{/* <AlarmClockCheck /> */}
+
 const Topbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,10 +33,10 @@ const Topbar = () => {
   const dispatch = useDispatch();
 
   // Get notification data from Redux store
-  const { unreadCount, currentFilterType, snoozedItems } = useSelector(state => state.notifications); // Added snoozedItems
+  const { unreadCount, currentFilterType, snoozedItems, notifications } = useSelector(state => state.notifications);
   const filteredNotifications = useSelector(selectFilteredNotifications);
   
-  const activeSnoozeTimeoutsRef = useRef(new Map()); // For managing snooze timeouts
+  const activeSnoozeTimeoutsRef = useRef(new Map());
 
   const notificationFilterOptions = [
     { value: 'all', label: 'All' },
@@ -50,12 +46,23 @@ const Topbar = () => {
     { value: 'deadline', label: 'Deadlines' },
     { value: 'info', label: 'Info' },
     { value: 'newComment', label: 'Comments' },
-    // Add other types as needed
   ];
 
+  // Load persisted notifications on component mount
   useEffect(() => {
+    // First load persisted notifications from localStorage
+    dispatch(loadPersistedNotifications());
+    
+    // Then fetch new notifications from server
     dispatch(fetchNotifications());
   }, [dispatch]);
+
+  // Persist notifications whenever they change
+  useEffect(() => {
+    if (notifications && notifications.length > 0) {
+      dispatch(persistNotifications());
+    }
+  }, [notifications, dispatch]);
 
   // Effect to manage timeouts for snoozed notifications
   useEffect(() => {
@@ -112,6 +119,18 @@ const Topbar = () => {
     localStorage.setItem('theme', newTheme);
   };
 
+  const handleNotificationClick = (notif) => {
+    if (!notif.isRead) {
+      dispatch(markNotificationAsRead(notif._id || notif.id));
+    }
+    // Optional: navigate to related entity
+  };
+
+  const handleSnoozeNotification = (e, notifId) => {
+    e.stopPropagation(); 
+    dispatch(snoozeNotification({ id: notifId, snoozeDuration: 10 * 60 * 1000 }));
+  };
+
   const menuItems = [
     { to: '/', label: 'Dashboard', icon: <Home size={18} /> },
     { to: '/tasks', label: 'Tasks', icon: <ListTodo size={18} /> },
@@ -144,8 +163,8 @@ const Topbar = () => {
             >
               <Bell size={20} />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1">
-                  {unreadCount}
+                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1 min-w-[18px] h-[18px] flex items-center justify-center">
+                  {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
             </button>
@@ -187,12 +206,7 @@ const Topbar = () => {
                       <li
                         key={notif._id || notif.id}
                         className={`p-3 text-sm border-b border-zinc-100 dark:border-zinc-800 last:border-b-0 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition cursor-pointer ${!notif.isRead ? 'font-semibold bg-blue-50 dark:bg-blue-900/40' : 'text-zinc-700 dark:text-zinc-300'}`}
-                        onClick={() => {
-                          if (!notif.isRead) {
-                            dispatch(markNotificationAsRead(notif._id || notif.id));
-                          }
-                          // Optional: navigate to related entity
-                        }}
+                        onClick={() => handleNotificationClick(notif)}
                       >
                         <div className="flex items-start gap-2">
                           {!notif.isRead && (
@@ -201,14 +215,16 @@ const Topbar = () => {
                           <span className="flex-grow">{notif.message}</span>
                         </div>
                         <div className={`text-xs text-zinc-500 dark:text-zinc-400 mt-1 ${!notif.isRead ? 'pl-4' : ''}`}>
-                          {new Date(notif.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          {new Date(notif.createdAt || Date.now()).toLocaleString([], { 
+                            month: 'short', 
+                            day: 'numeric', 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })}
                         </div>
                         <div className="mt-2 flex justify-start">
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation(); 
-                              dispatch(snoozeNotification({ id: notif._id || notif.id, snoozeDuration: 10 * 60 * 1000 }));
-                            }}
+                            onClick={(e) => handleSnoozeNotification(e, notif._id || notif.id)}
                             className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 py-1 px-2 rounded hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
                             title="Snooze for 10 minutes"
                           >

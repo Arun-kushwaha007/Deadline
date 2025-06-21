@@ -2,20 +2,23 @@
 import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { onMessage } from 'firebase/messaging';
-import { messaging } from './firebase';
+import { getMessagingInstance } from './firebase'; // ✅ FIXED
 import { useDispatch } from 'react-redux';
 import { addNotification } from './redux/slices/notificationSlice';
-
+import useFCMToken from './hooks/useFCMToken';
 import { SocketProvider } from './context/SocketContext';
 import AllApiRoutes from './AllApiRoutes';
 
 function App() {
   const dispatch = useDispatch();
-
+   useFCMToken(); 
   useEffect(() => {
     let unsubscribeOnMessage = () => {};
 
-    if (messaging) {
+    const setupOnMessage = async () => {
+      const messaging = await getMessagingInstance();
+      if (!messaging) return;
+
       unsubscribeOnMessage = onMessage(messaging, (payload) => {
         console.log('📩 FCM foreground message:', payload);
 
@@ -62,7 +65,9 @@ function App() {
           ), { duration: 6000 });
         }
       });
-    }
+    };
+
+    setupOnMessage();
 
     return () => {
       unsubscribeOnMessage();

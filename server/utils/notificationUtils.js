@@ -26,6 +26,8 @@ export const sendNotification = async ({
   entityModel,
 }) => {
   try {
+    console.log(`[NotificationUtils] 🚀 Starting notification process for user ${userId}`);
+    
     // 1. Save notification in MongoDB
     const notification = new Notification({
       userId, // string UUID
@@ -37,55 +39,80 @@ export const sendNotification = async ({
     });
 
     const savedNotification = await notification.save();
-    console.log(`✅ Notification created: ${savedNotification._id} for user ${userId}`);
+    console.log(`[NotificationUtils] ✅ Notification created: ${savedNotification._id} for user ${userId}`);
 
     // 2. Emit via Socket.IO
     if (redisClient?.get) {
-      const socketId = await redisClient.get(`socket:${userId}`);
-      if (socketId) {
-        io.to(socketId).emit('newNotification', savedNotification);
-        console.log(`📡 Notification emitted to socket ${socketId}`);
-      } else {
-        console.log(`ℹ️ No socket ID for user ${userId}, skipping real-time emit.`);
+      console.log(`[NotificationUtils] Attempting to get socketId for user ${userId} from Redis key: socket:${userId}`);
+      try {
+        const socketId = await redisClient.get(`socket:${userId}`);
+        if (socketId) {
+          console.log(`[NotificationUtils] ✅ Socket ID found: ${socketId} for user ${userId}. Emitting 'newNotification'.`);
+          io.to(socketId).emit('newNotification', savedNotification);
+          console.log(`[NotificationUtils] 📡 Notification emitted to socket ${socketId}`);
+        } else {
+          console.log(`[NotificationUtils] ℹ️ No socket ID for user ${userId}, skipping real-time emit.`);
+        }
+      } catch (redisError) {
+        console.error(`[NotificationUtils] ❌ Redis error for user ${userId}:`, redisError);
       }
+    } else {
+      console.log(`[NotificationUtils] ⚠️ Redis client not available. Skipping socket emit.`);
     }
 
     // 3. Push via FCM
     if (firebaseAdminInitialized) {
-      const user = await User.findOne({ userId }).select('fcmToken');
-      if (user?.fcmToken) {
-        const fcmMessage = {
-          notification: {
-            title: getNotificationTitle(savedNotification.type),
-            body: savedNotification.message,
-          },
-          token: user.fcmToken,
-          data: {
-            notificationId: savedNotification._id.toString(),
-            type: savedNotification.type,
-            relatedEntity: savedNotification.relatedEntity?.toString() || '',
-            entityModel: savedNotification.entityModel || '',
-            createdAt: savedNotification.createdAt.toISOString(),
-          },
-        };
+      console.log(`[NotificationUtils] Attempting to find user ${userId} for FCM token.`);
+      try {
+        const user = await User.findOne({ userId }).select('fcmToken'); // Find by UUID userId
+        if (user) {
+          console.log(`[NotificationUtils] User ${userId} found. FCM Token: ${user.fcmToken ? `${user.fcmToken.slice(0, 20)}...` : 'null'}`);
+          if (user.fcmToken) {
+            const fcmMessage = {
+              notification: {
+                title: getNotificationTitle(savedNotification.type),
+                body: savedNotification.message,
+              },
+              token: user.fcmToken,
+              data: {
+                notificationId: savedNotification._id.toString(),
+                type: savedNotification.type,
+                relatedEntity: savedNotification.relatedEntity?.toString() || '',
+                entityModel: savedNotification.entityModel || '',
+                createdAt: savedNotification.createdAt.toISOString(),
+              },
+            };
 
-        try {
-          const fcmResponse = await admin.messaging().send(fcmMessage);
-          console.log(`📲 FCM message sent to user ${userId}:`, fcmResponse);
-        } catch (fcmError) {
-          console.error(`🔥 Error sending FCM to ${userId}:`, fcmError);
-          if (fcmError.code === 'messaging/registration-token-not-registered') {
-            console.warn(`⚠️ Invalid FCM token for ${userId}.`);
+            try {
+              const fcmResponse = await admin.messaging().send(fcmMessage);
+              console.log(`[NotificationUtils] 📲 FCM message sent to user ${userId}:`, fcmResponse);
+            } catch (fcmError) {
+              console.error(`[NotificationUtils] 🔥 FCM send error for user ${userId}:`, fcmError);
+              
+              // Handle invalid token errors
+              if (fcmError.code === 'messaging/registration-token-not-registered' || 
+                  fcmError.code === 'messaging/invalid-registration-token') {
+                console.log(`[NotificationUtils] 🗑️ Clearing invalid FCM token for user ${userId}`);
+                user.fcmToken = null;
+                await user.save();
+              }
+            }
+          } else {
+            console.log(`[NotificationUtils] ℹ️ User ${userId} has no FCM token.`);
           }
+        } else {
+          console.log(`[NotificationUtils] ❌ User ${userId} not found in database.`);
         }
-      } else {
-        console.log(`ℹ️ User ${userId} has no FCM token.`);
+      } catch (userFindError) {
+        console.error(`[NotificationUtils] ❌ Error finding user ${userId}:`, userFindError);
       }
+    } else {
+      console.log(`[NotificationUtils] ⚠️ Firebase Admin not initialized. Skipping FCM.`);
     }
 
     return savedNotification;
   } catch (error) {
-    console.error('❌ Error in sendNotification:', error);
+    console.error('[NotificationUtils] ❌ Error in sendNotification:', error);
     return null;
   }
 };

@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
   },
   resetToken: String,
   resetTokenExpire: Date,
+  fcmToken: { // Added fcmToken field
+    type: String,
+    default: null, // Default to null, as a user might not have a token initially
+  },
 });
 
 // Pre-save middleware to hash password if modified

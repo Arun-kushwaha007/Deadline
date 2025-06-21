@@ -2,6 +2,7 @@ import Task from '../models/Task.js';
 // Notification model import is not directly needed here anymore, as sendNotification handles it.
 // import Notification from '../models/Notification.js'; 
 import Organization from '../models/Organization.js';
+import User from '../models/User.js'; // Import User model
 import { sendNotification } from '../utils/notificationUtils.js';
 
 // Helper Redis keys
@@ -30,15 +31,20 @@ export const createTask = async (req, res) => {
 
     // Send notification if task is assigned upon creation
     if (task.assignedTo) {
-      await sendNotification({
-        io,
-        redisClient,
-        userId: task.assignedTo.toString(),
-        type: 'taskAssigned',
-        message: `You have been assigned a new task: ${task.title}`,
-        entityId: task._id,
-        entityModel: 'Task',
-      });
+      const assignedUser = await User.findById(task.assignedTo);
+      if (assignedUser && assignedUser.userId) {
+        await sendNotification({
+          io,
+          redisClient,
+          userId: assignedUser.userId, // Use the UUID userId
+          type: 'taskAssigned',
+          message: `You have been assigned a new task: ${task.title}`,
+          entityId: task._id,
+          entityModel: 'Task',
+        });
+      } else {
+        console.warn(`[taskController.createTask] User not found or missing UUID for _id: ${task.assignedTo}`);
+      }
     }
 
     res.status(201).json(task);
@@ -161,31 +167,24 @@ export const updateTask = async (req, res) => {
     }
 
     // Check if 'assignedTo' field was updated and is different from the old assignee
-    const currentAssignee = updatedTask.assignedTo ? updatedTask.assignedTo.toString() : null;
+    const finalAssigneeMongoId = updatedTask.assignedTo ? updatedTask.assignedTo.toString() : null;
 
-    if (newAssignee && currentAssignee === newAssignee && newAssignee !== oldAssignee) {
-      await sendNotification({
-        io,
-        redisClient,
-        userId: newAssignee,
-        type: 'taskAssigned', // Or a more specific type like 'taskReassigned' if you add it
-        message: `You have been assigned a task: ${updatedTask.title}`,
-        entityId: updatedTask._id,
-        entityModel: 'Task',
-      });
-    } else if (currentAssignee && !oldAssignee) {
-      // This case handles if the task was previously unassigned and now is assigned.
-      // The previous condition (newAssignee && currentAssignee === newAssignee && newAssignee !== oldAssignee)
-      // might already cover this if newAssignee is part of req.body. Let's be explicit.
-       await sendNotification({
-        io,
-        redisClient,
-        userId: currentAssignee,
-        type: 'taskAssigned',
-        message: `You have been assigned a task: ${updatedTask.title}`,
-        entityId: updatedTask._id,
-        entityModel: 'Task',
-      });
+    // If the assignee has changed and there is a new assignee
+    if (finalAssigneeMongoId && finalAssigneeMongoId !== oldAssignee) {
+      const userToNotify = await User.findById(finalAssigneeMongoId);
+      if (userToNotify && userToNotify.userId) {
+        await sendNotification({
+          io,
+          redisClient,
+          userId: userToNotify.userId, // Use UUID
+          type: 'taskAssigned',
+          message: `You have been assigned a task: ${updatedTask.title}`,
+          entityId: updatedTask._id,
+          entityModel: 'Task',
+        });
+      } else {
+        console.warn(`[taskController.updateTask] User to notify (final assignee) not found or missing UUID for _id: ${finalAssigneeMongoId}`);
+      }
     }
     // If you want to notify about other updates (not just assignment), that logic would go here.
     // For example, notifying the previous assignee that the task was reassigned.

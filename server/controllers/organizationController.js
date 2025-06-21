@@ -175,7 +175,7 @@ export const addMember = async (req, res) => {
       await sendNotification({
         io,
         redisClient,
-        userId: user._id, // ObjectId of the added user
+        userId: user.userId, // Use the UUID userId
         type: 'info', // Or a more specific type like 'addedToOrganization'
         message: `You have been added to the organization '${organization.name}'.`,
         entityId: organization._id,
@@ -233,7 +233,7 @@ export const assignTask = async (req, res) => {
         await sendNotification({
           io,
           redisClient,
-          userId: assigneeUser._id, // ObjectId of the assignee
+          userId: assigneeUser.userId, // Use the UUID userId
           type: 'taskAssigned',
           message: `You have been assigned a new task '${newTask.title}' in organization '${organization.name}'.`,
           entityId: newTask._id, // ObjectId of the sub-document task

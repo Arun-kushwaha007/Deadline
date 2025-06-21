@@ -1,9 +1,9 @@
 {
-  "apiKey": "VITE_AI_FIREBASE_API_KEY",
-  "authDomain": "VITE_AI_FIREBASE_AUTH_DOMAIN",
-  "projectId": "VITE_AI_FIREBASE_PROJECT_ID",
-  "storageBucket": "VITE_AI_FIREBASE_STORAGE_BUCKET",
-  "messagingSenderId": "VITE_AI_FIREBASE_MESSAGING_SENDER_ID",
-  "appId": "VITE_AI_FIREBASE_APP_ID",
-  "measurementId": "VITE_AI_FIREBASE_MEASUREMENT_ID"
+  "apiKey": "AIzaSyCD0MW8nQ7BFFtBygSrv16hXq9gKZj7ShQ",
+  "authDomain": "collabnest-826d3.firebaseapp.com",
+  "projectId": "collabnest-826d3",
+  "storageBucket": "collabnest-826d3.appspot.com",
+  "messagingSenderId": "341927009359",
+  "appId": "1:341927009359:web:6ca264d11b3e148e51de3a",
+  "measurementId": "G-HZ1DJE8RRL"
 }
