@@ -8,7 +8,7 @@ export function ViewButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
-      onPointerDown={e => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
       type="button"
       tabIndex={0}
     >
@@ -25,7 +25,7 @@ export function EditButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
-      onPointerDown={e => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
       type="button"
       tabIndex={0}
     >
@@ -42,7 +42,7 @@ export function DeleteButton({ onClick }) {
         e.stopPropagation();
         onClick?.();
       }}
-      onPointerDown={e => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
       type="button"
       tabIndex={0}
     >
@@ -55,6 +55,7 @@ export default function TaskCard({
   title,
   description,
   dueDate,
+  createdAt,
   priority,
   labels = [],
   subtasks = [],
@@ -116,7 +117,16 @@ export default function TaskCard({
 
           {/* Due Date */}
           {dueDate && (
-            <p className="text-xs text-yellow-300">📅 Due: {new Date(dueDate).toLocaleDateString()}</p>
+            <p className="text-xs text-yellow-300">
+              📅 Due: {new Date(dueDate).toLocaleString()}
+            </p>
+          )}
+
+          {/* Created At */}
+          {createdAt && (
+            <p className="text-xs text-gray-400">
+              🕒 Created: {new Date(createdAt).toLocaleString()}
+            </p>
           )}
 
           {/* Assignee + AssignedBy */}
