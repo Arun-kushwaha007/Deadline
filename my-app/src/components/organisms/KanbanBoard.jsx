@@ -39,7 +39,7 @@ const KanbanBoard = () => {
           navigate('/login');
         }
       }, [navigate]);
-
+const [expandedColumns, setExpandedColumns] = useState({});
 
   const tasks = useSelector((state) => state.tasks.tasks);
   const taskStatus = useSelector((state) => state.tasks.status);
@@ -157,13 +157,19 @@ const KanbanBoard = () => {
         }}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          
           {columns.map((status) => {
-            const columnTasks = tasks.filter(
-              (task) =>
-                task.status === status &&
-                (!filterPriority || task.priority === filterPriority)
-            );
-
+            const columnTasks = tasks
+              .filter(
+                (task) =>
+                  task.status === status &&
+                  (!filterPriority || task.priority === filterPriority)
+              )
+              .sort((a, b) => a.order - b.order);
+          
+            const isExpanded = expandedColumns[status];
+            const tasksToShow = isExpanded ? columnTasks : columnTasks.slice(0, 4);
+          
             return (
               <DroppableColumn
                 key={status}
@@ -174,29 +180,43 @@ const KanbanBoard = () => {
                   {columnTitles[status]}
                 </h2>
                 <SortableContext
-                  items={columnTasks.map((t) => t.id.toString())}
+                  items={tasksToShow.map((t) => t.id.toString())}
                   strategy={verticalListSortingStrategy}
                 >
                   <div className="space-y-4">
-                    {columnTasks.map((task) => (
-                      <SortableTask  
+                    {tasksToShow.map((task) => (
+                      <SortableTask
                         key={task.id}
                         task={task}
                         onView={() => {
                           setEditTask(task);
                           setShowModal(true);
-                          setViewOnly(true); // Set viewOnly to true for View button
+                          setViewOnly(true);
                         }}
                         onEdit={() => {
                           setEditTask(task);
                           setShowModal(true);
-                          setViewOnly(false); // Set viewOnly to false for Edit button
+                          setViewOnly(false);
                         }}
                         onDelete={() => dispatch(deleteTaskThunk(task.id))}
                       />
                     ))}
                   </div>
                 </SortableContext>
+          
+                {columnTasks.length > 4 && (
+                  <button
+                    className="mt-3 text-sm text-blue-400 hover:underline"
+                    onClick={() =>
+                      setExpandedColumns((prev) => ({
+                        ...prev,
+                        [status]: !prev[status],
+                      }))
+                    }
+                  >
+                    {isExpanded ? 'Show Less' : 'View All Tasks'}
+                  </button>
+                )}
               </DroppableColumn>
             );
           })}
