@@ -5,7 +5,12 @@ const OrganizationSchema = new mongoose.Schema({
   members: [
     {
       userId: { type: String, ref: 'User' },  // changed from ObjectId to String
-      role: { type: String, default: 'member' },
+      role: { 
+        type: String, 
+        enum: ['admin', 'coordinator', 'member'], 
+        default: 'member' 
+      },
+      
     },
   ],
   tasks: [
@@ -13,8 +18,9 @@ const OrganizationSchema = new mongoose.Schema({
       title: { type: String, required: true },
       assignedTo: { type: String, ref: 'User' },  // changed from ObjectId to String
       status: { type: String, default: 'To Do' },
-    },
+    }, 
   ],
 }, { timestamps: true });
 
 export default mongoose.model('Organization', OrganizationSchema);
+ 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-
 import { useParams } from 'react-router-dom';
 import DashboardLayout from '../../components/organisms/DashboardLayout';
 
 const AddMember = () => {
   const { id: orgId } = useParams();
   const [mode, setMode] = useState('userId');
+  const [role, setRole] = useState('member');
 
   const [joiningUserId, setJoiningUserId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,24 +35,27 @@ const AddMember = () => {
       }
     };
 
-    const delayDebounce = setTimeout(fetchUsers, 300); // debounce
-
+    const delayDebounce = setTimeout(fetchUsers, 300);
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
   const handleInvite = async () => {
     if (!selectedUser) return;
     try {
-      const response = await fetch(`${backendUrl}/api/organizations/${orgId}/invite`, {
+      const response = await fetch(`${backendUrl}/api/organizations/${orgId}/members`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: selectedUser._id }),
+        body: JSON.stringify({ joiningUserId: selectedUser.userId, role }),
       });
       const data = await response.json();
-      setMessage(response.ok ? `✅ Invitation sent to ${selectedUser.name}` : `❌ ${data.message}`);
-      setSearchQuery('');
-      setSearchResults([]);
-      setSelectedUser(null);
+      if (response.ok) {
+        setMessage(`✅ ${selectedUser.name} added as ${role}`);
+        setSearchQuery('');
+        setSelectedUser(null);
+        setSearchResults([]);
+      } else {
+        setMessage(`❌ ${data.message || 'Failed to invite user.'}`);
+      }
     } catch (error) {
       console.error('Invite error:', error);
       setMessage('❌ Failed to send invite.');
@@ -65,7 +68,6 @@ const AddMember = () => {
     setSearchResults([]);
   };
 
-  // click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -99,30 +101,49 @@ const AddMember = () => {
 
         {/* Add by ID Mode */}
         {mode === 'userId' && (
-          <form onSubmit={async (e) => {
-            e.preventDefault();
-            try {
-              const response = await fetch(`${backendUrl}/api/organizations/${orgId}/members`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ joiningUserId }),
-              });
-              const data = await response.json();
-              setMessage(response.ok ? '✅ User added to the organization!' : `❌ ${data.message}`);
-            } catch (error) {
-              console.error('Error:', error);
-              setMessage('❌ An error occurred.');
-            }
-          }} className="space-y-4">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const response = await fetch(`${backendUrl}/api/organizations/${orgId}/members`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ joiningUserId, role }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                  setMessage('✅ User added to the organization!');
+                  setJoiningUserId('');
+                } else {
+                  setMessage(`❌ ${data.message || 'Failed to add user.'}`);
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                setMessage('❌ An error occurred.');
+              }
+            }}
+            className="space-y-4"
+          >
             <label className="block font-medium">User ID</label>
             <input
               type="text"
               value={joiningUserId}
               onChange={(e) => setJoiningUserId(e.target.value)}
               placeholder="Enter User ID"
-              className="w-full p-2 border rounded text-black"
+              className="w-full p-2 border rounded text-white"
               required
             />
+
+            <label className="block font-medium">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full p-2 border rounded mb-4 text-white"
+            >
+              <option value="member">Member</option>
+              <option value="coordinator">Coordinator</option>
+            </select>
+
             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">
               Add to Organization
             </button>
@@ -138,10 +159,10 @@ const AddMember = () => {
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
-                setSelectedUser(null); // reset selection if user changes input
+                setSelectedUser(null);
               }}
               placeholder="Enter user name or email"
-              className="w-full p-2 border rounded text-black"
+              className="w-full p-2 border rounded text-white"
             />
 
             {searchResults.length > 0 && (
@@ -161,13 +182,24 @@ const AddMember = () => {
             {selectedUser && (
               <div className="mt-2">
                 <p>
-                  Invite <strong>{selectedUser.name}</strong> ({selectedUser.email})?
+                  Add <strong>{selectedUser.name}</strong> ({selectedUser.email}) as:
                 </p>
+
+                <label className="block font-medium mt-4">Role</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full p-2 border rounded text-black"
+                >
+                  <option value="member">Member</option>
+                  <option value="coordinator">Coordinator</option>
+                </select>
+
                 <button
                   onClick={handleInvite}
-                  className="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500"
+                  className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500"
                 >
-                  Send Invite
+                  Confirm Add
                 </button>
               </div>
             )}

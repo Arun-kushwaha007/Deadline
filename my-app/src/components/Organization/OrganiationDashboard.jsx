@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchOrganizations } from '../../redux/organizationSlice';
@@ -8,10 +8,12 @@ import CreateOrganizationModal from './CreateOrganizationModal';
 const OrganizationDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const organizations = useSelector((state) => state.organization.organizations);
   const loading = useSelector((state) => state.organization.loading);
+  const user = useSelector((state) => state.auth.user); // ✅ FIXED: get user from store
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrganizations());
@@ -35,7 +37,11 @@ const OrganizationDashboard = () => {
           <div className="col-span-3 text-center text-lg text-gray-500 py-10">No organizations found.</div>
         ) : (
           organizations.map((org) => (
-            <OrganizationCard key={org._id} organization={org} />
+            <OrganizationCard
+              key={org._id}
+              organization={org}
+              currentUserId={user?.userId} // ✅ safe access with optional chaining
+            />
           ))
         )}
       </div>
