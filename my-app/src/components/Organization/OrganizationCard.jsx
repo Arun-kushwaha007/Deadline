@@ -19,7 +19,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
     (member) => member.userId === currentUserId
   );
 
-  const myRole = myMembership?.role || 'admin';
+  const myRole = myMembership?.role || 'member';
 
   return (
     <div
