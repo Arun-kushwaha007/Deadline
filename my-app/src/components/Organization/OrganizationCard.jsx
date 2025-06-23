@@ -37,12 +37,12 @@ const OrganizationCard = ({ organization, currentUserId }) => {
         >
           Add Member
         </button>
-        <button
+        {/* <button
           className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm"
           onClick={handleEdit}
         >
           Edit
-        </button>
+        </button> */}
       </div>
     </div>
   );
