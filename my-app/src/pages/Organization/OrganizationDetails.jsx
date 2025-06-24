@@ -22,6 +22,19 @@ const OrganizationDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: '' });
 
+  // 🔐 Get current userId from localStorage
+  const currentUserId = JSON.parse(localStorage.getItem('loggedInUser'))?.userId;
+
+  // 🔎 Find user's role in the org
+  const myMembership = selectedOrganization?.members.find((member) => {
+    const memberId =
+      typeof member.userId === 'object' ? member.userId.userId : member.userId;
+    return String(memberId) === String(currentUserId);
+  });
+
+  const myRole = myMembership?.role ?? 'member';
+  const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
+
   // Theme toggle
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -98,35 +111,39 @@ const OrganizationDetails = () => {
           )}
 
           <div className="flex gap-3">
-            <button
-              onClick={handleAddMember}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition"
-            >
-              Add Member
-            </button>
+            {isPrivileged && (
+              <button
+                onClick={handleAddMember}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition"
+              >
+                Add Member
+              </button>
+            )}
 
-            {isEditing ? (
-              <>
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
-                >
-                  Save
-                </button>
+            {isPrivileged && (
+              isEditing ? (
+                <>
+                  <button
+                    onClick={handleSave}
+                    className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={handleEditToggle}
+                    className="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 transition"
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
                 <button
                   onClick={handleEditToggle}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md shadow hover:bg-gray-600 transition"
+                  className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
                 >
-                  Cancel
+                  Edit
                 </button>
-              </>
-            ) : (
-              <button
-                onClick={handleEditToggle}
-                className="px-4 py-2 bg-green-600 text-white rounded-md shadow hover:bg-green-700 transition"
-              >
-                Edit
-              </button>
+              )
             )}
           </div>
         </div>
@@ -136,8 +153,7 @@ const OrganizationDetails = () => {
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
           <KanbanBoard tasks={selectedOrganization.tasks || []} />
         </section>
- 
- 
+
         {/* Members Section */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
@@ -151,7 +167,7 @@ const OrganizationDetails = () => {
                   <strong>{member.userId?.name || 'Unknown'}</strong> &mdash;
                   <span className="italic"> {member.role}</span>
                 </div>
-                {isEditing && (
+                {isEditing && isPrivileged && (
                   <button
                     onClick={async () => {
                       try {
