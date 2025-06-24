@@ -163,6 +163,7 @@ const organizationSlice = createSlice({
     selectedOrganization: null,
     loading: false, 
     error: null,    
+    currentUser: null,
 
     // Current user's organizations
     currentUserOrganizations: [],
@@ -197,6 +198,10 @@ const organizationSlice = createSlice({
       }
       state.organizationMembers[orgId].status = loading ? 'loading' : 'idle';
     },
+    setCurrentUser: (state, action) => {
+  state.currentUser = action.payload;
+},
+
   },
   extraReducers: (builder) => {
     builder
@@ -336,7 +341,8 @@ const organizationSlice = createSlice({
 export const { 
   clearSelectedOrganization, 
   clearOrganizationMembers, 
-  setMembersLoading 
+  setMembersLoading ,
+  setCurrentUser
 } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

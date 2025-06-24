@@ -8,6 +8,7 @@ import CreateOrganizationModal from './CreateOrganizationModal';
 const OrganizationDashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+const currentUser = useSelector((state) => state.organization.currentUser);
 
   const organizations = useSelector((state) => state.organization.organizations);
   const loading = useSelector((state) => state.organization.loading);
@@ -40,7 +41,7 @@ const OrganizationDashboard = () => {
             <OrganizationCard
               key={org._id}
               organization={org}
-              currentUserId={user?.userId} // ✅ safe access with optional chaining
+              currentUserId={currentUser?.userId}// ✅ safe access with optional chaining
             />
           ))
         )}

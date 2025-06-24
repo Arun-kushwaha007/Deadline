@@ -3,9 +3,14 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+// import { setCurrentUser } from '../../redux/organizationSlice'; // 
+import { setCurrentUser } from '../redux/organizationSlice';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // ✅ Redux dispatch
+
   const {
     register,
     handleSubmit,
@@ -25,14 +30,16 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('token', result.token);
-        localStorage.setItem(
-          'loggedInUser',
-          JSON.stringify({
-            name: result.user.name,
-            email: result.user.email,
-            userId: result.user.userId,
-          })
-        );
+
+        const userData = {
+          name: result.user.name,
+          email: result.user.email,
+          userId: result.user.userId,
+        };
+
+        localStorage.setItem('loggedInUser', JSON.stringify(userData));
+        dispatch(setCurrentUser(userData)); // ✅ Set user in Redux
+
         navigate('/');
       } else {
         alert(result.message);
@@ -63,14 +70,16 @@ const Login = () => {
 
       if (response.ok) {
         localStorage.setItem('token', result.token);
-        localStorage.setItem(
-          'loggedInUser',
-          JSON.stringify({
-            name: result.user.name,
-            email: result.user.email,
-            userId: result.user.userId,
-          })
-        );
+
+        const userData = {
+          name: result.user.name,
+          email: result.user.email,
+          userId: result.user.userId,
+        };
+
+        localStorage.setItem('loggedInUser', JSON.stringify(userData));
+        dispatch(setCurrentUser(userData)); // ✅ Set user in Redux
+
         navigate('/');
       } else {
         alert(result.message || 'Google login failed.');

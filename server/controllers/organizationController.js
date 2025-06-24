@@ -6,7 +6,6 @@ import { sendNotification } from '../utils/notificationUtils.js'; // Added impor
 export const getAllOrganizations = async (req, res) => {
   try {
     if (!req.user || !req.user.userId) {
-      // This should ideally be caught by authMiddleware, but as a safeguard:
       return res.status(401).json({ message: 'User not authenticated' });
     }
 
@@ -15,7 +14,42 @@ export const getAllOrganizations = async (req, res) => {
     // Find organizations where the current user is a member
     const organizations = await Organization.find({ "members.userId": userId });
 
-    res.status(200).json(organizations);
+    // Manually populate member user details
+    const organizationsWithDetails = await Promise.all(
+      organizations.map(async (org) => {
+        // Get all member UUIDs
+        const memberUserIds = org.members.map(m => m.userId);
+
+        // Fetch user objects for those UUIDs
+        const membersUsers = await User.find({ userId: { $in: memberUserIds } }).select('userId name email');
+
+        // Map userId (UUID string) to user object
+        const userMap = {};
+        membersUsers.forEach(user => {
+          userMap[String(user.userId)] = user;
+        });
+
+        // Attach user info + role for each member
+        const membersWithUser = org.members.map((member) => {
+          return {
+            role: member.role,
+            userId: userMap[String(member.userId)] || {
+              userId: member.userId,
+              name: 'Unknown User',
+              email: '',
+            },
+          };
+        });
+
+        // Return the enriched organization object
+        return {
+          ...org.toObject(),
+          members: membersWithUser,
+        };
+      })
+    );
+
+    res.status(200).json(organizationsWithDetails);
   } catch (error) {
     console.error('Error fetching organizations:', error);
     res.status(500).json({ message: 'Failed to fetch organizations', error: error.message });
