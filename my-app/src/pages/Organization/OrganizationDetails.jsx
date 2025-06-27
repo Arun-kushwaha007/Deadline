@@ -172,7 +172,8 @@ const OrganizationDetails = () => {
                     onClick={async () => {
                       try {
                         const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-                        await axios.delete(`${backendUrl}/api/organizations/${orgId}/members/${member.userId._id}`);
+                        await axios.delete(`${backendUrl}/api/organizations/${orgId}/members/${typeof member.userId === 'object' ? member.userId._id : member.userId}
+                        `);
                         dispatch(fetchOrganizationDetails(orgId));
                       } catch (err) {
                         console.error('Failed to delete member:', err);
