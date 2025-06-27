@@ -84,7 +84,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit }) => {
         setAssignee(member || null);
       }
       if (taskToEdit.organization) {
-        setOrganizationId(taskToEdit.organization);
+        // Ensure we are setting the ID string, not the whole object
+        setOrganizationId(taskToEdit.organization._id || taskToEdit.organization);
       }
     } else {
       // Reset form for new task
