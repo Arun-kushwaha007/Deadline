@@ -1,56 +1,5 @@
 import { useState } from 'react';
 
-export function ViewButton({ onClick }) {
-  return (
-    <button
-      className="text-blue-400 hover:text-blue-500"
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick?.();
-      }}
-      onPointerDown={(e) => e.stopPropagation()}
-      type="button"
-      tabIndex={0}
-    >
-      View
-    </button>
-  );
-}
-
-export function EditButton({ onClick }) {
-  return (
-    <button
-      className="text-yellow-400 hover:text-yellow-500"
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick?.();
-      }}
-      onPointerDown={(e) => e.stopPropagation()}
-      type="button"
-      tabIndex={0}
-    >
-      Edit
-    </button>
-  );
-}
-
-export function DeleteButton({ onClick }) {
-  return (
-    <button
-      className="text-red-400 hover:text-red-500"
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick?.();
-      }}
-      onPointerDown={(e) => e.stopPropagation()}
-      type="button"
-      tabIndex={0}
-    >
-      Delete
-    </button>
-  );
-}
-
 export default function TaskCard({
   title,
   description,
@@ -73,6 +22,22 @@ export default function TaskCard({
     medium: 'bg-yellow-500',
     high: 'bg-red-600',
   };
+
+  // Inline button components
+  const ActionButton = ({ color, label, onClick }) => (
+    <button
+      className={`text-${color}-400 hover:text-${color}-500`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.();
+      }}
+      onPointerDown={(e) => e.stopPropagation()}
+      type="button"
+      tabIndex={0}
+    >
+      {label}
+    </button>
+  );
 
   return (
     <div
@@ -165,9 +130,9 @@ export default function TaskCard({
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-4 pt-3 text-sm">
-            <ViewButton onClick={onView} />
-            <EditButton onClick={onEdit} />
-            <DeleteButton onClick={onDelete} />
+            <ActionButton color="blue" label="View" onClick={onView} />
+            <ActionButton color="yellow" label="Edit" onClick={onEdit} />
+            <ActionButton color="red" label="Delete" onClick={onDelete} />
           </div>
         </>
       )}

@@ -29,6 +29,7 @@ export default function SortableTask({ task, onView, onEdit, onDelete }) {
       role="listitem"
     >
       <TaskCard
+      {...task} 
         id={task.id}
         title={task.title}
         description={task.description}
