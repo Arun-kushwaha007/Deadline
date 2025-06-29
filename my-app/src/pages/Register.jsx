@@ -3,9 +3,14 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+
 
 const Register = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -115,13 +120,24 @@ const Register = () => {
             )}
           </div>
 
-          <div>
+          <div className='relative'>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}  
               {...register('password', { required: true })}
               placeholder="Password"
               className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
+           <div
+                         className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-orange-400"
+                         onClick={() => setShowPassword(!showPassword)}
+                       >
+                         {showPassword ? (
+                           <EyeSlashIcon className="h-5 w-5" />
+                         ) : (
+                           <EyeIcon className="h-5 w-5" />
+                         )}
+                       </div> 
+            
             {errors.password && (
               <p className="text-red-400 text-sm mt-1">*Password* is mandatory</p>
             )}

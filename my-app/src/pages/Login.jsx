@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react'; // 👈 NEW
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
-// import { setCurrentUser } from '../../redux/organizationSlice'; // 
 import { setCurrentUser } from '../redux/organizationSlice';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'; // 👈 NEW
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // ✅ Redux dispatch
+  const dispatch = useDispatch();
+
+  const [showPassword, setShowPassword] = useState(false); // 👈 NEW
 
   const {
     register,
@@ -38,7 +40,7 @@ const Login = () => {
         };
 
         localStorage.setItem('loggedInUser', JSON.stringify(userData));
-        dispatch(setCurrentUser(userData)); // ✅ Set user in Redux
+        dispatch(setCurrentUser(userData));
 
         navigate('/');
       } else {
@@ -78,7 +80,7 @@ const Login = () => {
         };
 
         localStorage.setItem('loggedInUser', JSON.stringify(userData));
-        dispatch(setCurrentUser(userData)); // ✅ Set user in Redux
+        dispatch(setCurrentUser(userData));
 
         navigate('/');
       } else {
@@ -108,13 +110,23 @@ const Login = () => {
             )}
           </div>
 
-          <div>
+          <div className="relative"> 
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'} // 👈 NEW
               {...register('password', { required: true })}
               placeholder="Password"
-              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="w-full px-4 py-2 pr-12 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
+            <div
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-orange-400"
+              onClick={() => setShowPassword(!showPassword)} // 👈 NEW
+            >
+              {showPassword ? (
+                <EyeSlashIcon className="h-5 w-5" />
+              ) : (
+                <EyeIcon className="h-5 w-5" />
+              )}
+            </div>
             {errors.password && (
               <p className="text-red-400 text-sm mt-1">*Password* is mandatory</p>
             )}
