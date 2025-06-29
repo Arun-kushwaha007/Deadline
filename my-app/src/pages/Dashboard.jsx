@@ -5,7 +5,7 @@ import AssistantPanel from '../components/organisms/AIAssistantPanel';
 // import OrganizationBoard from '../components/organisms/OrganizationBoard';
 import OrganizationDashboard from '../components/Organization/OrganiationDashboard';
 import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
-
+import TaskReportDashboard from '../components/organisms/TaskReportDashboard';
 const Dashboard = () => {
   return (
     <DashboardLayout>
@@ -17,6 +17,7 @@ const Dashboard = () => {
         <OrganizationDashboard />
         <KanbanBoard />
         {/* <AssistantPanel /> */}
+        <TaskReportDashboard />
         <AIAssistantWrapper />
         <p className="text-zinc-600 dark:text-zinc-400 mt-2">
           This is your control center.
