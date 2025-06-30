@@ -114,7 +114,7 @@ const [expandedColumns, setExpandedColumns] = useState({});
   if (!selectedOrganization) {
     return (
       <div className="p-6 text-white text-center">
-        <h1 className="text-2xl font-bold">Please select an organization to view its tasks.</h1>
+        <h1 className="text-2xl font-bold">Please select an organization to view its Analysis.</h1>
         {/* Optional: Add more guidance here */}
       </div>
     );
