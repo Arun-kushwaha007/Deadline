@@ -6,7 +6,7 @@ import { fetchOrganizationDetails, clearSelectedOrganization } from '../../redux
 
 import DashboardLayout from '../../components/organisms/DashboardLayout';
 import KanbanBoard from '../../components/organisms/KanbanBoard';
-
+import TaskReportDashboard from '../../components/organisms/TaskReportDashboard';
 const OrganizationDetails = () => {
   const { id: orgId } = useParams();
   const navigate = useNavigate();
@@ -153,7 +153,10 @@ const OrganizationDetails = () => {
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
           <KanbanBoard tasks={selectedOrganization.tasks || []} />
         </section>
-
+  <section className="mt-[-200px]">
+          {/* <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2> */}
+          <TaskReportDashboard tasks={selectedOrganization.tasks || []} />
+        </section>
         {/* Members Section */}
         <section className="mb-8">
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>

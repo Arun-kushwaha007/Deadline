@@ -17,7 +17,7 @@ const Dashboard = () => {
         <OrganizationDashboard />
         <KanbanBoard />
         {/* <AssistantPanel /> */}
-        <TaskReportDashboard />
+        {/* <TaskReportDashboard /> */}
         <AIAssistantWrapper />
         <p className="text-zinc-600 dark:text-zinc-400 mt-2">
           This is your control center.

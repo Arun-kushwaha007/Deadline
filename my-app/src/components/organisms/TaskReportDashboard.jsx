@@ -3,7 +3,27 @@ import { useSelector } from 'react-redux';
 
 const TaskReportDashboard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
-  const users = useSelector((state) => state.organization.members || []); // adjust if your user list is elsewhere
+  const users = useSelector((state) => state.organization.members || []);
+  const selectedOrganization = useSelector((state) => state.organization.selectedOrganization);
+
+  // ✅ Get logged-in user from localStorage
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+
+  // Default to member
+  let myRole = 'member';
+
+  if (loggedInUser && selectedOrganization) {
+    const myMembership = selectedOrganization.members?.find((member) => {
+      const memberId =
+        typeof member.userId === 'object'
+          ? member.userId.userId
+          : member.userId;
+
+      return String(memberId) === String(loggedInUser.userId);
+    });
+
+    myRole = myMembership?.role ?? 'member';
+  }
 
   // Total tasks
   const totalTasks = tasks.length;
@@ -36,7 +56,7 @@ const TaskReportDashboard = () => {
 
   return (
     <div className="p-6 min-h-screen text-white">
-      <h1 className="text-3xl font-bold text-orange-500 mb-8">📊 Task Report </h1>
+      <h1 className="text-3xl font-bold text-orange-500 mb-8">📊 Task Report</h1>
 
       {/* Overall Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
@@ -64,52 +84,67 @@ const TaskReportDashboard = () => {
         </div>
       </div>
 
-      {/* Tasks Per User */}
-      <h2 className="text-2xl font-bold mb-4">Tasks by User</h2>
-      <div className="space-y-6">
-        {Object.entries(tasksByUser).map(([userId, userTasks]) => {
-          const userInfo = users.find((u) => u._id === userId);
-          const userName = userInfo ? userInfo.name : (userId === "unassigned" ? "Unassigned" : "Unknown User");
+      {/* ✅ Only show Tasks Per User for admins and coordinators */}
+      {(myRole === 'admin' || myRole === 'coordinator') && (
+        <>
+          <h2 className="text-2xl font-bold mb-4">Tasks by User</h2>
+          <div className="space-y-6">
+            {Object.entries(tasksByUser).map(([userId, userTasks]) => {
+              const userInfo = users.find((u) => u._id === userId);
+              const userName = userInfo
+                ? userInfo.name
+                : userId === 'unassigned'
+                ? 'Unassigned'
+                : 'Unknown User';
 
-          return (
-            <div key={userId} className="bg-zinc-800 p-4 rounded-lg shadow">
-              <h3 className="text-lg font-semibold text-orange-400 mb-2">
-                {userName}
-              </h3>
-              <p className="text-sm mb-2">Total Tasks: {userTasks.length}</p>
+              return (
+                <div key={userId} className="bg-zinc-800 p-4 rounded-lg shadow">
+                  <h3 className="text-lg font-semibold text-orange-400 mb-2">
+                    {userName}
+                  </h3>
+                  <p className="text-sm mb-2">
+                    Total Tasks: {userTasks.length}
+                  </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {userTasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="bg-zinc-700 p-3 rounded shadow hover:bg-zinc-600 transition"
-                  >
-                    <h4 className="font-bold">{task.title}</h4>
-                    <p className="text-xs text-gray-300">
-                      Priority:{" "}
-                      <span
-                        className={
-                          task.priority === "high"
-                            ? "text-red-400"
-                            : task.priority === "medium"
-                            ? "text-orange-400"
-                            : "text-green-400"
-                        }
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {userTasks.map((task) => (
+                      <div
+                        key={task.id}
+                        className="bg-zinc-700 p-3 rounded shadow hover:bg-zinc-600 transition"
                       >
-                        {task.priority}
-                      </span>
-                    </p>
-                    <p className="text-xs text-gray-300">Status: {task.status}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Due: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : "N/A"}
-                    </p>
+                        <h4 className="font-bold">{task.title}</h4>
+                        <p className="text-xs text-gray-300">
+                          Priority:{' '}
+                          <span
+                            className={
+                              task.priority === 'high'
+                                ? 'text-red-400'
+                                : task.priority === 'medium'
+                                ? 'text-orange-400'
+                                : 'text-green-400'
+                            }
+                          >
+                            {task.priority}
+                          </span>
+                        </p>
+                        <p className="text-xs text-gray-300">
+                          Status: {task.status}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          Due:{' '}
+                          {task.dueDate
+                            ? new Date(task.dueDate).toLocaleDateString()
+                            : 'N/A'}
+                        </p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 };
