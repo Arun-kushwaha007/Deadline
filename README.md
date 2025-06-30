@@ -9,25 +9,44 @@
   <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.io">
   <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="Redux">
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/MERN-4A90E2?style=for-the-badge&logo=mongodb&logoColor=white" alt="MERN">
+  <img src="https://img.shields.io/badge/Redis-Caching-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis">
 </p>
 
 <p align="center">
-  <strong>A modern React web application template designed for real-time collaboration with robust notification support</strong>
+  <strong>A modern MERN-Stack web application template designed for real-time collaboration with robust notification support and advanced caching.</strong>
 </p>
 
 <p align="center">
-  Built with Vite for lightning-fast development, integrating Firebase Cloud Messaging, Socket.io, Redux, Tailwind CSS, and Google OAuth.
+  Built with Vite for lightning-fast development, integrating Firebase Cloud Messaging, Socket.io, Redux, Tailwind CSS, Google OAuth, MongoDB, Express, Node, React, and Redis caching.
 </p>
+</div>
+
+---
+
+
+<div align="left">
+
+## 🗂️ **Context / Index**
+
+- [🧭 Motive](#-motive)
+- [💡 Core Concept](#-core-concept)
+- [⚙️ How It Works](#️-how-it-works)
+- [🚀 Features](#-features)
+- [🛠️ Getting Started](#-getting-started)
+- [🔧 Environment Configuration](#-environment-configuration)
+- [📁 Project Structure](#-project-structure)
+- [🔧 Key Integrations](#-key-integrations)
+- [📜 Available Scripts](#-available-scripts)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [👤 Author](#-author)
 
 </div>
 
 ---
 
 ## 🧭 **Motive**
-
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Compass.png" alt="Compass" width="50" height="50" />
-</div> -->
 
 **CollabNest** addresses the growing need for seamless, real-time collaboration among distributed teams, students, and individuals working on shared projects. In our era of remote work and digital communication, CollabNest aims to:
 
@@ -38,10 +57,6 @@
 ---
 
 ## 💡 **Core Concept**
-
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Light%20Bulb.png" alt="Light Bulb" width="50" height="50" />
-</div> -->
 
 CollabNest is built upon **three fundamental pillars**:
 
@@ -57,10 +72,6 @@ Google OAuth integration prioritizes ease of access and security. The interface 
 ---
 
 ## ⚙️ **How It Works**
-
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Gear.png" alt="Gear" width="50" height="50" />
-</div> -->
 
 <table>
 <tr>
@@ -115,29 +126,28 @@ Google OAuth integration prioritizes ease of access and security. The interface 
 
 | Feature | Description |
 |---------|-------------|
-| ⚡ **React + Vite** | Ultra-fast development environment |
-| 🔥 **Firebase FCM** | Real-time push notifications |
-| 🛡️ **Google OAuth** | Secure authentication system |
-| 🌐 **Socket.io** | Real-time communication |
-| 🗃️ **Redux** | Predictable state management |
-| 🎨 **Tailwind CSS** | Utility-first styling |
-| 🌓 **Theme System** | Light/dark mode support |
-| ✅ **ESLint** | Code quality assurance |
-
+| ⚡ <img src="https://img.shields.io/badge/React-18.0+-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React" height="20"/> **React + Vite** | Ultra-fast development environment |
+| 🔥 <img src="https://img.shields.io/badge/Firebase-FF6B35?style=flat-square&logo=firebase&logoColor=white" alt="Firebase" height="20"/> **Firebase FCM** | Real-time push notifications |
+| 🛡️ <img src="https://img.shields.io/badge/Google-OAuth-4285F4?style=flat-square&logo=google&logoColor=white" alt="Google" height="20"/> **Google OAuth** | Secure authentication system |
+| 🌐 <img src="https://img.shields.io/badge/Socket.io-010101?style=flat-square&logo=socket.io&logoColor=white" alt="Socket.io" height="20"/> **Socket.io** | Real-time communication |
+| 🗃️ <img src="https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=redux&logoColor=white" alt="Redux" height="20"/> **Redux** | Predictable state management |
+| 🎨 <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" height="20"/> **Tailwind CSS** | Utility-first styling |
+| 🌓 <img src="https://img.shields.io/badge/Theme-Dark%20%2F%20Light-3C3C3C?style=flat-square&logo=vercel&logoColor=white" alt="Theme" height="20"/> **Theme System** | Light/dark mode support |
+| ✅ <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white" alt="ESLint" height="20"/> **ESLint** | Code quality assurance |
+| 🟩 <img src="https://img.shields.io/badge/MERN-4A90E2?style=flat-square&logo=mongodb&logoColor=white" alt="MERN" height="20"/> **MERN Stack** | MongoDB, Express, React, Node.js full stack |
+| 🏎️ <img src="https://img.shields.io/badge/Redis-Caching-DC382D?style=flat-square&logo=redis&logoColor=white" alt="Redis" height="20"/> **Redis Caching** | Fast in-memory caching and pub/sub |
 </div>
 
 ---
 
 ## 🛠️ **Getting Started**
-<!-- 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Hammer%20and%20Wrench.png" alt="Tools" width="50" height="50" />
-</div> -->
 
 ### 📋 **Prerequisites**
 
 - ![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?style=flat-square&logo=node.js&logoColor=white)
 - ![npm](https://img.shields.io/badge/npm-or-CB3837?style=flat-square&logo=npm&logoColor=white) ![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=flat-square&logo=yarn&logoColor=white)
+- ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat-square&logo=mongodb&logoColor=white)
+- ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
 
 ### 🚀 **Quick Start**
 
@@ -163,7 +173,9 @@ yarn dev
 # Navigate to http://localhost:5173
 ```
 
-### 🔧 **Environment Configuration**
+---
+
+## 🔧 **Environment Configuration**
 
 Create a `.env` file in the `my-app` folder:
 
@@ -203,12 +215,6 @@ FIREBASE_PRIVATE_KEY=your_firebase_private_key
 
 ## 📁 **Project Structure**
 
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/File%20Folder.png" alt="Folder" width="50" height="50" /> -->
-</div>
-
-<div align="left">
-
 ### 🎨 **Frontend (`my-app`)**
 ```
 📁 my-app/
@@ -244,15 +250,9 @@ FIREBASE_PRIVATE_KEY=your_firebase_private_key
 └── index.js
 ```
 
-</div>
-
 ---
 
 ## 🔧 **Key Integrations**
-
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Wrench.png" alt="Wrench" width="50" height="50" />
-</div> -->
 
 ### 🔔 **Notifications**
 - Firebase Cloud Messaging integration
@@ -266,6 +266,17 @@ FIREBASE_PRIVATE_KEY=your_firebase_private_key
 - Error handling & recovery
 - Event broadcasting
 
+### 🟩 **MERN Stack**
+- MongoDB for database
+- Express.js for backend API
+- React for frontend UI
+- Node.js for server runtime
+
+### 🏎️ **Redis Caching**
+- Redis for fast in-memory caching
+- Pub/sub for real-time data sync
+- Reduces database load and latency
+
 ### 🔐 **Authentication**
 - Google OAuth via `@react-oauth/google`
 - JWT token management
@@ -275,10 +286,6 @@ FIREBASE_PRIVATE_KEY=your_firebase_private_key
 ---
 
 ## 📜 **Available Scripts**
-
-<!-- <div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Scroll.png" alt="Scroll" width="50" height="50" />
-</div> -->
 
 | Command | Description |
 |---------|-------------|
