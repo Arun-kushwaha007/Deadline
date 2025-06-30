@@ -62,12 +62,10 @@ const DashboardOverview = () => {
       const hasMembersCache =
         organizationMembers[selectedOrg]?.status === 'succeeded';
 
-      if (!hasOrgDetails) {
+      // If organization details (which include members) are not available or members are not successfully cached,
+      // dispatch fetchOrganizationDetails. Its reducer will populate the organizationMembers cache.
+      if (!hasOrgDetails || !hasMembersCache) {
         dispatch(fetchOrganizationDetails(selectedOrg));
-      }
-
-      if (!hasMembersCache) {
-        dispatch(fetchOrganizationMembers(selectedOrg));
       }
     }
   }, [
