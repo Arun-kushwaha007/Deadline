@@ -308,9 +308,9 @@ We welcome contributions! Please feel free to submit a Pull Request. For major c
 
 ## 📄 **License**
 
-<div align="center">
+<!-- <div align="center">
   <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" alt="License" width="50" height="50" />
-</div>
+</div> -->
 
 This project does not currently specify a license. Please contact the author for licensing information.
 
