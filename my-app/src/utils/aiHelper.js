@@ -4,7 +4,7 @@ const delayBetweenRequests = 1100; // ms (OpenAI limit: ~60 RPM for free tier)
 export const fetchAIResponse = async (prompt) => {
   const OPENAI_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
-  if (!OPENAI_KEY) return '⚠️ API key missing.';
+  if (!OPENAI_KEY) return '⚠️ Currently Under Development.';
 
   const now = Date.now();
   const wait = Math.max(0, delayBetweenRequests - (now - lastRequestTime));
