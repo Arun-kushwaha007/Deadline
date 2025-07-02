@@ -144,13 +144,20 @@ const Topbar = () => {
   return (
     <>
       <header className="flex justify-between items-center h-16 px-6 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white transition-colors duration-300">
-        <div className="flex items-center gap-3">
-          <img
-            src={theme === 'dark' ? logoLight : logoDark}
-            alt="CollabNest"
-            className="h-12 object-contain mb-2"
-          />
-        </div>
+       <div className="flex items-center gap-3">
+         <a 
+           href="https://collab-nest-home.vercel.app/" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           className="transition-transform duration-200 hover:scale-99"
+         >
+           <img
+             src={theme === 'dark' ? logoLight : logoDark}
+             alt="CollabNest"
+             className="h-12 object-contain mb-2 cursor-pointer"
+           />
+         </a>
+       </div>
 
         <div className="flex items-center gap-4">
           {/* Notifications */}

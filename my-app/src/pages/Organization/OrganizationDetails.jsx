@@ -174,7 +174,7 @@ const OrganizationDetails = () => {
         </div>
 
         {/* Tasks Section */}
-        <section className="mb-10">
+        <section className="mb-1">
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
           <KanbanBoard
             tasks={selectedOrganization.tasks || []}
@@ -182,7 +182,7 @@ const OrganizationDetails = () => {
           />
         </section>
 
-        <section className="mt-[-200px]">
+        <section className="mb-1">
           <TaskReportDashboard
             tasks={selectedOrganization.tasks || []}
           />

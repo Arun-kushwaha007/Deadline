@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchOrganizations, selectOrganization } from '../../redux/organizationSlice';
 import OrganizationCard from './OrganizationCard';
 import CreateOrganizationModal from './CreateOrganizationModal';
 // import OrganizationOverview from './OrganizationOverview'; // ✅ your Overview component
 import DashboardOverview from '../organisms/DashboardOverview';
+
 const OrganizationDashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const organizations = useSelector((state) => state.organization.organizations);
   const loading = useSelector((state) => state.organization.loading);
   const selectedOrganization = useSelector((state) => state.organization.selectedOrganization);
@@ -22,13 +25,17 @@ const OrganizationDashboard = () => {
     dispatch(selectOrganization(organization));
   };
 
+  const handleCreateOrganization = () => {
+    navigate('/create_Organization');
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">My Organizations</h1>
         <button
-          className="px-4 py-2 bg-blue-600 text-white rounded-md"
-          onClick={() => setShowModal(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          onClick={handleCreateOrganization}
         >
           Create Organization
         </button>

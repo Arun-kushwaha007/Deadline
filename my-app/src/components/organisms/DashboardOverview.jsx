@@ -23,9 +23,6 @@ const DashboardOverview = () => {
   const dispatch = useDispatch();
 
   const tasks = useSelector((state) => state.tasks.tasks);
-  const users = useSelector((state) => state.tasks.users || []);
-  const usersStatus = useSelector((state) => state.tasks.usersStatus);
-
   const organizations = useSelector(
     (state) => state.organization.organizations || []
   );
@@ -36,26 +33,22 @@ const DashboardOverview = () => {
     detailsLoading,
   } = useSelector((state) => state.organization);
 
-  const members = useSelector((state) => state.tasks.users || []);
-
   const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-  // Global Filters (affect global charts)
+  // Global Filters
   const [selectedPriority, setSelectedPriority] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedUser, setSelectedUser] = useState('all');
 
-  // User Analysis Filters (independent)
+  // User Analysis Filters
   const [selectedOrg, setSelectedOrg] = useState('');
   const [analysisPriority, setAnalysisPriority] = useState('');
   const [analysisStatus, setAnalysisStatus] = useState('');
   const [analysisUserId, setAnalysisUserId] = useState('');
 
   useEffect(() => {
-    if (usersStatus === 'idle') {
-      dispatch(fetchUsers());
-    }
-  }, [dispatch, usersStatus]);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   useEffect(() => {
     if (selectedOrg) {
@@ -82,21 +75,54 @@ const DashboardOverview = () => {
     }
   }, [selectedOrg]);
 
+  // ✅ All available users from all org caches
+  const allUsers = useMemo(() => {
+    const allMembers = [];
+    Object.values(organizationMembers).forEach((org) => {
+      if (org?.members?.length) {
+        org.members.forEach((m) => {
+          if (m.userId && m.userId._id) {
+            allMembers.push({
+              _id: m.userId._id,
+              name: m.userId.name,
+              email: m.userId.email,
+            });
+          }
+        });
+      }
+    });
+    return allMembers;
+  }, [organizationMembers]);
+
+  const users = allUsers;
+  const members = allUsers;
+
+  // ✅ Generate orgMembers list for dropdown
   const orgMembers = useMemo(() => {
     if (!selectedOrg) return members;
+
     let organizationMembersList = [];
     const cachedMembers = organizationMembers[selectedOrg];
+
     if (cachedMembers?.status === 'succeeded') {
       organizationMembersList = cachedMembers.members
-        .map((m) => m.userId)
-        .filter((u) => u && u._id);
+        .filter((m) => m.userId && m.userId._id)
+        .map((m) => ({
+          _id: m.userId._id,
+          name: m.userId.name,
+          email: m.userId.email,
+        }));
     } else if (
       selectedOrganization &&
       selectedOrganization._id === selectedOrg
     ) {
       organizationMembersList = selectedOrganization.members
-        .map((m) => m.userId)
-        .filter((u) => u && u._id);
+        .filter((m) => m.userId && m.userId._id)
+        .map((m) => ({
+          _id: m.userId._id,
+          name: m.userId.name,
+          email: m.userId.email,
+        }));
     }
     return organizationMembersList;
   }, [members, selectedOrg, selectedOrganization, organizationMembers]);
@@ -109,9 +135,8 @@ const DashboardOverview = () => {
       const statusMatch = selectedStatus
         ? task.status === selectedStatus
         : true;
-      const userMatch = selectedUser !== 'all'
-        ? task.assignedTo === selectedUser
-        : true;
+      const userMatch =
+        selectedUser !== 'all' ? task.assignedTo === selectedUser : true;
       return priorityMatch && statusMatch && userMatch;
     });
   }, [tasks, selectedPriority, selectedStatus, selectedUser]);
@@ -173,9 +198,6 @@ const DashboardOverview = () => {
   ];
 
   const COLORS = ['#10b981', '#f97316', '#ef4444'];
-  // #10b981 - To Do (green)
-  // #f97316 - In Progress (orange)
-  // #ef4444 - Done (red)
 
   const priorityData = [
     {
@@ -231,9 +253,10 @@ const DashboardOverview = () => {
 
   return (
     <div className="p-6 min-h-screen text-white">
-      {/* <h1 className="text-3xl font-bold text-orange-500 mb-8">🏠 Dashboard Overview</h1> */}
+      <h2 className="text-2xl font-bold text-orange-400 mb-6">
+        🏠 Organization Analysis
+      </h2>
 
-        <h2 className="text-2xl font-bold text-orange-400 mb-6">🏠 Organization Analysis</h2>
       {/* Global Filters */}
       <div className="flex flex-wrap gap-4 mb-10">
         <select
@@ -262,7 +285,7 @@ const DashboardOverview = () => {
       {/* Global Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
         <div className="bg-zinc-800 p-4 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4"> Tasks by Status</h2>
+          <h2 className="text-xl font-bold mb-4">Tasks by Status</h2>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
@@ -310,7 +333,10 @@ const DashboardOverview = () => {
       </div>
 
       {/* User Analysis */}
-      <h2 className="text-2xl font-bold text-orange-400 mb-6">👥 User Analysis</h2>
+      <h2 className="text-2xl font-bold text-orange-400 mb-6">
+        👥 User Analysis
+      </h2>
+
       {/* User Analysis Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
         <select
@@ -320,7 +346,9 @@ const DashboardOverview = () => {
         >
           <option value="">All Organizations</option>
           {organizations.map((org) => (
-            <option key={org._id} value={org._id}>{org.name}</option>
+            <option key={org._id} value={org._id}>
+              {org.name}
+            </option>
           ))}
         </select>
         <select
@@ -351,7 +379,9 @@ const DashboardOverview = () => {
         >
           <option value="">All Users</option>
           {orgMembers.map((user) => (
-            <option key={user._id} value={user._id}>{user.name}</option>
+            <option key={user._id} value={user._id}>
+              {user.name}
+            </option>
           ))}
           <option value="Unassigned">Unassigned</option>
         </select>
@@ -377,7 +407,10 @@ const DashboardOverview = () => {
                       label
                     >
                       {user.statusBreakdown.map((entry, index) => (
-                        <Cell key={`cell-status-${index}`} fill={COLORS[index]} />
+                        <Cell
+                          key={`cell-status-${index}`}
+                          fill={COLORS[index]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip />
