@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrganizationDetails, clearSelectedOrganization } from '../../redux/organizationSlice';
+import {
+  fetchOrganizationDetails,
+  clearSelectedOrganization,
+} from '../../redux/organizationSlice';
 
 import DashboardLayout from '../../components/organisms/DashboardLayout';
 import KanbanBoard from '../../components/organisms/KanbanBoard';
 import TaskReportDashboard from '../../components/organisms/TaskReportDashboard';
+
 const OrganizationDetails = () => {
   const { id: orgId } = useParams();
   const navigate = useNavigate();
@@ -22,10 +26,10 @@ const OrganizationDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: '' });
 
-  // 🔐 Get current userId from localStorage
+  const [showAllMembers, setShowAllMembers] = useState(false);
+
   const currentUserId = JSON.parse(localStorage.getItem('loggedInUser'))?.userId;
 
-  // 🔎 Find user's role in the org
   const myMembership = selectedOrganization?.members.find((member) => {
     const memberId =
       typeof member.userId === 'object' ? member.userId.userId : member.userId;
@@ -35,12 +39,10 @@ const OrganizationDetails = () => {
   const myRole = myMembership?.role ?? 'member';
   const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
 
-  // Theme toggle
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  // Fetch org on mount
   useEffect(() => {
     if (orgId) {
       dispatch(fetchOrganizationDetails(orgId));
@@ -50,14 +52,12 @@ const OrganizationDetails = () => {
     };
   }, [dispatch, orgId]);
 
-  // Set edit form when org loads
   useEffect(() => {
     if (selectedOrganization?._id === orgId) {
       setEditData({ name: selectedOrganization.name });
     }
   }, [selectedOrganization, orgId]);
 
-  // Member management
   const handleAddMember = (e) => {
     e.stopPropagation();
     navigate(`/organizations/${orgId}/add-member`);
@@ -73,8 +73,12 @@ const OrganizationDetails = () => {
 
   const handleSave = async () => {
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-      await axios.put(`${backendUrl}/api/organizations/${orgId}`, editData);
+      const backendUrl =
+        import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      await axios.put(
+        `${backendUrl}/api/organizations/${orgId}`,
+        editData
+      );
       dispatch(fetchOrganizationDetails(orgId));
       setIsEditing(false);
     } catch (err) {
@@ -82,7 +86,23 @@ const OrganizationDetails = () => {
     }
   };
 
-  // Handle loading and error states
+  const handleDeleteMember = async (member) => {
+    try {
+      const backendUrl =
+        import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      await axios.delete(
+        `${backendUrl}/api/organizations/${orgId}/members/${
+          typeof member.userId === 'object'
+            ? member.userId._id
+            : member.userId
+        }`
+      );
+      dispatch(fetchOrganizationDetails(orgId));
+    } catch (err) {
+      console.error('Failed to delete member:', err);
+    }
+  };
+
   if (orgLoading || !selectedOrganization || selectedOrganization._id !== orgId) {
     return (
       <div className="p-6 text-lg text-center dark:text-white">
@@ -92,6 +112,10 @@ const OrganizationDetails = () => {
       </div>
     );
   }
+
+  const membersToShow = selectedOrganization.members.slice(0, 4);
+  const hasMoreMembers =
+    selectedOrganization.members.length > 4;
 
   return (
     <DashboardLayout>
@@ -107,7 +131,9 @@ const OrganizationDetails = () => {
               className="text-4xl font-extrabold px-3 py-2 border dark:bg-gray-800 dark:border-gray-700 rounded-md"
             />
           ) : (
-            <h1 className="text-4xl font-extrabold">{selectedOrganization.name}</h1>
+            <h1 className="text-4xl font-extrabold">
+              {selectedOrganization.name}
+            </h1>
           )}
 
           <div className="flex gap-3">
@@ -120,8 +146,8 @@ const OrganizationDetails = () => {
               </button>
             )}
 
-            {isPrivileged && (
-              isEditing ? (
+            {isPrivileged &&
+              (isEditing ? (
                 <>
                   <button
                     onClick={handleSave}
@@ -143,8 +169,7 @@ const OrganizationDetails = () => {
                 >
                   Edit
                 </button>
-              )
-            )}
+              ))}
           </div>
         </div>
 
@@ -155,37 +180,36 @@ const OrganizationDetails = () => {
             tasks={selectedOrganization.tasks || []}
             isPrivileged={isPrivileged}
           />
-          
         </section>
-  <section className="mt-[-200px]">
-          {/* <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2> */}
-          <TaskReportDashboard tasks={selectedOrganization.tasks || []} />
+
+        <section className="mt-[-200px]">
+          <TaskReportDashboard
+            tasks={selectedOrganization.tasks || []}
+          />
         </section>
+
         {/* Members Section */}
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Members</h2>
+          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">
+            Members
+          </h2>
+
           <ul className="space-y-2">
-            {selectedOrganization.members.map((member) => (
+            {membersToShow.map((member) => (
               <li
                 key={member.userId?._id || member._id}
                 className="bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-md shadow flex justify-between items-center"
               >
                 <div>
-                  <strong>{member.userId?.name || 'Unknown'}</strong> &mdash;
+                  <strong>
+                    {member.userId?.name || 'Unknown'}
+                  </strong>{' '}
+                  &mdash;
                   <span className="italic"> {member.role}</span>
                 </div>
                 {isEditing && isPrivileged && (
                   <button
-                    onClick={async () => {
-                      try {
-                        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-                        await axios.delete(`${backendUrl}/api/organizations/${orgId}/members/${typeof member.userId === 'object' ? member.userId._id : member.userId}
-                        `);
-                        dispatch(fetchOrganizationDetails(orgId));
-                      } catch (err) {
-                        console.error('Failed to delete member:', err);
-                      }
-                    }}
+                    onClick={() => handleDeleteMember(member)}
                     className="ml-4 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                   >
                     Delete
@@ -194,7 +218,60 @@ const OrganizationDetails = () => {
               </li>
             ))}
           </ul>
+
+          {hasMoreMembers && (
+            <button
+              onClick={() => setShowAllMembers(true)}
+              className="mt-4 px-4 py-2 bg-orange-500 text-white rounded shadow hover:bg-orange-600 transition"
+            >
+              View All Members
+            </button>
+          )}
         </section>
+
+        {/* Modal for All Members */}
+        {showAllMembers && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-xl max-h-[80vh] overflow-y-auto shadow-lg">
+              <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                All Members
+              </h2>
+              <ul className="space-y-2">
+                {selectedOrganization.members.map((member) => (
+                  <li
+                    key={member.userId?._id || member._id}
+                    className="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-md flex justify-between items-center"
+                  >
+                    <div>
+                      <strong>
+                        {member.userId?.name || 'Unknown'}
+                      </strong>{' '}
+                      &mdash;
+                      <span className="italic">
+                        {' '}
+                        {member.role}
+                      </span>
+                    </div>
+                    {isEditing && isPrivileged && (
+                      <button
+                        onClick={() => handleDeleteMember(member)}
+                        className="ml-4 px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => setShowAllMembers(false)}
+                className="mt-6 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 const TaskReportDashboard = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
   const users = useSelector((state) => state.organization.members || []);
-  const selectedOrganization = useSelector((state) => state.organization.selectedOrganization);
+  const selectedOrganization = useSelector(
+    (state) => state.organization.selectedOrganization
+  );
 
-  // ✅ Get logged-in user from localStorage
   const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
 
-  // Default to member
   let myRole = 'member';
 
   if (loggedInUser && selectedOrganization) {
@@ -18,17 +18,14 @@ const TaskReportDashboard = () => {
         typeof member.userId === 'object'
           ? member.userId.userId
           : member.userId;
-
       return String(memberId) === String(loggedInUser.userId);
     });
 
     myRole = myMembership?.role ?? 'member';
   }
 
-  // Total tasks
   const totalTasks = tasks.length;
 
-  // Tasks grouped by status
   const statusCounts = tasks.reduce(
     (acc, task) => {
       acc[task.status] = (acc[task.status] || 0) + 1;
@@ -37,7 +34,6 @@ const TaskReportDashboard = () => {
     { todo: 0, inprogress: 0, done: 0 }
   );
 
-  // Tasks grouped by priority
   const priorityCounts = tasks.reduce(
     (acc, task) => {
       acc[task.priority] = (acc[task.priority] || 0) + 1;
@@ -46,23 +42,58 @@ const TaskReportDashboard = () => {
     { low: 0, medium: 0, high: 0 }
   );
 
-  // Tasks grouped by user
-  const tasksByUser = tasks.reduce((acc, task) => {
-    const userId = task.assignedTo || 'unassigned';
-    if (!acc[userId]) acc[userId] = [];
-    acc[userId].push(task);
-    return acc;
-  }, {});
+  const tasksByUser = {};
+
+  for (const task of tasks) {
+    let userId = 'unassigned';
+    let userName = 'Unassigned';
+
+    if (task.assignedTo) {
+      if (typeof task.assignedTo === 'object') {
+        userId = task.assignedTo._id || 'unassigned';
+        userName = task.assignedTo.name || 'Unknown User';
+      } else {
+        userId = task.assignedTo;
+
+        const userInfo = users.find((u) => {
+          const uId =
+            typeof u.userId === 'object'
+              ? u.userId._id || u.userId.userId
+              : u._id || u.userId;
+          return String(uId) === String(userId);
+        });
+
+        userName =
+          userInfo?.userId?.name ||
+          userInfo?.name ||
+          'Unknown User';
+      }
+    }
+
+    if (!tasksByUser[userId]) {
+      tasksByUser[userId] = {
+        userId,
+        userName,
+        tasks: [],
+      };
+    }
+
+    tasksByUser[userId].tasks.push(task);
+  }
 
   return (
     <div className="p-6 min-h-screen text-white">
-      <h1 className="text-3xl font-bold text-orange-500 mb-8">📊 Task Report</h1>
+      <h1 className="text-3xl font-bold text-orange-500 mb-8">
+        📊 Task Report
+      </h1>
 
       {/* Overall Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="bg-zinc-800 p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2">Total Tasks</h2>
-          <p className="text-3xl font-bold text-orange-400">{totalTasks}</p>
+          <p className="text-3xl font-bold text-orange-400">
+            {totalTasks}
+          </p>
         </div>
 
         <div className="bg-zinc-800 p-6 rounded-lg shadow">
@@ -77,37 +108,44 @@ const TaskReportDashboard = () => {
         <div className="bg-zinc-800 p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-2">By Priority</h2>
           <ul className="text-sm space-y-1">
-            <li className="text-green-400">Low: {priorityCounts.low}</li>
-            <li className="text-orange-400">Medium: {priorityCounts.medium}</li>
-            <li className="text-red-400">High: {priorityCounts.high}</li>
+            <li className="text-green-400">
+              Low: {priorityCounts.low}
+            </li>
+            <li className="text-orange-400">
+              Medium: {priorityCounts.medium}
+            </li>
+            <li className="text-red-400">
+              High: {priorityCounts.high}
+            </li>
           </ul>
         </div>
       </div>
 
-      {/* ✅ Only show Tasks Per User for admins and coordinators */}
       {(myRole === 'admin' || myRole === 'coordinator') && (
         <>
-          <h2 className="text-2xl font-bold mb-4">Tasks by User</h2>
-          <div className="space-y-6">
-            {Object.entries(tasksByUser).map(([userId, userTasks]) => {
-              const userInfo = users.find((u) => u._id === userId);
-              const userName = userInfo
-                ? userInfo.name
-                : userId === 'unassigned'
-                ? 'Unassigned'
-                : 'Unknown User';
-
-              return (
-                <div key={userId} className="bg-zinc-800 p-4 rounded-lg shadow">
-                  <h3 className="text-lg font-semibold text-orange-400 mb-2">
-                    {userName}
+          <h2 className="text-2xl font-bold mb-4">
+            Tasks by User
+          </h2>
+          <div
+            className="space-y-6 overflow-y-auto pr-2"
+            style={{ maxHeight: '600px' }}
+          >
+            {Object.values(tasksByUser).map(
+              ({ userId, userName, tasks }) => (
+                <div
+                  key={userId}
+                  className="bg-zinc-800 p-4 rounded-lg shadow"
+                >
+                  <h3 className="text-lg font-semibold text-orange-400 mb-2 pb-2 border-b border-orange-400/30 shadow-lg">
+                    📋 Tasks assigned to:{' '}
+                    <span className="text-white">{userName}</span>
                   </h3>
                   <p className="text-sm mb-2">
-                    Total Tasks: {userTasks.length}
+                    Total Tasks: {tasks.length}
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {userTasks.map((task) => (
+                    {tasks.map((task) => (
                       <div
                         key={task.id}
                         className="bg-zinc-700 p-3 rounded shadow hover:bg-zinc-600 transition"
@@ -140,8 +178,8 @@ const TaskReportDashboard = () => {
                     ))}
                   </div>
                 </div>
-              );
-            })}
+              )
+            )}
           </div>
         </>
       )}
