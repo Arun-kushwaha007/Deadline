@@ -151,7 +151,11 @@ const OrganizationDetails = () => {
         {/* Tasks Section */}
         <section className="mb-10">
           <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
-          <KanbanBoard tasks={selectedOrganization.tasks || []} />
+          <KanbanBoard
+            tasks={selectedOrganization.tasks || []}
+            isPrivileged={isPrivileged}
+          />
+          
         </section>
   <section className="mt-[-200px]">
           {/* <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2> */}

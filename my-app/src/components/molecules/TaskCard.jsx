@@ -23,7 +23,6 @@ export default function TaskCard({
     high: 'bg-red-600',
   };
 
-  // Inline button components
   const ActionButton = ({ color, label, onClick }) => (
     <button
       className={`text-${color}-400 hover:text-${color}-500`}
@@ -132,7 +131,9 @@ export default function TaskCard({
           <div className="flex justify-end gap-4 pt-3 text-sm">
             <ActionButton color="blue" label="View" onClick={onView} />
             <ActionButton color="yellow" label="Edit" onClick={onEdit} />
-            <ActionButton color="red" label="Delete" onClick={onDelete} />
+            {onDelete && (
+              <ActionButton color="red" label="Delete" onClick={onDelete} />
+            )}
           </div>
         </>
       )}

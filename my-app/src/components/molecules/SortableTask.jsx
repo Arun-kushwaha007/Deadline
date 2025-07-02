@@ -2,7 +2,13 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import TaskCard from './TaskCard';
 
-export default function SortableTask({ task, onView, onEdit, onDelete }) {
+export default function SortableTask({
+  task,
+  onView,
+  onEdit,
+  onDelete,
+  myRole,
+}) {
   const {
     attributes,
     listeners,
@@ -19,6 +25,8 @@ export default function SortableTask({ task, onView, onEdit, onDelete }) {
     cursor: 'grab',
   };
 
+  const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
+
   return (
     <div
       ref={setNodeRef}
@@ -29,7 +37,7 @@ export default function SortableTask({ task, onView, onEdit, onDelete }) {
       role="listitem"
     >
       <TaskCard
-      {...task} 
+        {...task}
         id={task.id}
         title={task.title}
         description={task.description}
@@ -38,9 +46,8 @@ export default function SortableTask({ task, onView, onEdit, onDelete }) {
         assignee={task.assignedTo}
         onView={onView}
         onEdit={onEdit}
-        onDelete={onDelete}
+        onDelete={isPrivileged ? onDelete : undefined}
       />
-      
     </div>
   );
 }

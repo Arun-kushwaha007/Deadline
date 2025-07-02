@@ -28,6 +28,7 @@ import DroppableColumn from '../atoms/DroppableColumn';
 import TaskDetailsModal from '../molecules/TaskDetailsModal';
 import SortableTask from '../molecules/SortableTask';
 import TaskCard from '../molecules/TaskCard';
+// const isPrivileged = myRole === "admin" || myRole === "coordinator";
 
 const KanbanBoard = () => {
 
@@ -53,6 +54,15 @@ const [expandedColumns, setExpandedColumns] = useState({});
   const [filterPriority, setFilterPriority] = useState('');
   const [activeTask, setActiveTask] = useState(null);
   const [viewOnly, setViewOnly] = useState(false);
+const currentUserId = JSON.parse(localStorage.getItem('loggedInUser'))?.userId;
+
+const myMembership = selectedOrganization?.members?.find((member) => {
+  const memberId = typeof member.userId === 'object' ? member.userId.userId : member.userId;
+  return String(memberId) === String(currentUserId);
+});
+
+const myRole = myMembership?.role ?? 'member';
+const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
 
   useEffect(() => {
     const organizationId = selectedOrganization?._id;
@@ -179,30 +189,34 @@ const [expandedColumns, setExpandedColumns] = useState({});
                 <h2 className="text-xl font-bold mb-4 border-b border-zinc-700 pb-2">
                   {columnTitles[status]}
                 </h2>
-                <SortableContext
-                  items={tasksToShow.map((t) => t.id.toString())}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="space-y-4">
-                    {tasksToShow.map((task) => (
-                      <SortableTask
-                        key={task.id}
-                        task={task}
-                        onView={() => {
-                          setEditTask(task);
-                          setShowModal(true);
-                          setViewOnly(true);
-                        }}
-                        onEdit={() => {
-                          setEditTask(task);
-                          setShowModal(true);
-                          setViewOnly(false);
-                        }}
-                        onDelete={() => dispatch(deleteTaskThunk(task.id))}
-                      />
-                    ))}
-                  </div>
-                </SortableContext>
+               <SortableContext
+                 items={tasksToShow.map((t) => t.id.toString())}
+                 strategy={verticalListSortingStrategy}
+               >
+                 <div className="space-y-4">
+                   {tasksToShow.map((task) => (
+                     <SortableTask
+                       key={task.id}
+                       task={task}
+                       myRole={myRole}                // ✅ add this
+                       onView={() => {
+                         setEditTask(task);
+                         setShowModal(true);
+                         setViewOnly(true);
+                       }}
+                       onEdit={() => {
+                         setEditTask(task);
+                         setShowModal(true);
+                         setViewOnly(false);
+                       }}
+                       onDelete={() => dispatch(deleteTaskThunk(task.id))}
+                     />
+                   ))}
+                   
+                 </div>
+               </SortableContext>
+               
+               
           
                 {columnTasks.length > 4 && (
                   <button
@@ -222,15 +236,25 @@ const [expandedColumns, setExpandedColumns] = useState({});
           })}
         </div>
 
-        <DragOverlay>
-          {activeTask && (
-            <TaskCard
-              title={activeTask.title}
-              description={activeTask.description}
-              priority={activeTask.priority}
-            />
-          )}
-        </DragOverlay>
+       <DragOverlay>
+         {activeTask && (
+           <TaskCard
+             {...activeTask}
+             onView={() => {
+               setEditTask(activeTask);
+               setShowModal(true);
+               setViewOnly(true);
+             }}
+             onEdit={() => {
+               setEditTask(activeTask);
+               setShowModal(true);
+               setViewOnly(false);
+             }}
+             onDelete={isPrivileged ? () => dispatch(deleteTaskThunk(activeTask.id)) : undefined}
+           />
+         )}
+       </DragOverlay>
+       
       </DndContext>
       <NewTaskModal
         isOpen={showModal}
