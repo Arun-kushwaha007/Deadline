@@ -21,7 +21,6 @@ import {
   updateTaskStatus,
   reorderTasks,
   deleteTaskThunk,
-  clearTasks,
 } from '../../redux/slices/tasksSlice';
 
 import NewTaskModal from '../molecules/NewTaskModal';
@@ -42,7 +41,14 @@ const UserKanbanBoard = () => {
   const [viewOnly, setViewOnly] = useState(false);
 
   const tasks = useSelector((state) => state.tasks.tasks);
+  const taskStatus = useSelector((state) => state.tasks.status);
+  const organizations = useSelector((state) => state.organization.organizations || []);
 
+  // Get logged-in user info
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  const currentUserId = loggedInUser?.userId;
+
+  // Authentication check
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -50,11 +56,9 @@ const UserKanbanBoard = () => {
     }
   }, [navigate]);
 
+  // Fetch all tasks across all organizations (without organizationId parameter)
   useEffect(() => {
-    dispatch(fetchTasks());
-    return () => {
-      dispatch(clearTasks());
-    };
+    dispatch(fetchTasks()); // This will fetch all tasks since no organizationId is passed
   }, [dispatch]);
 
   const sensors = useSensors(useSensor(PointerSensor));
@@ -66,12 +70,44 @@ const UserKanbanBoard = () => {
     done: 'Done',
   };
 
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  // Helper function to check if a task is assigned to the current user
+  const isTaskAssignedToUser = (task) => {
+    if (!currentUserId) return false;
 
-  // ✅ Filter only tasks assigned to the logged-in user
-  const userTasks = tasks.filter(
-    (t) => t.assignedTo === loggedInUser?.userId
-  );
+    // Handle "everyone" assignments
+    if (task.assignedTo === 'everyone' || task.assignedTo === null) {
+      return true; // Show tasks assigned to everyone
+    }
+
+    // Handle different assignedTo data structures
+    let assignedUserId;
+    
+    if (typeof task.assignedTo === 'string') {
+      // assignedTo is a string ID
+      assignedUserId = task.assignedTo;
+    } else if (typeof task.assignedTo === 'object' && task.assignedTo !== null) {
+      // assignedTo is an object (populated user data)
+      assignedUserId = task.assignedTo._id || task.assignedTo.userId;
+    }
+
+    return String(assignedUserId) === String(currentUserId);
+  };
+
+  // Filter only tasks assigned to the logged-in user
+  const userTasks = tasks.filter(isTaskAssignedToUser);
+
+  // Helper function to get organization name for a task
+  const getOrganizationName = (task) => {
+    if (!task.organization) return 'Unknown Organization';
+    
+    // Handle both string ID and object formats
+    const orgId = typeof task.organization === 'string' 
+      ? task.organization 
+      : task.organization._id;
+    
+    const org = organizations.find(o => o._id === orgId);
+    return org ? org.name : (task.organization.name || 'Unknown Organization');
+  };
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -88,6 +124,7 @@ const UserKanbanBoard = () => {
     );
 
     if (isOverColumn) {
+      // Moving to a different column
       if (activeTaskData.status !== over.id) {
         dispatch(
           updateTaskStatus({
@@ -97,10 +134,12 @@ const UserKanbanBoard = () => {
         );
       }
     } else if (overTaskData) {
+      // Moving within or between columns
       const activeStatus = activeTaskData.status;
       const overStatus = overTaskData.status;
 
       if (activeStatus === overStatus) {
+        // Reordering within the same column
         const columnTasks = userTasks
           .filter((t) => t.status === activeStatus)
           .sort((a, b) => a.order - b.order);
@@ -122,6 +161,7 @@ const UserKanbanBoard = () => {
           );
         }
       } else {
+        // Moving to a different column
         dispatch(
           updateTaskStatus({
             id: activeTaskData.id,
@@ -134,12 +174,39 @@ const UserKanbanBoard = () => {
     setActiveTask(null);
   };
 
+  // Show message if no user is logged in
+  if (!currentUserId) {
+    return (
+      <div className="p-6 text-white text-center">
+        <h1 className="text-2xl font-bold mb-4">👤 My Task Board</h1>
+        <p className="text-gray-400">Please log in to view your tasks.</p>
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (taskStatus === 'loading') {
+    return (
+      <div className="p-6 text-white text-center">
+        <h1 className="text-2xl font-bold mb-4">👤 My Task Board</h1>
+        <p className="text-gray-400">Loading your tasks...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 min-h-screen text-white">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-extrabold tracking-tight">
-          👤 My Task Board
-        </h1>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            👤 My Task Board
+          </h1>
+          <p className="text-gray-400 mt-2">
+            {userTasks.length} task{userTasks.length !== 1 ? 's' : ''} assigned to you across all organizations
+          </p>
+        </div>
+        
+        {/* Optional: Add new task button if users can create tasks for themselves */}
         {/* <Button
           onClick={() => setShowModal(true)}
           className="bg-orange-500 hover:bg-orange-600"
@@ -169,97 +236,127 @@ const UserKanbanBoard = () => {
         </select>
       </div>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        onDragStart={({ active }) => {
-          const task = userTasks.find(
-            (t) => t.id.toString() === active.id
-          );
-          setActiveTask(task || null);
-        }}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {columns.map((status) => {
-            const columnTasks = userTasks
-              .filter(
-                (task) =>
-                  task.status === status &&
-                  (!filterPriority ||
-                    task.priority === filterPriority)
-              )
-              .sort((a, b) => a.order - b.order);
-
-            const isExpanded = expandedColumns[status];
-            const tasksToShow = isExpanded
-              ? columnTasks
-              : columnTasks.slice(0, 4);
-
-            return (
-              <DroppableColumn
-                key={status}
-                id={status}
-                className="bg-zinc-800 rounded-xl p-4 min-h-[300px] shadow-md hover:shadow-xl transition"
-              >
-                <h2 className="text-xl font-bold mb-4 border-b border-zinc-700 pb-2">
-                  {columnTitles[status]}
-                </h2>
-                <SortableContext
-                  items={tasksToShow.map((t) => t.id.toString())}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="space-y-4">
-                    {tasksToShow.map((task) => (
-                      <SortableTask
-                        key={task.id}
-                        task={task}
-                        onView={() => {
-                          setEditTask(task);
-                          setShowModal(true);
-                          setViewOnly(true);
-                        }}
-                        onEdit={() => {
-                          setEditTask(task);
-                          setShowModal(true);
-                          setViewOnly(false);
-                        }}
-                        onDelete={() =>
-                          dispatch(deleteTaskThunk(task.id))
-                        }
-                      />
-                    ))}
-                  </div>
-                </SortableContext>
-
-                {columnTasks.length > 4 && (
-                  <button
-                    className="mt-3 text-sm text-blue-400 hover:underline"
-                    onClick={() =>
-                      setExpandedColumns((prev) => ({
-                        ...prev,
-                        [status]: !prev[status],
-                      }))
-                    }
-                  >
-                    {isExpanded ? 'Show Less' : 'View All Tasks'}
-                  </button>
-                )}
-              </DroppableColumn>
-            );
-          })}
+      {userTasks.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-400 text-lg">
+            {filterPriority 
+              ? `No tasks found with ${filterPriority} priority.`
+              : 'No tasks assigned to you yet.'
+            }
+          </p>
         </div>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragStart={({ active }) => {
+            const task = userTasks.find(
+              (t) => t.id.toString() === active.id
+            );
+            setActiveTask(task || null);
+          }}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {columns.map((status) => {
+              const columnTasks = userTasks
+                .filter(
+                  (task) =>
+                    task.status === status &&
+                    (!filterPriority ||
+                      task.priority === filterPriority)
+                )
+                .sort((a, b) => a.order - b.order);
 
-        <DragOverlay>
-          {activeTask && (
-            <TaskCard
-              title={activeTask.title}
-              description={activeTask.description}
-              priority={activeTask.priority}
-            />
-          )}
-        </DragOverlay>
-      </DndContext>
+              const isExpanded = expandedColumns[status];
+              const tasksToShow = isExpanded
+                ? columnTasks
+                : columnTasks.slice(0, 4);
+
+              return (
+                <DroppableColumn
+                  key={status}
+                  id={status}
+                  className="bg-zinc-800 rounded-xl p-4 min-h-[300px] shadow-md hover:shadow-xl transition"
+                >
+                  <h2 className="text-xl font-bold mb-4 border-b border-zinc-700 pb-2">
+                    {columnTitles[status]}
+                    <span className="text-sm font-normal text-gray-400 ml-2">
+                      ({columnTasks.length})
+                    </span>
+                  </h2>
+                  
+                  <SortableContext
+                    items={tasksToShow.map((t) => t.id.toString())}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-4">
+                      {tasksToShow.map((task) => (
+                        <SortableTask
+                          key={task.id}
+                          task={task}
+                          myRole="member" // Users can only view/edit their own tasks
+                          organizationName={getOrganizationName(task)} // Pass organization name
+                          onView={() => {
+                            setEditTask(task);
+                            setShowModal(true);
+                            setViewOnly(true);
+                          }}
+                          onEdit={() => {
+                            setEditTask(task);
+                            setShowModal(true);
+                            setViewOnly(false);
+                          }}
+                          onDelete={() =>
+                            dispatch(deleteTaskThunk(task.id))
+                          }
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+
+                  {columnTasks.length > 4 && (
+                    <button
+                      className="mt-3 text-sm text-orange-400 hover:underline focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-zinc-800 rounded"
+                      onClick={() =>
+                        setExpandedColumns((prev) => ({
+                          ...prev,
+                          [status]: !prev[status],
+                        }))
+                      }
+                    >
+                      {isExpanded 
+                        ? `Show Less (${columnTasks.length - 4} hidden)` 
+                        : `View All Tasks (${columnTasks.length - 4} more)`
+                      }
+                    </button>
+                  )}
+                </DroppableColumn>
+              );
+            })}
+          </div>
+
+          <DragOverlay>
+            {activeTask && (
+              <TaskCard
+                {...activeTask}
+                organizationName={getOrganizationName(activeTask)} // Pass organization name
+                onView={() => {
+                  setEditTask(activeTask);
+                  setShowModal(true);
+                  setViewOnly(true);
+                }}
+                onEdit={() => {
+                  setEditTask(activeTask);
+                  setShowModal(true);
+                  setViewOnly(false);
+                }}
+                onDelete={() => dispatch(deleteTaskThunk(activeTask.id))}
+              />
+            )}
+          </DragOverlay>
+        </DndContext>
+      )}
 
       <NewTaskModal
         isOpen={showModal}

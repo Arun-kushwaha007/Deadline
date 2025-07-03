@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import DashboardLayout from '../components/organisms/DashboardLayout';
-// import KanbanBoard from '../components/organisms/KanbanBoard';
 import CalendarView from '../components/organisms/CalendarView';
 import UserKanbanBoard from '../components/organisms/UserKanbanBoard';
+import { fetchTasks, clearTasks } from '../redux/slices/tasksSlice';
+
 const Tasks = () => {
   const [view, setView] = useState('kanban');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTasks());
+    return () => {
+      dispatch(clearTasks());
+    };
+  }, [dispatch]);
 
   return (
     <DashboardLayout>

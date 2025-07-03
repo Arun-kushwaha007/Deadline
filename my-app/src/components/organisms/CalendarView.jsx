@@ -14,41 +14,62 @@ const CalendarView = () => {
   // Filter only tasks assigned to this user
   const myTasks = tasks.filter(
     (task) =>
-      task.assignedTo === loggedInUser?._id ||
+      task.assignedTo === loggedInUser?.userId || // Changed from _id to userId
       task.assignedTo === null ||
       task.assignedTo === undefined
   );
 
   const events = useMemo(() => {
-    return myTasks
-      .filter((task) => task.dueDate || task.createdAt)
-      .map((task) => ({
-        id: task._id,
-        title: task.title,
-        start: task.dueDate
-          ? new Date(task.dueDate).toISOString()
-          : new Date(task.createdAt).toISOString(),
-        end: task.dueDate
-          ? new Date(new Date(task.dueDate).getTime() + 60 * 60 * 1000).toISOString()
-          : null,
-        backgroundColor:
-          task.priority === 'high'
-            ? '#ef4444'
-            : task.priority === 'medium'
-            ? '#f97316'
-            : '#10b981',
-        borderColor:
-          task.priority === 'high'
-            ? '#ef4444'
-            : task.priority === 'medium'
-            ? '#f97316'
-            : '#10b981',
-        extendedProps: {
-          description: task.description,
-          priority: task.priority,
-          status: task.status,
-        },
-      }));
+    return myTasks.reduce((acc, task) => {
+      if (!task.title) {
+        return acc;
+      }
+
+      let startDate;
+      let endDate = null;
+
+      if (task.dueDate) {
+        const parsedDueDate = new Date(task.dueDate);
+        if (!isNaN(parsedDueDate)) {
+          startDate = parsedDueDate;
+          endDate = new Date(parsedDueDate.getTime() + 60 * 60 * 1000);
+        }
+      }
+
+      if (!startDate && task.createdAt) {
+        const parsedCreatedAt = new Date(task.createdAt);
+        if (!isNaN(parsedCreatedAt)) {
+          startDate = parsedCreatedAt;
+        }
+      }
+
+      if (startDate) {
+        acc.push({
+          id: task._id,
+          title: task.title,
+          start: startDate.toISOString(),
+          end: endDate ? endDate.toISOString() : null,
+          backgroundColor:
+            task.priority === 'high'
+              ? '#ef4444'
+              : task.priority === 'medium'
+              ? '#f97316'
+              : '#10b981',
+          borderColor:
+            task.priority === 'high'
+              ? '#ef4444'
+              : task.priority === 'medium'
+              ? '#f97316'
+              : '#10b981',
+          extendedProps: {
+            description: task.description,
+            priority: task.priority,
+            status: task.status,
+          },
+        });
+      }
+      return acc;
+    }, []);
   }, [myTasks]);
 
   return (
