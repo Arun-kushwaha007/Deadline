@@ -29,57 +29,64 @@ const CalendarView = () => {
     return false;
   });
 
-  const events = useMemo(() => {
-    return calendarTasks.reduce((acc, task) => {
-      if (!task.title) return acc;
+const events = useMemo(() => {
+  return calendarTasks.reduce((acc, task) => {
+    if (!task.title) return acc;
 
-      let startDate;
-      let endDate = null;
+    let startDate = null;
+    let endDate = null;
 
-      if (task.dueDate) {
-        const parsedDueDate = new Date(task.dueDate);
-        if (!isNaN(parsedDueDate)) {
-          startDate = parsedDueDate;
-          endDate = new Date(parsedDueDate.getTime() + 60 * 60 * 1000);
-        }
+    if (task.createdAt) {
+      const parsedCreatedAt = new Date(task.createdAt);
+      if (!isNaN(parsedCreatedAt)) {
+        startDate = parsedCreatedAt;
       }
+    }
 
-      if (!startDate && task.createdAt) {
-        const parsedCreatedAt = new Date(task.createdAt);
-        if (!isNaN(parsedCreatedAt)) {
-          startDate = parsedCreatedAt;
-        }
+    if (task.dueDate) {
+      const parsedDueDate = new Date(task.dueDate);
+      if (!isNaN(parsedDueDate)) {
+        parsedDueDate.setDate(parsedDueDate.getDate() + 1);
+        endDate = parsedDueDate;
       }
+    }
 
-      if (startDate) {
-        acc.push({
-          id: task._id,
-          title: task.title,
-          start: startDate.toISOString(),
-          end: endDate ? endDate.toISOString() : null,
-          backgroundColor:
-            task.priority === 'high'
-              ? '#ef4444'
-              : task.priority === 'medium'
-              ? '#f97316'
-              : '#10b981',
-          borderColor:
-            task.priority === 'high'
-              ? '#ef4444'
-              : task.priority === 'medium'
-              ? '#f97316'
-              : '#10b981',
-          extendedProps: {
-            description: task.description,
-            priority: task.priority,
-            status: task.status,
-          },
-        });
-      }
+    if (!endDate && startDate) {
+      endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 1);
+    }
 
-      return acc;
-    }, []);
-  }, [calendarTasks]);
+    if (startDate) {
+      acc.push({
+        id: task._id,
+        title: task.title,
+        start: startDate.toISOString(),
+        end: endDate ? endDate.toISOString() : null,
+        allDay: true,
+        backgroundColor:
+          task.priority === 'high'
+            ? '#ef4444'
+            : task.priority === 'medium'
+            ? '#f97316'
+            : '#10b981',
+        borderColor:
+          task.priority === 'high'
+            ? '#ef4444'
+            : task.priority === 'medium'
+            ? '#f97316'
+            : '#10b981',
+        extendedProps: {
+          description: task.description,
+          priority: task.priority,
+          status: task.status,
+        },
+      });
+    }
+
+    return acc;
+  }, []);
+}, [calendarTasks]);
+
 
   const handleEventClick = (info) => {
     setSelectedTask({

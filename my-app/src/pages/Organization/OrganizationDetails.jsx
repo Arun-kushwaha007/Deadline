@@ -10,6 +10,7 @@ import {
 import DashboardLayout from '../../components/organisms/DashboardLayout';
 import KanbanBoard from '../../components/organisms/KanbanBoard';
 import TaskReportDashboard from '../../components/organisms/TaskReportDashboard';
+import OrgCalendarView from '../../components/organisms/OrgCalendarView';
 
 const OrganizationDetails = () => {
   const { id: orgId } = useParams();
@@ -27,6 +28,7 @@ const OrganizationDetails = () => {
   const [editData, setEditData] = useState({ name: '' });
 
   const [showAllMembers, setShowAllMembers] = useState(false);
+  const [activeView, setActiveView] = useState('kanban');
 
   const currentUserId = JSON.parse(localStorage.getItem('loggedInUser'))?.userId;
 
@@ -173,14 +175,51 @@ const OrganizationDetails = () => {
           </div>
         </div>
 
+        {/* Toggle Button */}
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setActiveView('kanban')}
+            className={`px-4 py-2 rounded ${
+              activeView === 'kanban'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-100'
+            } hover:bg-blue-700 transition`}
+          >
+            Kanban View
+          </button>
+          <button
+            onClick={() => setActiveView('calendar')}
+            className={`px-4 py-2 rounded ${
+              activeView === 'calendar'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-100'
+            } hover:bg-blue-700 transition`}
+          >
+            Calendar View
+          </button>
+        </div>
+
         {/* Tasks Section */}
-        <section className="mb-1">
-          <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Tasks</h2>
-          <KanbanBoard
-            tasks={selectedOrganization.tasks || []}
-            isPrivileged={isPrivileged}
-          />
-        </section>
+        {activeView === 'kanban' && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold border-b pb-2 mb-4">
+              Tasks - Kanban
+            </h2>
+            <KanbanBoard
+              tasks={selectedOrganization.tasks || []}
+              isPrivileged={isPrivileged}
+            />
+          </section>
+        )}
+
+        {activeView === 'calendar' && (
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold border-b pb-2 mb-4">
+              Tasks - Calendar
+            </h2>
+            <OrgCalendarView />
+          </section>
+        )}
 
         <section className="mb-1">
           <TaskReportDashboard
