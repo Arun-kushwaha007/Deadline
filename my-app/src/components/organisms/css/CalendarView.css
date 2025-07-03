@@ -1,0 +1,32 @@
+/* Calendar background and text colors */
+.fc {
+  background-color: #18181b;
+  color: #f9fafb;
+}
+
+/* Header cells */
+.fc .fc-col-header-cell {
+  background-color: #27272a;
+  color: #f9fafb;
+  border: 1px solid #3f3f46;
+}
+
+/* Day cells border */
+.fc .fc-daygrid-day-frame {
+  border: 1px solid #3f3f46;
+}
+
+/* Event blocks */
+.fc-event {
+  font-size: 0.8rem;
+  border-radius: 4px;
+  color: white;
+  padding: 2px;
+}
+
+/* Tooltip styling */
+.fc-tooltip {
+  background-color: #27272a;
+  color: #f9fafb;
+  border: 1px solid #3f3f46;
+}
