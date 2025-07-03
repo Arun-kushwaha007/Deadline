@@ -80,17 +80,20 @@ const UserKanbanBoard = () => {
     }
 
     // Handle different assignedTo data structures
-    let assignedUserId;
-    
-    if (typeof task.assignedTo === 'string') {
-      // assignedTo is a string ID
-      assignedUserId = task.assignedTo;
-    } else if (typeof task.assignedTo === 'object' && task.assignedTo !== null) {
-      // assignedTo is an object (populated user data)
-      assignedUserId = task.assignedTo._id || task.assignedTo.userId;
-    }
+    let taskAssigneeIdentifier;
 
-    return String(assignedUserId) === String(currentUserId);
+    if (task.assignedTo && typeof task.assignedTo === 'object') {
+      // If assignedTo is a populated object, use its userId (UUID)
+      taskAssigneeIdentifier = task.assignedTo.userId;
+    } else if (typeof task.assignedTo === 'string') {
+      // If assignedTo is a string, it might be a direct ID (though less common for users now)
+      // or a special string like 'everyone' (already handled).
+      // This path is less likely for user assignment after backend changes.
+      taskAssigneeIdentifier = task.assignedTo;
+    }
+    // If task.assignedTo is null or not an object/string, taskAssigneeIdentifier will be undefined.
+
+    return String(taskAssigneeIdentifier) === String(currentUserId);
   };
 
   // Filter only tasks assigned to the logged-in user

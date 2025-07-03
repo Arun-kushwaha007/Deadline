@@ -47,7 +47,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 
     const tasks = await Task.find(queryConditions)
-      .populate('assignedTo', 'name email') // Populate specific fields
+      .populate('assignedTo', 'name email userId') // Populate specific fields
       .populate('organization', 'name'); // Populate specific fields
 
     res.status(200).json(tasks);
