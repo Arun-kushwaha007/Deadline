@@ -4,6 +4,7 @@ import DashboardLayout from '../../components/organisms/DashboardLayout';
 import CreateOrganizationModal from '../../components/Organization/CreateOrganizationModal';
 import OrganizationCard from '../../components/Organization/OrganizationCard';
 import { fetchOrganizations } from '../../redux/organizationSlice';
+import AIAssistantWrapper from '../../components/organisms/AIAssistantWrapper';
 
 const CreateOrganization = () => {
   const dispatch = useDispatch();
@@ -184,6 +185,7 @@ const CreateOrganization = () => {
 
         {/* Modal */}
         {showModal && <CreateOrganizationModal closeModal={() => setShowModal(false)} />}
+          <AIAssistantWrapper />
       </div>
     </DashboardLayout>
   );

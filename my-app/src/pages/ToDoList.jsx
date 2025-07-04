@@ -4,7 +4,7 @@ import DashboardLayout from '../components/organisms/DashboardLayout';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-
+import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const ToDoList = () => {
@@ -293,6 +293,7 @@ const ToDoList = () => {
           )}
         </div>
       </div>
+      <AIAssistantWrapper />
     </DashboardLayout>
   );
 };

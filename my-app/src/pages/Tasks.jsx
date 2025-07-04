@@ -4,6 +4,7 @@ import DashboardLayout from '../components/organisms/DashboardLayout';
 import CalendarView from '../components/organisms/CalendarView';
 import UserKanbanBoard from '../components/organisms/UserKanbanBoard';
 import { fetchTasks, clearTasks } from '../redux/slices/tasksSlice';
+import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
 
 const Tasks = () => {
   const [view, setView] = useState('kanban');
@@ -43,6 +44,8 @@ const Tasks = () => {
 
       {view === 'kanban' && <UserKanbanBoard />}
       {view === 'calendar' && <CalendarView />}
+      <AIAssistantWrapper />
+
     </DashboardLayout>
   );
 };
