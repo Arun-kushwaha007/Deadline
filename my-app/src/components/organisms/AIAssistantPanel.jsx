@@ -1,12 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, MessageCircle, Sparkles, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, MessageCircle, Sparkles, RefreshCw, GripVertical } from 'lucide-react';
 import { fetchAIResponse } from '../../utils/aiHelper';
 
 export default function AIAssistantPanel() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [panelSize, setPanelSize] = useState({ width: 320, height: 400 });
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeType, setResizeType] = useState(null);
   const messagesEndRef = useRef(null);
+  const panelRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -15,6 +19,47 @@ export default function AIAssistantPanel() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Resize handlers
+  const handleMouseDown = (e, type) => {
+    e.preventDefault();
+    setIsResizing(true);
+    setResizeType(type);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isResizing || !panelRef.current) return;
+
+    const rect = panelRef.current.getBoundingClientRect();
+    
+    if (resizeType === 'width') {
+      const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
+      setPanelSize(prev => ({ ...prev, width: newWidth }));
+    } else if (resizeType === 'height') {
+      const newHeight = Math.max(300, Math.min(800, e.clientY - rect.top));
+      setPanelSize(prev => ({ ...prev, height: newHeight }));
+    } else if (resizeType === 'both') {
+      const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
+      const newHeight = Math.max(300, Math.min(800, e.clientY - rect.top));
+      setPanelSize({ width: newWidth, height: newHeight });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsResizing(false);
+    setResizeType(null);
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
 
   const sendMessage = async () => {
     if (input.trim() === '' || isLoading) return;
@@ -72,9 +117,46 @@ export default function AIAssistantPanel() {
     });
   };
 
+  const messagesHeight = panelSize.height - 180; // Subtract header and input area heights
+
   return (
-    <aside className="w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300">
-      {/* Header - Reduced */}
+    <aside 
+      ref={panelRef}
+      className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300 select-none"
+      style={{ 
+        width: `${panelSize.width}px`, 
+        height: `${panelSize.height}px`,
+        minWidth: '280px',
+        minHeight: '300px',
+        maxWidth: '600px',
+        maxHeight: '800px'
+      }}
+    >
+      {/* Resize Handles */}
+      {/* Left resize handle (width) */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-purple-500/30 transition-colors z-10"
+        onMouseDown={(e) => handleMouseDown(e, 'width')}
+        title="Resize width"
+      />
+      
+      {/* Bottom resize handle (height) */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-1 cursor-ns-resize hover:bg-purple-500/30 transition-colors z-10"
+        onMouseDown={(e) => handleMouseDown(e, 'height')}
+        title="Resize height"
+      />
+      
+      {/* Corner resize handle (both) */}
+      <div
+        className="absolute bottom-0 left-0 w-4 h-4 cursor-nw-resize hover:bg-purple-500/50 transition-colors z-20 flex items-center justify-center"
+        onMouseDown={(e) => handleMouseDown(e, 'both')}
+        title="Resize both dimensions"
+      >
+        <GripVertical className="w-3 h-3 text-gray-400 transform rotate-45" />
+      </div>
+
+      {/* Header */}
       <div className="bg-gradient-to-r from-purple-500 to-blue-600 p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -83,21 +165,31 @@ export default function AIAssistantPanel() {
             </div>
             <div>
               <h2 className="text-base font-semibold text-white">AI Assistant</h2>
-              <p className="text-purple-100 text-xs">Here to help!</p>
+              <p className="text-purple-100 text-xs">
+                {panelSize.width}×{panelSize.height} • Resizable
+              </p>
             </div>
           </div>
-          <button
-            onClick={clearChat}
-            className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            title="Clear chat"
-          >
-            <RefreshCw className="w-3.5 h-3.5 text-white" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={clearChat}
+              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              title="Clear chat"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-white" />
+            </button>
+            <div className="text-white/60 text-xs ml-1">
+              <GripVertical className="w-4 h-4" />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Messages Area - Reduced Height */}
-      <div className="h-60 overflow-y-auto p-3 space-y-3 bg-gray-50 dark:bg-gray-900">
+      {/* Messages Area - Dynamic Height */}
+      <div 
+        className="overflow-y-auto p-3 space-y-3 bg-gray-50 dark:bg-gray-900"
+        style={{ height: `${messagesHeight}px` }}
+      >
         {messages.length === 0 ? (
           <div className="text-center py-6">
             <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -109,6 +201,9 @@ export default function AIAssistantPanel() {
             <p className="text-gray-600 dark:text-gray-400 text-xs">
               Ask about tasks, productivity tips, or project management.
             </p>
+            <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+              💡 Drag the edges to resize this panel
+            </div>
           </div>
         ) : (
           messages.map((msg) => (
@@ -116,7 +211,7 @@ export default function AIAssistantPanel() {
               key={msg.id}
               className={`flex gap-2 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
             >
-              {/* Avatar - Smaller */}
+              {/* Avatar */}
               <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
                 msg.sender === 'user'
                   ? 'bg-blue-500'
@@ -131,9 +226,10 @@ export default function AIAssistantPanel() {
                 )}
               </div>
 
-              {/* Message Bubble - Compact */}
-              <div className={`max-w-xs ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                <div className={`p-2 rounded-xl ${
+              {/* Message Bubble */}
+              <div className={`${msg.sender === 'user' ? 'text-right' : 'text-left'}`}
+                   style={{ maxWidth: `${panelSize.width - 100}px` }}>
+                <div className={`p-2 rounded-xl break-words ${
                   msg.sender === 'user'
                     ? 'bg-blue-500 text-white rounded-br-sm'
                     : msg.isError
@@ -152,7 +248,7 @@ export default function AIAssistantPanel() {
           ))
         )}
 
-        {/* Loading indicator - Compact */}
+        {/* Loading indicator */}
         {isLoading && (
           <div className="flex gap-2">
             <div className="flex-shrink-0 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
@@ -171,8 +267,8 @@ export default function AIAssistantPanel() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area - Compact */}
-      <div className="p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      {/* Input Area */}
+      <div className="absolute bottom-0 left-0 right-0 p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <input
@@ -201,7 +297,7 @@ export default function AIAssistantPanel() {
           </button>
         </div>
 
-        {/* Quick Actions - Compact */}
+        {/* Quick Actions */}
         <div className="mt-2 flex flex-wrap gap-1">
           {['Tasks', 'Tips', 'Ideas'].map((suggestion) => (
             <button
@@ -214,6 +310,15 @@ export default function AIAssistantPanel() {
           ))}
         </div>
       </div>
+
+      {/* Resize indicator overlay when resizing */}
+      {isResizing && (
+        <div className="absolute inset-0 bg-purple-500/10 border-2 border-purple-500 border-dashed rounded-2xl pointer-events-none z-30 flex items-center justify-center">
+          <div className="bg-purple-500 text-white px-3 py-1 rounded-lg text-sm font-medium">
+            {panelSize.width} × {panelSize.height}
+          </div>
+        </div>
+      )}
     </aside>
   );
 }

@@ -21,6 +21,8 @@ import ForgotPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import Terms from './pages/Terms'; 
 import Privacy from './pages/Privacy'; 
+// import Setting from './pages/Setting'; 
+import Setting from './pages/Setting';
 
 const AllApiRoutes = () => {
   return (
@@ -43,7 +45,9 @@ const AllApiRoutes = () => {
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
-      {/* Add more routes as needed */}
+      <Route path="/settings" element={<Setting />} />
+      
+      {/* Catch-all route for 404 Not Found */}
       <Route path="*" element={<div>404 Not Found</div>} />
 
 

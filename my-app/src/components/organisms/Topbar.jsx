@@ -321,7 +321,7 @@ const Topbar = () => {
                     </button>
                     <button
                       onClick={() => {
-                        navigate('/');
+                        navigate('/settings');
                         setShowUserMenu(false);
                       }}
                       className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"

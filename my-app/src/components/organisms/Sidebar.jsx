@@ -30,12 +30,12 @@ const Sidebar = () => {
       onClick: () => navigate('/profile'),
       color: 'text-blue-600 dark:text-blue-400'
     },
-    // {
-    //   label: 'Settings',
-    //   icon: <Settings size={16} />,
-    //   onClick: () => navigate('/settings'),
-    //   color: 'text-gray-600 dark:text-gray-400'
-    // },
+    {
+      label: 'Settings',
+      icon: <Settings size={16} />,
+      onClick: () => navigate('/settings'),
+      color: 'text-gray-600 dark:text-gray-400'
+    },
     {
       label: 'Help',
       icon: <HelpCircle size={16} />,
