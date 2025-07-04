@@ -340,10 +340,10 @@ const OrganizationDetails = () => {
           <div className="mb-8">
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                {/* <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
                   <ChartBarIcon className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Analytics & Reports</h2>
+                <h2 className="text-2xl font-bold text-white">Analytics & Reports</h2> */}
               </div>
               <TaskReportDashboard
                 tasks={selectedOrganization.tasks || []}
