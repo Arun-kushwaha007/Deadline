@@ -75,7 +75,7 @@ const DashboardOverview = () => {
     }
   }, [selectedOrg]);
 
-  // ✅ All available users from all org caches
+  // All available users from all org caches
   const allUsers = useMemo(() => {
     const allMembers = [];
     Object.values(organizationMembers).forEach((org) => {
@@ -97,7 +97,7 @@ const DashboardOverview = () => {
   const users = allUsers;
   const members = allUsers;
 
-  // ✅ Generate orgMembers list for dropdown
+  // Generate orgMembers list for dropdown
   const orgMembers = useMemo(() => {
     if (!selectedOrg) return members;
 
@@ -197,7 +197,8 @@ const DashboardOverview = () => {
     },
   ];
 
-  const COLORS = ['#10b981', '#f97316', '#ef4444'];
+  const COLORS = ['#3b82f6', '#f59e0b', '#10b981'];
+  const PRIORITY_COLORS = ['#10b981', '#f59e0b', '#ef4444'];
 
   const priorityData = [
     {
@@ -252,41 +253,79 @@ const DashboardOverview = () => {
   );
 
   return (
-    <div className="p-6 min-h-screen text-white">
-      <h2 className="text-2xl font-bold text-orange-400 mb-6">
-        🏠 Organization Analysis
-      </h2>
-
-      {/* Global Filters */}
-      <div className="flex flex-wrap gap-4 mb-10">
-        <select
-          value={selectedPriority}
-          onChange={(e) => setSelectedPriority(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-        >
-          <option value="">All Priorities</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-
-        <select
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-        >
-          <option value="">All Statuses</option>
-          <option value="todo">To Do</option>
-          <option value="inprogress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
+    <div className="p-6 min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-white transition-colors duration-300">
+      {/* Header Section */}
+      <div className="mb-8">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 shadow-lg">
+          <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+            📊 Organization Analytics
+          </h2>
+          <p className="text-blue-100">
+            Comprehensive insights into your organization's performance and productivity
+          </p>
+        </div>
       </div>
 
-      {/* Global Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
-        <div className="bg-zinc-800 p-4 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4">Tasks by Status</h2>
-          <ResponsiveContainer width="100%" height={250}>
+      {/* Global Filters Section */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+            <span className="text-white text-lg">🔍</span>
+          </div>
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            Global Filters
+          </h3>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Priority Level
+            </label>
+            <select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            >
+              <option value="">All Priorities</option>
+              <option value="low">🟢 Low</option>
+              <option value="medium">🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Task Status
+            </label>
+            <select
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            >
+              <option value="">All Statuses</option>
+              <option value="todo">📝 To Do</option>
+              <option value="inprogress">⚡ In Progress</option>
+              <option value="done">✅ Done</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Global Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {/* Status Chart */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-lg">📈</span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+              Tasks by Status
+            </h3>
+          </div>
+          
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
                 data={statusData}
@@ -294,144 +333,245 @@ const DashboardOverview = () => {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
-                label
+                outerRadius={100}
+                label={({ name, value }) => `${name}: ${value}`}
+                labelLine={false}
               >
                 {statusData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#374151',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff'
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
-          <div className="flex flex-wrap mt-4 gap-4">
+          
+          <div className="flex flex-wrap justify-center gap-4 mt-4">
             {statusData.map((s, index) => (
-              <div key={index} className="flex items-center space-x-2">
+              <div key={index} className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg">
                 <div
-                  className="w-4 h-4 rounded"
+                  className="w-4 h-4 rounded-full"
                   style={{ backgroundColor: COLORS[index] }}
                 />
-                <span className="text-sm">{s.name}</span>
+                <span className="text-sm font-medium">{s.name}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">({s.value})</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="bg-zinc-800 p-4 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4">Tasks by Priority</h2>
-          <ResponsiveContainer width="100%" height={250}>
+        {/* Priority Chart */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-lg">🎯</span>
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+              Tasks by Priority
+            </h3>
+          </div>
+          
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart data={priorityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-              <XAxis dataKey="name" stroke="#fff" />
-              <YAxis stroke="#fff" />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#f97316" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis 
+                dataKey="name" 
+                stroke="#6b7280" 
+                fontSize={12}
+                tick={{ fill: '#6b7280' }}
+              />
+              <YAxis 
+                stroke="#6b7280" 
+                fontSize={12}
+                tick={{ fill: '#6b7280' }}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: '#374151',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff'
+                }}
+              />
+              <Bar dataKey="value" fill="#f59e0b" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* User Analysis */}
-      <h2 className="text-2xl font-bold text-orange-400 mb-6">
-        👥 User Analysis
-      </h2>
-
-      {/* User Analysis Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <select
-          value={selectedOrg}
-          onChange={(e) => setSelectedOrg(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-        >
-          <option value="">All Organizations</option>
-          {organizations.map((org) => (
-            <option key={org._id} value={org._id}>
-              {org.name}
-            </option>
-          ))}
-        </select>
-        <select
-          value={analysisPriority}
-          onChange={(e) => setAnalysisPriority(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-        >
-          <option value="">All Priorities</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-        <select
-          value={analysisStatus}
-          onChange={(e) => setAnalysisStatus(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-        >
-          <option value="">All Statuses</option>
-          <option value="todo">To Do</option>
-          <option value="inprogress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
-        <select
-          value={analysisUserId}
-          onChange={(e) => setAnalysisUserId(e.target.value)}
-          className="bg-zinc-800 border border-zinc-700 text-white p-2 rounded-md"
-          disabled={!selectedOrg}
-        >
-          <option value="">All Users</option>
-          {orgMembers.map((user) => (
-            <option key={user._id} value={user._id}>
-              {user.name}
-            </option>
-          ))}
-          <option value="Unassigned">Unassigned</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 gap-8">
-        {userAnalysis.map((user) => (
-          <div key={user.userId} className="bg-zinc-800 p-4 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-2">{user.name}</h3>
-            <p className="mb-2 text-gray-300">Total Tasks: {user.totalTasks}</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-sm font-semibold mb-2">By Status</h4>
-                <ResponsiveContainer width="100%" height={150}>
-                  <PieChart>
-                    <Pie
-                      data={user.statusBreakdown}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={50}
-                      label
-                    >
-                      {user.statusBreakdown.map((entry, index) => (
-                        <Cell
-                          key={`cell-status-${index}`}
-                          fill={COLORS[index]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <h4 className="text-sm font-semibold mb-2">By Priority</h4>
-                <ResponsiveContainer width="100%" height={150}>
-                  <BarChart data={user.priorityBreakdown}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#555" />
-                    <XAxis dataKey="name" stroke="#fff" fontSize={10} />
-                    <YAxis stroke="#fff" />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#f97316" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+      {/* User Analysis Section */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+            <span className="text-white text-lg">👥</span>
           </div>
-        ))}
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
+            User Performance Analysis
+          </h3>
+        </div>
+
+        {/* User Analysis Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Organization
+            </label>
+            <select
+              value={selectedOrg}
+              onChange={(e) => setSelectedOrg(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+            >
+              <option value="">🏢 All Organizations</option>
+              {organizations.map((org) => (
+                <option key={org._id} value={org._id}>
+                  {org.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Priority
+            </label>
+            <select
+              value={analysisPriority}
+              onChange={(e) => setAnalysisPriority(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+            >
+              <option value="">All Priorities</option>
+              <option value="low">🟢 Low</option>
+              <option value="medium">🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Status
+            </label>
+            <select
+              value={analysisStatus}
+              onChange={(e) => setAnalysisStatus(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+            >
+              <option value="">All Statuses</option>
+              <option value="todo">📝 To Do</option>
+              <option value="inprogress">⚡ In Progress</option>
+              <option value="done">✅ Done</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Team Member
+            </label>
+            <select
+              value={analysisUserId}
+              onChange={(e) => setAnalysisUserId(e.target.value)}
+              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
+              disabled={!selectedOrg}
+            >
+              <option value="">👤 All Users</option>
+              {orgMembers.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.name}
+                </option>
+              ))}
+              <option value="Unassigned">❓ Unassigned</option>
+            </select>
+          </div>
+        </div>
+
+        {/* User Analysis Cards */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+          {userAnalysis.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-4xl">📊</span>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+                No Data Available
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Apply filters to see user performance analysis
+              </p>
+            </div>
+          ) : (
+            userAnalysis.map((user) => (
+              <div key={user.userId} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-800 dark:text-white">{user.name}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      📋 {user.totalTasks} total tasks
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* Status Breakdown */}
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+                    <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      📊 Status Distribution
+                    </h5>
+                    <ResponsiveContainer width="100%" height={120}>
+                      <PieChart>
+                        <Pie
+                          data={user.statusBreakdown}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={40}
+                          label={false}
+                        >
+                          {user.statusBreakdown.map((entry, index) => (
+                            <Cell
+                              key={`cell-status-${index}`}
+                              fill={COLORS[index]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  {/* Priority Breakdown */}
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
+                    <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                      🎯 Priority Distribution
+                    </h5>
+                    <ResponsiveContainer width="100%" height={120}>
+                      <BarChart data={user.priorityBreakdown}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                        <XAxis 
+                          dataKey="name" 
+                          stroke="#6b7280" 
+                          fontSize={10}
+                          tick={{ fill: '#6b7280' }}
+                        />
+                        <YAxis stroke="#6b7280" fontSize={10} />
+                        <Tooltip />
+                        <Bar dataKey="value" fill="#8b5cf6" radius={[2, 2, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
