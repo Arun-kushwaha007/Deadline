@@ -964,7 +964,7 @@ const Profile = () => {
               <div className="p-8">
                 {/* Enhanced Profile Picture Section */}
                 <div className="mb-8">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
                     <span className="text-lg">📸</span> Profile Picture
                   </label>
                   
@@ -995,7 +995,7 @@ const Profile = () => {
 
                 {/* Enhanced Bio Section */}
                 <div className="mb-8">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
                     <span className="text-lg">📝</span> Bio
                   </label>
                   <textarea
@@ -1009,7 +1009,7 @@ const Profile = () => {
 
                 {/* Enhanced Skills Section */}
                 <div className="mb-10">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
                     <span className="text-lg">🎯</span> Job Title / Role
                   </label>
                   <input

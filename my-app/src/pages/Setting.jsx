@@ -15,7 +15,7 @@ import {
   MoonIcon,
   SunIcon
 } from '@heroicons/react/24/outline';
-
+import DashboardLayout from '../components/organisms/DashboardLayout';
 const Setting = () => {
   const [user, setUser] = useState(null);
   const [notifications, setNotifications] = useState({
@@ -75,6 +75,7 @@ const Setting = () => {
   };
 
   return (
+    <DashboardLayout> 
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden">
@@ -421,6 +422,7 @@ const Setting = () => {
          </div>
             )}
           </div>
+          </DashboardLayout>
         );
       };
       

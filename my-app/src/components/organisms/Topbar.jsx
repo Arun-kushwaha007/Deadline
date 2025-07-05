@@ -1,5 +1,3 @@
-// components/organisms/Topbar.jsx
-
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +16,7 @@ import {
 import {
   Moon, Sun, LogIn, User, Bell, Menu, LogOut, UserPen, AlarmClockCheck,
   Home, ListTodo, Users, Building2, CirclePlus, LayoutList, CircleHelp, 
-  CheckCheck, Filter, Calendar, BarChart3, Settings
+  CheckCheck, Filter, Calendar, BarChart3, Settings, X
 } from 'lucide-react';
 import logoDark from '../../assets/collabnest_logo_dark.png';
 import logoLight from '../../assets/collabnest_logo_light.png';
@@ -30,6 +28,10 @@ const Topbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  
+  // New states for toast notifications
+  const [toastNotifications, setToastNotifications] = useState([]);
+  const [lastNotificationCount, setLastNotificationCount] = useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,6 +64,122 @@ const Topbar = () => {
       dispatch(persistNotifications());
     }
   }, [notifications, dispatch]);
+
+  // Watch for new notifications and show toast
+  useEffect(() => {
+    if (notifications.length > lastNotificationCount && lastNotificationCount > 0) {
+      // Get the newest notifications
+      const newNotifications = notifications.slice(0, notifications.length - lastNotificationCount);
+      
+      newNotifications.forEach((notification, index) => {
+        setTimeout(() => {
+          showToastNotification(notification);
+        }, index * 500); // Stagger multiple notifications
+      });
+    }
+    setLastNotificationCount(notifications.length);
+  }, [notifications.length, lastNotificationCount]);
+
+  // Show toast notification
+  const showToastNotification = (notification) => {
+    const toastId = `toast-${Date.now()}-${Math.random()}`;
+    const newToast = {
+      id: toastId,
+      notification,
+      timestamp: Date.now()
+    };
+
+    setToastNotifications(prev => [...prev, newToast]);
+
+    // Auto remove after 10 seconds
+    setTimeout(() => {
+      removeToastNotification(toastId);
+    }, 10000);
+  };
+
+  // Remove toast notification
+  const removeToastNotification = (toastId) => {
+    setToastNotifications(prev => prev.filter(toast => toast.id !== toastId));
+  };
+
+  // Handle toast notification click
+  const handleToastClick = (toast) => {
+    const notification = toast.notification;
+    
+    // Mark as read if not already
+    if (!notification.isRead) {
+      dispatch(markNotificationAsRead(notification._id || notification.id));
+    }
+    
+    // Remove the toast
+    removeToastNotification(toast.id);
+    
+    // Optional: Navigate to related page based on notification type
+    switch (notification.type) {
+      case 'taskAssigned':
+        navigate('/tasks');
+        break;
+      case 'invite':
+        navigate('/join_Organization');
+        break;
+      case 'deadline':
+        navigate('/tasks');
+        break;
+      default:
+        // Open the notification panel
+        setShowNotifications(true);
+        break;
+    }
+  };
+
+  // Get notification styling based on type
+  const getNotificationStyle = (type) => {
+    const styles = {
+      taskAssigned: {
+        bg: 'bg-gradient-to-r from-blue-500 to-blue-600',
+        border: 'border-blue-400',
+        icon: '📋',
+        color: 'text-blue-50'
+      },
+      invite: {
+        bg: 'bg-gradient-to-r from-green-500 to-green-600',
+        border: 'border-green-400',
+        icon: '📨',
+        color: 'text-green-50'
+      },
+      message: {
+        bg: 'bg-gradient-to-r from-purple-500 to-purple-600',
+        border: 'border-purple-400',
+        icon: '💬',
+        color: 'text-purple-50'
+      },
+      deadline: {
+        bg: 'bg-gradient-to-r from-red-500 to-red-600',
+        border: 'border-red-400',
+        icon: '⏰',
+        color: 'text-red-50'
+      },
+      info: {
+        bg: 'bg-gradient-to-r from-cyan-500 to-cyan-600',
+        border: 'border-cyan-400',
+        icon: 'ℹ️',
+        color: 'text-cyan-50'
+      },
+      newComment: {
+        bg: 'bg-gradient-to-r from-orange-500 to-orange-600',
+        border: 'border-orange-400',
+        icon: '💭',
+        color: 'text-orange-50'
+      },
+      default: {
+        bg: 'bg-gradient-to-r from-gray-500 to-gray-600',
+        border: 'border-gray-400',
+        icon: '🔔',
+        color: 'text-gray-50'
+      }
+    };
+    return styles[type] || styles.default;
+  };
 
   // Effect to manage timeouts for snoozed notifications
   useEffect(() => {
@@ -433,6 +551,103 @@ const Topbar = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications Container */}
+      <div className="fixed top-4 right-4 z-[9999] space-y-3 pointer-events-none">
+        {toastNotifications.map((toast, index) => {
+          const style = getNotificationStyle(toast.notification.type);
+          const timeSinceShown = Date.now() - toast.timestamp;
+          const remainingTime = Math.max(0, 10000 - timeSinceShown);
+          const progressPercent = (remainingTime / 10000) * 100;
+
+          return (
+            <div
+              key={toast.id}
+              className={`pointer-events-auto relative w-80 max-w-sm ${style.bg} ${style.border} border-2 rounded-2xl shadow-2xl backdrop-blur-lg animate-slide-in-right cursor-pointer hover:scale-105 transition-all duration-300 overflow-hidden`}
+              style={{
+                animationDelay: `${index * 100}ms`,
+                transform: `translateY(${index * 4}px)`,
+              }}
+              onClick={() => handleToastClick(toast)}
+            >
+              {/* Progress bar */}
+              <div className="absolute top-0 left-0 h-1 bg-white/30 transition-all duration-1000 ease-linear"
+                   style={{ width: `${progressPercent}%` }}></div>
+              
+              <div className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30">
+                      <span className="text-lg">{style.icon}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className={`font-bold text-sm ${style.color} leading-tight`}>
+                        New {toast.notification.type.charAt(0).toUpperCase() + toast.notification.type.slice(1).replace(/([A-Z])/g, ' $1')}
+                      </h4>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeToastNotification(toast.id);
+                        }}
+                        className="flex-shrink-0 text-white/70 hover:text-white p-1 hover:bg-white/20 rounded-full transition-all duration-200 ml-2"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                    
+                    <p className={`text-sm ${style.color} leading-relaxed line-clamp-2`}>
+                      {toast.notification.message}
+                    </p>
+                    
+                    <div className="flex items-center justify-between mt-3">
+                      <span className="text-xs text-white/70">
+                        {new Date(toast.notification.createdAt || Date.now()).toLocaleTimeString([], { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}
+                      </span>
+                      <span className="text-xs bg-white/20 px-2 py-1 rounded-full text-white/90 font-medium">
+                        Click to view
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Shine effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CSS for animations */}
+      <style jsx>{`
+        @keyframes slide-in-right {
+          from {
+            transform: translateX(100%) translateY(0px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0) translateY(0px);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in-right {
+          animation: slide-in-right 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+      `}</style>
     </>
   );
 };
