@@ -192,7 +192,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
           
           {/* Rating Section */}
           <div>
-            <label className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">⭐</span> Rating
             </label>
             <div className="flex items-center gap-2 mb-2">
@@ -209,7 +209,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Category Selection */}
           <div>
-            <label className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">📂</span> Category
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -237,7 +237,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Title */}
           <div>
-            <label className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">📝</span> Title
             </label>
             <input
@@ -260,7 +260,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Message */}
           <div>
-            <label className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">💭</span> Message
             </label>
             <textarea
@@ -283,7 +283,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Tags */}
           <div>
-            <label className="block text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">🏷️</span> Tags (Optional)
             </label>
             
