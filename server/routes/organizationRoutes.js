@@ -5,7 +5,8 @@ import {
   getOrganizationById,
   addMember,
   assignTask,
-  getMyOrganizations, // Import the new function
+  getMyOrganizations,
+  getOrganizationMembers, // Import the new controller function
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
@@ -24,6 +25,9 @@ router.post('/create', authMiddleware, createOrganization);
 
 // GET specific organization by ID
 router.get('/:id', getOrganizationById);
+
+// GET members of a specific organization by ID
+router.get('/:id/members', authMiddleware, getOrganizationMembers);
 
 // POST add a member to an organization
 router.post('/:id/members', addMember);

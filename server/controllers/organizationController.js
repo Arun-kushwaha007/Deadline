@@ -56,6 +56,54 @@ export const getAllOrganizations = async (req, res) => {
   }
 };
 
+// GET /api/organizations/:id/members
+export const getOrganizationMembers = async (req, res) => {
+  const { id } = req.params; // This is the MongoDB _id of the organization
+
+  try {
+    const organization = await Organization.findById(id);
+    if (!organization) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+
+    // Extract member UUIDs from the organization's members array
+    // Assuming organization.members stores objects like { userId: 'uuid-string', role: 'role-name' }
+    const memberUserIds = organization.members.map(m => m.userId);
+
+    if (memberUserIds.length === 0) {
+      return res.status(200).json([]); // No members to fetch
+    }
+
+    // Fetch user details for these member UUIDs
+    // Assuming User model has a 'userId' field that stores the UUID string
+    const membersUsers = await User.find({ userId: { $in: memberUserIds } }).select('userId name email profilePicture'); // Added profilePicture
+
+    // Create a map of UUID -> user object for efficient lookup
+    const userMap = {};
+    membersUsers.forEach(user => {
+      userMap[user.userId] = user.toObject(); // Convert to plain object
+    });
+
+    // Enrich the organization's member list with full user details
+    const enrichedMembers = organization.members.map(member => {
+      const userDetails = userMap[member.userId];
+      return {
+        userId: member.userId, // The UUID string
+        role: member.role,
+        name: userDetails ? userDetails.name : 'Unknown User',
+        email: userDetails ? userDetails.email : '',
+        profilePicture: userDetails ? userDetails.profilePicture : '', // Added profilePicture
+        // You can add _id (MongoDB ObjectId of User document) if needed, e.g., userDetails._id
+      };
+    });
+
+    res.status(200).json(enrichedMembers);
+  } catch (error) {
+    console.error('Error fetching organization members:', error);
+    res.status(500).json({ message: 'Failed to fetch organization members', error: error.message });
+  }
+};
+
 // GET /api/organizations/mine
 // Fetches organizations where the logged-in user is a member
 export const getMyOrganizations = async (req, res) => {

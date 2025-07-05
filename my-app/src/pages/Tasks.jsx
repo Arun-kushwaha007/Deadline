@@ -179,13 +179,13 @@ const Tasks = () => {
                   </p>
                 </div>
                 
-                <button
+                {/* <button
                   onClick={() => navigate('/create-task')}
                   className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all transform hover:scale-105 font-medium"
                 >
                   <Plus className="w-4 h-4" />
                   New Task
-                </button>
+                </button> */}
               </div>
             </div>
 
