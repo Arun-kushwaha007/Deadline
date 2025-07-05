@@ -8,6 +8,22 @@ import {
   clearOrganizationMembers 
 } from '../../redux/organizationSlice';
 
+import {
+  XMarkIcon,
+  PlusIcon,
+  UserIcon,
+  BuildingOfficeIcon,
+  CalendarIcon,
+  FlagIcon,
+  TagIcon,
+  CheckCircleIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  UsersIcon,
+  SparklesIcon,
+  ClockIcon
+} from '@heroicons/react/24/outline';
+
 const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   const dispatch = useDispatch();
   const { users, usersStatus, error: usersError } = useSelector((state) => state.tasks);
@@ -16,7 +32,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     currentUserOrganizations, 
     currentUserOrganizationsStatus, 
     selectedOrganization,
-    organizationMembers, // Add this for cached members
+    organizationMembers,
     detailsLoading,
     error: currentUserOrganizationsError 
   } = useSelector((state) => state.organization);
@@ -37,6 +53,20 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   const [loading, setLoading] = useState(false);
   const [organizationId, setOrganizationId] = useState('');
 
+  // Priority configurations
+  const priorityConfig = {
+    low: { color: 'text-green-400', bg: 'bg-green-500/20', border: 'border-green-500/30', icon: '🟢' },
+    medium: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', icon: '🟡' },
+    high: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30', icon: '🔴' }
+  };
+
+  const statusConfig = {
+    todo: { color: 'text-blue-400', bg: 'bg-blue-500/20', border: 'border-blue-500/30', icon: '📋' },
+    inprogress: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', icon: '⚡' },
+    done: { color: 'text-green-400', bg: 'bg-green-500/20', border: 'border-green-500/30', icon: '✅' }
+  };
+
+  // All existing useEffect and logic remain the same...
   useEffect(() => {
     if (isOpen) {
       if (usersStatus === 'idle') {
@@ -48,10 +78,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     }
   }, [isOpen, usersStatus, currentUserOrganizationsStatus, dispatch]);
 
-  // Fetch organization details when organizationId changes
   useEffect(() => {
     if (organizationId) {
-      // Check if we already have the organization details and members
       const hasOrgDetails = selectedOrganization && selectedOrganization._id === organizationId;
       const hasMembersCache = organizationMembers[organizationId]?.status === 'succeeded';
       
@@ -59,7 +87,6 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
         dispatch(fetchOrganizationDetails(organizationId));
       }
       
-      // Fetch members separately if not cached
       if (!hasMembersCache) {
         dispatch(fetchOrganizationMembers(organizationId));
       }
@@ -71,10 +98,9 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
       setDueDate(taskToEdit.dueDate 
-        ? new Date(taskToEdit.dueDate).toISOString().slice(0, 16) // "YYYY-MM-DDTHH:MM"
+        ? new Date(taskToEdit.dueDate).toISOString().slice(0, 16)
         : ''
       );
-      
       setStatus(taskToEdit.status || 'todo');
       setPriority(taskToEdit.priority || '');
       setLabels((taskToEdit.labels || []).join(', '));
@@ -84,49 +110,32 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
         setAssignee(member || null);
       }
       if (taskToEdit.organization) {
-        // Ensure we are setting the ID string, not the whole object
         setOrganizationId(taskToEdit.organization._id || taskToEdit.organization);
       }
     } else {
-      // Reset form for new task
-      setTitle('');
-      setDescription('');
-      setDueDate('');
-      setStatus('todo');
-      setPriority('');
-      setLabels('');
-      setSubtasks([{ title: '', done: false }]);
-      setAssignee(null);
-      setAssignedBy('');
-      setVisibility('private');
-      setOrganizationId('');
+      resetForm();
     }
   }, [taskToEdit, users, isOpen]);
 
-  // Filter members based on selected organization and search term
   useEffect(() => {
     let membersToFilter = [];
 
     if (organizationId) {
-      // First try to get members from cache
       const cachedMembers = organizationMembers[organizationId];
       if (cachedMembers?.status === 'succeeded') {
         membersToFilter = cachedMembers.members
           .map(member => member.userId)
           .filter(user => user && user._id);
       }
-      // Fallback to selectedOrganization if cache not available
       else if (selectedOrganization && selectedOrganization._id === organizationId) {
         membersToFilter = selectedOrganization.members
           .map(member => member.userId)
           .filter(user => user && user._id);
       }
     } else {
-      // If no organization selected, show all users (fallback)
       membersToFilter = users;
     }
 
-    // Apply search filter
     const filtered = assigneeSearch.trim() === ''
       ? membersToFilter
       : membersToFilter.filter(user =>
@@ -136,12 +145,10 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     setFilteredMembers(filtered);
   }, [assigneeSearch, organizationId, selectedOrganization, organizationMembers, users]);
 
-  // Reset assignee when organization changes
   useEffect(() => {
     if (organizationId && assignee) {
       let orgMembers = [];
       
-      // Get members from cache or selectedOrganization
       const cachedMembers = organizationMembers[organizationId];
       if (cachedMembers?.status === 'succeeded') {
         orgMembers = cachedMembers.members;
@@ -149,13 +156,12 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
         orgMembers = selectedOrganization.members;
       }
       
-      // Check if current assignee is still a member of the selected organization
       if (orgMembers.length > 0) {
         const isAssigneeMember = orgMembers.some(
           member => member.userId?._id === assignee._id
         );
         if (!isAssigneeMember && assignee._id !== 'everyone') {
-          setAssignee(null); // Reset assignee if they're not in the new org
+          setAssignee(null);
         }
       }
     }
@@ -188,7 +194,6 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     setErrors({});
     setAssigneeSearch('');
     setOrganizationId('');
-    // Clear any cached members when form is reset
     dispatch(clearOrganizationMembers());
   };
 
@@ -204,8 +209,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     const taskPayload = {
       title,
       description,
-     dueDate: new Date(dueDate).toISOString(), // ensure ISO format is stored in DB
-     
+      dueDate: new Date(dueDate).toISOString(),
       status,
       priority,
       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
@@ -231,9 +235,6 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     }
   };
 
-  if (!isOpen) return null;
-
-  // Get available members count for display
   const getAvailableMembersCount = () => {
     if (!organizationId) return 0;
     
@@ -251,275 +252,472 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
 
   const availableMembersCount = getAvailableMembersCount();
   
-  // Check if members are loading
   const membersLoading = organizationId && (
     organizationMembers[organizationId]?.status === 'loading' ||
     (detailsLoading && (!selectedOrganization || selectedOrganization._id !== organizationId))
   );
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
-          {taskToEdit ? 'Edit Task' : 'Create New Task'}
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Task Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          />
-          {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
-
-          <textarea
-            rows={3}
-            placeholder="Task Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          />
-          {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
-
-          {/* Organization Dropdown */}
-          <div>
-            <label className="block text-sm mb-1 text-white">Organization</label>
-            <select
-              value={organizationId}
-              onChange={(e) => {
-                setOrganizationId(e.target.value);
-                setAssignee(null); // Reset assignee when org changes
-                setAssigneeSearch(''); // Clear search
-              }}
-              className="w-full p-2 rounded bg-slate-700 text-white"
-              disabled={currentUserOrganizationsStatus === 'loading' || currentUserOrganizationsStatus === 'failed'}
-            >
-              <option value="">Select Organization</option>
-              {currentUserOrganizationsStatus === 'succeeded' &&
-                currentUserOrganizations.map((org) => (
-                  <option key={org._id} value={org._id}>
-                    {org.name}
-                  </option>
-                ))}
-            </select>
-            {currentUserOrganizationsStatus === 'loading' && <p className="text-blue-400 text-sm">Loading organizations...</p>}
-            {currentUserOrganizationsStatus === 'failed' && <p className="text-red-500 text-sm">Error loading organizations: {currentUserOrganizationsError?.message || 'Unknown error'}</p>}
-            {errors.organizationId && <p className="text-red-500 text-sm">{errors.organizationId}</p>}
-          </div>
-
-         <input
-           type="datetime-local"
-           value={dueDate}
-           onChange={(e) => setDueDate(e.target.value)}
-           className="w-full p-2 rounded bg-slate-700 text-white"
-         />
-         
-          {errors.dueDate && <p className="text-red-500 text-sm">{errors.dueDate}</p>}
-
-          <input
-            type="text"
-            placeholder="Labels (comma-separated)"
-            value={labels}
-            onChange={(e) => setLabels(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          />
-
-          {/* Assignee Section */}
-          <div>
-            <label className="block text-sm mb-1 text-white">
-              Assign To {organizationId && `(${availableMembersCount} members available)`}
-            </label>
-            
-            {!organizationId && (
-              <p className="text-yellow-400 text-sm mb-2">Please select an organization first to see available members.</p>
-            )}
-            
-            {membersLoading && (
-              <p className="text-blue-400 text-sm mb-2">Loading organization members...</p>
-            )}
-            
-            {organizationId && !membersLoading && availableMembersCount > 0 && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Search members..."
-                  value={assigneeSearch}
-                  onChange={(e) => setAssigneeSearch(e.target.value)}
-                  className="w-full p-2 mb-2 rounded bg-slate-700 text-white"
-                  disabled={assignee?._id === 'everyone' || availableMembersCount === 0}
-                />
-                
-                {assigneeSearch && filteredMembers.length > 0 && (
-                  <div className="border dark:border-slate-600 rounded max-h-32 overflow-y-auto bg-white dark:bg-slate-700">
-                    {filteredMembers.map((user) => (
-                      <div
-                        key={user._id}
-                        onClick={() => {
-                          setAssignee(user);
-                          setAssigneeSearch('');
-                        }}
-                        className="px-3 py-2 hover:bg-blue-100 dark:hover:bg-slate-600 cursor-pointer"
-                      >
-                        {user.name}
-                      </div>
-                    ))}
-                  </div>
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                {viewOnly ? (
+                  <EyeIcon className="w-5 h-5 text-white" />
+                ) : taskToEdit ? (
+                  <SparklesIcon className="w-5 h-5 text-white" />
+                ) : (
+                  <PlusIcon className="w-5 h-5 text-white" />
                 )}
-                
-                {assigneeSearch && filteredMembers.length === 0 && availableMembersCount > 0 && (
-                  <div className="p-2 text-sm text-gray-500">No members found in this organization</div>
-                )}
-                
-                {availableMembersCount === 0 && (
-                  <p className="text-sm text-gray-400">No members available in this organization.</p>
-                )}
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAssignee({ _id: 'everyone', name: 'Everyone' });
-                    setAssigneeSearch('');
-                  }}
-                  className="mt-1 text-xs text-blue-400 hover:underline"
-                  disabled={availableMembersCount === 0}
-                >
-                  Assign to Everyone in Organization
-                </button>
-
-                {assignee && (
-                  <div className="mt-2 text-sm text-green-400 flex justify-between items-center">
-                    Assigned to: {assignee.name}
-                    <button
-                      type="button"
-                      onClick={() => setAssignee(null)}
-                      className="text-red-400 hover:underline text-xs ml-2"
-                    >
-                      ✕ Remove
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
-            
-            {errors.assignee && <p className="text-red-500 text-sm">{errors.assignee}</p>}
-          </div>
-
-          <input
-            type="text"
-            placeholder="Assigned By"
-            value={assignedBy}
-            onChange={(e) => setAssignedBy(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          />
-
-          <div>
-            <label className="block text-sm text-white mb-1">Visibility</label>
-            <div className="flex gap-4 text-white">
-              <label>
-                <input
-                  type="radio"
-                  value="public"
-                  checked={visibility === 'public'}
-                  onChange={() => setVisibility('public')}
-                  className="mr-1"
-                />
-                Public
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="private"
-                  checked={visibility === 'private'}
-                  onChange={() => setVisibility('private')}
-                  className="mr-1"
-                />
-                Private
-              </label>
-            </div>
-            <p className="text-xs text-gray-300 mt-1">
-              Public: All org members can see this task. Private: Only the assignee can view it.
-            </p>
-          </div>
-
-          {/* Subtasks */}
-          <div>
-            <label className="block text-sm mb-1 text-white">Subtasks</label>
-            {subtasks.map((subtask, idx) => (
-              <div key={idx} className="flex items-center gap-2 mb-2">
-                <input
-                  type="text"
-                  placeholder={`Subtask ${idx + 1}`}
-                  value={subtask.title}
-                  onChange={(e) =>
-                    setSubtasks((prev) =>
-                      prev.map((s, i) => (i === idx ? { ...s, title: e.target.value } : s))
-                    )
-                  }
-                  className="flex-1 p-2 rounded bg-slate-700 text-white"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSubtasks((prev) => prev.filter((_, i) => i !== idx))
-                  }
-                  className="text-red-400 hover:underline text-sm"
-                >
-                  ✕
-                </button>
               </div>
-            ))}
+              <div>
+                <h2 className="text-xl font-bold text-white">
+                  {viewOnly ? 'View Task' : taskToEdit ? 'Edit Task' : 'Create New Task'}
+                </h2>
+                <p className="text-blue-100 text-sm">
+                  {viewOnly ? 'Task details and information' : 'Fill in the details to manage your task'}
+                </p>
+              </div>
+            </div>
             <button
-              type="button"
-              onClick={() => setSubtasks([...subtasks, { title: '', done: false }])}
-              className="text-blue-400 hover:underline text-sm"
+              onClick={onClose}
+              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
             >
-              + Add Subtask
+              <XMarkIcon className="w-5 h-5 text-white" />
             </button>
           </div>
+        </div>
 
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          >
-            <option value="">Select Priority</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          {errors.priority && <p className="text-red-500 text-sm">{errors.priority}</p>}
+        {/* Form Content */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Title */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <SparklesIcon className="w-4 h-4" />
+                Task Title
+              </label>
+              <input
+                type="text"
+                placeholder="Enter task title..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                disabled={viewOnly}
+                className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+              />
+              {errors.title && <p className="text-red-400 text-sm flex items-center gap-1">
+                <span>⚠️</span> {errors.title}
+              </p>}
+            </div>
 
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full p-2 rounded bg-slate-700 text-white"
-          >
-            <option value="todo">To Do</option>
-            <option value="inprogress">In Progress</option>
-            <option value="done">Done</option>
-          </select>
+            {/* Description */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <TagIcon className="w-4 h-4" />
+                Description
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Describe your task..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                disabled={viewOnly}
+                className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none disabled:opacity-50"
+              />
+              {errors.description && <p className="text-red-400 text-sm flex items-center gap-1">
+                <span>⚠️</span> {errors.description}
+              </p>}
+            </div>
 
-          <div className="flex justify-end gap-3 pt-4">
+            {/* Organization & Due Date Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Organization */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                  <BuildingOfficeIcon className="w-4 h-4" />
+                  Organization
+                </label>
+                <select
+                  value={organizationId}
+                  onChange={(e) => {
+                    setOrganizationId(e.target.value);
+                    setAssignee(null);
+                    setAssigneeSearch('');
+                  }}
+                  disabled={viewOnly || currentUserOrganizationsStatus === 'loading'}
+                  className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                >
+                  <option value="">Select Organization</option>
+                  {currentUserOrganizationsStatus === 'succeeded' &&
+                    currentUserOrganizations.map((org) => (
+                      <option key={org._id} value={org._id}>
+                        {org.name}
+                      </option>
+                    ))}
+                </select>
+                {currentUserOrganizationsStatus === 'loading' && 
+                  <p className="text-blue-400 text-sm flex items-center gap-1">
+                    <ClockIcon className="w-3 h-3 animate-spin" />
+                    Loading organizations...
+                  </p>
+                }
+                {errors.organizationId && <p className="text-red-400 text-sm flex items-center gap-1">
+                  <span>⚠️</span> {errors.organizationId}
+                </p>}
+              </div>
+
+              {/* Due Date */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                  <CalendarIcon className="w-4 h-4" />
+                  Due Date
+                </label>
+                <input
+                  type="datetime-local"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                  disabled={viewOnly}
+                  className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                />
+                {errors.dueDate && <p className="text-red-400 text-sm flex items-center gap-1">
+                  <span>⚠️</span> {errors.dueDate}
+                </p>}
+              </div>
+            </div>
+
+            {/* Priority & Status Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Priority */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                  <FlagIcon className="w-4 h-4" />
+                  Priority
+                </label>
+                <select
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                  disabled={viewOnly}
+                  className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                >
+                  <option value="">Select Priority</option>
+                  <option value="low">🟢 Low Priority</option>
+                  <option value="medium">🟡 Medium Priority</option>
+                  <option value="high">🔴 High Priority</option>
+                </select>
+                {priority && (
+                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${priorityConfig[priority].bg} ${priorityConfig[priority].border} ${priorityConfig[priority].color}`}>
+                    <span>{priorityConfig[priority].icon}</span>
+                    {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
+                  </div>
+                )}
+                {errors.priority && <p className="text-red-400 text-sm flex items-center gap-1">
+                  <span>⚠️</span> {errors.priority}
+                </p>}
+              </div>
+
+              {/* Status */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                  <CheckCircleIcon className="w-4 h-4" />
+                  Status
+                </label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  disabled={viewOnly}
+                  className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                >
+                  <option value="todo">📋 To Do</option>
+                  <option value="inprogress">⚡ In Progress</option>
+                  <option value="done">✅ Done</option>
+                </select>
+                {status && (
+                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${statusConfig[status].bg} ${statusConfig[status].border} ${statusConfig[status].color}`}>
+                    <span>{statusConfig[status].icon}</span>
+                    {status === 'todo' ? 'To Do' : status === 'inprogress' ? 'In Progress' : 'Done'}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Labels */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <TagIcon className="w-4 h-4" />
+                Labels
+              </label>
+              <input
+                type="text"
+                placeholder="Add labels (comma-separated)..."
+                value={labels}
+                onChange={(e) => setLabels(e.target.value)}
+                disabled={viewOnly}
+                className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+              />
+              {labels && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {labels.split(',').map((label, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-medium text-indigo-300"
+                    >
+                      #{label.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Assignee Section */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <UserIcon className="w-4 h-4" />
+                Assign To {organizationId && `(${availableMembersCount} members available)`}
+              </label>
+              
+              {!organizationId ? (
+                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                  <p className="text-yellow-400 text-sm flex items-center gap-2">
+                    <span>⚠️</span>
+                    Please select an organization first to see available members.
+                  </p>
+                </div>
+              ) : membersLoading ? (
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                  <p className="text-blue-400 text-sm flex items-center gap-2">
+                    <ClockIcon className="w-4 h-4 animate-spin" />
+                    Loading organization members...
+                  </p>
+                </div>
+              ) : availableMembersCount > 0 ? (
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    placeholder="Search members..."
+                    value={assigneeSearch}
+                    onChange={(e) => setAssigneeSearch(e.target.value)}
+                    disabled={viewOnly || assignee?._id === 'everyone'}
+                    className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                  />
+                  
+                  {assigneeSearch && filteredMembers.length > 0 && (
+                    <div className="border border-gray-600/50 rounded-lg max-h-32 overflow-y-auto bg-gray-800/50">
+                      {filteredMembers.map((user) => (
+                        <div
+                          key={user._id}
+                          onClick={() => {
+                            if (!viewOnly) {
+                              setAssignee(user);
+                              setAssigneeSearch('');
+                            }
+                          }}
+                          className="px-4 py-3 hover:bg-gray-700/50 cursor-pointer border-b border-gray-700/30 last:border-b-0 flex items-center gap-3"
+                        >
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <UserIcon className="w-4 h-4 text-white" />
+                          </div>
+                          <span className="text-white">{user.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {!viewOnly && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAssignee({ _id: 'everyone', name: 'Everyone' });
+                        setAssigneeSearch('');
+                      }}
+                      className="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+                    >
+                      <UsersIcon className="w-4 h-4 inline mr-1" />
+                      Assign to Everyone in Organization
+                    </button>
+                  )}
+
+                  {assignee && (
+                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                            {assignee._id === 'everyone' ? (
+                              <UsersIcon className="w-4 h-4 text-white" />
+                            ) : (
+                              <UserIcon className="w-4 h-4 text-white" />
+                            )}
+                          </div>
+                          <span className="text-green-400 font-medium">
+                            Assigned to: {assignee.name}
+                          </span>
+                        </div>
+                        {!viewOnly && (
+                          <button
+                            type="button"
+                            onClick={() => setAssignee(null)}
+                            className="text-red-400 hover:text-red-300 text-sm transition-colors"
+                          >
+                            <XMarkIcon className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-gray-600/20 border border-gray-600/30 rounded-lg p-3">
+                  <p className="text-gray-400 text-sm">No members available in this organization.</p>
+                </div>
+              )}
+              
+              {errors.assignee && <p className="text-red-400 text-sm flex items-center gap-1">
+                <span>⚠️</span> {errors.assignee}
+              </p>}
+            </div>
+
+            {/* Assigned By */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <UserIcon className="w-4 h-4" />
+                Assigned By
+              </label>
+              <input
+                type="text"
+                placeholder="Who is assigning this task?"
+                value={assignedBy}
+                onChange={(e) => setAssignedBy(e.target.value)}
+                disabled={viewOnly}
+                className="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+              />
+            </div>
+
+            {/* Visibility */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <EyeIcon className="w-4 h-4" />
+                Visibility
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="public"
+                    checked={visibility === 'public'}
+                    onChange={() => setVisibility('public')}
+                    disabled={viewOnly}
+                    className="text-blue-500 focus:ring-blue-500"
+                  />
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <EyeIcon className="w-4 h-4" />
+                    <span>Public</span>
+                  </div>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    value="private"
+                    checked={visibility === 'private'}
+                    onChange={() => setVisibility('private')}
+                    disabled={viewOnly}
+                    className="text-blue-500 focus:ring-blue-500"
+                  />
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <EyeSlashIcon className="w-4 h-4" />
+                    <span>Private</span>
+                  </div>
+                </label>
+              </div>
+              <p className="text-xs text-gray-400 bg-gray-700/30 rounded-lg p-2">
+                Public: All organization members can see this task. Private: Only the assignee can view it.
+              </p>
+            </div>
+
+            {/* Subtasks */}
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <CheckCircleIcon className="w-4 h-4" />
+                Subtasks
+              </label>
+              <div className="space-y-2">
+                {subtasks.map((subtask, idx) => (
+                  <div key={idx} className="flex items-center gap-3 p-3 bg-gray-700/30 rounded-lg border border-gray-600/30">
+                    <input
+                      type="text"
+                      placeholder={`Subtask ${idx + 1}`}
+                      value={subtask.title}
+                      onChange={(e) =>
+                        setSubtasks((prev) =>
+                          prev.map((s, i) => (i === idx ? { ...s, title: e.target.value } : s))
+                        )
+                      }
+                      disabled={viewOnly}
+                      className="flex-1 p-2 rounded bg-gray-800/50 border border-gray-600/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50"
+                    />
+                    {!viewOnly && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSubtasks((prev) => prev.filter((_, i) => i !== idx))
+                        }
+                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded transition-colors"
+                      >
+                        <XMarkIcon className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {!viewOnly && (
+                  <button
+                    type="button"
+                    onClick={() => setSubtasks([...subtasks, { title: '', done: false }])}
+                    className="w-full p-3 border-2 border-dashed border-gray-600/50 rounded-lg text-blue-400 hover:text-blue-300 hover:border-blue-500/50 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <PlusIcon className="w-4 h-4" />
+                    Add Subtask
+                  </button>
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer */}
+        <div className="bg-gray-800/50 border-t border-gray-700/50 p-6">
+          <div className="flex justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-500 rounded text-white"
+              className="px-6 py-2 bg-gray-600 hover:bg-gray-500 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105"
             >
-              Cancel
+              {viewOnly ? 'Close' : 'Cancel'}
             </button>
             {!viewOnly && (
               <button
                 type="submit"
+                onClick={handleSubmit}
                 disabled={loading}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none"
               >
-                {loading ? 'Saving...' : taskToEdit ? 'Update Task' : 'Add Task'}
+                {loading ? (
+                  <div className="flex items-center gap-2">
+                    <ClockIcon className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    {taskToEdit ? <SparklesIcon className="w-4 h-4" /> : <PlusIcon className="w-4 h-4" />}
+                    {taskToEdit ? 'Update Task' : 'Create Task'}
+                  </div>
+                )}
               </button>
             )}
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
