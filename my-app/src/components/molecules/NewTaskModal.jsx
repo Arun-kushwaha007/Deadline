@@ -53,6 +53,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [organizationId, setOrganizationId] = useState('');
+  const [assigneeRole, setAssigneeRole] = useState('member'); // Default role
 
   // Priority configuration
   const priorityConfig = {
@@ -118,17 +119,19 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   useEffect(() => {
     if (organizationId) {
       const hasOrgDetails = selectedOrganization && selectedOrganization._id === organizationId;
-      const hasMembersCache = organizationMembers[organizationId]?.status === 'succeeded';
-      
-      if (!hasOrgDetails) {
+      const orgDetailsCurrentlyLoading = detailsLoading && selectedOrganization?._id !== organizationId;
+      const membersCache = organizationMembers[organizationId];
+      const membersCurrentlyLoading = membersCache?.status === 'loading';
+
+      if (!hasOrgDetails && !orgDetailsCurrentlyLoading) {
         dispatch(fetchOrganizationDetails(organizationId));
       }
       
-      if (!hasMembersCache) {
+      if (!membersCache || (membersCache.status !== 'succeeded' && !membersCurrentlyLoading)) {
         dispatch(fetchOrganizationMembers(organizationId));
       }
     }
-  }, [organizationId, dispatch, selectedOrganization, organizationMembers]);
+  }, [organizationId, dispatch, selectedOrganization, organizationMembers, detailsLoading]);
 
   useEffect(() => {
     if (taskToEdit) {
@@ -166,27 +169,53 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   }, [taskToEdit, users, isOpen]);
 
   useEffect(() => {
-    let membersToFilter = [];
+    let potentialMembers = [];
 
     if (organizationId) {
-      const cachedMembers = organizationMembers[organizationId];
-      if (cachedMembers?.status === 'succeeded') {
-        membersToFilter = cachedMembers.members
-          .map(member => member.userId)
-          .filter(user => user && user._id);
+      const cachedMembersData = organizationMembers[organizationId];
+      const selectedOrgData = selectedOrganization;
+
+      // Source 1: organizationMembers cache (from fetchOrganizationMembers)
+      if (cachedMembersData?.status === 'succeeded' && cachedMembersData.members) {
+        potentialMembers = cachedMembersData.members.map(member => {
+          if (member && member.userId && typeof member.userId === 'object' && member.userId._id && member.userId.name) {
+            return member.userId; // Structure is { userId: { _id: ..., name: ... } }
+          }
+          if (member && member._id && member.name) {
+            return member; // Structure is { _id: ..., name: ... } (direct user-like object)
+          }
+          return null;
+        }).filter(user => user); // Filter out nulls
       }
-      else if (selectedOrganization && selectedOrganization._id === organizationId) {
-        membersToFilter = selectedOrganization.members
-          .map(member => member.userId)
-          .filter(user => user && user._id);
+      
+      // Source 2: selectedOrganization.members (from fetchOrganizationDetails)
+      // This is used if cache was empty/failed OR if it yielded no members and selectedOrgData is available
+      if (potentialMembers.length === 0 && selectedOrgData && selectedOrgData._id === organizationId && selectedOrgData.members) {
+        potentialMembers = selectedOrgData.members.map(member => {
+          // Primarily expect direct user-like objects, as suggested by AssignTaskModal
+          if (member && member._id && member.name) {
+            return member; 
+          }
+          // Fallback for { userId: { ... } } structure, for robustness
+          if (member && member.userId && typeof member.userId === 'object' && member.userId._id && member.userId.name) {
+            return member.userId;
+          }
+          return null;
+        }).filter(user => user);
       }
     } else {
-      membersToFilter = users;
+      // No organization selected, use global users list
+      potentialMembers = users; 
     }
 
+    // Ensure all items in potentialMembers are valid user objects with _id and name
+    const finalMembersToFilter = potentialMembers.filter(
+      user => user && user._id && typeof user.name === 'string'
+    );
+
     const filtered = assigneeSearch.trim() === ''
-      ? membersToFilter
-      : membersToFilter.filter(user =>
+      ? finalMembersToFilter
+      : finalMembersToFilter.filter(user =>
           user.name.toLowerCase().includes(assigneeSearch.toLowerCase())
         );
 
@@ -194,23 +223,34 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   }, [assigneeSearch, organizationId, selectedOrganization, organizationMembers, users]);
 
   useEffect(() => {
-    if (organizationId && assignee) {
-      let orgMembers = [];
-      
-      const cachedMembers = organizationMembers[organizationId];
-      if (cachedMembers?.status === 'succeeded') {
-        orgMembers = cachedMembers.members;
-      } else if (selectedOrganization && selectedOrganization._id === organizationId) {
-        orgMembers = selectedOrganization.members;
+    if (organizationId && assignee && assignee._id !== 'everyone') {
+      let orgUserObjects = [];
+      const cachedMembersData = organizationMembers[organizationId];
+      const selectedOrgData = selectedOrganization;
+
+      if (cachedMembersData?.status === 'succeeded' && cachedMembersData.members) {
+        orgUserObjects = cachedMembersData.members.map(member => {
+          if (member && member.userId && typeof member.userId === 'object' && member.userId._id) return member.userId;
+          if (member && member._id) return member; // Assuming 'member' itself could be the user object
+          return null;
+        }).filter(Boolean);
+      } else if (selectedOrgData && selectedOrgData._id === organizationId && selectedOrgData.members) {
+        orgUserObjects = selectedOrgData.members.map(member => {
+          if (member && member._id) return member; // Primarily expect direct user object
+          if (member && member.userId && typeof member.userId === 'object' && member.userId._id) return member.userId;
+          return null;
+        }).filter(Boolean);
       }
       
-      if (orgMembers.length > 0) {
-        const isAssigneeMember = orgMembers.some(
-          member => member.userId?._id === assignee._id
+      if (orgUserObjects.length > 0) {
+        const isAssigneeStillMember = orgUserObjects.some(
+          userObj => userObj._id === assignee._id
         );
-        if (!isAssigneeMember && assignee._id !== 'everyone') {
-          setAssignee(null);
+        if (!isAssigneeStillMember) {
+          setAssignee(null); // Clear assignee if they are no longer in the selected org's member list
         }
+      } else if (assignee) { // If org has no members, clear assignee unless it's "everyone"
+        setAssignee(null);
       }
     }
   }, [organizationId, selectedOrganization, organizationMembers, assignee]);
@@ -263,6 +303,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
       subtasks: subtasks.filter(s => s.title.trim()),
       assignedTo: assignee?._id !== 'everyone' ? assignee._id : null,
+      ...(assignee && assignee._id !== 'everyone' && { assigneeRole }), // Conditionally add assigneeRole
       assignedBy: assigner,
       visibility,
       organization: organizationId,
@@ -621,7 +662,10 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
                         {!viewOnly && (
                           <button
                             type="button"
-                            onClick={() => setAssignee(null)}
+                            onClick={() => {
+                              setAssignee(null);
+                              setAssigneeRole('member'); // Reset role when assignee is cleared
+                            }}
                             className="text-red-400 hover:text-red-300 text-sm transition-colors"
                           >
                             <XMarkIcon className="w-4 h-4" />
@@ -630,6 +674,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
                       </div>
                     </div>
                   )}
+
+               
                 </div>
               )}
               
