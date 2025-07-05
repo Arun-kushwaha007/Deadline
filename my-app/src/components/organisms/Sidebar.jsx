@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, UserPen, User, Settings, HelpCircle, Sparkles } from 'lucide-react';
+import { LogOut, UserPen, User, Settings, HelpCircle,Star ,Sparkles } from 'lucide-react';
 import MenuItems from './MenuItems';
 
 const Sidebar = () => {
@@ -41,7 +41,13 @@ const Sidebar = () => {
       icon: <HelpCircle size={16} />,
       onClick: () => navigate('/help'),
       color: 'text-purple-600 dark:text-purple-400'
-    }
+    },
+    {
+          label: 'Feedback',
+          icon: <Star size={16} />,
+          onClick: () => navigate('/feedback'),
+          color: 'text-red-600 dark:text-red-400'
+        }
   ];
 
   return (

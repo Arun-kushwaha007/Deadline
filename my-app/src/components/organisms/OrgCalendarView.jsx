@@ -214,14 +214,14 @@ const OrgCalendarView = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen  text-white">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/10 to-indigo-600/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative p-6 space-y-6">
+      <div className="relative  space-y-6">
         {/* Header Section */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">

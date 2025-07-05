@@ -23,6 +23,8 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy'; 
 // import Setting from './pages/Setting'; 
 import Setting from './pages/Setting';
+import Feedback from './pages/Feedback';
+
 
 const AllApiRoutes = () => {
   return (
@@ -46,6 +48,7 @@ const AllApiRoutes = () => {
       <Route path="/terms" element={<Terms />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/settings" element={<Setting />} />
+      <Route path="/feedback" element={<Feedback />} />
       
       {/* Catch-all route for 404 Not Found */}
       <Route path="*" element={<div>404 Not Found</div>} />

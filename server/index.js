@@ -64,6 +64,7 @@ import notificationRoutes from './routes/notificationRoutes.js';
 import organizationRoutes from './routes/organizationRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import todoRoutes from './routes/todos.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -71,6 +72,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/todos', todoRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Health check route
 app.get('/api/health', (_, res) => {
