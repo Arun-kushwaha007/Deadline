@@ -46,12 +46,15 @@ const api = {
   // DELETE request
   delete: async (endpoint) => {
     const token = localStorage.getItem('token');
+    console.log('Token from localStorage in api.delete:', token); // <-- ADDED THIS
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+    console.log('Headers in api.delete:', headers); // <-- AND THIS
     const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
+      headers: headers, // Use the constructed headers
     });
     return response.json();
   },

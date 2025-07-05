@@ -334,3 +334,79 @@ export const assignTask = async (req, res) => {
     res.status(500).json({ message: 'Failed to assign task', error: error.message });
   }
 };
+
+// DELETE /api/organizations/:id/members/:memberId
+export const removeMemberFromOrganization = async (req, res) => {
+  const { id: orgId, memberId: memberUuidToRemove } = req.params;
+  const requesterUuid = req.user.userId; // UUID of the user making the request
+
+  try {
+    const organization = await Organization.findById(orgId);
+    if (!organization) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+
+    // Find the requester's membership and role in this organization
+    const requesterMembership = organization.members.find(
+      (m) => m.userId === requesterUuid
+    );
+
+    if (!requesterMembership) {
+      return res.status(403).json({ message: 'Requester is not a member of this organization' });
+    }
+
+    // Only admins or coordinators can remove members
+    if (!['admin', 'coordinator'].includes(requesterMembership.role)) {
+      return res.status(403).json({ message: 'User does not have permission to remove members' });
+    }
+
+    // Find the index of the member to remove (by UUID)
+    const memberIndexToRemove = organization.members.findIndex(
+      (m) => m.userId === memberUuidToRemove
+    );
+
+    if (memberIndexToRemove === -1) {
+      return res.status(404).json({ message: 'Member not found in this organization' });
+    }
+
+    const memberToRemove = organization.members[memberIndexToRemove];
+
+    // Prevent removing the last admin
+    if (memberToRemove.role === 'admin') {
+      const adminCount = organization.members.filter(m => m.role === 'admin').length;
+      if (adminCount <= 1) {
+        return res.status(400).json({ message: 'Cannot remove the last admin of the organization' });
+      }
+    }
+    
+    // Prevent coordinator from removing admin
+    if (requesterMembership.role === 'coordinator' && memberToRemove.role === 'admin') {
+        return res.status(403).json({ message: 'Coordinators cannot remove admins.'});
+    }
+
+    // Remove the member
+    organization.members.splice(memberIndexToRemove, 1);
+    await organization.save();
+
+    // Optionally, send a notification to the removed member (if desired)
+    // For example:
+    // const io = req.app.get('io');
+    // const redisClient = req.app.get('redis');
+    // if (io && redisClient) {
+    //   await sendNotification({
+    //     io,
+    //     redisClient,
+    //     userId: memberUuidToRemove, // UUID of the removed member
+    //     type: 'warning', // Or 'removedFromOrganization'
+    //     message: `You have been removed from the organization '${organization.name}'.`,
+    //     entityId: organization._id,
+    //     entityModel: 'Organization',
+    //   });
+    // }
+
+    res.status(200).json({ message: 'Member removed successfully', organization });
+  } catch (error) {
+    console.error('Error removing member:', error);
+    res.status(500).json({ message: 'Failed to remove member', error: error.message });
+  }
+};

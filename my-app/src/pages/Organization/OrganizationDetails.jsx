@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api'; // Import the custom api object
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchOrganizationDetails,
@@ -92,33 +92,33 @@ const OrganizationDetails = () => {
 
   const handleSave = async () => {
     try {
-      const backendUrl =
-        import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-      await axios.put(
-        `${backendUrl}/api/organizations/${orgId}`,
+      // Use api.put and adjust the endpoint
+      await api.put(
+        `/organizations/${orgId}`,
         editData
       );
       dispatch(fetchOrganizationDetails(orgId));
       setIsEditing(false);
     } catch (err) {
       console.error('Failed to update organization:', err);
+      // Consider user feedback for errors here too
     }
   };
 
   const handleDeleteMember = async (member) => {
     try {
-      const backendUrl =
-        import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-      await axios.delete(
-        `${backendUrl}/api/organizations/${orgId}/members/${
-          typeof member.userId === 'object'
-            ? member.userId._id
-            : member.userId
-        }`
+      const memberId = typeof member.userId === 'object' 
+        ? member.userId.userId 
+        : member.userId;
+
+      // Use api.delete and adjust the endpoint
+      await api.delete(
+        `/organizations/${orgId}/members/${memberId}`
       );
       dispatch(fetchOrganizationDetails(orgId));
     } catch (err) {
       console.error('Failed to delete member:', err);
+      // It's good practice to inform the user too, e.g., via a toast notification
     }
   };
 

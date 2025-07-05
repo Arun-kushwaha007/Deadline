@@ -111,7 +111,7 @@ const OrganizationDashboard = () => {
                   Create Organization
                 </button>
                 <button
-                  onClick={() => navigate('/join-organization')}
+                  onClick={() => navigate('/join_organization')}
                   className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors font-medium flex items-center gap-2"
                 >
                   <span className="text-lg">🤝</span>

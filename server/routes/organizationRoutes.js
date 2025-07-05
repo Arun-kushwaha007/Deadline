@@ -7,6 +7,7 @@ import {
   assignTask,
   getMyOrganizations,
   getOrganizationMembers, // Import the new controller function
+  removeMemberFromOrganization, // Added for deleting members
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
@@ -34,5 +35,8 @@ router.post('/:id/members', addMember);
 
 // POST assign a task to a member
 router.post('/:id/tasks', assignTask);
+
+// DELETE a member from an organization
+router.delete('/:id/members/:memberId', authMiddleware, removeMemberFromOrganization);
 
 export default router;
