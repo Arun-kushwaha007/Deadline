@@ -1332,7 +1332,7 @@ If you find **CollabNest** helpful (or at least amusing), you can:
 
 ☕ **Buy me a coffee** — Because coding runs on caffeine
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-F7DF1E?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/arunkushwaha)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-F7DF1E?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://coff.ee/arunkushwaha)
 
 ---
 
