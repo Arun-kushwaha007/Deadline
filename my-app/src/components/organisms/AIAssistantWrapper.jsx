@@ -8,15 +8,38 @@ export default function AIAssistantWrapper() {
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Show welcome notification after component mounts
+  // Show welcome notification with auto-close and recurring pattern
   useEffect(() => {
-    const timer = setTimeout(() => {
+    let initialTimer;
+    let recurringInterval;
+    let autoCloseTimer;
+
+    const showNotification = () => {
       if (!isOpen) {
         setHasNewMessage(true);
+        
+        // Auto-close after 10 seconds
+        autoCloseTimer = setTimeout(() => {
+          setHasNewMessage(false);
+        }, 10000);
       }
+    };
+
+    // Initial notification after 3 seconds
+    initialTimer = setTimeout(() => {
+      showNotification();
     }, 3000);
 
-    return () => clearTimeout(timer);
+    // Recurring notification every 1 minute (60000ms)
+    recurringInterval = setInterval(() => {
+      showNotification();
+    }, 60000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(recurringInterval);
+      clearTimeout(autoCloseTimer);
+    };
   }, [isOpen]);
 
   // Clear notification when panel is opened
@@ -31,6 +54,10 @@ export default function AIAssistantWrapper() {
     setHasNewMessage(false);
   };
 
+  const handleCloseNotification = () => {
+    setHasNewMessage(false);
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* AI Assistant Panel */}
@@ -40,7 +67,7 @@ export default function AIAssistantWrapper() {
         </div>
       )}
 
-      {/* Welcome Tooltip */}
+      {/* Welcome Tooltip with Auto-close */}
       {!isOpen && hasNewMessage && (
         <div className="absolute bottom-16 right-0 mb-2 animate-in slide-in-from-bottom-3 fade-in duration-500">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-2xl border border-gray-200 dark:border-gray-700 max-w-xs relative">
@@ -55,14 +82,28 @@ export default function AIAssistantWrapper() {
                 <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                   I'm here to help with your tasks and productivity. Click to start chatting!
                 </p>
+                {/* Auto-close indicator */}
+                <div className="mt-2 flex items-center gap-1">
+                  <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-500">
+                    Auto-closes in 10s
+                  </span>
+                </div>
               </div>
               <button
-                onClick={() => setHasNewMessage(false)}
+                onClick={handleCloseNotification}
                 className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                title="Close notification"
               >
                 <X className="w-3 h-3" />
               </button>
             </div>
+            
+            {/* Progress bar for auto-close */}
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-b-xl overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-purple-500 to-blue-600 animate-progress-bar"></div>
+            </div>
+            
             {/* Tooltip Arrow */}
             <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700"></div>
           </div>
@@ -139,7 +180,7 @@ export default function AIAssistantWrapper() {
   );
 }
 
-// Add CSS for animation delays
+// Enhanced CSS with progress bar animation
 const styles = `
   .animation-delay-200 {
     animation-delay: 200ms;
@@ -158,6 +199,19 @@ const styles = `
   
   .animate-in {
     animation: animate-in 0.3s ease-out;
+  }
+  
+  @keyframes progress-bar {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0%;
+    }
+  }
+  
+  .animate-progress-bar {
+    animation: progress-bar 10s linear forwards;
   }
 `;
 

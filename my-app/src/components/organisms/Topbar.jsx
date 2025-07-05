@@ -275,7 +275,7 @@ const Topbar = () => {
                               className="mt-2 text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 py-1 px-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
                               title="Snooze for 10 minutes"
                             >
-                              <AlarmClockCheck size={12} /> Snooze 10m
+                              <AlarmClockCheck size={12} /> Snooze 
                             </button>
                           </div>
                           {!notif.isRead && (

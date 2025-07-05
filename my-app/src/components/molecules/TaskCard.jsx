@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { 
   CalendarIcon, 
   ClockIcon, 
@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function TaskCard({
+  id,
   title,
   description,
   dueDate,
@@ -29,70 +30,120 @@ export default function TaskCard({
   onDelete,
 }) {
   const [expanded, setExpanded] = useState(false);
+  const actionButtonsRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
 
+  // Priority configuration
   const priorityConfig = {
     low: {
       bg: 'bg-green-500/20',
       border: 'border-green-500/30',
       text: 'text-green-400',
       icon: '🟢',
-      gradient: 'from-green-500/10 to-emerald-500/10'
+      // gradient: '#10B981, #059669'
     },
     medium: {
       bg: 'bg-yellow-500/20',
       border: 'border-yellow-500/30',
       text: 'text-yellow-400',
       icon: '🟡',
-      gradient: 'from-yellow-500/10 to-orange-500/10'
+      // gradient: '#F59E0B, #D97706'
     },
     high: {
       bg: 'bg-red-500/20',
       border: 'border-red-500/30',
       text: 'text-red-400',
       icon: '🔴',
-      gradient: 'from-red-500/10 to-pink-500/10'
-    },
+      // gradient: '#EF4444, #DC2626'
+    }
   };
 
+  // Visibility configuration
   const visibilityConfig = {
-    public: { icon: '🌍', color: 'text-blue-400' },
-    team: { icon: '👥', color: 'text-purple-400' },
-    private: { icon: '🔒', color: 'text-gray-400' }
+    public: {
+      color: 'text-blue-400',
+      icon: '👁️'
+    },
+    private: {
+      color: 'text-purple-400',
+      icon: '🔒'
+    }
   };
 
+  // Calculate date-related properties
+  const now = new Date();
+  const dueDateObj = dueDate ? new Date(dueDate) : null;
+  const isOverdue = dueDateObj && dueDateObj < now;
+  const isDueSoon = dueDateObj && !isOverdue && (dueDateObj - now) < (24 * 60 * 60 * 1000); // Due within 24 hours
+
+  // Calculate subtasks progress
+  const totalSubtasks = subtasks.length;
+  const completedSubtasks = subtasks.filter(subtask => subtask.done).length;
+  const progressPercentage = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
+
+  // Get style configurations
   const priorityStyle = priorityConfig[priority] || priorityConfig.medium;
   const visibilityStyle = visibilityConfig[visibility] || visibilityConfig.private;
 
-  const completedSubtasks = subtasks.filter(subtask => subtask.done).length;
-  const totalSubtasks = subtasks.length;
-  const progressPercentage = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-
-  const isOverdue = dueDate && new Date(dueDate) < new Date();
-  const isDueSoon = dueDate && new Date(dueDate) <= new Date(Date.now() + 24 * 60 * 60 * 1000);
-
   const ActionButton = ({ icon: Icon, label, onClick, variant = 'default' }) => {
-    const variants = {
-      default: 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50',
-      primary: 'text-blue-400 hover:text-blue-300 hover:bg-blue-500/20',
-      warning: 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20',
-      danger: 'text-red-400 hover:text-red-300 hover:bg-red-500/20'
+      const variants = {
+        default: 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50',
+        primary: 'text-blue-400 hover:text-blue-300 hover:bg-blue-500/20',
+        warning: 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20',
+        danger: 'text-red-400 hover:text-red-300 hover:bg-red-500/20'
+      };
+  
+      const handleButtonClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        setIsDragging(false);
+        
+        // Debug logging for all actions
+        console.log(`🔍 ${label} button clicked:`, {
+          taskId: id,
+          title: title,
+          action: label
+        });
+        
+        if (onClick) {
+          onClick();
+        }
+      };
+  
+      const handlePointerDown = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsDragging(false);
+      };
+  
+      const handleMouseDown = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsDragging(false);
+      };
+  
+      return (
+        <button
+          className={`
+            p-2 rounded-lg transition-all duration-200 group ${variants[variant]} 
+            relative z-50 pointer-events-auto
+          `}
+          onClick={handleButtonClick}
+          onPointerDown={handlePointerDown}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handlePointerDown}
+          onDragStart={(e) => e.preventDefault()}
+          onDrag={(e) => e.preventDefault()}
+          draggable={false}
+          type="button"
+          title={label}
+          data-action-button="true"
+        >
+          <Icon className="w-4 h-4" />
+        </button>
+      );
     };
-
-    return (
-      <button
-        className={`p-2 rounded-lg transition-all duration-200 group ${variants[variant]}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          onClick?.();
-        }}
-        onPointerDown={(e) => e.stopPropagation()}
-        type="button"
-        title={label}
-      >
-        <Icon className="w-4 h-4" />
-      </button>
-    );
-  };
 
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -103,30 +154,73 @@ export default function TaskCard({
     });
   };
 
+  // Handle card interactions with better button detection
+  const handleCardClick = (e) => {
+    // Check if click is on action button or its children
+    const isActionButton = e.target.closest('[data-action-button="true"]') || 
+                          e.target.closest('.action-buttons-container');
+    
+    if (!isActionButton && !isDragging) {
+      setExpanded((prev) => !prev);
+    }
+  };
+
+  const handleCardPointerDown = (e) => {
+    // Check if pointer down is on action button
+    const isActionButton = e.target.closest('[data-action-button="true"]') || 
+                          e.target.closest('.action-buttons-container');
+    
+    if (isActionButton) {
+      e.stopPropagation();
+      e.preventDefault();
+      setIsDragging(false);
+      return;
+    }
+    
+    // Allow drag for non-button areas
+    setIsDragging(true);
+  };
+
+  const handleCardMouseDown = (e) => {
+    const isActionButton = e.target.closest('[data-action-button="true"]') || 
+                          e.target.closest('.action-buttons-container');
+    
+    if (isActionButton) {
+      e.stopPropagation();
+      e.preventDefault();
+      setIsDragging(false);
+      return;
+    }
+  };
+
   return (
-    <div
-      className={`
-        relative group bg-gradient-to-br from-gray-800/90 to-gray-900/90 
-        backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-xl 
-        transition-all duration-300 cursor-pointer overflow-hidden
-        ${expanded 
-          ? 'p-6 scale-[1.02] shadow-2xl border-gray-600/60 z-20' 
-          : 'p-4 hover:scale-[1.01] hover:shadow-lg hover:border-gray-600/40'
-        }
-        ${isOverdue ? 'ring-2 ring-red-500/30' : ''}
-      `}
-      style={{ 
-        minHeight: expanded ? 'auto' : '120px', 
-        minWidth: '280px', 
-        maxWidth: '380px',
-        backgroundImage: expanded ? `linear-gradient(135deg, ${priorityStyle.gradient})` : ''
-      }}
-      onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
-      onClick={() => setExpanded((prev) => !prev)}
-    >
+   <div
+       className={`
+         relative group bg-gradient-to-br from-gray-800/90 to-gray-900/90 
+         backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-xl 
+         transition-all duration-300 cursor-pointer overflow-hidden
+         ${expanded 
+           ? 'p-6 scale-[1.02] shadow-2xl border-gray-600/60 z-20' 
+           : 'p-4 hover:scale-[1.01] hover:shadow-lg hover:border-gray-600/40'
+         }
+         ${isOverdue ? 'ring-2 ring-red-500/30' : ''}
+         ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'}
+       `}
+       style={{ 
+         minHeight: expanded ? 'auto' : '120px', 
+         minWidth: '280px', 
+         maxWidth: '380px',
+         backgroundImage: expanded ? `linear-gradient(135deg, ${priorityStyle.gradient})` : ''
+       }}
+       onMouseEnter={() => setExpanded(true)}
+       onMouseLeave={() => setExpanded(false)}
+       onClick={handleCardClick}
+       onPointerDown={handleCardPointerDown}
+       onMouseDown={handleCardMouseDown}
+       data-task-card="true"
+     >
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
       </div>
@@ -293,7 +387,6 @@ export default function TaskCard({
                 </span>
               </div>
               
-              {/* Progress Bar */}
               <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
                 <div 
                   className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
@@ -331,7 +424,15 @@ export default function TaskCard({
           )}
 
           {/* Action Buttons */}
-          <div className="flex justify-end gap-2 pt-4 border-t border-gray-700/50">
+          <div 
+            ref={actionButtonsRef}
+            className="action-buttons-container flex justify-end gap-2 pt-4 border-t border-gray-700/50 relative z-50"
+            onPointerDown={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            onDragStart={(e) => e.preventDefault()}
+            style={{ pointerEvents: 'auto' }}
+          >
             <ActionButton 
               icon={EyeIcon} 
               label="View" 

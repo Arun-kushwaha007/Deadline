@@ -38,7 +38,7 @@ export default function SortableTask({
     >
       <TaskCard
         {...task}
-        id={task.id}
+         id={task._id || task.id}
         title={task.title}
         description={task.description}
         priority={task.priority}

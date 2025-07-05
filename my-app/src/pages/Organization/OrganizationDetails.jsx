@@ -227,10 +227,10 @@ const OrganizationDetails = () => {
                     <span className="text-gray-400 text-sm">
                       {selectedOrganization.members.length} members
                     </span>
-                    <span className="text-gray-600">•</span>
+                    {/* <span className="text-gray-600">•</span>
                     <span className="text-gray-400 text-sm">
                       {selectedOrganization.tasks?.length || 0} tasks
-                    </span>
+                    </span> */}
                   </div>
                 </div>
               </div>
@@ -249,13 +249,13 @@ const OrganizationDetails = () => {
                 {isPrivileged && (
                   isEditing ? (
                     <div className="flex gap-2">
-                      <button
+                      {/* <button
                         onClick={handleSave}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
                       >
                         <CheckIcon className="w-4 h-4" />
                         Save
-                      </button>
+                      </button> */}
                       <button
                         onClick={handleEditToggle}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
@@ -362,13 +362,59 @@ const OrganizationDetails = () => {
               </div>
               
               {myRole && (
+                <>
                 <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${getRoleConfig(myRole).bg} ${getRoleConfig(myRole).border}`}>
                   <span className="text-sm">{getRoleConfig(myRole).icon}</span>
                   <span className={`text-sm font-medium ${getRoleConfig(myRole).color}`}>
                     Your role: {myRole}
                   </span>
+                  
                 </div>
+                <div className="flex items-center gap-3">
+                                {isPrivileged && (
+                                  <></>
+                                  // <button
+                                  //   onClick={handleAddMember}
+                                  //   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                  // >
+                                  //   <UserPlusIcon className="w-4 h-4" />
+                                  //   Add Member
+                                  // </button>
+                                )}
+                
+                                {isPrivileged && (
+                                  isEditing ? (
+                                    <div className="flex gap-2">
+                                      {/* <button
+                                        onClick={handleSave}
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                      >
+                                        <CheckIcon className="w-4 h-4" />
+                                        Save
+                                      </button> */}
+                                      <button
+                                        onClick={handleEditToggle}
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                      >
+                                        <XMarkIcon className="w-4 h-4" />
+                                        Cancel
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={handleEditToggle}
+                                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                    >
+                                      <PencilIcon className="w-4 h-4" />
+                                      Edit
+                                    </button>
+                                  )
+                                )}
+                              </div>
+                </>
+                
               )}
+              
             </div>
 
             <div className="grid gap-4 mb-6">
