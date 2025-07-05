@@ -23,41 +23,45 @@ export default function AIAssistantPanel() {
   // Resize handlers
   const handleMouseDown = (e, type) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsResizing(true);
     setResizeType(type);
+    
+    const handleMouseMove = (e) => {
+      if (!panelRef.current) return;
+
+      const rect = panelRef.current.getBoundingClientRect();
+      
+      if (type === 'width') {
+        const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
+        setPanelSize(prev => ({ ...prev, width: newWidth }));
+      } else if (type === 'height') {
+        const newHeight = Math.max(300, Math.min(800, rect.bottom - e.clientY));
+        setPanelSize(prev => ({ ...prev, height: newHeight }));
+      } else if (type === 'both') {
+        const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
+        const newHeight = Math.max(300, Math.min(800, rect.bottom - e.clientY));
+        setPanelSize({ width: newWidth, height: newHeight });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      setResizeType(null);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseMove = (e) => {
-    if (!isResizing || !panelRef.current) return;
-
-    const rect = panelRef.current.getBoundingClientRect();
-    
-    if (resizeType === 'width') {
-      const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
-      setPanelSize(prev => ({ ...prev, width: newWidth }));
-    } else if (resizeType === 'height') {
-      const newHeight = Math.max(300, Math.min(800, e.clientY - rect.top));
-      setPanelSize(prev => ({ ...prev, height: newHeight }));
-    } else if (resizeType === 'both') {
-      const newWidth = Math.max(280, Math.min(600, rect.right - e.clientX));
-      const newHeight = Math.max(300, Math.min(800, e.clientY - rect.top));
-      setPanelSize({ width: newWidth, height: newHeight });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsResizing(false);
-    setResizeType(null);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  };
-
   useEffect(() => {
+    // Cleanup function for component unmount
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      // Remove any remaining event listeners
+      document.removeEventListener('mousemove', () => {});
+      document.removeEventListener('mouseup', () => {});
     };
   }, []);
 
@@ -135,25 +139,25 @@ export default function AIAssistantPanel() {
       {/* Resize Handles */}
       {/* Left resize handle (width) */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-purple-500/30 transition-colors z-10"
+        className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-purple-500/50 transition-colors z-10 bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'width')}
         title="Resize width"
       />
       
-      {/* Bottom resize handle (height) */}
+      {/* Top resize handle (height) */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-1 cursor-ns-resize hover:bg-purple-500/30 transition-colors z-10"
+        className="absolute top-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-purple-500/50 transition-colors z-10 bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'height')}
         title="Resize height"
       />
       
-      {/* Corner resize handle (both) */}
+      {/* Top-left corner resize handle (both) */}
       <div
-        className="absolute bottom-0 left-0 w-4 h-4 cursor-nw-resize hover:bg-purple-500/50 transition-colors z-20 flex items-center justify-center"
+        className="absolute top-0 left-0 w-6 h-6 cursor-nw-resize hover:bg-purple-500/70 transition-colors z-20 flex items-center justify-center bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'both')}
         title="Resize both dimensions"
       >
-        <GripVertical className="w-3 h-3 text-gray-400 transform rotate-45" />
+        <GripVertical className="w-3 h-3 text-gray-400 hover:text-purple-500 transition-colors" />
       </div>
 
       {/* Header */}
