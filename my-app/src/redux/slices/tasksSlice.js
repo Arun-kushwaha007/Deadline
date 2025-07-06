@@ -38,6 +38,27 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (organizati
   }
 });
 
+export const updateTaskStatus = createAsyncThunk('tasks/updateTaskStatus', async ({ id, status }, { dispatch, getState, rejectWithValue }) => {
+  const oldTasks = JSON.parse(JSON.stringify(getState().tasks.tasks)); // Deep copy
+  const taskIndex = oldTasks.findIndex(task => task.id === id);
+  if (taskIndex === -1) {
+    return rejectWithValue('Task not found');
+  }
+  const oldTaskStatus = oldTasks[taskIndex].status;
+
+  // Optimistically update the state
+  dispatch(tasksSlice.actions.optimisticallyUpdateTaskStatus({ id, status }));
+
+  try {
+    const response = await axios.put(`${API_BASE_URL}/tasks/${id}`, { status }, getAuthConfig());
+    return { ...response.data, id: response.data._id };
+  } catch (error) {
+    // Rollback on error
+    dispatch(tasksSlice.actions.optimisticallyUpdateTaskStatus({ id, status: oldTaskStatus }));
+    return rejectWithValue(error.response?.data || error.message);
+  }
+});
+
 export const fetchUsers = createAsyncThunk('tasks/fetchUsers', async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/users`, getAuthConfig());
@@ -79,10 +100,12 @@ const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    updateTaskStatus: (state, action) => {
+    optimisticallyUpdateTaskStatus: (state, action) => {
       const { id, status } = action.payload;
       const task = state.tasks.find(task => task.id === id);
-      if (task) task.status = status;
+      if (task) {
+        task.status = status;
+      }
     },
     reorderTasks: (state, action) => {
       const { status, tasks: reorderedTasks } = action.payload;
@@ -146,6 +169,28 @@ const tasksSlice = createSlice({
         state.error = action.payload;
       })
 
+      // Update Task Status
+      .addCase(updateTaskStatus.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        // The optimistic update has already updated the task.
+        // We might want to update the task with the response from the server 
+        // if it contains more information or to ensure consistency.
+        const index = state.tasks.findIndex(task => task.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        }
+        state.error = null; // Clear any previous errors
+      })
+      .addCase(updateTaskStatus.rejected, (state, action) => {
+        state.status = 'failed';
+        // The rollback is handled in the thunk itself.
+        // We just need to set the error.
+        state.error = action.payload;
+        // Optionally, you could show a notification to the user here.
+      })
+      // No need for a pending case if we are doing optimistic updates,
+      // unless you want to show a subtle loading indicator somewhere.
+
       // Delete Task
       .addCase(deleteTaskThunk.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter(task => task.id !== action.payload);
@@ -170,7 +215,7 @@ const tasksSlice = createSlice({
 });
 
 export const {
-  updateTaskStatus,
+  optimisticallyUpdateTaskStatus,
   reorderTasks,
   updateTaskOrganization,
   reorderOrgTasks,
