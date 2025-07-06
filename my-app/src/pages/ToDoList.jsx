@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Plus, CheckCircle, Trash2, Calendar, Filter } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
-import axios from 'axios';
+// import api from '../../utils/api'; // Changed from axios to custom api
+import api from '../utils/api';
 import { useNavigate } from 'react-router';
 import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+// const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'; // No longer needed directly
 
 const ToDoList = () => {
   const navigate = useNavigate();
@@ -31,8 +32,8 @@ const ToDoList = () => {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${backendUrl}/api/todos`);
-        setTasks(res.data);
+        const fetchedTasks = await api.get('/todos'); // Use api.get
+        setTasks(fetchedTasks); // api.get returns JSON directly
       } catch (err) {
         console.error('❌ Failed to load tasks:', err);
       } finally {
@@ -45,34 +46,35 @@ const ToDoList = () => {
   const addTask = async () => {
     if (!task.trim()) return;
     try {
-      const response = await axios.post(`${backendUrl}/api/todos`, {
+      const newTask = await api.post('/todos', { // Use api.post
         text: task.trim(),
       });
-      setTasks(prev => [response.data, ...prev]);
+      setTasks(prev => [newTask, ...prev]); // api.post returns JSON directly
       setTask('');
     } catch (error) {
-      console.error('Failed to add task:', error.response?.data || error.message);
+      // The custom api utility already returns .json(), so error.response?.data might not be applicable in the same way
+      // It might be error itself or error.message depending on how api.js handles errors
+      console.error('Failed to add task:', error.message || error);
     }
   };
 
   const toggleComplete = async (id) => {
     try {
-      const res = await axios.put(`${backendUrl}/api/todos/${id}/toggle`);
-      const updated = res.data;
+      const updatedTask = await api.put(`/todos/${id}/toggle`); // Use api.put
       setTasks((prev) =>
-        prev.map((t) => (t._id === id ? updated : t))
+        prev.map((t) => (t._id === id ? updatedTask : t)) // api.put returns JSON directly
       );
     } catch (err) {
-      console.error('❌ Failed to toggle task:', err);
+      console.error('❌ Failed to toggle task:', err.message || err);
     }
   };
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`${backendUrl}/api/todos/${id}`);
+      await api.delete(`/todos/${id}`); // Use api.delete
       setTasks((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
-      console.error('❌ Failed to delete task:', err);
+      console.error('❌ Failed to delete task:', err.message || err);
     }
   };
 
