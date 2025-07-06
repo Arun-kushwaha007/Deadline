@@ -222,32 +222,45 @@ export const getOrganizationById = async (req, res) => {
 
 // POST /api/organizations/:id/members
 export const addMember = async (req, res) => {
-  const { joiningUserId } = req.body;  // UUID string
-  const { id } = req.params;
+  const { joiningUserId, role } = req.body;  // Expect joiningUserId (UUID string) and role
+  const { id: orgId } = req.params; // Organization's MongoDB _id
 
   if (!joiningUserId) {
-    return res.status(400).json({ message: 'User ID is required' });
+    return res.status(400).json({ message: 'User ID (joiningUserId) is required' });
+  }
+  if (!role) {
+    return res.status(400).json({ message: 'User role is required' });
+  }
+
+  // Validate role value against enum in Organization model
+  const validRoles = Organization.schema.path('members.role').enumValues;
+  if (!validRoles.includes(role)) {
+      return res.status(400).json({ message: `Invalid role. Must be one of: ${validRoles.join(', ')}` });
   }
 
   try {
-    // Find user by userId (UUID string)
+    // Find user by their UUID (userId field in User model)
     const user = await User.findOne({ userId: joiningUserId });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found with the provided User ID' });
+    }
 
-    // Find the organization by ID
-    const organization = await Organization.findById(id);
-    if (!organization) return res.status(404).json({ message: 'Organization not found' });
+    // Find the organization by its MongoDB _id
+    const organization = await Organization.findById(orgId);
+    if (!organization) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
 
     // Check if user is already a member by comparing UUID strings
     const alreadyMember = organization.members.some(
-      m => m.userId === user.userId
+      m => m.userId === user.userId // user.userId is the UUID string from the found User document
     );
     if (alreadyMember) {
       return res.status(409).json({ message: 'User is already a member of this organization' });
     }
 
-    // Add member using UUID string
-    organization.members.push({ userId: user.userId, role: 'member' }); // Assuming default role 'member'
+    // Add member using their UUID string and the provided role
+    organization.members.push({ userId: user.userId, role: role }); 
     await organization.save();
 
     // Send notification to the newly added member

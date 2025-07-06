@@ -70,14 +70,15 @@ export const fetchOrganizationDetails = createAsyncThunk(
 
 export const addMemberToOrganization = createAsyncThunk(
   'organization/addMemberToOrganization',
-  async ({ orgId, email }, thunkAPI) => {
+  async ({ orgId, email, role }, thunkAPI) => { // Added role to parameters
     const token = localStorage.getItem('token');
     if (!token) {
       return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
     }
     try {
       // Corrected URL from /add-member to /members
-      const { data } = await axios.post(`${API}/${orgId}/members`, { email }, {
+      // Include role in the payload sent to the backend
+      const { data } = await axios.post(`${API}/${orgId}/members`, { email, role }, { 
         headers: {
           Authorization: `Bearer ${token}`,
         },

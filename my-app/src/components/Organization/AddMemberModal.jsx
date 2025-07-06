@@ -6,10 +6,11 @@ import { addMemberToOrganization } from '../../redux/organizationSlice';
 
 const AddMemberModal = ({ orgId, closeModal }) => {
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState('member'); // Default role is 'member'
   const dispatch = useDispatch();
 
   const handleAdd = () => {
-    dispatch(addMemberToOrganization({ orgId, email }));
+    dispatch(addMemberToOrganization({ orgId, email, role })); // Include role
     closeModal();
   };
 
@@ -24,6 +25,14 @@ const AddMemberModal = ({ orgId, closeModal }) => {
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 border rounded mb-4"
         />
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="w-full p-2 border rounded mb-4"
+        >
+          <option value="member">Member</option>
+          <option value="coordinator">Coordinator</option>
+        </select>
         <div className="flex justify-end gap-2">
           <button className="px-4 py-2 bg-gray-300 rounded" onClick={closeModal}>Cancel</button>
           <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={handleAdd}>Add</button>
