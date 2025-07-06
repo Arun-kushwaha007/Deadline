@@ -12,6 +12,7 @@ const getNotificationTitle = (type) => {
     case 'warning': return 'Warning';
     case 'message': return 'New Message';
     case 'reminder': return 'Reminder';
+    case 'idleTask': return 'Idle Task Alert'; // Added title for idleTask
     default: return 'New Notification';
   }
 };

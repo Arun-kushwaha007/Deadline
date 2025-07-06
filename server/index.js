@@ -15,7 +15,8 @@ import { Server as socketIO } from 'socket.io';
 import { createClient } from 'redis';
 import { Resend } from 'resend';
 import './config/firebaseAdmin.js'; // ✅ Now safe to run after env loaded
-
+// import initializeScheduler from './services/schedulerService.js'; 
+import initializeScheduler from './services/schedulerService.js'; // Import scheduler service
 // Firebase Admin Environment Check
 if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PROJECT_ID) {
   console.warn('⚠️ Firebase Admin SDK not initialized properly. Missing environment variables. correct it');
@@ -44,6 +45,9 @@ const io = new socketIO(server, {
     credentials: true,
   },
 });
+
+// Initialize Scheduler Service (after io and redisClient are available)
+initializeScheduler(io, redisClient);
 
 // Middleware
 app.use(cors({

@@ -68,6 +68,14 @@ const TaskSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    // Stores timestamps of when deadline notifications were sent for different urgency windows
+    // Keys could be like "7day", "3day", "1day_hr1", "1day_hr2", etc.
+    // Values would be the timestamp of the notification.
+    deadlineNotifiedAt: {
+      type: Map,
+      of: Date,
+      default: () => new Map(),
+    }
   },
   {
     // ✅ This automatically adds `createdAt` and `updatedAt` fields
