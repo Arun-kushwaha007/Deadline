@@ -136,6 +136,7 @@ export const getTaskById = async (req, res) => {
 // Update Task
 export const updateTask = async (req, res) => {
   const taskId = req.params.id;
+  console.log(`[Task Update Controller] Received PUT request for task ${taskId} with body:`, JSON.stringify(req.body, null, 2));
   const redisClient = req.app.get('redis');
   const io = req.app.get('io');
   const { assignedTo: newAssignee } = req.body; // Get the new assignee from the request body
@@ -194,6 +195,7 @@ export const updateTask = async (req, res) => {
 
     // For now, let's keep a general update event for other changes if needed,
     // but ensure it doesn't duplicate the assignment notification.
+    /*
     if (io && redisClient && currentAssignee && currentAssignee !== newAssignee) { // Example: notify if assignee changed
         const targetSocketId = await redisClient.get(currentAssignee);
         if (targetSocketId) {
@@ -205,11 +207,32 @@ export const updateTask = async (req, res) => {
             // console.log(`Sent generic taskUpdated to ${currentAssignee}`);
         }
     }
+    */
+
+    // Emit a general task update event to the organization room
+    if (updatedTask.organization && io) {
+      const orgId = updatedTask.organization._id || updatedTask.organization; // Handle populated vs non-populated
+      const roomName = `org:${orgId}`;
+      // We emit to the room, excluding the sender's socket if possible,
+      // though the frontend will also have logic to prevent acting on its own updates.
+      // For now, just broadcast to the room. If the sender is in the room, they'll get it too.
+      io.to(roomName).emit('task_updated_in_organization', { ...updatedTask.toObject(), id: updatedTask._id });
+      console.log(`[Task Update] Emitted 'task_updated_in_organization' to room ${roomName} for task ${updatedTask._id}`);
+    }
 
 
-    res.status(200).json(updatedTask);
+    res.status(200).json({ ...updatedTask.toObject(), id: updatedTask._id });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(`[Task Update Controller] Error updating task ${taskId}:`, error);
+    // Check if it's a Mongoose validation error
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ 
+        error: 'Validation failed', 
+        details: error.errors,
+        message: error.message // General message
+      });
+    }
+    res.status(400).json({ error: error.message, details: error.toString() });
   }
 };
 

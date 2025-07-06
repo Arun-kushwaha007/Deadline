@@ -132,28 +132,67 @@ const startServer = async () => {
 };
 
 // Socket.IO Events
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => { // Added async here
   console.log('🟢 User connected:', socket.id);
 
   socket.on('register', async (userId) => {
+    if (!userId) {
+      console.warn(`[Socket Register] Attempt to register with undefined userId for socket ${socket.id}`);
+      return;
+    }
+    socket.userId = userId; // Store userId on the socket instance
     await redisClient.set(`socket:${userId}`, socket.id);
     console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
+
+    // Join organization rooms
+    try {
+      const User = mongoose.model('User'); // Ensure User model is available
+      const Organization = mongoose.model('Organization'); // Ensure Organization model is available
+
+      const user = await User.findOne({ userId: userId });
+      if (user) {
+        const organizations = await Organization.find({ 'members.userId': userId });
+        organizations.forEach(org => {
+          const roomName = `org:${org._id}`;
+          socket.join(roomName);
+          console.log(`[Socket Register] User ${userId} (${socket.id}) joined room ${roomName}`);
+        });
+      } else {
+        console.warn(`[Socket Register] User with userId ${userId} not found in database.`);
+      }
+    } catch (error) {
+      console.error(`[Socket Register] Error joining organization rooms for user ${userId}:`, error);
+    }
   });
-  
 
   socket.on('disconnect', async () => {
-    try {
-      const keys = await redisClient.keys('*');
-      for (const key of keys) {
-        const socketId = await redisClient.get(key);
-        if (socketId === socket.id) {
-          await redisClient.del(key);
-          console.log(`🔴 User ${key} disconnected`);
-          break;
-        }
+    console.log(`🔴 User ${socket.userId || socket.id} disconnected`);
+    if (socket.userId) {
+      try {
+        await redisClient.del(`socket:${socket.userId}`);
+        console.log(`[Socket Disconnect] Removed user ${socket.userId} from Redis.`);
+        // No explicit room leaving needed for server-to-room broadcasts,
+        // Socket.IO handles this when a socket disconnects.
+      } catch (err) {
+        console.error(`[Socket Disconnect] Redis DEL error for user ${socket.userId}:`, err);
       }
-    } catch (err) {
-      console.error('Redis disconnect error:', err);
+    } else {
+      // Fallback for sockets that didn't register a userId (should be rare)
+      // This part of the original code might be slow if there are many keys.
+      // Consider if this fallback is strictly necessary or can be optimized.
+      try {
+        const keys = await redisClient.keys('socket:*'); // More specific key pattern
+        for (const key of keys) {
+          const socketId = await redisClient.get(key);
+          if (socketId === socket.id) {
+            await redisClient.del(key);
+            console.log(`[Socket Disconnect Fallback] Removed key ${key} for socket ${socket.id}`);
+            break;
+          }
+        }
+      } catch (err) {
+        console.error('[Socket Disconnect Fallback] Redis error:', err);
+      }
     }
   });
 });

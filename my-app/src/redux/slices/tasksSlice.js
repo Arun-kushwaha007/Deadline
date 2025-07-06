@@ -50,6 +50,7 @@ export const updateTaskStatus = createAsyncThunk('tasks/updateTaskStatus', async
   dispatch(tasksSlice.actions.optimisticallyUpdateTaskStatus({ id, status }));
 
   try {
+    console.log('[tasksSlice] Attempting to update task status via API. ID:', id, 'Payload:', { status });
     const response = await axios.put(`${API_BASE_URL}/tasks/${id}`, { status }, getAuthConfig());
     return { ...response.data, id: response.data._id };
   } catch (error) {
@@ -106,6 +107,25 @@ const tasksSlice = createSlice({
       if (task) {
         task.status = status;
       }
+    },
+    reorderTasks: (state, action) => {
+      const { status, tasks: reorderedTasks } = action.payload;
+      const filteredOut = state.tasks.filter(t => t.status !== status);
+    },
+    applyTaskUpdateFromSocket: (state, action) => {
+      const updatedTask = action.payload;
+      const index = state.tasks.findIndex(task => task.id === updatedTask.id);
+      if (index !== -1) {
+        // Preserve local state for fields not sent by socket if necessary,
+        // but here the socket sends the full task object.
+        state.tasks[index] = updatedTask;
+      } else {
+        // If task is not found, it might be a new task created by another user
+        // that this client hasn't received yet. Add it to the list.
+        // This helps in scenarios where the 'createTask' socket event might have been missed.
+        state.tasks.push(updatedTask);
+      }
+      state.status = 'succeeded'; // Ensure status is consistent
     },
     reorderTasks: (state, action) => {
       const { status, tasks: reorderedTasks } = action.payload;
@@ -216,6 +236,7 @@ const tasksSlice = createSlice({
 
 export const {
   optimisticallyUpdateTaskStatus,
+  applyTaskUpdateFromSocket,
   reorderTasks,
   updateTaskOrganization,
   reorderOrgTasks,
