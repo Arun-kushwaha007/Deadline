@@ -102,7 +102,7 @@ const Setting = () => {
             Settings
           </h1>
           <p className="text-gray-400 text-lg">
-            Customize your CollabNest experience
+            Customize your CollabNest experience (Under Development)
           </p>
         </div>
 
@@ -190,7 +190,7 @@ const Setting = () => {
               <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
                 <BellIcon className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white">Notification Preferences</h2>
+              <h2 className="text-2xl font-bold text-white">Notification Preferences (Under Development)</h2>
             </div>
 
             <div className="space-y-4">

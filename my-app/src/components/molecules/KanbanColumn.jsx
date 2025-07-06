@@ -7,7 +7,7 @@ export default function KanbanColumn({ title, tasks = [] }) {
       <h2 className="text-xl font-bold text-white mb-2">{title}</h2>
       <div className="flex flex-col gap-4">
         {tasks.map((task, index) => (
-          <TaskCard key={index} title={task.title} description={task.description} createdAt={task.createdAt}
+          <TaskCard key={index} title={task.title} description={task.description} createdAt={task.createdAt} 
             priority={task.priority}/>
         ))}
       </div>

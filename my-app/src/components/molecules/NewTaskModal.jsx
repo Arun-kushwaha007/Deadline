@@ -47,13 +47,15 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
   const [subtasks, setSubtasks] = useState([{ title: '', done: false }]);
   const [assignee, setAssignee] = useState(null);
   const [assignedBy, setAssignedBy] = useState('');
-  const [visibility, setVisibility] = useState('private');
+  const [visibility, setVisibility] = useState('public'); // Changed default to 'public'
   const [errors, setErrors] = useState({});
   const [assigneeSearch, setAssigneeSearch] = useState('');
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [organizationId, setOrganizationId] = useState('');
-  const [assigneeRole, setAssigneeRole] = useState('member'); // Default role
+  const [assigneeRole, setAssigneeRole] = useState('member');
+
+const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
   // Priority configuration
   const priorityConfig = {
@@ -133,7 +135,7 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     }
   }, [organizationId, dispatch, selectedOrganization, organizationMembers, detailsLoading]);
 
-  useEffect(() => {
+ useEffect(() => {
     if (taskToEdit) {
       setTitle(taskToEdit.title || '');
       setDescription(taskToEdit.description || '');
@@ -153,6 +155,8 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
       if (taskToEdit.organization) {
         setOrganizationId(taskToEdit.organization._id || taskToEdit.organization);
       }
+      // Keep existing assignedBy for edit mode
+      setAssignedBy(taskToEdit.assignedBy || loggedInUser.name || 'Unknown');
     } else {
       setTitle('');
       setDescription('');
@@ -162,11 +166,11 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
       setLabels('');
       setSubtasks([{ title: '', done: false }]);
       setAssignee(null);
-      setAssignedBy('');
-      setVisibility('private');
+      setAssignedBy(loggedInUser.name || 'Unknown'); // Set logged-in user name by default
+      setVisibility('public'); // Set public as default
       setOrganizationId('');
     }
-  }, [taskToEdit, users, isOpen]);
+  }, [taskToEdit, users, isOpen, loggedInUser.name]);
 
   useEffect(() => {
     let potentialMembers = [];
@@ -268,61 +272,62 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
     return Object.values(newErrors).every(e => e === '');
   };
 
-  const resetForm = () => {
-    setTitle('');
-    setDescription('');
-    setDueDate('');
-    setStatus('todo');
-    setPriority('');
-    setLabels('');
-    setSubtasks([{ title: '', done: false }]);
-    setAssignee(null);
-    setAssignedBy('');
-    setVisibility('private');
-    setErrors({});
-    setAssigneeSearch('');
-    setOrganizationId('');
-    dispatch(clearOrganizationMembers());
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    setLoading(true);
-
-    const user = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
-    const assigner = assignedBy || user.name || 'Unknown';
-
-    const taskPayload = {
-      title,
-      description,
-      dueDate: new Date(dueDate).toISOString(),
-      status,
-      priority,
-      labels: labels.split(',').map(l => l.trim()).filter(Boolean),
-      subtasks: subtasks.filter(s => s.title.trim()),
-      assignedTo: assignee?._id !== 'everyone' ? assignee._id : null,
-      ...(assignee && assignee._id !== 'everyone' && { assigneeRole }), // Conditionally add assigneeRole
-      assignedBy: assigner,
-      visibility,
-      organization: organizationId,
-    };
-
-    try {
-      if (taskToEdit) {
-        await dispatch(updateTask({ id: taskToEdit.id, ...taskPayload }));
-      } else {
-        await dispatch(createTask(taskPayload));
-      }
-      resetForm();
-      onClose();
-    } catch (err) {
-      console.error('Task submission failed', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+ const resetForm = () => {
+     setTitle('');
+     setDescription('');
+     setDueDate('');
+     setStatus('todo');
+     setPriority('');
+     setLabels('');
+     setSubtasks([{ title: '', done: false }]);
+     setAssignee(null);
+     setAssignedBy(loggedInUser.name || 'Unknown'); // Reset to logged-in user
+     setVisibility('public'); // Reset to public
+     setErrors({});
+     setAssigneeSearch('');
+     setOrganizationId('');
+     dispatch(clearOrganizationMembers());
+   };
+ 
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     if (!validateForm()) return;
+ 
+     setLoading(true);
+ 
+     // Use the current assignedBy state (which is already set to logged-in user)
+     const assigner = assignedBy || loggedInUser.name || 'Unknown';
+ 
+     const taskPayload = {
+       title,
+       description,
+       dueDate: new Date(dueDate).toISOString(),
+       status,
+       priority,
+       labels: labels.split(',').map(l => l.trim()).filter(Boolean),
+       subtasks: subtasks.filter(s => s.title.trim()),
+       assignedTo: assignee?._id !== 'everyone' ? assignee._id : null,
+       ...(assignee && assignee._id !== 'everyone' && { assigneeRole }),
+       assignedBy: assigner,
+       visibility,
+       organization: organizationId,
+     };
+ 
+     try {
+       if (taskToEdit) {
+         await dispatch(updateTask({ id: taskToEdit.id, ...taskPayload }));
+       } else {
+         await dispatch(createTask(taskPayload));
+       }
+       resetForm();
+       onClose();
+     } catch (err) {
+       console.error('Task submission failed', err);
+     } finally {
+       setLoading(false);
+     }
+   };
+ 
 
   if (!isOpen) return null;
 
@@ -695,97 +700,102 @@ const NewTaskModal = ({ isOpen, onClose, taskToEdit, viewOnly }) => {
 
             {/* Labels and Assigned By Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Labels */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-                  <TagIcon className="w-4 h-4" />
-                  Labels
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter labels (comma-separated)"
-                  value={labels}
-                  onChange={(e) => setLabels(e.target.value)}
-                  disabled={viewOnly}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                <p className="text-xs text-gray-400">
-                  Use commas to separate multiple labels
-                </p>
-              </div>
-
-              {/* Assigned By */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-                  <UserIcon className="w-4 h-4" />
-                  Assigned By
-                </label>
-                <input
-                  type="text"
-                  placeholder="Who assigned this task?"
-                  value={assignedBy}
-                  onChange={(e) => setAssignedBy(e.target.value)}
-                  disabled={viewOnly}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-              </div>
-            </div>
-
-            {/* Visibility Settings */}
-            <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
-                <EyeIcon className="w-4 h-4" />
-                Visibility
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => !viewOnly && setVisibility('public')}
-                  disabled={viewOnly}
-                  className={`p-4 rounded-lg border transition-all ${
-                    visibility === 'public'
-                      ? 'bg-blue-500/20 border-blue-500/30 ring-2 ring-blue-500/50'
-                      : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
-                  } ${viewOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <EyeIcon className={`w-5 h-5 ${visibility === 'public' ? 'text-blue-400' : 'text-gray-400'}`} />
-                    <div className="text-left">
-                      <div className={`font-medium ${visibility === 'public' ? 'text-white' : 'text-gray-300'}`}>
-                        Public
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        All org members can see
-                      </div>
-                    </div>
-                  </div>
-                </button>
-                
-                <button
-                  type="button"
-                  onClick={() => !viewOnly && setVisibility('private')}
-                  disabled={viewOnly}
-                  className={`p-4 rounded-lg border transition-all ${
-                    visibility === 'private'
-                      ? 'bg-purple-500/20 border-purple-500/30 ring-2 ring-purple-500/50'
-                      : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
-                  } ${viewOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                  <div className="flex items-center gap-3">
-                    <EyeSlashIcon className={`w-5 h-5 ${visibility === 'private' ? 'text-purple-400' : 'text-gray-400'}`} />
-                    <div className="text-left">
-                      <div className={`font-medium ${visibility === 'private' ? 'text-white' : 'text-gray-300'}`}>
-                        Private
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        Only assignee can view
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </div>
-
+                         {/* Labels */}
+                         <div className="space-y-2">
+                           <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                             <TagIcon className="w-4 h-4" />
+                             Labels
+                           </label>
+                           <input
+                             type="text"
+                             placeholder="Enter labels (comma-separated)"
+                             value={labels}
+                             onChange={(e) => setLabels(e.target.value)}
+                             disabled={viewOnly}
+                             className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                           />
+                           <p className="text-xs text-gray-400">
+                             Use commas to separate multiple labels
+                           </p>
+                         </div>
+           
+                         {/* Assigned By */}
+                         <div className="space-y-2">
+                           <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                             <UserIcon className="w-4 h-4" />
+                             Assigned By
+                           </label>
+                           <div className="relative">
+                             <input
+                               type="text"
+                               value={assignedBy}
+                               disabled={true} // Always disabled
+                               className="w-full px-4 py-3 bg-gray-600/50 border border-gray-500/50 rounded-lg text-gray-300 cursor-not-allowed opacity-75"
+                             />
+                             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                               <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                 <UserIcon className="w-3 h-3 text-white" />
+                               </div>
+                             </div>
+                           </div>
+                           <p className="text-xs text-gray-400">
+                             Automatically set to current user
+                           </p>
+                         </div>
+                       </div>
+           
+                       {/* Visibility Settings */}
+                       <div className="space-y-3">
+                         <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                           <EyeIcon className="w-4 h-4" />
+                           Visibility
+                         </label>
+                         <div className="grid grid-cols-2 gap-3">
+                           {/* Public Option - Always Selected */}
+                           <button
+                             type="button"
+                             disabled={true} // Disabled since it's always selected
+                             className="p-4 rounded-lg border bg-blue-500/20 border-blue-500/30 ring-2 ring-blue-500/50 cursor-default"
+                           >
+                             <div className="flex items-center gap-3">
+                               <EyeIcon className="w-5 h-5 text-blue-400" />
+                               <div className="text-left">
+                                 <div className="font-medium text-white">
+                                   Public
+                                 </div>
+                                 <div className="text-xs text-gray-400">
+                                   All org members can see
+                                 </div>
+                               </div>
+                             </div>
+                           </button>
+                           
+                           {/* Private Option - Disabled */}
+                           <div className="p-4 rounded-lg border bg-gray-700/30 border-gray-600/30 opacity-50 cursor-not-allowed relative">
+                             <div className="flex items-center gap-3">
+                               <EyeSlashIcon className="w-5 h-5 text-gray-500" />
+                               <div className="text-left">
+                                 <div className="font-medium text-gray-500">
+                                   Private
+                                 </div>
+                                 <div className="text-xs text-gray-500">
+                                   Coming in next version
+                                 </div>
+                               </div>
+                             </div>
+                             {/* "Coming Soon" Badge */}
+                             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                               Soon
+                             </div>
+                           </div>
+                         </div>
+                         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                           <p className="text-blue-400 text-sm flex items-center gap-2">
+                             <EyeIcon className="w-4 h-4" />
+                             Currently all tasks are public within the organization. Private tasks will be available in the next version.
+                           </p>
+                         </div>
+                       </div>
             {/* Subtasks Section */}
             <div className="space-y-3">
               <label className="flex items-center gap-2 text-sm font-medium text-gray-300">

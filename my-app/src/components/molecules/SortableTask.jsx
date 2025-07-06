@@ -44,6 +44,7 @@ export default function SortableTask({
         priority={task.priority}
         status={task.status}
         assignee={task.assignedTo}
+        assignedBy={task.assignedBy}
         onView={onView}
         onEdit={onEdit}
         onDelete={isPrivileged ? onDelete : undefined}
