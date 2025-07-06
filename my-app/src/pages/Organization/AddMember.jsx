@@ -22,10 +22,12 @@ const AddMember = () => {
 
   const [joiningUserId, setJoiningUserId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [allUsers, setAllUsers] = useState([]); // Store all users
+  const [filteredUsers, setFilteredUsers] = useState([]); // Store filtered users
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
@@ -50,33 +52,37 @@ const AddMember = () => {
     }
   };
 
+  // Fetch all users on component mount
   useEffect(() => {
-    const fetchUsers = async () => {
-      if (searchQuery.trim().length < 2) {
-        setSearchResults([]);
-        return;
-      }
-      
-      setIsLoading(true);
+    const fetchAllUsers = async () => {
       try {
-        const response = await fetch(`${backendUrl}/api/users/search?q=${encodeURIComponent(searchQuery)}`);
+        const response = await fetch(`${backendUrl}/api/users/all`);
         const data = await response.json();
         if (response.ok) {
-          setSearchResults(data.users || []);
+          setAllUsers(data.users || []);
         } else {
-          setSearchResults([]);
+          console.error('Failed to fetch users:', data.message);
         }
       } catch (err) {
-        console.error('Error fetching users:', err);
-        setSearchResults([]);
-      } finally {
-        setIsLoading(false);
+        console.error('Error fetching all users:', err);
       }
     };
 
-    const delayDebounce = setTimeout(fetchUsers, 300);
-    return () => clearTimeout(delayDebounce);
-  }, [searchQuery, backendUrl]);
+    fetchAllUsers();
+  }, [backendUrl]);
+
+  // Filter users based on search query
+  useEffect(() => {
+    if (searchQuery.trim().length === 0) {
+      setFilteredUsers(allUsers);
+    } else {
+      const filtered = allUsers.filter(user => 
+        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchQuery, allUsers]);
 
   const handleInvite = async () => {
     if (!selectedUser) return;
@@ -96,7 +102,7 @@ const AddMember = () => {
         });
         setSearchQuery('');
         setSelectedUser(null);
-        setSearchResults([]);
+        setShowDropdown(false);
       } else {
         setMessage({
           type: 'error',
@@ -117,7 +123,7 @@ const AddMember = () => {
   const handleSuggestionClick = (user) => {
     setSelectedUser(user);
     setSearchQuery(user.name);
-    setSearchResults([]);
+    setShowDropdown(false);
   };
 
   const handleUserIdSubmit = async (e) => {
@@ -158,7 +164,7 @@ const AddMember = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setSearchResults([]);
+        setShowDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -167,7 +173,7 @@ const AddMember = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white p-6">
+      <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-gray-800 to-zinc-900 text-white p-6">
         {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
@@ -322,7 +328,7 @@ const AddMember = () => {
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                     <MagnifyingGlassIcon className="w-4 h-4 text-white" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">Search & Invite Users</h2>
+                  <h2 className="text-xl font-bold text-white">Search & Invite Users (Under Development - Use Id method for now)</h2>
                 </div>
 
                 <div className="relative space-y-4" ref={dropdownRef}>
@@ -341,41 +347,47 @@ const AddMember = () => {
                         onChange={(e) => {
                           setSearchQuery(e.target.value);
                           setSelectedUser(null);
+                          setShowDropdown(true);
                         }}
-                        placeholder="Enter name or email to search..."
+                        onFocus={() => setShowDropdown(true)}
+                        placeholder="Search by name or email..."
                         className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       />
-                      {isLoading && (
-                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                          <div className="w-4 h-4 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
-                        </div>
-                      )}
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <ChevronDownIcon className={`w-4 h-4 text-gray-400 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
+                      </div>
                     </div>
                     <p className="text-xs text-gray-400">
-                      Type at least 2 characters to search for users
+                      Search through all registered users
                     </p>
                   </div>
 
-                  {/* Search Results Dropdown */}
-                  {searchResults.length > 0 && (
+                  {/* Users Dropdown */}
+                  {showDropdown && (
                     <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
-                      {searchResults.map((user) => (
-                        <button
-                          key={user._id}
-                          onClick={() => handleSuggestionClick(user)}
-                          className="w-full p-4 text-left hover:bg-gray-700/50 border-b border-gray-700/50 last:border-b-0 transition-colors"
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                              <UserIcon className="w-5 h-5 text-white" />
+                      {filteredUsers.length > 0 ? (
+                        filteredUsers.map((user) => (
+                          <button
+                            key={user._id}
+                            onClick={() => handleSuggestionClick(user)}
+                            className="w-full p-4 text-left hover:bg-gray-700/50 border-b border-gray-700/50 last:border-b-0 transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <UserIcon className="w-5 h-5 text-white" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-white">{user.name}</div>
+                                <div className="text-sm text-gray-400">{user.email}</div>
+                              </div>
                             </div>
-                            <div>
-                              <div className="font-medium text-white">{user.name}</div>
-                              <div className="text-sm text-gray-400">{user.email}</div>
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                          </button>
+                        ))
+                      ) : (
+                        <div className="p-4 text-center text-gray-400">
+                          No users found
+                        </div>
+                      )}
                     </div>
                   )}
 

@@ -542,6 +542,8 @@ const Feedback = () => {
               <div className="space-y-6">
                 {publicFeedbacks.length === 0 ? (
                   <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+                    {/* <div className="text-2xl mb-6">This part is still under Development- </div> */}
+                    
                     <div className="text-8xl mb-6">⭐</div>
                     <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No Public Reviews Yet</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
