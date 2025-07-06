@@ -74,5 +74,5 @@ feedbackSchema.pre('save', function(next) {
 feedbackSchema.index({ userId: 1, createdAt: -1 });
 feedbackSchema.index({ isPublic: 1, isApproved: 1, rating: -1 });
 
-export default feedbackSchema;
+export default mongoose.models.Feedback || mongoose.model('Feedback', feedbackSchema);
 // module.exports = mongoose.model('Feedback', feedbackSchema);

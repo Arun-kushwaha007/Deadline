@@ -4,21 +4,23 @@ import Feedback from '../models/Feedback.js';
 
 const router = express.Router();
 
+import authMiddleware from '../middleware/authMiddleware.js';
+
 // ------------------------------
 // Middleware
 // ------------------------------
 
-const authenticateUser = (req, res, next) => {
-  const userId = req.headers['user-id'] || req.body.userId;
-  if (!userId) {
-    return res.status(401).json({
-      success: false,
-      message: 'Authentication required'
-    });
-  }
-  req.userId = userId;
-  next();
-};
+// const authenticateUser = (req, res, next) => { // Custom auth removed
+//   const userId = req.headers['user-id'] || req.body.userId;
+//   if (!userId) {
+//     return res.status(401).json({
+//       success: false,
+//       message: 'Authentication required'
+//     });
+//   }
+//   req.userId = userId;
+//   next();
+// };
 
 const validateFeedbackInput = (req, res, next) => {
   const { rating, title, message, category } = req.body;
@@ -60,16 +62,14 @@ const validateFeedbackInput = (req, res, next) => {
 // Routes
 // ------------------------------
 
+// POST /api/feedback - Create new feedback
 router.post(
   '/',
-  authenticateUser,
+  authMiddleware, // Use standard JWT auth middleware
   validateFeedbackInput,
   async (req, res) => {
     try {
       const {
-        userName,
-        userEmail,
-        userAvatar,
         rating,
         title,
         message,
@@ -78,11 +78,14 @@ router.post(
         tags = []
       } = req.body;
 
+      // User info from authMiddleware
+      const { _id: userIdFromAuth, name: userNameFromAuth, email: userEmailFromAuth, profilePic: userAvatarFromAuth } = req.user;
+
       const newFeedback = new Feedback({
-        userId: req.userId,
-        userName: userName || 'Anonymous User',
-        userEmail: userEmail || '',
-        userAvatar: userAvatar || null,
+        userId: userIdFromAuth,
+        userName: userNameFromAuth || 'Anonymous User',
+        userEmail: userEmailFromAuth || '',
+        userAvatar: userAvatarFromAuth || null,
         rating: parseInt(rating),
         title: title.trim(),
         message: message.trim(),
@@ -110,34 +113,28 @@ router.post(
   }
 );
 
+// GET /api/feedback/myfeedback - Get feedback for the authenticated user
 router.get(
-  '/user/:userId',
-  authenticateUser,
+  '/myfeedback', 
+  authMiddleware, 
   async (req, res) => {
     try {
-      const { userId } = req.params;
+      const userIdFromAuth = req.user._id; 
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 10;
       const skip = (page - 1) * limit;
 
-      if (req.userId !== userId) {
-        return res.status(403).json({
-          success: false,
-          message: 'Access denied: You can only view your own feedback'
-        });
-      }
-
-      const feedback = await Feedback.find({ userId })
+      const userFeedback = await Feedback.find({ userId: userIdFromAuth })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit);
 
-      const totalFeedback = await Feedback.countDocuments({ userId });
+      const totalFeedback = await Feedback.countDocuments({ userId: userIdFromAuth });
       const totalPages = Math.ceil(totalFeedback / limit);
 
       res.json({
         success: true,
-        data: feedback,
+        data: userFeedback, // Changed variable name for clarity
         pagination: {
           currentPage: page,
           totalPages,
@@ -151,13 +148,14 @@ router.get(
       console.error('Error fetching user feedback:', error);
       res.status(500).json({
         success: false,
-        message: 'Server error while fetching feedback',
+        message: 'Server error while fetching user feedback', // Clarified error message
         error: error.message
       });
     }
   }
 );
 
+// GET /api/feedback/public - Get public and approved feedback (no auth needed)
 router.get(
   '/public',
   async (req, res) => {
@@ -172,7 +170,7 @@ router.get(
 
       const query = {
         isPublic: true,
-        isApproved: true,
+        isApproved: true, // Assuming only approved public feedback should be shown
         rating: { $gte: minRating }
       };
 
@@ -183,11 +181,11 @@ router.get(
       const sortObj = {};
       sortObj[sort] = order;
 
-      const feedback = await Feedback.find(query)
+      const publicFeedback = await Feedback.find(query)
         .sort(sortObj)
         .skip(skip)
         .limit(limit)
-        .select('-userEmail');
+        .select('-userEmail'); // Do not send user emails for public listings
 
       const totalFeedback = await Feedback.countDocuments(query);
       const totalPages = Math.ceil(totalFeedback / limit);
@@ -207,7 +205,7 @@ router.get(
 
       res.json({
         success: true,
-        data: feedback,
+        data: publicFeedback, // Changed variable name
         stats: {
           averageRating: Math.round(averageRating * 10) / 10,
           totalPublicFeedback: totalFeedback
@@ -232,51 +230,67 @@ router.get(
   }
 );
 
+// GET /api/feedback/:feedbackId - Get a specific feedback item
+// Auth is checked: if user is authenticated and it's their feedback, they can see it even if not public.
+// Otherwise, feedback must be public and approved.
 router.get(
   '/:feedbackId',
-  authenticateUser,
+  authMiddleware, 
   async (req, res) => {
     try {
       const { feedbackId } = req.params;
+      const userIdFromAuth = req.user ? req.user._id.toString() : null;
 
-      const feedback = await Feedback.findById(feedbackId);
+      const foundFeedback = await Feedback.findById(feedbackId);
 
-      if (!feedback) {
+      if (!foundFeedback) {
         return res.status(404).json({
           success: false,
           message: 'Feedback not found'
         });
       }
 
-      if (feedback.userId !== req.userId && !feedback.isPublic) {
+      const isOwner = userIdFromAuth && foundFeedback.userId.toString() === userIdFromAuth;
+
+      if (!((foundFeedback.isPublic && foundFeedback.isApproved) || isOwner)) {
         return res.status(403).json({
           success: false,
           message: 'Access denied'
         });
       }
 
+      const dataToSend = foundFeedback.toObject();
+      if (!isOwner && !dataToSend.isPublic) { // Double check, should be caught by above
+         delete dataToSend.userEmail; // Should not happen if logic above is correct
+      } else if (!isOwner && dataToSend.isPublic) {
+         delete dataToSend.userEmail; // Don't send email of other users even if public
+      }
+
+
       res.json({
         success: true,
-        data: feedback
+        data: dataToSend
       });
     } catch (error) {
-      console.error('Error fetching feedback:', error);
+      console.error('Error fetching feedback by ID:', error);
       res.status(500).json({
         success: false,
-        message: 'Server error while fetching feedback',
+        message: 'Server error while fetching feedback by ID',
         error: error.message
       });
     }
   }
 );
 
+// PUT /api/feedback/:feedbackId - Update a feedback item
 router.put(
   '/:feedbackId',
-  authenticateUser,
+  authMiddleware, 
   validateFeedbackInput,
   async (req, res) => {
     try {
       const { feedbackId } = req.params;
+      const userIdFromAuth = req.user._id.toString();
       const {
         rating,
         title,
@@ -286,40 +300,35 @@ router.put(
         tags
       } = req.body;
 
-      const feedback = await Feedback.findById(feedbackId);
+      const feedbackToUpdate = await Feedback.findById(feedbackId);
 
-      if (!feedback) {
+      if (!feedbackToUpdate) {
         return res.status(404).json({
           success: false,
           message: 'Feedback not found'
         });
       }
 
-      if (feedback.userId !== req.userId) {
+      if (feedbackToUpdate.userId.toString() !== userIdFromAuth) {
         return res.status(403).json({
           success: false,
           message: 'Access denied: You can only update your own feedback'
         });
       }
 
-      const updatedFeedback = await Feedback.findByIdAndUpdate(
-        feedbackId,
-        {
-          rating: parseInt(rating),
-          title: title.trim(),
-          message: message.trim(),
-          category,
-          isPublic: Boolean(isPublic),
-          tags: Array.isArray(tags) ? tags.filter(tag => tag.trim().length > 0) : [],
-          updatedAt: Date.now()
-        },
-        { new: true, runValidators: true }
-      );
+      feedbackToUpdate.rating = parseInt(rating);
+      feedbackToUpdate.title = title.trim();
+      feedbackToUpdate.message = message.trim();
+      if (category) feedbackToUpdate.category = category;
+      if (isPublic !== undefined) feedbackToUpdate.isPublic = Boolean(isPublic);
+      if (tags) feedbackToUpdate.tags = Array.isArray(tags) ? tags.filter(tag => tag.trim().length > 0) : [];
+      
+      const updatedFeedbackItem = await feedbackToUpdate.save();
 
       res.json({
         success: true,
         message: 'Feedback updated successfully',
-        data: updatedFeedback
+        data: updatedFeedbackItem
       });
     } catch (error) {
       console.error('Error updating feedback:', error);
@@ -332,23 +341,25 @@ router.put(
   }
 );
 
+// DELETE /api/feedback/:feedbackId - Delete a feedback item
 router.delete(
   '/:feedbackId',
-  authenticateUser,
+  authMiddleware, 
   async (req, res) => {
     try {
       const { feedbackId } = req.params;
+      const userIdFromAuth = req.user._id.toString();
 
-      const feedback = await Feedback.findById(feedbackId);
+      const feedbackToDelete = await Feedback.findById(feedbackId);
 
-      if (!feedback) {
+      if (!feedbackToDelete) {
         return res.status(404).json({
           success: false,
           message: 'Feedback not found'
         });
       }
 
-      if (feedback.userId !== req.userId) {
+      if (feedbackToDelete.userId.toString() !== userIdFromAuth) {
         return res.status(403).json({
           success: false,
           message: 'Access denied: You can only delete your own feedback'
@@ -372,37 +383,38 @@ router.delete(
   }
 );
 
+// POST /api/feedback/:feedbackId/helpful - Mark feedback as helpful (no auth needed for this action)
 router.post(
   '/:feedbackId/helpful',
   async (req, res) => {
     try {
       const { feedbackId } = req.params;
 
-      const feedback = await Feedback.findById(feedbackId);
+      const feedbackItem = await Feedback.findById(feedbackId);
 
-      if (!feedback) {
+      if (!feedbackItem) {
         return res.status(404).json({
           success: false,
           message: 'Feedback not found'
         });
       }
 
-      if (!feedback.isPublic) {
+      if (!feedbackItem.isPublic) { // Only public feedback can be marked helpful by anyone
         return res.status(403).json({
           success: false,
           message: 'Cannot mark private feedback as helpful'
         });
       }
 
-      feedback.helpfulCount += 1;
-      await feedback.save();
+      feedbackItem.helpfulCount = (feedbackItem.helpfulCount || 0) + 1;
+      await feedbackItem.save();
 
       res.json({
         success: true,
         message: 'Feedback marked as helpful',
         data: {
           feedbackId,
-          helpfulCount: feedback.helpfulCount
+          helpfulCount: feedbackItem.helpfulCount
         }
       });
     } catch (error) {
@@ -416,12 +428,16 @@ router.post(
   }
 );
 
+// GET /api/feedback/stats/summary - Get feedback statistics (requires auth, implies admin/privileged access)
 router.get(
   '/stats/summary',
-  authenticateUser,
+  authMiddleware,
   async (req, res) => {
     try {
-      const stats = await Feedback.aggregate([
+      // Optional: Add role-based access control here if needed
+      // e.g., if (!req.user.roles.includes('admin')) return res.status(403).json({ message: 'Forbidden' });
+
+      const overallStatsData = await Feedback.aggregate([ // Renamed to avoid conflict
         {
           $group: {
             _id: null,
@@ -437,7 +453,7 @@ router.get(
         }
       ]);
 
-      const categoryStats = await Feedback.aggregate([
+      const categoryStatsData = await Feedback.aggregate([ // Renamed
         {
           $group: {
             _id: '$category',
@@ -448,7 +464,7 @@ router.get(
         { $sort: { count: -1 } }
       ]);
 
-      const ratingStats = await Feedback.aggregate([
+      const ratingStatsData = await Feedback.aggregate([ // Renamed
         {
           $group: {
             _id: '$rating',
@@ -461,7 +477,7 @@ router.get(
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const recentTrends = await Feedback.aggregate([
+      const recentTrendsData = await Feedback.aggregate([ // Renamed
         {
           $match: {
             createdAt: { $gte: thirtyDaysAgo }
@@ -482,15 +498,15 @@ router.get(
       res.json({
         success: true,
         data: {
-          overall: stats[0] || {
+          overall: overallStatsData[0] || { // Use renamed variable
             totalFeedback: 0,
             averageRating: 0,
             totalPublic: 0,
             totalApproved: 0
           },
-          byCategory: categoryStats,
-          byRating: ratingStats,
-          recentTrends
+          byCategory: categoryStatsData, // Use renamed variable
+          byRating: ratingStatsData, // Use renamed variable
+          recentTrends: recentTrendsData // Use renamed variable
         }
       });
     } catch (error) {

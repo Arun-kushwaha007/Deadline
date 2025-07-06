@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import FeedbackModal from '../components/modals/FeedbackModal';
-
+import api from '../utils/api';
 const Feedback = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -24,10 +24,10 @@ const Feedback = () => {
     limit: 10
   });
   const [stats, setStats] = useState({
-    totalFeedback: 0,
-    averageRating: 0,
-    totalPublic: 0
+    averageRating: 0, // Default to 0 or null
+    totalPublicFeedback: 0 // Default to 0 or null
   });
+  const [userFeedbackCount, setUserFeedbackCount] = useState(0); // For "Your Feedback" stat
 
   // Categories with icons and colors
   const categories = [
@@ -45,243 +45,174 @@ const Feedback = () => {
     if (loggedInUser) {
       const parsedUser = JSON.parse(loggedInUser);
       setUser(parsedUser);
-      fetchUserFeedbacks(parsedUser.userId);
+      // fetchUserFeedbacks will be called by tab change or pagination change if user is set
     } else {
       navigate('/login');
     }
-    fetchPublicFeedbacks();
+    // fetchPublicFeedbacks will be called by tab change or pagination/filter change
   }, [navigate]);
 
-  // Fetch user's feedback
-  const fetchUserFeedbacks = async (userId) => {
+  // Fetch user's feedback (My Feedback tab)
+  const fetchUserFeedbacks = async (page = 1) => {
+    if (!user) return; // Ensure user is loaded
+    setLoading(true);
     try {
-      setLoading(true);
-      // Replace with actual API call
-      const response = await fetch(`/api/feedback/user/${userId}?page=${pagination.currentPage}&limit=${pagination.limit}`, {
-        headers: {
-          'user-id': userId
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setFeedbacks(data.data);
-        setPagination(data.pagination);
+      const response = await api.get(`/feedback/myfeedback?page=${page}&limit=${pagination.limit}`);
+      if (response && response.data) { // Assuming api.get returns { success, data, pagination }
+        setFeedbacks(response.data);
+        setPagination(response.pagination);
+        setUserFeedbackCount(response.pagination.totalItems || 0);
       } else {
-        // Fallback to localStorage for demo
-        const savedFeedbacks = localStorage.getItem(`userFeedbacks_${userId}`) || '[]';
-        setFeedbacks(JSON.parse(savedFeedbacks));
+        setFeedbacks([]);
+        showNotification('Could not load your feedback.', 'error');
       }
     } catch (error) {
       console.error('Error fetching user feedbacks:', error);
-      // Fallback to localStorage
-      const savedFeedbacks = localStorage.getItem(`userFeedbacks_${userId}`) || '[]';
-      setFeedbacks(JSON.parse(savedFeedbacks));
+      setFeedbacks([]);
+      showNotification(error.message || 'Failed to fetch your feedback.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch public feedbacks/testimonials
-  const fetchPublicFeedbacks = async () => {
+  // Fetch public feedbacks/testimonials (Testimonials or All Reviews tab)
+  const fetchPublicFeedbacks = async (page = 1) => {
+    setLoading(true);
     try {
       const queryParams = new URLSearchParams({
-        page: pagination.currentPage,
+        page: page,
         limit: pagination.limit,
         ...(filterCategory && { category: filterCategory }),
         minRating: filterRating,
         sort: sortBy,
         order: sortOrder,
         ...(searchQuery && { q: searchQuery })
-      });
+      }).toString();
 
       const endpoint = searchQuery ? 
-        `/api/feedback/search?${queryParams}` : 
-        `/api/feedback/public?${queryParams}`;
-
-      const response = await fetch(endpoint);
+        `/feedback/search?${queryParams}` : 
+        `/feedback/public?${queryParams}`;
       
-      if (response.ok) {
-        const data = await response.json();
-        setPublicFeedbacks(data.data);
-        setPagination(data.pagination);
-        if (data.stats) {
-          setStats(data.stats);
+      const response = await api.get(endpoint);
+
+      if (response && response.data) { // Assuming api.get returns { success, data, stats, pagination }
+        setPublicFeedbacks(response.data);
+        setPagination(response.pagination);
+        if (response.stats) {
+          setStats(response.stats);
         }
       } else {
-        // Fallback to demo data
-        setPublicFeedbacks(getDemoPublicFeedbacks());
+        setPublicFeedbacks([]);
+        showNotification('Could not load public feedback.', 'error');
       }
     } catch (error) {
       console.error('Error fetching public feedbacks:', error);
-      setPublicFeedbacks(getDemoPublicFeedbacks());
+      setPublicFeedbacks([]);
+      showNotification(error.message || 'Failed to fetch public feedback.', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Demo public feedbacks
-  const getDemoPublicFeedbacks = () => [
-    {
-      _id: '1',
-      userName: 'John Doe',
-      userAvatar: null,
-      rating: 5,
-      title: 'Amazing Platform!',
-      message: 'This platform has revolutionized how our team manages deadlines. The interface is intuitive and the features are exactly what we needed.',
-      category: 'testimonial',
-      tags: ['user-friendly', 'efficient', 'innovative'],
-      helpfulCount: 15,
-      createdAt: new Date().toISOString(),
-      isPublic: true,
-      isApproved: true
-    },
-    {
-      _id: '2',
-      userName: 'Sarah Smith',
-      userAvatar: null,
-      rating: 4,
-      title: 'Great for Team Collaboration',
-      message: 'Love how easy it is to track project progress and collaborate with team members. Would recommend to any organization.',
-      category: 'testimonial',
-      tags: ['collaboration', 'professional', 'reliable'],
-      helpfulCount: 12,
-      createdAt: new Date().toISOString(),
-      isPublic: true,
-      isApproved: true
+  // Effect for fetching data when activeTab or relevant filters/pagination change
+  useEffect(() => {
+    if (activeTab === 'my-feedback' && user) {
+      fetchUserFeedbacks(pagination.currentPage);
+    } else if (activeTab === 'testimonials' || activeTab === 'all-reviews') {
+      fetchPublicFeedbacks(pagination.currentPage);
     }
-  ];
+  }, [activeTab, user, pagination.currentPage, filterCategory, filterRating, sortBy, sortOrder, searchQuery, pagination.limit]);
+
 
   // Handle feedback submission
   const handleFeedbackSubmit = async (feedbackData) => {
+    if (!user) {
+      showNotification('You must be logged in to submit feedback.', 'error');
+      return;
+    }
     try {
-      const payload = {
-        userId: user.userId,
-        userName: user.name,
-        userEmail: user.email,
-        userAvatar: user.profilePic,
-        ...feedbackData
-      };
-
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'user-id': user.userId
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setFeedbacks(prev => [result.data, ...prev]);
+      // userId, userName, userEmail, userAvatar will be set by backend using authMiddleware
+      const response = await api.post('/feedback', feedbackData);
+      if (response && response.data) { // Assuming api.post returns { success, data }
+        setFeedbacks(prev => [response.data, ...prev]); // Add to 'My Feedback' locally
+        setUserFeedbackCount(prev => prev + 1);
         showNotification('🎉 Feedback submitted successfully!', 'success');
+        fetchUserFeedbacks(); // Refresh user feedbacks
+        if (response.data.isPublic && response.data.isApproved) {
+             fetchPublicFeedbacks(); // Refresh public if it was made public and approved instantly
+        }
       } else {
-        throw new Error('Failed to submit feedback');
+        throw new Error(response.message || 'Failed to submit feedback');
       }
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      // Fallback to localStorage
-      const newFeedback = {
-        _id: Date.now().toString(),
-        userId: user.userId,
-        userName: user.name,
-        userEmail: user.email,
-        userAvatar: user.profilePic,
-        ...feedbackData,
-        createdAt: new Date().toISOString(),
-        helpfulCount: 0
-      };
-      
-      const updatedFeedbacks = [newFeedback, ...feedbacks];
-      setFeedbacks(updatedFeedbacks);
-      localStorage.setItem(`userFeedbacks_${user.userId}`, JSON.stringify(updatedFeedbacks));
-      
-      showNotification('🎉 Feedback saved locally!', 'success');
+      showNotification(error.message || 'Error submitting feedback.', 'error');
     }
   };
 
   // Handle feedback update
   const handleFeedbackUpdate = async (feedbackData) => {
+    if (!editingFeedback || !user) return;
     try {
-      const response = await fetch(`/api/feedback/${editingFeedback._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'user-id': user.userId
-        },
-        body: JSON.stringify(feedbackData)
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setFeedbacks(prev => prev.map(f => f._id === editingFeedback._id ? result.data : f));
+      const response = await api.put(`/feedback/${editingFeedback._id}`, feedbackData);
+      if (response && response.data) {
+        setFeedbacks(prev => prev.map(f => f._id === editingFeedback._id ? response.data : f));
         showNotification('✅ Feedback updated successfully!', 'success');
+        if (response.data.isPublic && response.data.isApproved) {
+            fetchPublicFeedbacks(); // Refresh public if visibility/approval changed
+        } else if (!response.data.isPublic || !response.data.isApproved) {
+            // If it became private or unapproved, ensure it's removed from public list if it was there
+            setPublicFeedbacks(prev => prev.filter(pf => pf._id !== response.data._id));
+        }
       } else {
-        throw new Error('Failed to update feedback');
+        throw new Error(response.message || 'Failed to update feedback');
       }
     } catch (error) {
       console.error('Error updating feedback:', error);
-      // Fallback to localStorage update
-      const updatedFeedbacks = feedbacks.map(f => 
-        f._id === editingFeedback._id ? { ...f, ...feedbackData, updatedAt: new Date().toISOString() } : f
-      );
-      setFeedbacks(updatedFeedbacks);
-      localStorage.setItem(`userFeedbacks_${user.userId}`, JSON.stringify(updatedFeedbacks));
-      
-      showNotification('✅ Feedback updated locally!', 'success');
+      showNotification(error.message || 'Error updating feedback.', 'error');
     }
     setEditingFeedback(null);
   };
 
   // Handle feedback deletion
   const handleDeleteFeedback = async (feedbackId) => {
-    if (!window.confirm('Are you sure you want to delete this feedback?')) return;
+    if (!user || !window.confirm('Are you sure you want to delete this feedback?')) return;
 
     try {
-      const response = await fetch(`/api/feedback/${feedbackId}`, {
-        method: 'DELETE',
-        headers: {
-          'user-id': user.userId
-        }
-      });
-
-      if (response.ok) {
+      const response = await api.delete(`/feedback/${feedbackId}`);
+      if (response && response.success) {
         setFeedbacks(prev => prev.filter(f => f._id !== feedbackId));
+        setUserFeedbackCount(prev => prev -1);
+        setPublicFeedbacks(prev => prev.filter(pf => pf._id !== feedbackId)); // Also remove from public if it was there
         showNotification('🗑️ Feedback deleted successfully!', 'success');
       } else {
-        throw new Error('Failed to delete feedback');
+        throw new Error(response.message || 'Failed to delete feedback');
       }
     } catch (error) {
       console.error('Error deleting feedback:', error);
-      // Fallback to localStorage
-      const updatedFeedbacks = feedbacks.filter(f => f._id !== feedbackId);
-      setFeedbacks(updatedFeedbacks);
-      localStorage.setItem(`userFeedbacks_${user.userId}`, JSON.stringify(updatedFeedbacks));
-      
-      showNotification('🗑️ Feedback deleted locally!', 'success');
+      showNotification(error.message || 'Error deleting feedback.', 'error');
     }
   };
 
   // Handle helpful vote
   const handleHelpfulVote = async (feedbackId) => {
     try {
-      const response = await fetch(`/api/feedback/${feedbackId}/helpful`, {
-        method: 'POST'
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setPublicFeedbacks(prev => 
-          prev.map(f => f._id === feedbackId ? { ...f, helpfulCount: result.data.helpfulCount } : f)
+      const response = await api.post(`/feedback/${feedbackId}/helpful`); // No body needed for this POST
+      if (response && response.data) {
+        const updateList = (list) => list.map(f => 
+          f._id === feedbackId ? { ...f, helpfulCount: response.data.helpfulCount } : f
         );
+        setPublicFeedbacks(updateList);
+        if(feedbacks.some(f => f._id === feedbackId)) { // If it's also in 'my-feedback'
+            setFeedbacks(updateList);
+        }
         showNotification('👍 Thank you for your vote!', 'success');
+      } else {
+        throw new Error(response.message || 'Failed to vote helpful');
       }
     } catch (error) {
       console.error('Error voting helpful:', error);
-      // Optimistic update
-      setPublicFeedbacks(prev => 
-        prev.map(f => f._id === feedbackId ? { ...f, helpfulCount: (f.helpfulCount || 0) + 1 } : f)
-      );
-      showNotification('👍 Vote counted!', 'success');
+      showNotification(error.message || 'Error voting helpful.', 'error');
     }
   };
 
