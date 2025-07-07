@@ -139,108 +139,159 @@ const Profile = () => {
 
   // Load user data and progress
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    const savedProgress = localStorage.getItem('userProgress');
-    const savedSkills = localStorage.getItem('userSkills');
-    
-    setTimeout(() => {
-      if (loggedInUser) {
-        const parsedUser = JSON.parse(loggedInUser);
-        if (!parsedUser.userId) {
-          alert('User ID is missing. Please log in again.');
+    const fetchUserProfile = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem('token');
+        console.log('[Profile.jsx] Token for fetchUserProfile:', token); // Log the token
+
+        if (!token) {
+          alert('Authentication token not found. Please log in.');
           navigate('/login');
+          setIsLoading(false); // Stop loading if no token
           return;
         }
-        
-        setUser(parsedUser);
-        setBio(parsedUser.bio || '');
-        setSection(parsedUser.section || '');
-        setProfilePic(parsedUser.profilePic || '');
-        setPreview(parsedUser.profilePic || '');
-        
-        // Load progress data
-        if (savedProgress) {
-          const progress = JSON.parse(savedProgress);
-          setUserProgress(progress);
-          updateLoginStreak(progress);
-        } else {
-          // Initialize progress for new user
-          initializeUserProgress(parsedUser.userId);
+
+        const response = await fetch('/api/users/profile', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            alert('Session expired or invalid. Please log in again.');
+            navigate('/login');
+          } else {
+            throw new Error(`Failed to fetch profile: ${response.statusText}`);
+          }
+          return;
         }
+
+        const data = await response.json();
+        setUser(data);
+        setBio(data.bio || '');
+        setSection(data.section || '');
+        setProfilePic(data.profilePic || '');
+        setPreview(data.profilePic || '');
+        setUserSkills(data.userSkills || []);
         
-        // Load user skills
-        if (savedSkills) {
-          setUserSkills(JSON.parse(savedSkills));
+        // Ensure userProgress is an object, even if not fully populated from DB
+        const fetchedProgress = data.userProgress || {};
+        const defaultProgress = {
+          tasksCompleted: 0,
+          organizationsJoined: 0,
+          activeDays: 0,
+          projectsCollaborated: 0,
+          skillsCertified: 0,
+          improvementsSuggested: 0,
+          loginStreak: 0,
+          lastLoginDate: null,
+        };
+        setUserProgress({ ...defaultProgress, ...fetchedProgress });
+
+        // updateLoginStreak might need to be called here if still relevant
+        // or handled server-side during login. For now, just setting the state.
+        // if (data.userProgress) {
+        //   updateLoginStreak(data.userProgress); 
+        // }
+
+
+      } catch (error) {
+        console.error('[Profile.jsx] Error fetching user profile:', error);
+        if (error.response) { // If error has a response object (e.g., from Axios)
+          console.error('[Profile.jsx] Error response data:', await error.response.text());
+          console.error('[Profile.jsx] Error response status:', error.response.status);
+        } else if (error.message && error.message.includes('not valid JSON')) {
+            // This case handles the fetch API directly when it receives non-JSON
+            // We need access to the raw response if possible, which is tricky from here
+            // as the original response object isn't typically part of the SyntaxError.
+            // The alert already notifies the user. The key is that the backend sent non-JSON.
+            console.error('[Profile.jsx] Received non-JSON response from server. This often means HTML error page or misconfigured proxy.');
         }
-      } else {
-        alert('Please log in to view your profile.');
-        navigate('/login');
+        alert('Failed to load profile data. Please try again later or check console for details.');
+        // Potentially navigate to login or an error page
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    }, 1000);
+    };
+
+    fetchUserProfile();
   }, [navigate]);
 
-  // Initialize user progress
-  const initializeUserProgress = (userId) => {
-    const initialProgress = {
-      tasksCompleted: 0,
-      organizationsJoined: 0,
-      activeDays: 1,
-      projectsCollaborated: 0,
-      skillsCertified: 0,
-      improvementsSuggested: 0,
-      loginStreak: 1,
-      lastLoginDate: new Date().toDateString(),
-    };
+  // Initialize user progress - This logic might be moved to backend or user registration
+  // const initializeUserProgress = (userId) => {
+  //   const initialProgress = {
+  //     tasksCompleted: 0,
+  //     organizationsJoined: 0,
+  //     activeDays: 1,
+  //     projectsCollaborated: 0,
+  //     skillsCertified: 0,
+  //     improvementsSuggested: 0,
+  //     loginStreak: 1,
+  //     lastLoginDate: new Date().toDateString(),
+  //   };
     
-    setUserProgress(initialProgress);
-    localStorage.setItem('userProgress', JSON.stringify(initialProgress));
-  };
+  //   setUserProgress(initialProgress);
+  //   // localStorage.setItem('userProgress', JSON.stringify(initialProgress)); // Removed
+  // };
 
-  // Update login streak
-  const updateLoginStreak = (currentProgress) => {
-    const today = new Date().toDateString();
-    const lastLogin = currentProgress.lastLoginDate;
+  // Update login streak - This should ideally be handled server-side on login
+  // const updateLoginStreak = (currentProgress) => {
+  //   const today = new Date().toDateString();
+  //   const lastLogin = currentProgress.lastLoginDate ? new Date(currentProgress.lastLoginDate).toDateString() : null;
     
-    if (lastLogin !== today) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
+  //   if (lastLogin !== today) {
+  //     const yesterday = new Date();
+  //     yesterday.setDate(yesterday.getDate() - 1);
       
-      let newStreak;
-      if (lastLogin === yesterday.toDateString()) {
-        newStreak = currentProgress.loginStreak + 1;
-      } else {
-        newStreak = 1; // Reset streak if more than 1 day gap
-      }
+  //     let newStreak;
+  //     if (lastLogin === yesterday.toDateString()) {
+  //       newStreak = (currentProgress.loginStreak || 0) + 1;
+  //     } else {
+  //       newStreak = 1; // Reset streak if more than 1 day gap
+  //     }
       
-      const updatedProgress = {
-        ...currentProgress,
-        loginStreak: newStreak,
-        lastLoginDate: today,
-        activeDays: currentProgress.activeDays + 1
-      };
+  //     const updatedProgress = {
+  //       ...currentProgress,
+  //       loginStreak: newStreak,
+  //       lastLoginDate: new Date().toISOString(), // Store as ISO string for backend
+  //       activeDays: (currentProgress.activeDays || 0) + 1
+  //     };
       
-      setUserProgress(updatedProgress);
-      localStorage.setItem('userProgress', JSON.stringify(updatedProgress));
-    }
-  };
+  //     setUserProgress(updatedProgress);
+  //     // localStorage.setItem('userProgress', JSON.stringify(updatedProgress)); // Removed
+  //     // TODO: API call to update this on backend if needed immediately.
+  //   }
+  // };
 
-  // Progress simulation functions (for demo purposes)
-  const simulateProgress = (key, increment = 1) => {
-    const updatedProgress = {
-      ...userProgress,
-      [key]: userProgress[key] + increment
+  // Progress simulation functions (for demo purposes) - Will need API calls if kept
+  const simulateProgress = async (key, increment = 1) => {
+    // This function now primarily serves for local UI updates and achievement checks.
+    // Actual progress updates should happen via specific actions (e.g., completing a task)
+    // which would then call an API to update the backend.
+    // For now, we'll keep the local state update for UI responsiveness
+    // and achievement notifications.
+    
+    const currentProgress = userProgress || {}; // Ensure userProgress is defined
+    const updatedLocalProgress = {
+      ...currentProgress,
+      [key]: (currentProgress[key] || 0) + increment
     };
     
     if (key === 'skillsCertified') {
-      updatedProgress.skillsCertified = userSkills.length;
+      updatedLocalProgress.skillsCertified = userSkills.length;
     }
     
-    setUserProgress(updatedProgress);
-    localStorage.setItem('userProgress', JSON.stringify(updatedProgress));
+    setUserProgress(updatedLocalProgress);
+    // localStorage.setItem('userProgress', JSON.stringify(updatedProgress)); // Removed
     
     // Show achievement unlock notification if applicable
-    checkForNewAchievements(updatedProgress);
+    checkForNewAchievements(updatedLocalProgress);
+
+    // TODO: Consider if an API call is needed here for general progress simulation
+    // or if this function should be removed/refactored if progress is updated elsewhere.
   };
 
   // Check for newly unlocked achievements
@@ -275,77 +326,128 @@ const Profile = () => {
     }, 5000);
   };
 
+  // Helper function to make authenticated API calls for profile updates
+  const updateUserProfileAPI = async (profileData) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Authentication token not found. Please log in.');
+      navigate('/login');
+      return null;
+    }
+    try {
+      const response = await fetch('/api/users/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(profileData),
+      });
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert(`Failed to update profile: ${error.message}`);
+      return null;
+    }
+  };
+
   // Add new skill
-  const addSkill = () => {
+  const addSkill = async () => {
     if (newSkill.name.trim()) {
-      const skill = {
-        id: Date.now(),
+      // Note: Mongoose will generate _id, client-side 'id' is for local keying if needed before save
+      // but ideally, we'd get the new skill object (with _id) back from server.
+      // For now, we optimistically add and then update with server response.
+      const skillToAdd = { 
+        // id: Date.now(), // Temporary, will be replaced by MongoDB _id
         name: newSkill.name.trim(),
         level: newSkill.level,
         color: newSkill.color,
         dateAdded: new Date().toISOString()
       };
       
-      const updatedSkills = [...userSkills, skill];
-      setUserSkills(updatedSkills);
-      localStorage.setItem('userSkills', JSON.stringify(updatedSkills));
-      
-      // Update skills certified progress
-      simulateProgress('skillsCertified', 0); // Will be calculated from userSkills.length
-      
-      // Reset form
-      setNewSkill({ name: '', level: 50, color: 'bg-blue-500' });
-      setShowSkillsModal(false);
-      
-      // Show success notification
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
-      notification.innerHTML = `✅ Skill "${skill.name}" added successfully!`;
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.remove();
-      }, 3000);
+      const newSkillsArray = [...userSkills, skillToAdd];
+      const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
+
+      if (updatedProfileData) {
+        setUserSkills(updatedProfileData.userSkills || []); // Refresh with server state
+        setUserProgress(updatedProfileData.userProgress || userProgress); // Refresh progress
+        
+        // Update skills certified progress locally for immediate UI feedback
+        // simulateProgress('skillsCertified', 0); // This will use the new userSkills.length
+        const currentProgress = updatedProfileData.userProgress || userProgress;
+        const updatedLocalProgress = { ...currentProgress, skillsCertified: updatedProfileData.userSkills.length };
+        setUserProgress(updatedLocalProgress);
+        checkForNewAchievements(updatedLocalProgress);
+
+
+        setNewSkill({ name: '', level: 50, color: 'bg-blue-500' });
+        setShowSkillsModal(false);
+        
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
+        notification.innerHTML = `✅ Skill "${skillToAdd.name}" added successfully!`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      }
     }
   };
 
   // Remove skill
-  const removeSkill = (skillId) => {
-    const updatedSkills = userSkills.filter(skill => skill.id !== skillId);
-    setUserSkills(updatedSkills);
-    localStorage.setItem('userSkills', JSON.stringify(updatedSkills));
-    
-    // Update progress
-    const updatedProgress = {
-      ...userProgress,
-      skillsCertified: updatedSkills.length
-    };
-    setUserProgress(updatedProgress);
-    localStorage.setItem('userProgress', JSON.stringify(updatedProgress));
+  const removeSkill = async (skillIdToRemove) => {
+    // Note: skillIdToRemove is the MongoDB _id if skills are fetched from DB
+    // If it's a temporary client-side ID (like Date.now()), this needs careful handling.
+    // Assuming skills in userSkills state have `_id` from the database.
+    const newSkillsArray = userSkills.filter(skill => skill._id !== skillIdToRemove); // Use _id from MongoDB
+    const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
+
+    if (updatedProfileData) {
+      setUserSkills(updatedProfileData.userSkills || []);
+      setUserProgress(updatedProfileData.userProgress || userProgress);
+
+      const currentProgress = updatedProfileData.userProgress || userProgress;
+      const updatedLocalProgress = { ...currentProgress, skillsCertified: updatedProfileData.userSkills.length };
+      setUserProgress(updatedLocalProgress);
+      checkForNewAchievements(updatedLocalProgress);
+    }
   };
 
   // Update skill level
-  const updateSkillLevel = (skillId, newLevel) => {
-    const updatedSkills = userSkills.map(skill =>
-      skill.id === skillId ? { ...skill, level: newLevel } : skill
+  const updateSkillLevel = async (skillIdToUpdate, newLevel) => {
+    const newSkillsArray = userSkills.map(skill =>
+      skill._id === skillIdToUpdate ? { ...skill, level: newLevel } : skill // Use _id
     );
-    setUserSkills(updatedSkills);
-    localStorage.setItem('userSkills', JSON.stringify(updatedSkills));
+    const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
+
+    if (updatedProfileData) {
+      setUserSkills(updatedProfileData.userSkills || []);
+      // No direct progress change here unless skillsCertified definition changes
+    }
   };
 
   // Rest of your existing functions (handleUpdate, handleImageUpload, etc.)
-  const handleUpdate = () => {
-    const updatedUser = {
-      ...user,
+  const handleUpdate = async () => {
+    const profileDataToUpdate = {
+      name: user.name, // Assuming name can be updated, though not in modal currently
       bio,
       section,
-      profilePic: preview,
+      profilePic: preview, // This could be a base64 string or a URL
     };
-    localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setShowEditModal(false);
-    
-    // Success notification with animation
+
+    const updatedUserData = await updateUserProfileAPI(profileDataToUpdate);
+
+    if (updatedUserData) {
+      setUser(updatedUserData); // Update the main user object
+      setBio(updatedUserData.bio || '');
+      setSection(updatedUserData.section || '');
+      setProfilePic(updatedUserData.profilePic || '');
+      // Preview is already set locally, but ensure consistency if backend modifies URL
+      setPreview(updatedUserData.profilePic || ''); 
+      setShowEditModal(false);
+      
+      // Success notification with animation
     const notification = document.createElement('div');
     notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
     notification.innerHTML = '✅ Profile updated successfully!';
@@ -354,7 +456,8 @@ const Profile = () => {
     setTimeout(() => {
       notification.remove();
     }, 3000);
-  };
+    } // This closes the if(updatedUserData) block
+  }; // This closes the handleUpdate async function
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -464,7 +567,7 @@ const Profile = () => {
       bgColor: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20',
       borderColor: 'border-blue-200 dark:border-blue-800',
       progress: Math.min((userProgress.organizationsJoined / 5) * 100, 100),
-      action: () => simulateProgress('organizationsJoined')
+      // action: () => simulateProgress('organizationsJoined')
     },
     {
       label: 'Tasks Completed',
@@ -474,7 +577,7 @@ const Profile = () => {
       bgColor: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
       borderColor: 'border-green-200 dark:border-green-800',
       progress: Math.min((userProgress.tasksCompleted / 50) * 100, 100),
-      action: () => simulateProgress('tasksCompleted')
+      // action: () => simulateProgress('tasksCompleted')
     },
     {
       label: 'Login Streak',
@@ -1042,8 +1145,8 @@ const Profile = () => {
         )}
       </div>
     </DashboardLayout>
-  );
-};
+  ); // This closes the return statement of the Profile component
+}; // This is the correct closing brace for const Profile = () => { ... }
 
 // Enhanced CSS with new animations
 const styles = `

@@ -29,6 +29,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null, // Default to null, as a user might not have a token initially
   },
+  bio: {
+    type: String,
+    default: '',
+  },
+  section: { // For job title/role
+    type: String,
+    default: '',
+  },
+  profilePic: {
+    type: String,
+    default: '', // URL or base64 string
+  },
+  userSkills: [{
+    name: String,
+    level: Number,
+    color: String,
+    dateAdded: { type: Date, default: Date.now },
+  }],
+  userProgress: {
+    tasksCompleted: { type: Number, default: 0 },
+    organizationsJoined: { type: Number, default: 0 },
+    activeDays: { type: Number, default: 0 },
+    projectsCollaborated: { type: Number, default: 0 },
+    skillsCertified: { type: Number, default: 0 },
+    improvementsSuggested: { type: Number, default: 0 },
+    loginStreak: { type: Number, default: 0 },
+    lastLoginDate: { type: Date },
+  },
 });
 
 // Pre-save middleware to hash password if modified
