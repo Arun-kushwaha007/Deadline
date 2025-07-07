@@ -191,6 +191,20 @@ const Profile = () => {
         };
         setUserProgress({ ...defaultProgress, ...fetchedProgress });
 
+        // Update localStorage with the fetched user data including profilePic
+        const existingLoggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || {};
+        const updatedLoggedInUser = {
+          ...existingLoggedInUser,
+          name: data.name, // Assuming API returns name
+          email: data.email, // Assuming API returns email
+          userId: data.userId, // Assuming API returns userId
+          profilePic: data.profilePic || '', // Ensure profilePic is included
+          bio: data.bio || '',
+          section: data.section || '',
+          // Potentially other fields if they are part of loggedInUser and returned by API
+        };
+        localStorage.setItem('loggedInUser', JSON.stringify(updatedLoggedInUser));
+
         // updateLoginStreak might need to be called here if still relevant
         // or handled server-side during login. For now, just setting the state.
         // if (data.userProgress) {

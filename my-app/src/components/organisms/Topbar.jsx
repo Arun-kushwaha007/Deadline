@@ -415,8 +415,16 @@ const Topbar = () => {
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 className="hidden sm:flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <User size={16} className="text-white" />
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                  {user.profilePic ? (
+                    <img
+                      src={user.profilePic}
+                      alt={user.name || 'User'}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User size={16} className="text-white" />
+                  )}
                 </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.name}</span>
               </button>

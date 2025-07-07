@@ -55,12 +55,12 @@ const Sidebar = () => {
       {/* User Welcome Section - Compact */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-            {user?.avatar ? (
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+            {user?.profilePic ? (
               <img 
-                src={user.avatar} 
-                alt={user.name} 
-                className="w-full h-full rounded-full object-cover"
+                src={user.profilePic} 
+                alt={user.name || 'User'} 
+                className="w-full h-full object-cover"
               />
             ) : (
               <span className="text-white font-bold text-sm">
