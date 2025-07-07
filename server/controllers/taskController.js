@@ -47,9 +47,19 @@ export const createTask = async (req, res) => {
       }
     }
 
-    res.status(201).json(task);
+    // Emit task_created_in_organization event to the organization room
+    if (task.organization && io) {
+      const orgId = task.organization._id || task.organization; // Handle populated vs non-populated
+      const roomName = `org:${orgId}`;
+      const taskObject = { ...task.toObject(), id: task._id };
+      io.to(roomName).emit('task_created_in_organization', taskObject);
+      console.log(`[Task Create] Emitted 'task_created_in_organization' to room ${roomName} for new task ${task._id}`);
+    }
+
+    res.status(201).json({ ...task.toObject(), id: task._id });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error(`[Task Create Controller] Error creating task:`, error);
+    res.status(400).json({ error: error.message, details: error.errors });
   }
 };
 

@@ -1,7 +1,13 @@
 // src/context/SocketContext.js
 import { createContext, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createTask, updateTask, deleteTaskThunk, applyTaskUpdateFromSocket } from '../redux/slices/tasksSlice';
+import { 
+  createTask, 
+  updateTask, 
+  deleteTaskThunk, 
+  applyTaskUpdateFromSocket,
+  applyTaskCreationFromSocket 
+} from '../redux/slices/tasksSlice';
 import { addNotification } from '../redux/slices/notificationSlice';
 import socket from '../socket';
 
@@ -57,6 +63,14 @@ export const SocketProvider = ({ children }) => {
 
    socket.on('task_updated_in_organization', handleTaskUpdatedInOrg);
  
+    // Listener for new task creation event
+    const handleTaskCreatedInOrg = (newTaskData) => {
+      console.log('[SocketContext] Received task_created_in_organization:', newTaskData);
+      dispatch(applyTaskCreationFromSocket(newTaskData));
+    };
+
+    socket.on('task_created_in_organization', handleTaskCreatedInOrg);
+
    return () => {
      socket.off('taskAssigned');
      // We can potentially remove the generic 'taskUpdated' listener if
@@ -67,6 +81,7 @@ export const SocketProvider = ({ children }) => {
      socket.off('taskDeleted');
      socket.off('newNotification');
      socket.off('task_updated_in_organization', handleTaskUpdatedInOrg); // Clean up new listener
+      socket.off('task_created_in_organization', handleTaskCreatedInOrg); // Clean up new listener
      window.removeEventListener('beforeunload', handleBeforeUnload);
      // ✅ DO NOT disconnect here — let it persist across route changes
    };

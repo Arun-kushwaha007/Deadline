@@ -127,6 +127,21 @@ const tasksSlice = createSlice({
       }
       state.status = 'succeeded'; // Ensure status is consistent
     },
+    applyTaskCreationFromSocket: (state, action) => {
+      const newTask = action.payload;
+      console.log('[Reducer] applyTaskCreationFromSocket - Incoming newTask:', newTask, 'Current tasks count:', state.tasks.length);
+      const taskExists = state.tasks.find(task => task.id === newTask.id);
+      console.log('[Reducer] applyTaskCreationFromSocket - Task already exists in state?', !!taskExists);
+      if (!taskExists) {
+        state.tasks.push(newTask);
+        console.log('[Reducer] applyTaskCreationFromSocket - Task pushed. New tasks count:', state.tasks.length);
+      } else {
+        console.log('[Reducer] applyTaskCreationFromSocket - Task not pushed due to duplicate ID.');
+      }
+      // Optionally, sort tasks or handle order if necessary
+      // For now, just adding to the end.
+      state.status = 'succeeded'; 
+    },
     reorderTasks: (state, action) => {
       const { status, tasks: reorderedTasks } = action.payload;
       const filteredOut = state.tasks.filter(t => t.status !== status);
@@ -237,6 +252,7 @@ const tasksSlice = createSlice({
 export const {
   optimisticallyUpdateTaskStatus,
   applyTaskUpdateFromSocket,
+  applyTaskCreationFromSocket,
   reorderTasks,
   updateTaskOrganization,
   reorderOrgTasks,
