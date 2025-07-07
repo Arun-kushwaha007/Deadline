@@ -22,8 +22,8 @@ const AddMember = () => {
 
   const [joiningUserId, setJoiningUserId] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [allUsers, setAllUsers] = useState([]); // Store all users
-  const [filteredUsers, setFilteredUsers] = useState([]); // Store filtered users
+  const [allUsers, setAllUsers] = useState([]); 
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);

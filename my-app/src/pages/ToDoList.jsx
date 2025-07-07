@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Sun, Moon, Plus, CheckCircle, Trash2, Calendar, Filter } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
-// import api from '../../utils/api'; // Changed from axios to custom api
+
 import api from '../utils/api';
 import { useNavigate } from 'react-router';
 import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
-// const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'; // No longer needed directly
+
 
 const ToDoList = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ToDoList = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [task, setTask] = useState('');
   const [tasks, setTasks] = useState([]);
-  const [filter, setFilter] = useState('all'); // all, active, completed
+  const [filter, setFilter] = useState('all'); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,8 +32,8 @@ const ToDoList = () => {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const fetchedTasks = await api.get('/todos'); // Use api.get
-        setTasks(fetchedTasks); // api.get returns JSON directly
+        const fetchedTasks = await api.get('/todos');
+        setTasks(fetchedTasks); 
       } catch (err) {
         console.error('❌ Failed to load tasks:', err);
       } finally {
@@ -46,23 +46,22 @@ const ToDoList = () => {
   const addTask = async () => {
     if (!task.trim()) return;
     try {
-      const newTask = await api.post('/todos', { // Use api.post
+      const newTask = await api.post('/todos', { 
         text: task.trim(),
       });
-      setTasks(prev => [newTask, ...prev]); // api.post returns JSON directly
+      setTasks(prev => [newTask, ...prev]);
       setTask('');
     } catch (error) {
-      // The custom api utility already returns .json(), so error.response?.data might not be applicable in the same way
-      // It might be error itself or error.message depending on how api.js handles errors
+
       console.error('Failed to add task:', error.message || error);
     }
   };
 
   const toggleComplete = async (id) => {
     try {
-      const updatedTask = await api.put(`/todos/${id}/toggle`); // Use api.put
+      const updatedTask = await api.put(`/todos/${id}/toggle`);
       setTasks((prev) =>
-        prev.map((t) => (t._id === id ? updatedTask : t)) // api.put returns JSON directly
+        prev.map((t) => (t._id === id ? updatedTask : t)) 
       );
     } catch (err) {
       console.error('❌ Failed to toggle task:', err.message || err);
@@ -71,7 +70,7 @@ const ToDoList = () => {
 
   const deleteTask = async (id) => {
     try {
-      await api.delete(`/todos/${id}`); // Use api.delete
+      await api.delete(`/todos/${id}`);
       setTasks((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
       console.error('❌ Failed to delete task:', err.message || err);

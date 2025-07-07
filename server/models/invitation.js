@@ -8,7 +8,7 @@ const invitationSchema = new mongoose.Schema({
   },
   inviter: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Assuming your User model is named 'User'
+    ref: 'User',
     required: true,
   },
   inviteeEmail: {
@@ -17,7 +17,7 @@ const invitationSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
-  inviteeUser: { // To be populated if the invitee is an existing user or after they accept
+  inviteeUser: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
@@ -39,14 +39,11 @@ const invitationSchema = new mongoose.Schema({
       date.setDate(date.getDate() + 7);
       return date;
     },
-    index: { expires: '1s' }, // Optional: MongoDB TTL index to auto-delete expired if not handled by app logic
-                               // Note: TTL index deletes the whole document. If you want to keep it and just mark as expired,
-                               // you might need a cron job or similar to update status.
-                               // For now, just setting expiresAt. Status update to 'expired' can be manual or via cron.
+    index: { expires: '1s' }, 
   },
 });
 
-// Optional: Add an index for common queries
+
 invitationSchema.index({ inviteeEmail: 1, status: 1 });
 invitationSchema.index({ organization: 1, inviteeEmail: 1 }, { unique: true, partialFilterExpression: { status: 'pending' } }); // Prevent duplicate pending invites to same org for same email
 

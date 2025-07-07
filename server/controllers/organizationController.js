@@ -1,6 +1,6 @@
 import Organization from '../models/Organization.js';
 import User from '../models/User.js';
-import { sendNotification } from '../utils/notificationUtils.js'; // Added import
+import { sendNotification } from '../utils/notificationUtils.js';
 
 // GET /api/organizations/
 export const getAllOrganizations = async (req, res) => {
@@ -66,19 +66,16 @@ export const getOrganizationMembers = async (req, res) => {
       return res.status(404).json({ message: 'Organization not found' });
     }
 
-    // Extract member UUIDs from the organization's members array
-    // Assuming organization.members stores objects like { userId: 'uuid-string', role: 'role-name' }
     const memberUserIds = organization.members.map(m => m.userId);
 
     if (memberUserIds.length === 0) {
       return res.status(200).json([]); // No members to fetch
     }
 
-    // Fetch user details for these member UUIDs
-    // Assuming User model has a 'userId' field that stores the UUID string
-    const membersUsers = await User.find({ userId: { $in: memberUserIds } }).select('userId name email profilePicture'); // Added profilePicture
 
-    // Create a map of UUID -> user object for efficient lookup
+    const membersUsers = await User.find({ userId: { $in: memberUserIds } }).select('userId name email profilePicture'); 
+
+
     const userMap = {};
     membersUsers.forEach(user => {
       userMap[user.userId] = user.toObject(); // Convert to plain object
@@ -92,7 +89,7 @@ export const getOrganizationMembers = async (req, res) => {
         role: member.role,
         name: userDetails ? userDetails.name : 'Unknown User',
         email: userDetails ? userDetails.email : '',
-        profilePicture: userDetails ? userDetails.profilePicture : '', // Added profilePicture
+        profilePicture: userDetails ? userDetails.profilePicture : '',
         // You can add _id (MongoDB ObjectId of User document) if needed, e.g., userDetails._id
       };
     });
@@ -251,7 +248,6 @@ export const addMember = async (req, res) => {
       return res.status(404).json({ message: 'Organization not found' });
     }
 
-    // Check if user is already a member by comparing UUID strings
     const alreadyMember = organization.members.some(
       m => m.userId === user.userId // user.userId is the UUID string from the found User document
     );
@@ -263,7 +259,7 @@ export const addMember = async (req, res) => {
     organization.members.push({ userId: user.userId, role: role }); 
     await organization.save();
 
-    // Send notification to the newly added member
+   
     const io = req.app.get('io');
     const redisClient = req.app.get('redis');
     if (io && redisClient && user) {
@@ -271,7 +267,7 @@ export const addMember = async (req, res) => {
         io,
         redisClient,
         userId: user.userId, // Use the UUID userId
-        type: 'info', // Or a more specific type like 'addedToOrganization'
+        type: 'info', 
         message: `You have been added to the organization '${organization.name}'.`,
         entityId: organization._id,
         entityModel: 'Organization',
@@ -300,7 +296,7 @@ export const assignTask = async (req, res) => {
     const organization = await Organization.findById(id);
     if (!organization) return res.status(404).json({ message: 'Organization not found' });
 
-    // assignedTo is a UUID string here, check membership by UUID string
+
     const isMember = organization.members.some(
       m => m.userId === assignedTo
     );
@@ -323,7 +319,7 @@ export const assignTask = async (req, res) => {
     const redisClient = req.app.get('redis');
 
     if (io && redisClient && assigneeUser) {
-      const newTask = organization.tasks[organization.tasks.length - 1]; // Get the newly added task
+      const newTask = organization.tasks[organization.tasks.length - 1]; 
       if (newTask) {
         await sendNotification({
           io,
@@ -401,21 +397,7 @@ export const removeMemberFromOrganization = async (req, res) => {
     organization.members.splice(memberIndexToRemove, 1);
     await organization.save();
 
-    // Optionally, send a notification to the removed member (if desired)
-    // For example:
-    // const io = req.app.get('io');
-    // const redisClient = req.app.get('redis');
-    // if (io && redisClient) {
-    //   await sendNotification({
-    //     io,
-    //     redisClient,
-    //     userId: memberUuidToRemove, // UUID of the removed member
-    //     type: 'warning', // Or 'removedFromOrganization'
-    //     message: `You have been removed from the organization '${organization.name}'.`,
-    //     entityId: organization._id,
-    //     entityModel: 'Organization',
-    //   });
-    // }
+
 
     res.status(200).json({ message: 'Member removed successfully', organization });
   } catch (error) {

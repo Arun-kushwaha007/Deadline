@@ -13,7 +13,6 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Categories with emojis and descriptions
   const categories = [
     { value: 'general', label: '💬 General Feedback', desc: 'Overall experience and thoughts' },
     { value: 'feature', label: '✨ Feature Request', desc: 'Suggest new features or improvements' },
@@ -28,7 +27,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     'efficient', 'professional', 'responsive', 'intuitive', 'valuable'
   ];
 
-  // Reset form when modal opens/closes
+
   useEffect(() => {
     if (isOpen) {
       if (initialData) {
@@ -54,7 +53,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
       [field]: value
     }));
     
-    // Clear error for this field
+
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
@@ -63,8 +62,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     }
   };
 
-  // Add tag
-  const addTag = (tag) => {
+ const addTag = (tag) => {
     const tagToAdd = tag || currentTag.trim();
     if (tagToAdd && !formData.tags.includes(tagToAdd)) {
       setFormData(prev => ({
@@ -75,7 +73,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     }
   };
 
-  // Remove tag
+
   const removeTag = (tagToRemove) => {
     setFormData(prev => ({
       ...prev,
@@ -83,7 +81,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     }));
   };
 
-  // Validate form
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -107,7 +105,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -145,7 +143,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     }, 5000);
   };
 
-  // Render stars for rating
+
   const renderStars = () => {
     return [...Array(5)].map((_, index) => (
       <button
@@ -169,7 +167,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
       <div className="bg-white dark:bg-gray-800 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
         
-        {/* Header */}
+
         <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-6 rounded-t-3xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 animate-pulse"></div>
           <div className="relative z-10 flex justify-between items-center">
@@ -190,7 +188,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
           
-          {/* Rating Section */}
+    
           <div>
             <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
               <span className="text-xl">⭐</span> Rating

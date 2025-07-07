@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage, isSupported } from 'firebase/messaging';
 
-// ✅ Firebase config using Vite environment variables
+//  Firebase config using Vite environment variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_AI_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_AI_FIREBASE_AUTH_DOMAIN,
@@ -11,12 +11,11 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_AI_FIREBASE_APP_ID,
 };
 
-// ✅ Initialize Firebase app once
+//  Initialize Firebase app once
 const firebaseApp = initializeApp(firebaseConfig);
 
-/**
- * ✅ Returns a messaging instance if supported; otherwise, returns null.
- */
+//  Returns a messaging instance if supported; otherwise, returns null.
+
 const getMessagingInstance = async () => {
   try {
     const supported = await isSupported();
@@ -34,5 +33,5 @@ const getMessagingInstance = async () => {
   }
 };
 
-// ✅ Export utility functions for usage in your hooks
+
 export { getMessagingInstance, getToken, onMessage };

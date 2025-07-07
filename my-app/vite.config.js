@@ -17,14 +17,12 @@ export default {
   },
   plugins: [react(),tailwindcss()],
   server: {
-    // port: 3000, // Optional: specify frontend dev server port
+    // port: 3000, // Optional
     proxy: {
       '/api': {
-        target: 'http://localhost:5000', // Assuming backend runs on port 5000
+        target: 'http://localhost:5000',
         changeOrigin: true,
-        secure: false, // Set to true if your backend server is HTTPS with a valid certificate
-        // Optional: rewrite path if your backend API routes don't start with /api
-        // rewrite: (path) => path.replace(/^\/api/, ''), 
+        secure: false,
       },
     },
   },

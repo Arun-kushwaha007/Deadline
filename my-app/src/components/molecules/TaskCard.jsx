@@ -11,7 +11,7 @@ import {
   TagIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  UserCircleIcon // Added for better visual distinction
+  UserCircleIcon 
 } from '@heroicons/react/24/outline';
 
 export default function TaskCard({
@@ -216,13 +216,13 @@ export default function TaskCard({
       onMouseDown={handleCardMouseDown}
       data-task-card="true"
     >
-      {/* Background Pattern */}
+ 
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
       </div>
 
-      {/* Header */}
+  
       <div className="relative flex justify-between items-start mb-3">
         <div className="flex-1 min-w-0">
           <h3 className={`font-bold text-white leading-tight ${
@@ -258,7 +258,7 @@ export default function TaskCard({
         </div>
       </div>
 
-      {/* Quick Info (Always Visible) - Enhanced with Assigned By */}
+ 
       <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
         <div className="flex items-center gap-3">
           {dueDate && (
@@ -284,7 +284,7 @@ export default function TaskCard({
         </span>
       </div>
 
-      {/* Assigned By Info - Always Visible in Collapsed State */}
+
       {!expanded && assignedBy && (
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-2">
           <UserCircleIcon className="w-3 h-3" />
@@ -293,7 +293,7 @@ export default function TaskCard({
         </div>
       )}
 
-      {/* Progress Bar for Subtasks */}
+
       {totalSubtasks > 0 && !expanded && (
         <div className="w-full bg-gray-700 rounded-full h-1.5 mb-3">
           <div 
@@ -356,7 +356,7 @@ export default function TaskCard({
             )}
           </div>
 
-          {/* Enhanced Assignment Info Section */}
+ 
           {(assignee?.name || assignedBy) && (
             <div className="mb-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
               <div className="flex items-center gap-2 mb-3">
@@ -469,7 +469,7 @@ export default function TaskCard({
         </>
       )}
 
-      {/* Hover overlay */}
+
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
     </div>
   );

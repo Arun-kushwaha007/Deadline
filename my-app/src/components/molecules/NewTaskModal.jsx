@@ -183,24 +183,24 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
       if (cachedMembersData?.status === 'succeeded' && cachedMembersData.members) {
         potentialMembers = cachedMembersData.members.map(member => {
           if (member && member.userId && typeof member.userId === 'object' && member.userId._id && member.userId.name) {
-            return member.userId; // Structure is { userId: { _id: ..., name: ... } }
+            return member.userId; 
           }
-          if (member && member._id && member.name) {
-            return member; // Structure is { _id: ..., name: ... } (direct user-like object)
-          }
-          return null;
-        }).filter(user => user); // Filter out nulls
-      }
-      
-      // Source 2: selectedOrganization.members (from fetchOrganizationDetails)
-      // This is used if cache was empty/failed OR if it yielded no members and selectedOrgData is available
-      if (potentialMembers.length === 0 && selectedOrgData && selectedOrgData._id === organizationId && selectedOrgData.members) {
-        potentialMembers = selectedOrgData.members.map(member => {
-          // Primarily expect direct user-like objects, as suggested by AssignTaskModal
           if (member && member._id && member.name) {
             return member; 
           }
-          // Fallback for { userId: { ... } } structure, for robustness
+          return null;
+        }).filter(user => user);
+      }
+      
+      
+      // This is used if cache was empty/failed OR if it yielded no members and selectedOrgData is available
+      if (potentialMembers.length === 0 && selectedOrgData && selectedOrgData._id === organizationId && selectedOrgData.members) {
+        potentialMembers = selectedOrgData.members.map(member => {
+
+          if (member && member._id && member.name) {
+            return member; 
+          }
+          
           if (member && member.userId && typeof member.userId === 'object' && member.userId._id && member.userId.name) {
             return member.userId;
           }
@@ -208,11 +208,11 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
         }).filter(user => user);
       }
     } else {
-      // No organization selected, use global users list
+
       potentialMembers = users; 
     }
 
-    // Ensure all items in potentialMembers are valid user objects with _id and name
+ 
     const finalMembersToFilter = potentialMembers.filter(
       user => user && user._id && typeof user.name === 'string'
     );
@@ -235,12 +235,12 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
       if (cachedMembersData?.status === 'succeeded' && cachedMembersData.members) {
         orgUserObjects = cachedMembersData.members.map(member => {
           if (member && member.userId && typeof member.userId === 'object' && member.userId._id) return member.userId;
-          if (member && member._id) return member; // Assuming 'member' itself could be the user object
+          if (member && member._id) return member; 
           return null;
         }).filter(Boolean);
       } else if (selectedOrgData && selectedOrgData._id === organizationId && selectedOrgData.members) {
         orgUserObjects = selectedOrgData.members.map(member => {
-          if (member && member._id) return member; // Primarily expect direct user object
+          if (member && member._id) return member; 
           if (member && member.userId && typeof member.userId === 'object' && member.userId._id) return member.userId;
           return null;
         }).filter(Boolean);
@@ -282,7 +282,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
      setSubtasks([{ title: '', done: false }]);
      setAssignee(null);
      setAssignedBy(loggedInUser.name || 'Unknown'); // Reset to logged-in user
-     setVisibility('public'); // Reset to public
+     setVisibility('public'); 
      setErrors({});
      setAssigneeSearch('');
      setOrganizationId('');
@@ -669,7 +669,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                             type="button"
                             onClick={() => {
                               setAssignee(null);
-                              setAssigneeRole('member'); // Reset role when assignee is cleared
+                              setAssigneeRole('member');
                             }}
                             className="text-red-400 hover:text-red-300 text-sm transition-colors"
                           >
@@ -751,7 +751,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                            Visibility
                          </label>
                          <div className="grid grid-cols-2 gap-3">
-                           {/* Public Option - Always Selected */}
+                      
                            <button
                              type="button"
                              disabled={true} // Disabled since it's always selected
@@ -783,7 +783,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                                  </div>
                                </div>
                              </div>
-                             {/* "Coming Soon" Badge */}
+                          
                              <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
                                Soon
                              </div>

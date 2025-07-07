@@ -1,9 +1,7 @@
 import { io } from 'socket.io-client';
 
-// Use Vite's environment variable for the backend URL (e.g., from .env file)
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-// Connect with additional options for production readiness
 const socket = io(backendUrl, {
   transports: ['websocket'],         // Use WebSocket only for better performance
   withCredentials: true,             // Needed if you use cookies or auth headers

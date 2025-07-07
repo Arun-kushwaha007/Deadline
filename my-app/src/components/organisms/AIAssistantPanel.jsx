@@ -189,7 +189,7 @@ export default function AIAssistantPanel() {
         </div>
       </div>
 
-      {/* Messages Area - Dynamic Height */}
+      {/* Messages Area */}
       <div 
         className="overflow-y-auto p-3 space-y-3 bg-gray-50 dark:bg-gray-900"
         style={{ height: `${messagesHeight}px` }}
@@ -230,7 +230,7 @@ export default function AIAssistantPanel() {
                 )}
               </div>
 
-              {/* Message Bubble */}
+         
               <div className={`${msg.sender === 'user' ? 'text-right' : 'text-left'}`}
                    style={{ maxWidth: `${panelSize.width - 100}px` }}>
                 <div className={`p-2 rounded-xl break-words ${
@@ -252,7 +252,7 @@ export default function AIAssistantPanel() {
           ))
         )}
 
-        {/* Loading indicator */}
+     
         {isLoading && (
           <div className="flex gap-2">
             <div className="flex-shrink-0 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config(); // ✅ Load env FIRST before any other imports
+dotenv.config(); 
 
 // console.log('[ENV CHECK]', {
 //   FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
@@ -14,9 +14,9 @@ import mongoose from 'mongoose';
 import { Server as socketIO } from 'socket.io';
 import { createClient } from 'redis';
 import { Resend } from 'resend';
-import './config/firebaseAdmin.js'; // ✅ Now safe to run after env loaded
+import './config/firebaseAdmin.js'; 
 // import initializeScheduler from './services/schedulerService.js'; 
-import initializeScheduler from './services/schedulerService.js'; // Import scheduler service
+import initializeScheduler from './services/schedulerService.js';
 // Firebase Admin Environment Check
 if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PROJECT_ID) {
   console.warn('⚠️ Firebase Admin SDK not initialized properly. Missing environment variables. correct it');
@@ -132,7 +132,7 @@ const startServer = async () => {
 };
 
 // Socket.IO Events
-io.on('connection', async (socket) => { // Added async here
+io.on('connection', async (socket) => {
   console.log('🟢 User connected:', socket.id);
 
   socket.on('register', async (userId) => {
@@ -140,14 +140,14 @@ io.on('connection', async (socket) => { // Added async here
       console.warn(`[Socket Register] Attempt to register with undefined userId for socket ${socket.id}`);
       return;
     }
-    socket.userId = userId; // Store userId on the socket instance
+    socket.userId = userId; 
     await redisClient.set(`socket:${userId}`, socket.id);
     console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
 
     // Join organization rooms
     try {
-      const User = mongoose.model('User'); // Ensure User model is available
-      const Organization = mongoose.model('Organization'); // Ensure Organization model is available
+      const User = mongoose.model('User'); 
+      const Organization = mongoose.model('Organization'); 
 
       const user = await User.findOne({ userId: userId });
       if (user) {
@@ -171,17 +171,14 @@ io.on('connection', async (socket) => { // Added async here
       try {
         await redisClient.del(`socket:${socket.userId}`);
         console.log(`[Socket Disconnect] Removed user ${socket.userId} from Redis.`);
-        // No explicit room leaving needed for server-to-room broadcasts,
-        // Socket.IO handles this when a socket disconnects.
+     
       } catch (err) {
         console.error(`[Socket Disconnect] Redis DEL error for user ${socket.userId}:`, err);
       }
     } else {
-      // Fallback for sockets that didn't register a userId (should be rare)
-      // This part of the original code might be slow if there are many keys.
-      // Consider if this fallback is strictly necessary or can be optimized.
+     
       try {
-        const keys = await redisClient.keys('socket:*'); // More specific key pattern
+        const keys = await redisClient.keys('socket:*'); 
         for (const key of keys) {
           const socketId = await redisClient.get(key);
           if (socketId === socket.id) {
@@ -197,5 +194,4 @@ io.on('connection', async (socket) => { // Added async here
   });
 });
 
-// Start the server
 startServer();

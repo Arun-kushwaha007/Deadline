@@ -16,13 +16,13 @@ const OrganizationDashboard = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid'); 
 
   useEffect(() => {
     dispatch(fetchOrganizations());
   }, [dispatch]);
 
-  // Remove duplicates and ensure unique organizations
+
   const uniqueOrganizations = React.useMemo(() => {
     if (!organizations || !Array.isArray(organizations)) return [];
     

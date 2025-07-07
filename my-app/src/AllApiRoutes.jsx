@@ -21,7 +21,7 @@ import ForgotPassword from './pages/ForgetPassword';
 import ResetPassword from './pages/ResetPassword';
 import Terms from './pages/Terms'; 
 import Privacy from './pages/Privacy'; 
-// import Setting from './pages/Setting'; 
+
 import Setting from './pages/Setting';
 import Feedback from './pages/Feedback';
 

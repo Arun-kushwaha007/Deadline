@@ -40,7 +40,7 @@ const useFCMToken = () => {
           console.log('✅ FCM token received:', token);
           setTokenStatus(prev => ({ ...prev, token }));
           
-          // Check if token has changed or if we need to send it
+      
           const storedToken = localStorage.getItem('fcmToken');
           const tokenSentFlag = localStorage.getItem('fcmTokenSent');
           
@@ -115,7 +115,7 @@ const useFCMToken = () => {
     fetchAndSendToken();
   }, []);
 
-  // Optional: Return status for debugging or UI feedback
+
   return tokenStatus;
 };
 

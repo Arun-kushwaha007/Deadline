@@ -107,7 +107,6 @@ const UserKanbanBoard = () => {
 
   const columns = ['todo', 'inprogress', 'done'];
 
-  // Helper function to check if a task is assigned to the current user
   const isTaskAssignedToUser = (task) => {
     if (!currentUserId) return false;
 
@@ -120,15 +119,13 @@ const UserKanbanBoard = () => {
     let taskAssigneeIdentifier;
 
     if (task.assignedTo && typeof task.assignedTo === 'object') {
-      // If assignedTo is a populated object, use its userId (UUID)
+  
       taskAssigneeIdentifier = task.assignedTo.userId;
     } else if (typeof task.assignedTo === 'string') {
-      // If assignedTo is a string, it might be a direct ID (though less common for users now)
-      // or a special string like 'everyone' (already handled).
-      // This path is less likely for user assignment after backend changes.
+      
       taskAssigneeIdentifier = task.assignedTo;
     }
-    // If task.assignedTo is null or not an object/string, taskAssigneeIdentifier will be undefined.
+    
 
     return String(taskAssigneeIdentifier) === String(currentUserId);
   };
@@ -417,8 +414,8 @@ const UserKanbanBoard = () => {
                               <div key={task.id} className="relative">
                                 <SortableTask
                                   task={task}
-                                  myRole="member" // Users can only view/edit their own tasks
-                                  organizationName={getOrganizationName(task)} // Pass organization name
+                                  myRole="member" 
+                                  organizationName={getOrganizationName(task)} 
                                   onView={() => {
                                     setEditTask(task);
                                     setShowModal(true);

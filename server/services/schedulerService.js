@@ -2,16 +2,12 @@ import cron from 'node-cron';
 import Task from '../models/Task.js';
 import User from '../models/User.js';
 import { sendNotification } from '../utils/notificationUtils.js';
-import { admin } from '../config/firebaseAdmin.js'; // Assuming admin is exported for FCM
-// import { io } from '../index.js'; // Assuming io is exported from main server file
-// import { redisClient } from '../index.js'; // Assuming redisClient is exported
+import { admin } from '../config/firebaseAdmin.js'; 
 
-// Placeholder for io and redisClient if they are not directly exportable
-// You might need to pass them during initialization
 let io_instance = null;
 let redis_client_instance = null;
 
-// --- Functions for Idle Task Detection ---
+
 const checkIdleTasks = async () => {
   if (!io_instance || !redis_client_instance) {
     console.error('[SchedulerService-IdleTasks] IO or Redis client not initialized.');
@@ -30,11 +26,8 @@ const checkIdleTasks = async () => {
     if (idleTasks.length > 0) {
       console.log(`[SchedulerService-IdleTasks] Found ${idleTasks.length} idle tasks.`);
       for (const task of idleTasks) {
-        if (task.assignedTo && task.assignedTo.userId) { // Ensure user and userId exist
-          // Optional: Add a check here to prevent re-notifying if already notified for idleness recently
-          // This might involve adding a field to the Task model like `lastIdleNotificationSentAt`
-          // For now, it will notify every time the job runs and the task is still idle.
-
+        if (task.assignedTo && task.assignedTo.userId) {
+  
           console.log(`[SchedulerService-IdleTasks] Sending idle notification for task "${task.title}" to user ${task.assignedTo.userId}`);
           await sendNotification({
             io: io_instance,
@@ -57,16 +50,9 @@ const checkIdleTasks = async () => {
   }
 };
 
-// --- Functions for Deadline Alerts (with Exponential Frequency) ---
-
 const MS_PER_HOUR = 60 * 60 * 1000;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
 
-// Define notification windows and their properties
-// `threshold`: ms before deadline this window starts
-// `frequency`: how often to notify within this window (in ms). `null` means once per window.
-// `message`: template for the notification
-// `id`: unique key for storing in `deadlineNotifiedAt`
 const deadlineNotificationWindows = [
   { id: 'overdue', threshold: 0, frequency: 6 * MS_PER_HOUR, message: "Overdue: Task \"{taskTitle}\" was due on {dueDate}. Please update its status." }, // Notify every 6 hours if overdue
   { id: 'due_1h', threshold: 1 * MS_PER_HOUR, frequency: 15 * 60 * 1000, message: "Urgent: Task \"{taskTitle}\" is due in ~{timeLeft}!" }, // Notify every 15 mins in the last hour
@@ -102,7 +88,7 @@ const checkDeadlineAlerts = async () => {
     const tasks = await Task.find({
       status: { $ne: 'done' },
       assignedTo: { $ne: null },
-      dueDate: { $ne: null } // Ensure dueDate exists
+      dueDate: { $ne: null }
     }).populate('assignedTo', 'userId');
 
     if (tasks.length === 0) {
@@ -114,22 +100,19 @@ const checkDeadlineAlerts = async () => {
       if (!task.assignedTo || !task.assignedTo.userId) continue;
 
       const dueDate = task.dueDate.getTime();
-      const timeLeftMs = dueDate - currentTime; // Can be negative if overdue
+      const timeLeftMs = dueDate - currentTime;
 
       for (const window of deadlineNotificationWindows) {
         const isOverdueTask = timeLeftMs <= 0;
         
         // Special handling for overdue tasks: they only match the 'overdue' window
         if (window.id === 'overdue' && !isOverdueTask) {
-            continue; // Skip 'overdue' window if task is not overdue
+            continue; 
         }
         if (window.id !== 'overdue' && isOverdueTask) {
-            continue; // Skip non-'overdue' windows if task is overdue
+            continue; 
         }
 
-        // Check if task falls into the current notification window's timeframe
-        // For non-overdue: timeLeftMs > 0 && timeLeftMs <= window.threshold
-        // For overdue: isOverdueTask (which means timeLeftMs <=0) and window.id === 'overdue'
         const matchesWindow = (isOverdueTask && window.id === 'overdue') || 
                               (!isOverdueTask && timeLeftMs <= window.threshold);
 
@@ -142,14 +125,12 @@ const checkDeadlineAlerts = async () => {
             // Never notified for this window before
             shouldNotify = true;
           } else if (window.frequency !== null) {
-            // This window has a recurring frequency, check if enough time has passed
+         
             if (currentTime - lastNotifiedForWindow.getTime() >= window.frequency) {
               shouldNotify = true;
             }
           }
-          // If frequency is null, it means notify only once per window.
-          // If lastNotifiedForWindow exists and frequency is null, shouldNotify remains false.
-
+   
           if (shouldNotify) {
             const message = window.message
               .replace('{taskTitle}', task.title)
@@ -173,13 +154,9 @@ const checkDeadlineAlerts = async () => {
               task.deadlineNotifiedAt = new Map();
             }
             task.deadlineNotifiedAt.set(window.id, now);
-            await task.save(); // Save the updated task with the new notification timestamp
+            await task.save(); 
             
-            // Important: Once a notification for a specific window is sent,
-            // we typically break from the inner loop to avoid sending multiple types of notifications
-            // for the same task in one check run (e.g. both 7-day and 3-day if thresholds overlap and not handled by frequency).
-            // The current window definitions are mostly exclusive based on threshold, but overdue is special.
-            // If it's overdue, we only send the overdue notification.
+ 
             break; 
           }
         }
@@ -198,8 +175,7 @@ const scheduleJobs = () => {
   });
   console.log('[SchedulerService] Scheduled job: checkIdleTasks (daily at 9:00 UTC)');
 
-  // Schedule checkDeadlineAlerts to run more frequently, e.g., every 15 minutes
-  // The logic within checkDeadlineAlerts will handle the exponential timing.
+ 
   cron.schedule('*/15 * * * *', checkDeadlineAlerts); // Runs every 15 minutes
   console.log('[SchedulerService] Scheduled job: checkDeadlineAlerts (every 15 minutes)');
 };

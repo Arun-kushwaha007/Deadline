@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Backend base URL
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 const API = `${backendUrl}/api/organizations`;
 
-// Async Thunks
+
 
 export const fetchOrganizations = createAsyncThunk(
   'organization/fetchOrganizations',
@@ -35,7 +35,7 @@ export const createOrganization = createAsyncThunk(
       return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
     }
     try {
-      // orgName should be a string, not an object
+   
       const { data } = await axios.post(`${API}/create`, { name: orgName }, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,14 +70,13 @@ export const fetchOrganizationDetails = createAsyncThunk(
 
 export const addMemberToOrganization = createAsyncThunk(
   'organization/addMemberToOrganization',
-  async ({ orgId, email, role }, thunkAPI) => { // Added role to parameters
+  async ({ orgId, email, role }, thunkAPI) => {
     const token = localStorage.getItem('token');
     if (!token) {
       return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
     }
     try {
-      // Corrected URL from /add-member to /members
-      // Include role in the payload sent to the backend
+     
       const { data } = await axios.post(`${API}/${orgId}/members`, { email, role }, { 
         headers: {
           Authorization: `Bearer ${token}`,
@@ -98,7 +97,7 @@ export const assignTaskToMember = createAsyncThunk(
       return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
     }
     try {
-      // Corrected URL from /assign-task to /tasks
+ 
       const { data } = await axios.post(`${API}/${orgId}/tasks`, {
         title,
         assignedTo,
@@ -114,16 +113,16 @@ export const assignTaskToMember = createAsyncThunk(
   }
 );
 
-// Define and Export fetchMyOrganizations Async Thunk first
+
 export const fetchMyOrganizations = createAsyncThunk(
-  'organization/fetchMyOrganizations', // Action type prefix consistent with the slice name 'organization'
+  'organization/fetchMyOrganizations',
   async (_, thunkAPI) => {
     const token = localStorage.getItem('token');
     if (!token) {
       return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
     }
     try {
-      const { data } = await axios.get(`${API}/mine`, { // Uses the API constant from the existing slice
+      const { data } = await axios.get(`${API}/mine`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

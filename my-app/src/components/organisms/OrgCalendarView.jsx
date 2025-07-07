@@ -154,7 +154,7 @@ const OrgCalendarView = () => {
 
   const handleEventClick = (info) => {
     setSelectedTask({
-      title: info.event.title.replace(/^[🟢🟡🔴]\s/, ''), // Remove emoji from title
+      title: info.event.title.replace(/^[🟢🟡🔴]\s/, ''),
       priority: info.event.extendedProps.priority,
       status: info.event.extendedProps.status,
       description: info.event.extendedProps.description,

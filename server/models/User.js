@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    // Optional: Basic email format validation
+ 
     match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email'],
   },
   password: {
@@ -25,21 +25,21 @@ const userSchema = new mongoose.Schema({
   },
   resetToken: String,
   resetTokenExpire: Date,
-  fcmToken: { // Added fcmToken field
+  fcmToken: { 
     type: String,
-    default: null, // Default to null, as a user might not have a token initially
+    default: null,
   },
   bio: {
     type: String,
     default: '',
   },
-  section: { // For job title/role
+  section: {
     type: String,
     default: '',
   },
   profilePic: {
     type: String,
-    default: '', // URL or base64 string
+    default: '',
   },
   userSkills: [{
     name: String,
@@ -59,13 +59,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Pre-save middleware to hash password if modified
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
     this.password = await bcrypt.hash(this.password, 10);
-    next(); // Make sure to call next() here
+    next();
   } catch (error) {
     next(error);
   }

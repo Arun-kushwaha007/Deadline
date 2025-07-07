@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
 
-dotenv.config(); // ✅ Ensure .env is loaded before reading env vars
+dotenv.config(); 
 
 let firebaseAdminInitialized = false;
 

@@ -174,7 +174,7 @@ const notificationSlice = createSlice({
         isRead: false
       };
       
-      // Check if notification already exists
+
       const existingIndex = state.notifications.findIndex(
         notif => (notif._id || notif.id) === (newNotification._id || newNotification.id)
       );

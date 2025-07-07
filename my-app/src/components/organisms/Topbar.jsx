@@ -240,7 +240,7 @@ const Topbar = () => {
     if (!notif.isRead) {
       dispatch(markNotificationAsRead(notif._id || notif.id));
     }
-    // Optional: navigate to related entity
+  
   };
 
   const handleSnoozeNotification = (e, notifId) => {

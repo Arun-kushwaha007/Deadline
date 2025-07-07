@@ -8,7 +8,7 @@ export default function AIAssistantWrapper() {
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Show welcome notification with auto-close and recurring pattern
+
   useEffect(() => {
     let initialTimer;
     let recurringInterval;
@@ -60,14 +60,14 @@ export default function AIAssistantWrapper() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* AI Assistant Panel */}
+
       {isOpen && (
         <div className="mb-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
           <AIAssistantPanel onClose={() => setIsOpen(false)} />
         </div>
       )}
 
-      {/* Welcome Tooltip with Auto-close */}
+ 
       {!isOpen && hasNewMessage && (
         <div className="absolute bottom-16 right-0 mb-2 animate-in slide-in-from-bottom-3 fade-in duration-500">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-2xl border border-gray-200 dark:border-gray-700 max-w-xs relative">
@@ -82,7 +82,7 @@ export default function AIAssistantWrapper() {
                 <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                   I'm here to help with your tasks and productivity. Click to start chatting!
                 </p>
-                {/* Auto-close indicator */}
+             
                 <div className="mt-2 flex items-center gap-1">
                   <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse"></div>
                   <span className="text-xs text-gray-500 dark:text-gray-500">
@@ -99,18 +99,18 @@ export default function AIAssistantWrapper() {
               </button>
             </div>
             
-            {/* Progress bar for auto-close */}
+        
             <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-b-xl overflow-hidden">
               <div className="h-full bg-gradient-to-r from-purple-500 to-blue-600 animate-progress-bar"></div>
             </div>
             
-            {/* Tooltip Arrow */}
+         
             <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700"></div>
           </div>
         </div>
       )}
 
-      {/* Floating Action Button */}
+  
       <Magnet padding={200} disabled={false} magnetStrength={5}>
         <div className="relative">
           <button
@@ -131,7 +131,7 @@ export default function AIAssistantWrapper() {
                 : 'bg-gradient-to-r from-purple-500 to-blue-600 opacity-30 blur-lg scale-150'
             }`}></div>
             
-            {/* Icon */}
+          
             <div className="relative z-10 flex items-center justify-center w-full h-full text-white">
               {isOpen ? (
                 <X className="w-6 h-6 transition-transform duration-200" />
@@ -140,7 +140,6 @@ export default function AIAssistantWrapper() {
               )}
             </div>
 
-            {/* Notification Dot */}
             {!isOpen && hasNewMessage && (
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse">
                 <div className="absolute inset-0 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
@@ -169,7 +168,7 @@ export default function AIAssistantWrapper() {
         </div>
       </Magnet>
 
-      {/* Pulse Ring Animation */}
+   
       {!isOpen && hasNewMessage && (
         <div className="absolute inset-0 rounded-full">
           <div className="absolute inset-0 rounded-full bg-purple-400 opacity-75 animate-ping"></div>
@@ -180,7 +179,6 @@ export default function AIAssistantWrapper() {
   );
 }
 
-// Enhanced CSS with progress bar animation
 const styles = `
   .animation-delay-200 {
     animation-delay: 200ms;
@@ -215,7 +213,6 @@ const styles = `
   }
 `;
 
-// Inject styles
 if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;

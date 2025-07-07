@@ -4,7 +4,7 @@ const OrganizationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   members: [
     {
-      userId: { type: String, ref: 'User' },  // changed from ObjectId to String
+      userId: { type: String, ref: 'User' },  
       role: { 
         type: String, 
         enum: ['admin', 'coordinator', 'member'], 
@@ -16,7 +16,7 @@ const OrganizationSchema = new mongoose.Schema({
   tasks: [
     {
       title: { type: String, required: true },
-      assignedTo: { type: String, ref: 'User' },  // changed from ObjectId to String
+      assignedTo: { type: String, ref: 'User' },  
       status: { type: String, default: 'To Do' },
     }, 
   ],

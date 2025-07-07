@@ -1,7 +1,7 @@
 import Invitation from '../models/Invitation.js';
 import Organization from '../models/Organization.js';
-import User from '../models/User.js'; // Assuming User model is for user details
-import { sendNotification } from '../utils/notificationUtils.js'; // Added import
+import User from '../models/User.js'; 
+import { sendNotification } from '../utils/notificationUtils.js';
 
 // Create an invitation
 // POST /api/invitations/send
@@ -36,9 +36,9 @@ export const createInvitation = async (req, res) => {
       }
     }
 
-    // Check for existing pending invitation (using organizationId which is ObjectId)
+
     const existingPendingInvitation = await Invitation.findOne({
-      organization: organizationId, // This is mongoose.Schema.Types.ObjectId
+      organization: organizationId,
       inviteeEmail: inviteeEmail.toLowerCase(),
       status: 'pending',
     });
@@ -47,22 +47,22 @@ export const createInvitation = async (req, res) => {
     }
 
     const invitation = new Invitation({
-      organization: organizationId, // ObjectId
-      inviter: inviterId, // ObjectId (req.user.id)
+      organization: organizationId,
+      inviter: inviterId,
       inviteeEmail: inviteeEmail.toLowerCase(),
     });
     await invitation.save();
 
-    // Populate organization and inviter details for the response
+
     const populatedInvitation = await Invitation.findById(invitation.id)
         .populate('organization', 'name')
-        .populate('inviter', 'name email userId'); // Added userId to inviter population
+        .populate('inviter', 'name email userId');
 
-    // Send notification to the invitee if they are an existing user
+
     if (inviteeUserDoc) {
       const io = req.app.get('io');
       const redisClient = req.app.get('redis');
-      if (io && redisClient) { // Ensure io and redisClient are available
+      if (io && redisClient) {
         await sendNotification({
           io,
           redisClient,
@@ -84,15 +84,15 @@ export const createInvitation = async (req, res) => {
   }
 };
 
-// GET /api/invitations/pending (for the logged-in user)
+
 export const getPendingInvitations = async (req, res) => {
   try {
-    const loggedInUserEmail = req.user.email; // from authMiddleware
+    const loggedInUserEmail = req.user.email; 
     const invitations = await Invitation.find({
       inviteeEmail: loggedInUserEmail.toLowerCase(),
       status: 'pending',
     }).populate('organization', 'name id')
-      .populate('inviter', 'name email userId'); // Added userId to inviter population
+      .populate('inviter', 'name email userId'); 
     res.status(200).json(invitations);
   } catch (error) {
     console.error('Error fetching pending invitations:', error);
@@ -104,8 +104,7 @@ export const getPendingInvitations = async (req, res) => {
 export const acceptInvitation = async (req, res) => {
   try {
     const { invitationId } = req.params;
-    const inviteeUser = req.user; // User document from authMiddleware (req.user.id is ObjectId, req.user.userId is String UUID)
-
+    const inviteeUser = req.user; 
     const invitation = await Invitation.findById(invitationId);
     if (!invitation) {
       return res.status(404).json({ message: 'Invitation not found.' });
@@ -117,17 +116,16 @@ export const acceptInvitation = async (req, res) => {
       return res.status(400).json({ message: `This invitation is already ${invitation.status}.` });
     }
     if (invitation.expiresAt < new Date()) {
-        // Attempt to update status to 'expired' if not already handled by TTL
+     
         const updatedInvite = await Invitation.findByIdAndUpdate(invitationId, { status: 'expired' }, { new: true });
-        // If TTL deleted it, findByIdAndUpdate might not find it, or it might.
-        // If found and updated, status is now 'expired'. If not found (due to TTL), it's effectively expired.
+       
         return res.status(400).json({ message: 'This invitation has expired.' });
     }
 
     const organization = await Organization.findById(invitation.organization);
     if (!organization) {
-      // This case might happen if the organization is deleted after invitation was sent
-      invitation.status = 'expired'; // Or some other status like 'invalid'
+
+      invitation.status = 'expired';
       await invitation.save();
       return res.status(404).json({ message: 'Organization associated with this invitation not found.' });
     }
@@ -136,14 +134,14 @@ export const acceptInvitation = async (req, res) => {
     const isAlreadyMember = organization.members.some(member => member.userId === inviteeUser.userId);
     if (isAlreadyMember) {
         invitation.status = 'accepted';
-        invitation.inviteeUser = inviteeUser.id; // Store ObjectId of user who accepted
+        invitation.inviteeUser = inviteeUser.id;
         await invitation.save();
         // Populate organization details for the response
-        const populatedOrganization = await Organization.findById(organization.id); // Re-fetch or use existing if details suffice
+        const populatedOrganization = await Organization.findById(organization.id); 
         return res.status(200).json({ message: 'Already a member. Invitation marked as accepted.', organization: populatedOrganization });
     }
 
-    organization.members.push({ userId: inviteeUser.userId, role: 'member' }); // Add string UUID to members array
+    organization.members.push({ userId: inviteeUser.userId, role: 'member' }); 
     await organization.save();
 
     invitation.status = 'accepted';

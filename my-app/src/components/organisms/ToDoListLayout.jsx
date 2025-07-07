@@ -171,7 +171,7 @@ const ToDoListLayout = ({
   );
 };
 
-// Add CSS animation keyframes
+
 const styles = `
   @keyframes fadeInUp {
     from {
@@ -185,7 +185,6 @@ const styles = `
   }
 `;
 
-// Inject styles
 if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;

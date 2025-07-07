@@ -70,9 +70,8 @@ feedbackSchema.pre('save', function(next) {
   next();
 });
 
-// Index for better query performance
+
 feedbackSchema.index({ userId: 1, createdAt: -1 });
 feedbackSchema.index({ isPublic: 1, isApproved: 1, rating: -1 });
 
 export default mongoose.models.Feedback || mongoose.model('Feedback', feedbackSchema);
-// module.exports = mongoose.model('Feedback', feedbackSchema);

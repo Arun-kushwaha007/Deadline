@@ -30,7 +30,7 @@ const CalendarView = () => {
   const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
   const currentUserId = loggedInUser?.userId;
 
-  // Configuration objects
+
   const statusConfig = {
     todo: {
       icon: ClockIcon,
@@ -166,7 +166,7 @@ const CalendarView = () => {
 
   const handleEventClick = (info) => {
     setSelectedTask({
-      title: info.event.title.replace(/^[🟢🟡🔴]\s/, ''), // Remove emoji from title
+      title: info.event.title.replace(/^[🟢🟡🔴]\s/, ''), 
       priority: info.event.extendedProps.priority,
       status: info.event.extendedProps.status,
       description: info.event.extendedProps.description,
@@ -347,7 +347,7 @@ const CalendarView = () => {
           </div>
         </div>
 
-        {/* Enhanced Modal */}
+   
         {modalOpen && selectedTask && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
             <div className="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">

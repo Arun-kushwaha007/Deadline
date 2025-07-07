@@ -33,7 +33,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
       ? myMembership.userId.name
       : 'You';
 
-  // Role configurations
+
   const getRoleConfig = (role) => {
     const configs = {
       admin: { 

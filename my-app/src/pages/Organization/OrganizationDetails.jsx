@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../utils/api'; // Import the custom api object
+import api from '../../utils/api'; 
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchOrganizationDetails,
@@ -12,7 +12,7 @@ import KanbanBoard from '../../components/organisms/KanbanBoard';
 import TaskReportDashboard from '../../components/organisms/TaskReportDashboard';
 import OrgCalendarView from '../../components/organisms/OrgCalendarView';
 
-// Heroicons imports
+
 import {
   UserPlusIcon,
   PencilIcon,
@@ -92,7 +92,7 @@ const OrganizationDetails = () => {
 
   const handleSave = async () => {
     try {
-      // Use api.put and adjust the endpoint
+    
       await api.put(
         `/organizations/${orgId}`,
         editData
@@ -101,7 +101,7 @@ const OrganizationDetails = () => {
       setIsEditing(false);
     } catch (err) {
       console.error('Failed to update organization:', err);
-      // Consider user feedback for errors here too
+
     }
   };
 
@@ -111,14 +111,14 @@ const OrganizationDetails = () => {
         ? member.userId.userId 
         : member.userId;
 
-      // Use api.delete and adjust the endpoint
+
       await api.delete(
         `/organizations/${orgId}/members/${memberId}`
       );
       dispatch(fetchOrganizationDetails(orgId));
     } catch (err) {
       console.error('Failed to delete member:', err);
-      // It's good practice to inform the user too, e.g., via a toast notification
+ 
     }
   };
 

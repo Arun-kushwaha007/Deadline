@@ -2,7 +2,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken'; // Added for JWT
+import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import {Resend} from 'resend';
@@ -11,8 +11,7 @@ import {jwtDecode} from 'jwt-decode';
 
 
 const router = express.Router();
-// const resend = new Resend(process.env.RESEND_API_KEY);
-// ✅ Register Route
+
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -37,7 +36,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ Login Route
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -58,7 +57,7 @@ router.post('/login', async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      token: token, // Added token
+      token: token, 
       user: {
         userId: user.userId, // This is the string UUID
         name: user.name,
@@ -71,7 +70,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ✅ Get Profile by userId (not Mongo _id)
+
 router.get('/profile/:userId', async (req, res) => {
   try {
     const user = await User.findOne({ userId: req.params.userId }).select('-password');
@@ -90,7 +89,7 @@ router.get('/profile/:userId', async (req, res) => {
 
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
-  const resend = req.app.get('resend'); // ✅ Pull resend instance globally
+  const resend = req.app.get('resend'); 
 
   try {
     const user = await User.findOne({ email });
@@ -178,26 +177,26 @@ router.post('/google-login', async (req, res) => {
       user = new User({
         name,
         email,
-        password: googleId, // or generate a random password
-        profilePicture: picture, // optional
+        password: googleId,
+        profilePicture: picture, ptional
       });
       await user.save();
     }
 
     // Generate JWT
     const token = jwt.sign(
-      { userId: user.id }, // user.id is the MongoDB _id
+      { userId: user.id },
       process.env.JWT_SECRET,
-      { expiresIn: '1d' } // Token expiration
+      { expiresIn: '1d' }
     );
 
     res.status(200).json({
       message: 'Google login successful',
-      token: token, // Added token
+      token: token, 
       user: {
         name: user.name,
         email: user.email,
-        userId: user.userId, // This is the string UUID, changed from user._id for consistency
+        userId: user.userId, 
       },
     });
   } catch (error) {

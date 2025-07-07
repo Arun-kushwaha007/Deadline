@@ -6,21 +6,7 @@ const router = express.Router();
 
 import authMiddleware from '../middleware/authMiddleware.js';
 
-// ------------------------------
-// Middleware
-// ------------------------------
 
-// const authenticateUser = (req, res, next) => { // Custom auth removed
-//   const userId = req.headers['user-id'] || req.body.userId;
-//   if (!userId) {
-//     return res.status(401).json({
-//       success: false,
-//       message: 'Authentication required'
-//     });
-//   }
-//   req.userId = userId;
-//   next();
-// };
 
 const validateFeedbackInput = (req, res, next) => {
   const { rating, title, message, category } = req.body;
@@ -58,14 +44,10 @@ const validateFeedbackInput = (req, res, next) => {
   next();
 };
 
-// ------------------------------
-// Routes
-// ------------------------------
 
-// POST /api/feedback - Create new feedback
 router.post(
   '/',
-  authMiddleware, // Use standard JWT auth middleware
+  authMiddleware, 
   validateFeedbackInput,
   async (req, res) => {
     try {
@@ -134,7 +116,7 @@ router.get(
 
       res.json({
         success: true,
-        data: userFeedback, // Changed variable name for clarity
+        data: userFeedback,
         pagination: {
           currentPage: page,
           totalPages,
@@ -148,14 +130,14 @@ router.get(
       console.error('Error fetching user feedback:', error);
       res.status(500).json({
         success: false,
-        message: 'Server error while fetching user feedback', // Clarified error message
+        message: 'Server error while fetching user feedback', 
         error: error.message
       });
     }
   }
 );
 
-// GET /api/feedback/public - Get public and approved feedback (no auth needed)
+
 router.get(
   '/public',
   async (req, res) => {
@@ -170,7 +152,7 @@ router.get(
 
       const query = {
         isPublic: true,
-        isApproved: true, // Assuming only approved public feedback should be shown
+        isApproved: true,
         rating: { $gte: minRating }
       };
 
@@ -185,7 +167,7 @@ router.get(
         .sort(sortObj)
         .skip(skip)
         .limit(limit)
-        .select('-userEmail'); // Do not send user emails for public listings
+        .select('-userEmail'); 
 
       const totalFeedback = await Feedback.countDocuments(query);
       const totalPages = Math.ceil(totalFeedback / limit);
@@ -205,7 +187,7 @@ router.get(
 
       res.json({
         success: true,
-        data: publicFeedback, // Changed variable name
+        data: publicFeedback,
         stats: {
           averageRating: Math.round(averageRating * 10) / 10,
           totalPublicFeedback: totalFeedback
@@ -230,9 +212,7 @@ router.get(
   }
 );
 
-// GET /api/feedback/:feedbackId - Get a specific feedback item
-// Auth is checked: if user is authenticated and it's their feedback, they can see it even if not public.
-// Otherwise, feedback must be public and approved.
+
 router.get(
   '/:feedbackId',
   authMiddleware, 
@@ -260,8 +240,8 @@ router.get(
       }
 
       const dataToSend = foundFeedback.toObject();
-      if (!isOwner && !dataToSend.isPublic) { // Double check, should be caught by above
-         delete dataToSend.userEmail; // Should not happen if logic above is correct
+      if (!isOwner && !dataToSend.isPublic) { 
+         delete dataToSend.userEmail; 
       } else if (!isOwner && dataToSend.isPublic) {
          delete dataToSend.userEmail; // Don't send email of other users even if public
       }
@@ -428,16 +408,13 @@ router.post(
   }
 );
 
-// GET /api/feedback/stats/summary - Get feedback statistics (requires auth, implies admin/privileged access)
 router.get(
   '/stats/summary',
   authMiddleware,
   async (req, res) => {
     try {
-      // Optional: Add role-based access control here if needed
-      // e.g., if (!req.user.roles.includes('admin')) return res.status(403).json({ message: 'Forbidden' });
 
-      const overallStatsData = await Feedback.aggregate([ // Renamed to avoid conflict
+      const overallStatsData = await Feedback.aggregate([ 
         {
           $group: {
             _id: null,
@@ -453,7 +430,7 @@ router.get(
         }
       ]);
 
-      const categoryStatsData = await Feedback.aggregate([ // Renamed
+      const categoryStatsData = await Feedback.aggregate([
         {
           $group: {
             _id: '$category',
@@ -464,7 +441,7 @@ router.get(
         { $sort: { count: -1 } }
       ]);
 
-      const ratingStatsData = await Feedback.aggregate([ // Renamed
+      const ratingStatsData = await Feedback.aggregate([
         {
           $group: {
             _id: '$rating',
@@ -477,7 +454,7 @@ router.get(
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const recentTrendsData = await Feedback.aggregate([ // Renamed
+      const recentTrendsData = await Feedback.aggregate([ 
         {
           $match: {
             createdAt: { $gte: thirtyDaysAgo }
@@ -498,15 +475,15 @@ router.get(
       res.json({
         success: true,
         data: {
-          overall: overallStatsData[0] || { // Use renamed variable
+          overall: overallStatsData[0] || { 
             totalFeedback: 0,
             averageRating: 0,
             totalPublic: 0,
             totalApproved: 0
           },
-          byCategory: categoryStatsData, // Use renamed variable
-          byRating: ratingStatsData, // Use renamed variable
-          recentTrends: recentTrendsData // Use renamed variable
+          byCategory: categoryStatsData,
+          byRating: ratingStatsData,
+          recentTrends: recentTrendsData 
         }
       });
     } catch (error) {

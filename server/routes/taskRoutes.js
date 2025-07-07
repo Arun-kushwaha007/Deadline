@@ -6,11 +6,6 @@ import { createTask, getTaskById, updateTask, deleteTask } from '../controllers/
 
 const router = express.Router();
 
-/**
- * GET /api/tasks
- * Fetch all tasks assigned to the logged-in user, or filter by organizationId if provided.
- * Pass organizationId as a query param: /api/tasks?organizationId=ORG_ID
- */
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const userId = req.user._id; // MongoDB _id of the user
@@ -38,17 +33,15 @@ router.get('/', authMiddleware, async (req, res) => {
     let queryConditions = { ...orgFilter };
 
     if (organizationId) {
-      // If organizationId is specified, fetch all tasks for that org.
-      // User membership check is already done.
-      // No filter by assignedTo: userId here.
+
     } else {
       // If no specific organization, fetch tasks assigned to the user across their orgs
       queryConditions.assignedTo = userId;
     }
 
     const tasks = await Task.find(queryConditions)
-      .populate('assignedTo', 'name email userId') // Populate specific fields
-      .populate('organization', 'name'); // Populate specific fields
+      .populate('assignedTo', 'name email userId')
+      .populate('organization', 'name');
 
     res.status(200).json(tasks);
   } catch (err) {

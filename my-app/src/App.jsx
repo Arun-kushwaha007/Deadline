@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { onMessage } from 'firebase/messaging';
-import { getMessagingInstance } from './firebase'; // ✅ FIXED
+import { getMessagingInstance } from './firebase'; 
 import { useDispatch } from 'react-redux';
 import { addNotification } from './redux/slices/notificationSlice';
 import useFCMToken from './hooks/useFCMToken';

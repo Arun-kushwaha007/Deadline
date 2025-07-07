@@ -24,12 +24,12 @@ const Feedback = () => {
     limit: 10
   });
   const [stats, setStats] = useState({
-    averageRating: 0, // Default to 0 or null
-    totalPublicFeedback: 0 // Default to 0 or null
+    averageRating: 0,
+    totalPublicFeedback: 0 
   });
-  const [userFeedbackCount, setUserFeedbackCount] = useState(0); // For "Your Feedback" stat
+  const [userFeedbackCount, setUserFeedbackCount] = useState(0); 
 
-  // Categories with icons and colors
+  
   const categories = [
     { value: '', label: 'All Categories', icon: '📂', color: 'bg-gray-100 text-gray-800' },
     { value: 'general', label: 'General', icon: '💬', color: 'bg-blue-100 text-blue-800' },
@@ -39,7 +39,7 @@ const Feedback = () => {
     { value: 'testimonial', label: 'Testimonial', icon: '⭐', color: 'bg-yellow-100 text-yellow-800' }
   ];
 
-  // Load user and initial data
+ 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
@@ -54,11 +54,11 @@ const Feedback = () => {
 
   // Fetch user's feedback (My Feedback tab)
   const fetchUserFeedbacks = async (page = 1) => {
-    if (!user) return; // Ensure user is loaded
+    if (!user) return;
     setLoading(true);
     try {
       const response = await api.get(`/feedback/myfeedback?page=${page}&limit=${pagination.limit}`);
-      if (response && response.data) { // Assuming api.get returns { success, data, pagination }
+      if (response && response.data) { 
         setFeedbacks(response.data);
         setPagination(response.pagination);
         setUserFeedbackCount(response.pagination.totalItems || 0);
@@ -95,7 +95,7 @@ const Feedback = () => {
       
       const response = await api.get(endpoint);
 
-      if (response && response.data) { // Assuming api.get returns { success, data, stats, pagination }
+      if (response && response.data) { 
         setPublicFeedbacks(response.data);
         setPagination(response.pagination);
         if (response.stats) {
@@ -131,15 +131,15 @@ const Feedback = () => {
       return;
     }
     try {
-      // userId, userName, userEmail, userAvatar will be set by backend using authMiddleware
+     
       const response = await api.post('/feedback', feedbackData);
-      if (response && response.data) { // Assuming api.post returns { success, data }
-        setFeedbacks(prev => [response.data, ...prev]); // Add to 'My Feedback' locally
+      if (response && response.data) { 
+        setFeedbacks(prev => [response.data, ...prev]);
         setUserFeedbackCount(prev => prev + 1);
         showNotification('🎉 Feedback submitted successfully!', 'success');
-        fetchUserFeedbacks(); // Refresh user feedbacks
+        fetchUserFeedbacks(); 
         if (response.data.isPublic && response.data.isApproved) {
-             fetchPublicFeedbacks(); // Refresh public if it was made public and approved instantly
+             fetchPublicFeedbacks(); 
         }
       } else {
         throw new Error(response.message || 'Failed to submit feedback');
@@ -159,9 +159,9 @@ const Feedback = () => {
         setFeedbacks(prev => prev.map(f => f._id === editingFeedback._id ? response.data : f));
         showNotification('✅ Feedback updated successfully!', 'success');
         if (response.data.isPublic && response.data.isApproved) {
-            fetchPublicFeedbacks(); // Refresh public if visibility/approval changed
+            fetchPublicFeedbacks(); 
         } else if (!response.data.isPublic || !response.data.isApproved) {
-            // If it became private or unapproved, ensure it's removed from public list if it was there
+           
             setPublicFeedbacks(prev => prev.filter(pf => pf._id !== response.data._id));
         }
       } else {
@@ -183,7 +183,7 @@ const Feedback = () => {
       if (response && response.success) {
         setFeedbacks(prev => prev.filter(f => f._id !== feedbackId));
         setUserFeedbackCount(prev => prev -1);
-        setPublicFeedbacks(prev => prev.filter(pf => pf._id !== feedbackId)); // Also remove from public if it was there
+        setPublicFeedbacks(prev => prev.filter(pf => pf._id !== feedbackId));
         showNotification('🗑️ Feedback deleted successfully!', 'success');
       } else {
         throw new Error(response.message || 'Failed to delete feedback');
@@ -197,13 +197,13 @@ const Feedback = () => {
   // Handle helpful vote
   const handleHelpfulVote = async (feedbackId) => {
     try {
-      const response = await api.post(`/feedback/${feedbackId}/helpful`); // No body needed for this POST
+      const response = await api.post(`/feedback/${feedbackId}/helpful`); 
       if (response && response.data) {
         const updateList = (list) => list.map(f => 
           f._id === feedbackId ? { ...f, helpfulCount: response.data.helpfulCount } : f
         );
         setPublicFeedbacks(updateList);
-        if(feedbacks.some(f => f._id === feedbackId)) { // If it's also in 'my-feedback'
+        if(feedbacks.some(f => f._id === feedbackId)) {
             setFeedbacks(updateList);
         }
         showNotification('👍 Thank you for your vote!', 'success');

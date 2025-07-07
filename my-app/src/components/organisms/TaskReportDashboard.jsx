@@ -154,7 +154,7 @@ const TaskReportDashboard = () => {
 
   // Get array of users for carousel navigation
   const userArray = Object.values(tasksByUser);
-  const usersPerPage = 6; // Show more users per page
+  const usersPerPage = 6; 
   const totalPages = Math.ceil(userArray.length / usersPerPage);
 
   const nextUsers = () => {

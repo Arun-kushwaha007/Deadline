@@ -143,12 +143,12 @@ const Profile = () => {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('token');
-        console.log('[Profile.jsx] Token for fetchUserProfile:', token); // Log the token
+        console.log('[Profile.jsx] Token for fetchUserProfile:', token); 
 
         if (!token) {
           alert('Authentication token not found. Please log in.');
           navigate('/login');
-          setIsLoading(false); // Stop loading if no token
+          setIsLoading(false);
           return;
         }
 
@@ -177,7 +177,7 @@ const Profile = () => {
         setPreview(data.profilePic || '');
         setUserSkills(data.userSkills || []);
         
-        // Ensure userProgress is an object, even if not fully populated from DB
+       
         const fetchedProgress = data.userProgress || {};
         const defaultProgress = {
           tasksCompleted: 0,
@@ -191,22 +191,20 @@ const Profile = () => {
         };
         setUserProgress({ ...defaultProgress, ...fetchedProgress });
 
-        // Update localStorage with the fetched user data including profilePic
+    
         const existingLoggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || {};
         const updatedLoggedInUser = {
           ...existingLoggedInUser,
-          name: data.name, // Assuming API returns name
-          email: data.email, // Assuming API returns email
-          userId: data.userId, // Assuming API returns userId
-          profilePic: data.profilePic || '', // Ensure profilePic is included
+          name: data.name, 
+          email: data.email, 
+          userId: data.userId,
+          profilePic: data.profilePic || '',
           bio: data.bio || '',
           section: data.section || '',
-          // Potentially other fields if they are part of loggedInUser and returned by API
+        
         };
         localStorage.setItem('loggedInUser', JSON.stringify(updatedLoggedInUser));
 
-        // updateLoginStreak might need to be called here if still relevant
-        // or handled server-side during login. For now, just setting the state.
         // if (data.userProgress) {
         //   updateLoginStreak(data.userProgress); 
         // }
@@ -218,10 +216,7 @@ const Profile = () => {
           console.error('[Profile.jsx] Error response data:', await error.response.text());
           console.error('[Profile.jsx] Error response status:', error.response.status);
         } else if (error.message && error.message.includes('not valid JSON')) {
-            // This case handles the fetch API directly when it receives non-JSON
-            // We need access to the raw response if possible, which is tricky from here
-            // as the original response object isn't typically part of the SyntaxError.
-            // The alert already notifies the user. The key is that the backend sent non-JSON.
+         
             console.error('[Profile.jsx] Received non-JSON response from server. This often means HTML error page or misconfigured proxy.');
         }
         alert('Failed to load profile data. Please try again later or check console for details.');
@@ -282,13 +277,9 @@ const Profile = () => {
 
   // Progress simulation functions (for demo purposes) - Will need API calls if kept
   const simulateProgress = async (key, increment = 1) => {
-    // This function now primarily serves for local UI updates and achievement checks.
-    // Actual progress updates should happen via specific actions (e.g., completing a task)
-    // which would then call an API to update the backend.
-    // For now, we'll keep the local state update for UI responsiveness
-    // and achievement notifications.
+
     
-    const currentProgress = userProgress || {}; // Ensure userProgress is defined
+    const currentProgress = userProgress || {};
     const updatedLocalProgress = {
       ...currentProgress,
       [key]: (currentProgress[key] || 0) + increment
@@ -299,16 +290,13 @@ const Profile = () => {
     }
     
     setUserProgress(updatedLocalProgress);
-    // localStorage.setItem('userProgress', JSON.stringify(updatedProgress)); // Removed
-    
-    // Show achievement unlock notification if applicable
+
     checkForNewAchievements(updatedLocalProgress);
 
-    // TODO: Consider if an API call is needed here for general progress simulation
-    // or if this function should be removed/refactored if progress is updated elsewhere.
+ 
   };
 
-  // Check for newly unlocked achievements
+
   const checkForNewAchievements = (newProgress) => {
     achievementDefinitions.forEach(achievement => {
       const oldValue = userProgress[achievement.progressKey] || 0;
@@ -371,11 +359,9 @@ const Profile = () => {
   // Add new skill
   const addSkill = async () => {
     if (newSkill.name.trim()) {
-      // Note: Mongoose will generate _id, client-side 'id' is for local keying if needed before save
-      // but ideally, we'd get the new skill object (with _id) back from server.
-      // For now, we optimistically add and then update with server response.
+
       const skillToAdd = { 
-        // id: Date.now(), // Temporary, will be replaced by MongoDB _id
+        // id: Date.now(),
         name: newSkill.name.trim(),
         level: newSkill.level,
         color: newSkill.color,
@@ -386,11 +372,10 @@ const Profile = () => {
       const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
 
       if (updatedProfileData) {
-        setUserSkills(updatedProfileData.userSkills || []); // Refresh with server state
-        setUserProgress(updatedProfileData.userProgress || userProgress); // Refresh progress
+        setUserSkills(updatedProfileData.userSkills || []);
+        setUserProgress(updatedProfileData.userProgress || userProgress); 
         
-        // Update skills certified progress locally for immediate UI feedback
-        // simulateProgress('skillsCertified', 0); // This will use the new userSkills.length
+    
         const currentProgress = updatedProfileData.userProgress || userProgress;
         const updatedLocalProgress = { ...currentProgress, skillsCertified: updatedProfileData.userSkills.length };
         setUserProgress(updatedLocalProgress);
@@ -411,10 +396,8 @@ const Profile = () => {
 
   // Remove skill
   const removeSkill = async (skillIdToRemove) => {
-    // Note: skillIdToRemove is the MongoDB _id if skills are fetched from DB
-    // If it's a temporary client-side ID (like Date.now()), this needs careful handling.
-    // Assuming skills in userSkills state have `_id` from the database.
-    const newSkillsArray = userSkills.filter(skill => skill._id !== skillIdToRemove); // Use _id from MongoDB
+
+    const newSkillsArray = userSkills.filter(skill => skill._id !== skillIdToRemove);
     const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
 
     if (updatedProfileData) {
@@ -431,7 +414,7 @@ const Profile = () => {
   // Update skill level
   const updateSkillLevel = async (skillIdToUpdate, newLevel) => {
     const newSkillsArray = userSkills.map(skill =>
-      skill._id === skillIdToUpdate ? { ...skill, level: newLevel } : skill // Use _id
+      skill._id === skillIdToUpdate ? { ...skill, level: newLevel } : skill 
     );
     const updatedProfileData = await updateUserProfileAPI({ userSkills: newSkillsArray });
 
@@ -441,27 +424,27 @@ const Profile = () => {
     }
   };
 
-  // Rest of your existing functions (handleUpdate, handleImageUpload, etc.)
+
   const handleUpdate = async () => {
     const profileDataToUpdate = {
-      name: user.name, // Assuming name can be updated, though not in modal currently
+      name: user.name,
       bio,
       section,
-      profilePic: preview, // This could be a base64 string or a URL
+      profilePic: preview, 
     };
 
     const updatedUserData = await updateUserProfileAPI(profileDataToUpdate);
 
     if (updatedUserData) {
-      setUser(updatedUserData); // Update the main user object
+      setUser(updatedUserData); 
       setBio(updatedUserData.bio || '');
       setSection(updatedUserData.section || '');
       setProfilePic(updatedUserData.profilePic || '');
-      // Preview is already set locally, but ensure consistency if backend modifies URL
+    
       setPreview(updatedUserData.profilePic || ''); 
       setShowEditModal(false);
       
-      // Success notification with animation
+
     const notification = document.createElement('div');
     notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
     notification.innerHTML = '✅ Profile updated successfully!';
@@ -470,8 +453,8 @@ const Profile = () => {
     setTimeout(() => {
       notification.remove();
     }, 3000);
-    } // This closes the if(updatedUserData) block
-  }; // This closes the handleUpdate async function
+    } 
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -1159,10 +1142,10 @@ const Profile = () => {
         )}
       </div>
     </DashboardLayout>
-  ); // This closes the return statement of the Profile component
-}; // This is the correct closing brace for const Profile = () => { ... }
+  ); 
+}; 
 
-// Enhanced CSS with new animations
+
 const styles = `
   @keyframes float {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -1221,7 +1204,7 @@ const styles = `
   .animate-shine { animation: shine 2s infinite; }
 `;
 
-// Inject styles
+
 if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');
   styleSheet.textContent = styles;

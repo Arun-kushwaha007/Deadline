@@ -19,7 +19,7 @@ const TaskDetailsModal = ({ task, onClose }) => {
 
   const handleDelete = () => {
     dispatch(deleteTaskThunk(task.id));
-    onClose(); // Close after delete
+    onClose(); 
   };
 
   return (

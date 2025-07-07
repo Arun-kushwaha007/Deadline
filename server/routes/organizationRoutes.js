@@ -6,16 +6,14 @@ import {
   addMember,
   assignTask,
   getMyOrganizations,
-  getOrganizationMembers, // Import the new controller function
-  removeMemberFromOrganization, // Added for deleting members
+  getOrganizationMembers, 
+  removeMemberFromOrganization,
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
 
 import authMiddleware from '../middleware/authMiddleware.js';
 
-// GET all organizations (should this be /mine or a separate admin route?)
-// For now, keeping it as is, but /mine is more specific for user's orgs.
 router.get('/', authMiddleware, getAllOrganizations); 
 
 // GET organizations for the logged-in user

@@ -1,8 +1,7 @@
 import Task from '../models/Task.js';
-// Notification model import is not directly needed here anymore, as sendNotification handles it.
-// import Notification from '../models/Notification.js'; 
+
 import Organization from '../models/Organization.js';
-import User from '../models/User.js'; // Import User model
+import User from '../models/User.js';
 import { sendNotification } from '../utils/notificationUtils.js';
 
 // Helper Redis keys
@@ -36,7 +35,7 @@ export const createTask = async (req, res) => {
         await sendNotification({
           io,
           redisClient,
-          userId: assignedUser.userId, // Use the UUID userId
+          userId: assignedUser.userId, 
           type: 'taskAssigned',
           message: `You have been assigned a new task: ${task.title}`,
           entityId: task._id,
@@ -49,7 +48,7 @@ export const createTask = async (req, res) => {
 
     // Emit task_created_in_organization event to the organization room
     if (task.organization && io) {
-      const orgId = task.organization._id || task.organization; // Handle populated vs non-populated
+      const orgId = task.organization._id || task.organization;
       const roomName = `org:${orgId}`;
       const taskObject = { ...task.toObject(), id: task._id };
       io.to(roomName).emit('task_created_in_organization', taskObject);
@@ -149,7 +148,7 @@ export const updateTask = async (req, res) => {
   console.log(`[Task Update Controller] Received PUT request for task ${taskId} with body:`, JSON.stringify(req.body, null, 2));
   const redisClient = req.app.get('redis');
   const io = req.app.get('io');
-  const { assignedTo: newAssignee } = req.body; // Get the new assignee from the request body
+  const { assignedTo: newAssignee } = req.body;
 
   try {
     // Fetch the task before updating to check the old assignee
@@ -197,35 +196,13 @@ export const updateTask = async (req, res) => {
         console.warn(`[taskController.updateTask] User to notify (final assignee) not found or missing UUID for _id: ${finalAssigneeMongoId}`);
       }
     }
-    // If you want to notify about other updates (not just assignment), that logic would go here.
-    // For example, notifying the previous assignee that the task was reassigned.
-    // The current 'taskUpdated' emit is generic. If sendNotification is comprehensive,
-    // you might not need the old io.to(targetSocketId).emit('taskUpdated', updatedTask); line,
-    // or you might want to make it more specific.
 
-    // For now, let's keep a general update event for other changes if needed,
-    // but ensure it doesn't duplicate the assignment notification.
-    /*
-    if (io && redisClient && currentAssignee && currentAssignee !== newAssignee) { // Example: notify if assignee changed
-        const targetSocketId = await redisClient.get(currentAssignee);
-        if (targetSocketId) {
-            // Emitting a generic 'taskUpdated' event to the current assignee if they weren't just newly assigned
-            // This might be redundant if sendNotification covers all cases, or could be for other types of updates.
-            // Consider the overall notification strategy.
-            // For this subtask, the primary goal is the 'taskAssigned' notification via sendNotification.
-            // io.to(targetSocketId).emit('taskUpdated', updatedTask);
-            // console.log(`Sent generic taskUpdated to ${currentAssignee}`);
-        }
-    }
-    */
 
     // Emit a general task update event to the organization room
     if (updatedTask.organization && io) {
-      const orgId = updatedTask.organization._id || updatedTask.organization; // Handle populated vs non-populated
+      const orgId = updatedTask.organization._id || updatedTask.organization; 
       const roomName = `org:${orgId}`;
-      // We emit to the room, excluding the sender's socket if possible,
-      // though the frontend will also have logic to prevent acting on its own updates.
-      // For now, just broadcast to the room. If the sender is in the room, they'll get it too.
+  
       io.to(roomName).emit('task_updated_in_organization', { ...updatedTask.toObject(), id: updatedTask._id });
       console.log(`[Task Update] Emitted 'task_updated_in_organization' to room ${roomName} for task ${updatedTask._id}`);
     }

@@ -26,7 +26,7 @@ const TaskSchema = new mongoose.Schema(
       required: [true, 'Description is required'],
       trim: true,
     },
-    // ✅ Due date now supports full date & time — no changes needed here
+    
     dueDate: {
       type: Date,
       required: [true, 'Due date is required'],
@@ -68,9 +68,7 @@ const TaskSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // Stores timestamps of when deadline notifications were sent for different urgency windows
-    // Keys could be like "7day", "3day", "1day_hr1", "1day_hr2", etc.
-    // Values would be the timestamp of the notification.
+
     deadlineNotifiedAt: {
       type: Map,
       of: Date,
@@ -78,10 +76,10 @@ const TaskSchema = new mongoose.Schema(
     }
   },
   {
-    // ✅ This automatically adds `createdAt` and `updatedAt` fields
+  
     timestamps: true,
   }
 );
 
-// Avoid model overwrite error in dev
+
 export default mongoose.models.Task || mongoose.model('Task', TaskSchema);

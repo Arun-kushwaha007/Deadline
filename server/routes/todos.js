@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
     const newTodo = new Todo({
       text: text.trim(),
-      userId: req.user._id, // Associate with the logged-in user
+      userId: req.user._id, 
     });
     const saved = await newTodo.save();
     res.status(201).json(saved);

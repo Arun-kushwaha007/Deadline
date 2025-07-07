@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const { type, isRead } = req.query;
-    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
+
     const query = { userId: req.user.userId };
     
     if (type) {
@@ -32,11 +32,11 @@ router.get('/', authMiddleware, async (req, res) => {
 // Mark as read
 router.put('/:id/read', authMiddleware, async (req, res) => {
   try {
-    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
+
     const notification = await Notification.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.userId }, // Use UUID for matching
+      { _id: req.params.id, userId: req.user.userId }, 
       { isRead: true },
-      { new: true } // Return the updated document
+      { new: true } 
     );
     if (!notification) {
       return res.status(404).json({ message: 'Notification not found or user unauthorized' });
@@ -51,11 +51,11 @@ router.put('/:id/read', authMiddleware, async (req, res) => {
 // Mark as unread
 router.put('/:id/unread', authMiddleware, async (req, res) => {
   try {
-    // ✅ FIXED: Use req.user.userId (UUID) instead of req.user._id (ObjectId)
+  
     const notification = await Notification.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.userId }, // Use UUID for matching
+      { _id: req.params.id, userId: req.user.userId },
       { isRead: false },
-      { new: true } // Return the updated document
+      { new: true } 
     );
     if (!notification) {
       return res.status(404).json({ message: 'Notification not found or user unauthorized' });

@@ -12,7 +12,7 @@ const getNotificationTitle = (type) => {
     case 'warning': return 'Warning';
     case 'message': return 'New Message';
     case 'reminder': return 'Reminder';
-    case 'idleTask': return 'Idle Task Alert'; // Added title for idleTask
+    case 'idleTask': return 'Idle Task Alert'; 
     default: return 'New Notification';
   }
 };
@@ -31,7 +31,7 @@ export const sendNotification = async ({
     
     // 1. Save notification in MongoDB
     const notification = new Notification({
-      userId, // string UUID
+      userId, 
       type,
       message,
       relatedEntity: entityId,

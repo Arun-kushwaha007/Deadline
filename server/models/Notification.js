@@ -18,7 +18,7 @@ const notificationSchema = new mongoose.Schema(
         'reminder',
         'taskAssigned',
         'newComment',
-        'idleTask', // Added new notification type
+        'idleTask',
       ],
     },
     message: {

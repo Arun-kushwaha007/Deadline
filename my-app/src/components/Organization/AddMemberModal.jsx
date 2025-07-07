@@ -6,11 +6,11 @@ import { addMemberToOrganization } from '../../redux/organizationSlice';
 
 const AddMemberModal = ({ orgId, closeModal }) => {
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState('member'); // Default role is 'member'
+  const [role, setRole] = useState('member'); 
   const dispatch = useDispatch();
 
   const handleAdd = () => {
-    dispatch(addMemberToOrganization({ orgId, email, role })); // Include role
+    dispatch(addMemberToOrganization({ orgId, email, role }));
     closeModal();
   };
 

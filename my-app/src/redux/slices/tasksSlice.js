@@ -30,7 +30,7 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (organizati
       apiUrl += `?organizationId=${organizationId}`;
     }
     const response = await axios.get(apiUrl, getAuthConfig());
-    // Ensure the response is always an array
+ 
     const data = Array.isArray(response.data) ? response.data : [response.data];
     return data.map(task => ({ ...task, id: task._id }));
   } catch (error) {
@@ -116,16 +116,13 @@ const tasksSlice = createSlice({
       const updatedTask = action.payload;
       const index = state.tasks.findIndex(task => task.id === updatedTask.id);
       if (index !== -1) {
-        // Preserve local state for fields not sent by socket if necessary,
-        // but here the socket sends the full task object.
+
         state.tasks[index] = updatedTask;
       } else {
-        // If task is not found, it might be a new task created by another user
-        // that this client hasn't received yet. Add it to the list.
-        // This helps in scenarios where the 'createTask' socket event might have been missed.
+    
         state.tasks.push(updatedTask);
       }
-      state.status = 'succeeded'; // Ensure status is consistent
+      state.status = 'succeeded'; 
     },
     applyTaskCreationFromSocket: (state, action) => {
       const newTask = action.payload;
@@ -138,8 +135,7 @@ const tasksSlice = createSlice({
       } else {
         console.log('[Reducer] applyTaskCreationFromSocket - Task not pushed due to duplicate ID.');
       }
-      // Optionally, sort tasks or handle order if necessary
-      // For now, just adding to the end.
+
       state.status = 'succeeded'; 
     },
     reorderTasks: (state, action) => {
@@ -207,24 +203,19 @@ const tasksSlice = createSlice({
       // Update Task Status
       .addCase(updateTaskStatus.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        // The optimistic update has already updated the task.
-        // We might want to update the task with the response from the server 
-        // if it contains more information or to ensure consistency.
+
         const index = state.tasks.findIndex(task => task.id === action.payload.id);
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
-        state.error = null; // Clear any previous errors
+        state.error = null;
       })
       .addCase(updateTaskStatus.rejected, (state, action) => {
         state.status = 'failed';
-        // The rollback is handled in the thunk itself.
-        // We just need to set the error.
+
         state.error = action.payload;
-        // Optionally, you could show a notification to the user here.
+    
       })
-      // No need for a pending case if we are doing optimistic updates,
-      // unless you want to show a subtle loading indicator somewhere.
 
       // Delete Task
       .addCase(deleteTaskThunk.fulfilled, (state, action) => {
