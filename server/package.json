@@ -4,9 +4,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "echo \"No build step required\""
   },
   "keywords": [],
   "author": "",
@@ -28,5 +28,8 @@
     "resend": "^4.5.1",
     "socket.io": "^4.8.1",
     "uuid": "^11.1.0"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
