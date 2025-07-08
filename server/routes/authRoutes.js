@@ -103,7 +103,7 @@ router.post('/forgot-password', async (req, res) => {
     user.resetTokenExpire = tokenExpire;
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:5173/reset-password/${resetToken} || https://collabnest-iota.vercel.app/reset-password/${resetToken}`;
 
     const emailResponse = await resend.emails.send({
   from: 'CollabNest <onboarding@resend.dev>',

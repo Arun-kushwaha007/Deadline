@@ -41,6 +41,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const allowedOrigins = [
   'http://localhost:5173', 
   'https://deadline-pobb.onrender.com', 
+  'https://collabnest-iota.vercel.app/'
 ];
 
 
