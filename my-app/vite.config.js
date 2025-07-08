@@ -18,9 +18,16 @@ export default {
   plugins: [react(),tailwindcss()],
   server: {
     // port: 3000, // Optional
+    // proxy: {
+    //       '/api': {
+    //         target: 'http://localhost:5000 ',
+    //         changeOrigin: true,
+    //         secure: false,
+    //       },
+    //     },
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://deadline-pobb.onrender.com ',
         changeOrigin: true,
         secure: false,
       },

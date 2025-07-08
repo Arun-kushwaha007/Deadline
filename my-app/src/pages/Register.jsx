@@ -19,7 +19,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
       const response = await fetch(`${backendUrl}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -62,7 +62,7 @@ const Register = () => {
       // Decode the Google credential to extract user info
       const decoded = jwtDecode(credentialResponse.credential);
 
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
       const response = await fetch(`${backendUrl}/api/auth/google-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

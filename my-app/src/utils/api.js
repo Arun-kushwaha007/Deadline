@@ -1,5 +1,17 @@
 // utils/api.js
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+let API_BASE_URL;
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+  API_BASE_URL = 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
+} else {
+  API_BASE_URL = 'https://deadline-pobb.onrender.com';
+}
+
+
+if (import.meta.env.VITE_BACKEND_URL) {
+  API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+}
+
 
 const api = {
   // GET request

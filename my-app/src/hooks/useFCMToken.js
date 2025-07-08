@@ -60,7 +60,7 @@ const useFCMToken = () => {
             console.log('🔄 Sending token to backend...');
             
             // Send token to backend using fetch directly
-            const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+            const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000' || 'https://deadline-pobb.onrender.com';
             const authToken = localStorage.getItem('token');
             
             console.log('🌐 Backend URL:', backendUrl);

@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
 
 const socket = io(backendUrl, {
   transports: ['websocket'],         // Use WebSocket only for better performance

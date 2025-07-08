@@ -38,22 +38,41 @@ if (!process.env.RESEND_API_KEY) {
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Socket.IO Setup
-const io = new socketIO(server, {
-  cors: {
-    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-    credentials: true,
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'https://deadline-pobb.onrender.com', 
+];
+
+
+
+if (process.env.CLIENT_ORIGIN) {
+  if (!allowedOrigins.includes(process.env.CLIENT_ORIGIN)) {
+    allowedOrigins.push(process.env.CLIENT_ORIGIN);
+  }
+}
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
   },
+  credentials: true,
+};
+
+const io = new socketIO(server, {
+  cors: corsOptions, 
 });
 
 // Initialize Scheduler Service (after io and redisClient are available)
 initializeScheduler(io, redisClient);
 
 // Middleware
-app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-  credentials: true,
-}));
+app.use(cors(corsOptions)); // Use the dynamic corsOptions for Express
 app.use(express.json());
 
 // Attach global instances

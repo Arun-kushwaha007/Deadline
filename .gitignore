@@ -9,3 +9,4 @@
 /my-app/.env.local
 /server/.env.local
 /my-app/.env 
+/my-app/.env.production

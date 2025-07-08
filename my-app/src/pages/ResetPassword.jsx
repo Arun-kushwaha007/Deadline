@@ -10,7 +10,7 @@ const ResetPassword = () => {
 
   const onSubmit = async ({ password }) => {
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
       const res = await fetch(`${backendUrl}/api/auth/reset-password/${token}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
