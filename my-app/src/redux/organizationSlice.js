@@ -27,6 +27,26 @@ export const fetchOrganizations = createAsyncThunk(
   }
 );
 
+export const deleteOrganization = createAsyncThunk(
+  'organization/deleteOrganization',
+  async (orgId, thunkAPI) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return thunkAPI.rejectWithValue('Authentication token not found. Please log in.');
+    }
+    try {
+      await axios.delete(`${API}/${orgId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return orgId; // Return the ID of the deleted organization for reducer logic
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 export const createOrganization = createAsyncThunk(
   'organization/createOrganization',
   async (orgName, thunkAPI) => {
@@ -339,6 +359,32 @@ selectOrganization: (state, action) => {
           state.organizationMembers[orgId].error = action.payload;
         }
         state.membersLoading = false;
+      })
+
+      // Delete organization
+      .addCase(deleteOrganization.pending, (state) => {
+        state.loading = true; // Or a specific loading flag like state.deletingLoading
+        state.error = null;
+      })
+      .addCase(deleteOrganization.fulfilled, (state, action) => {
+        state.loading = false;
+        const deletedOrgId = action.payload;
+        // Remove from organizations list
+        state.organizations = state.organizations.filter(org => org._id !== deletedOrgId);
+        // Remove from current user's organizations list
+        state.currentUserOrganizations = state.currentUserOrganizations.filter(org => org._id !== deletedOrgId);
+        // Clear selected organization if it was the one deleted
+        if (state.selectedOrganization && state.selectedOrganization._id === deletedOrgId) {
+          state.selectedOrganization = null;
+        }
+        // Optionally, clear from members cache too
+        if (state.organizationMembers[deletedOrgId]) {
+          delete state.organizationMembers[deletedOrgId];
+        }
+      })
+      .addCase(deleteOrganization.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Store error message
       });
   },
 });

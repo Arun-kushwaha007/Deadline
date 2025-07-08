@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchOrganizationDetails,
   clearSelectedOrganization,
+  deleteOrganization,
 } from '../../redux/organizationSlice';
 
 import DashboardLayout from '../../components/organisms/DashboardLayout';
@@ -57,6 +58,7 @@ const OrganizationDetails = () => {
 
   const myRole = myMembership?.role ?? 'member';
   const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
+  const isAdmin = myRole === 'admin';
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -121,6 +123,22 @@ const OrganizationDetails = () => {
  
     }
   };
+  
+  const handleDeleteOrganizationClick = () => {
+    if (window.confirm(`Are you sure you want to permanently delete the organization "${selectedOrganization?.name}"? This action cannot be undone.`)) {
+   
+      dispatch(deleteOrganization(orgId)).then((result) => {
+        if (deleteOrganization.fulfilled.match(result)) {
+          navigate('/'); 
+        } else {
+          // Handle error, maybe show a notification
+          console.error("Failed to delete organization:", result.payload);
+          alert(`Failed to delete organization: ${result.payload || 'Server error'}`);
+        }
+      });
+    }
+  };
+
 
   if (orgLoading || !selectedOrganization || selectedOrganization._id !== orgId) {
     return (
@@ -273,6 +291,16 @@ const OrganizationDetails = () => {
                       Edit
                     </button>
                   )
+                )}
+                {isAdmin && !isEditing && (
+                  <button
+                    onClick={handleDeleteOrganizationClick}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    title="Delete Organization"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                    Delete Org
+                  </button>
                 )}
               </div>
             </div>

@@ -405,3 +405,40 @@ export const removeMemberFromOrganization = async (req, res) => {
     res.status(500).json({ message: 'Failed to remove member', error: error.message });
   }
 };
+
+// DELETE /api/organizations/:id
+export const deleteOrganization = async (req, res) => {
+  const { id: orgId } = req.params;
+  const requesterUuid = req.user.userId; // UUID of the user making the request
+
+  try {
+    const organization = await Organization.findById(orgId);
+    if (!organization) {
+      return res.status(404).json({ message: 'Organization not found' });
+    }
+
+    // Find the requester's membership and role in this organization
+    const requesterMembership = organization.members.find(
+      (m) => String(m.userId) === String(requesterUuid)
+    );
+
+    if (!requesterMembership) {
+   
+      return res.status(403).json({ message: 'Requester is not a member of this organization' });
+    }
+
+    // Only admins can delete an organization
+    if (requesterMembership.role !== 'admin') {
+      return res.status(403).json({ message: 'User does not have permission to delete this organization. Only admins can perform this action.' });
+    }
+
+    // Proceed with deletion
+    await Organization.findByIdAndDelete(orgId);
+
+  
+    res.status(200).json({ message: 'Organization deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting organization:', error);
+    res.status(500).json({ message: 'Failed to delete organization', error: error.message });
+  }
+};

@@ -8,6 +8,7 @@ import {
   getMyOrganizations,
   getOrganizationMembers, 
   removeMemberFromOrganization,
+  deleteOrganization,
 } from '../controllers/organizationController.js';
 
 const router = express.Router();
@@ -36,5 +37,8 @@ router.post('/:id/tasks', assignTask);
 
 // DELETE a member from an organization
 router.delete('/:id/members/:memberId', authMiddleware, removeMemberFromOrganization);
+
+// DELETE an organization
+router.delete('/:id', authMiddleware, deleteOrganization);
 
 export default router;
