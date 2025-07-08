@@ -2,12 +2,12 @@
 let API_BASE_URL;
 
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-  API_BASE_URL = 'http://localhost:5000'|| 'https://deadline-pobb.onrender.com';
+  API_BASE_URL = 'http://localhost:5000';
 } else {
   API_BASE_URL = 'https://deadline-pobb.onrender.com';
 }
 
-
+// Fallback if VITE_BACKEND_URL is explicitly set for production/staging
 if (import.meta.env.VITE_BACKEND_URL) {
   API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 }

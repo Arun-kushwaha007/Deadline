@@ -39,11 +39,10 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Socket.IO Setup
 const allowedOrigins = [
-  'http://localhost:5173', 
+  'http://localhost:5173', // Local development frontend
   'https://deadline-pobb.onrender.com', 
-  'https://collabnest-iota.vercel.app/'
+  'https://collabnest-iota.vercel.app', 
 ];
-
 
 
 if (process.env.CLIENT_ORIGIN) {
@@ -66,7 +65,7 @@ const corsOptions = {
 };
 
 const io = new socketIO(server, {
-  cors: corsOptions, 
+  cors: corsOptions, // Use the dynamic corsOptions for Socket.IO
 });
 
 // Initialize Scheduler Service (after io and redisClient are available)
