@@ -178,7 +178,7 @@ router.post('/google-login', async (req, res) => {
         name,
         email,
         password: googleId,
-        profilePicture: picture, ptional
+        profilePicture: picture // Corrected: removed "ptional"
       });
       await user.save();
     }
