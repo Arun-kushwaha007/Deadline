@@ -18,8 +18,8 @@ import {
   Home, ListTodo, Users, Building2, CirclePlus, LayoutList, CircleHelp, 
   CheckCheck, Filter, Calendar, BarChart3, Settings, X, Star
 } from 'lucide-react';
-import logoLight from '../../assets/collabnest_logo_dark.png';
-import logoDark from '../../assets/collabnest_logo_light.png';
+import logoDark from '../../assets/collabnest_logo_dark.png';
+import logoLight from '../../assets/collabnest_logo_light.png';
 
 const Topbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -304,7 +304,7 @@ const Topbar = () => {
             className="transition-transform duration-200 hover:scale-105"
           >
             <img
-              src={theme === 'dark' ? logoLight : logoDark}
+              src={ logoDark}
               alt="CollabNest"
               className="h-10 object-contain cursor-pointer"
             />
