@@ -72,6 +72,13 @@ const io = new socketIO(server, {
 initializeScheduler(io, redisClient);
 
 // Middleware
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  // You might also consider CORP if COOP alone isn't enough,
+  // but start with COOP.
+  // res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin'); 
+  next();
+});
 app.use(cors(corsOptions)); // Use the dynamic corsOptions for Express
 app.use(express.json());
 
