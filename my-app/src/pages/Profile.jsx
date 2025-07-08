@@ -137,38 +137,22 @@ const Profile = () => {
     { value: 'bg-indigo-500', label: 'Indigo', preview: '#6366F1' }
   ];
 
-  // Load user data and progress
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      setIsLoading(true);
-      try {
-        const token = localStorage.getItem('token');
-        console.log('[Profile.jsx] Token for fetchUserProfile:', token); 
 
-        if (!token) {
-          alert('Authentication token not found. Please log in.');
-          navigate('/login');
-          setIsLoading(false);
-          return;
-        }
+useEffect(() => {
+  const fetchUserProfile = async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
-        const response = await fetch('/api/users/profile', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+      const response = await fetch(`${backendUrl}/api/users/profile`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            alert('Session expired or invalid. Please log in again.');
-            navigate('/login');
-          } else {
-            throw new Error(`Failed to fetch profile: ${response.statusText}`);
-          }
-          return;
-        }
-
+      if (response.ok) {
         const data = await response.json();
         setUser(data);
         setBio(data.bio || '');
@@ -177,7 +161,7 @@ const Profile = () => {
         setPreview(data.profilePic || '');
         setUserSkills(data.userSkills || []);
         
-       
+        // Set user progress with defaults
         const fetchedProgress = data.userProgress || {};
         const defaultProgress = {
           tasksCompleted: 0,
@@ -191,89 +175,31 @@ const Profile = () => {
         };
         setUserProgress({ ...defaultProgress, ...fetchedProgress });
 
-    
-        const existingLoggedInUser = JSON.parse(localStorage.getItem('loggedInUser')) || {};
+        // Update localStorage with fresh data
         const updatedLoggedInUser = {
-          ...existingLoggedInUser,
           name: data.name, 
           email: data.email, 
           userId: data.userId,
           profilePic: data.profilePic || '',
           bio: data.bio || '',
           section: data.section || '',
-        
         };
         localStorage.setItem('loggedInUser', JSON.stringify(updatedLoggedInUser));
 
-        // if (data.userProgress) {
-        //   updateLoginStreak(data.userProgress); 
-        // }
-
-
-      } catch (error) {
-        console.error('[Profile.jsx] Error fetching user profile:', error);
-        if (error.response) { // If error has a response object (e.g., from Axios)
-          console.error('[Profile.jsx] Error response data:', await error.response.text());
-          console.error('[Profile.jsx] Error response status:', error.response.status);
-        } else if (error.message && error.message.includes('not valid JSON')) {
-         
-            console.error('[Profile.jsx] Received non-JSON response from server. This often means HTML error page or misconfigured proxy.');
-        }
-        alert('Failed to load profile data. Please try again later or check console for details.');
-        // Potentially navigate to login or an error page
-      } finally {
-        setIsLoading(false);
+      } else {
+        console.error('Failed to fetch profile:', response.statusText);
+        // You could show a toast notification here instead of alert
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      // You could show a toast notification here instead of alert
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchUserProfile();
-  }, [navigate]);
-
-  // Initialize user progress - This logic might be moved to backend or user registration
-  // const initializeUserProgress = (userId) => {
-  //   const initialProgress = {
-  //     tasksCompleted: 0,
-  //     organizationsJoined: 0,
-  //     activeDays: 1,
-  //     projectsCollaborated: 0,
-  //     skillsCertified: 0,
-  //     improvementsSuggested: 0,
-  //     loginStreak: 1,
-  //     lastLoginDate: new Date().toDateString(),
-  //   };
-    
-  //   setUserProgress(initialProgress);
-  //   // localStorage.setItem('userProgress', JSON.stringify(initialProgress)); // Removed
-  // };
-
-  // Update login streak - This should ideally be handled server-side on login
-  // const updateLoginStreak = (currentProgress) => {
-  //   const today = new Date().toDateString();
-  //   const lastLogin = currentProgress.lastLoginDate ? new Date(currentProgress.lastLoginDate).toDateString() : null;
-    
-  //   if (lastLogin !== today) {
-  //     const yesterday = new Date();
-  //     yesterday.setDate(yesterday.getDate() - 1);
-      
-  //     let newStreak;
-  //     if (lastLogin === yesterday.toDateString()) {
-  //       newStreak = (currentProgress.loginStreak || 0) + 1;
-  //     } else {
-  //       newStreak = 1; // Reset streak if more than 1 day gap
-  //     }
-      
-  //     const updatedProgress = {
-  //       ...currentProgress,
-  //       loginStreak: newStreak,
-  //       lastLoginDate: new Date().toISOString(), // Store as ISO string for backend
-  //       activeDays: (currentProgress.activeDays || 0) + 1
-  //     };
-      
-  //     setUserProgress(updatedProgress);
-  //     // localStorage.setItem('userProgress', JSON.stringify(updatedProgress)); // Removed
-  //     // TODO: API call to update this on backend if needed immediately.
-  //   }
-  // };
+  fetchUserProfile();
+}, []);
 
   // Progress simulation functions (for demo purposes) - Will need API calls if kept
   const simulateProgress = async (key, increment = 1) => {
@@ -658,39 +584,7 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Demo Progress Buttons (for testing) */}
-            {/* <div className="mb-8 max-w-4xl mx-auto">
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-6">
-                <h3 className="text-lg font-semibold mb-4 text-yellow-800 dark:text-yellow-200">🧪 Demo Progress (for testing)</h3>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => simulateProgress('tasksCompleted')}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
-                  >
-                    Complete Task (+1)
-                  </button>
-                  <button
-                    onClick={() => simulateProgress('organizationsJoined')}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
-                  >
-                    Join Organization (+1)
-                  </button>
-                  <button
-                    onClick={() => simulateProgress('projectsCollaborated')}
-                    className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm"
-                  >
-                    Complete Project (+1)
-                  </button>
-                  <button
-                    onClick={() => simulateProgress('improvementsSuggested')}
-                    className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-sm"
-                  >
-                    Suggest Improvement (+1)
-                  </button>
-                </div>
-              </div>
-            </div> */}
-
+         
             {/* Tab Navigation */}
             <div className="mb-8">
               <div className="flex justify-center">
