@@ -16,10 +16,10 @@ import {
 import {
   Moon, Sun, LogIn, User, Bell, Menu, LogOut, UserPen, AlarmClockCheck,
   Home, ListTodo, Users, Building2, CirclePlus, LayoutList, CircleHelp, 
-  CheckCheck, Filter, Calendar, BarChart3, Settings, X
+  CheckCheck, Filter, Calendar, BarChart3, Settings, X, Star
 } from 'lucide-react';
-import logoDark from '../../assets/collabnest_logo_dark.png';
-import logoLight from '../../assets/collabnest_logo_light.png';
+import logoLight from '../../assets/collabnest_logo_dark.png';
+import logoDark from '../../assets/collabnest_logo_light.png';
 
 const Topbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -240,7 +240,6 @@ const Topbar = () => {
     if (!notif.isRead) {
       dispatch(markNotificationAsRead(notif._id || notif.id));
     }
-  
   };
 
   const handleSnoozeNotification = (e, notifId) => {
@@ -265,6 +264,20 @@ const Topbar = () => {
     { to: '/join_Organization', label: 'Join Organization', icon: <CirclePlus size={18} />, badge: null },
     { to: '/todo', label: 'To Do List', icon: <LayoutList size={18} />, badge: null },
     { to: '/help', label: 'Help', icon: <CircleHelp size={18} />, badge: null },
+    {
+      to: '/settings',
+      label: 'Settings',
+      icon: <Settings size={18} />,
+      badge: null,
+      color: 'text-gray-600 dark:text-gray-400'
+    },
+    {
+      to: '/feedback',
+      label: 'Feedback',
+      icon: <Star size={18} />,
+      badge: null,
+      color: 'text-red-600 dark:text-red-400'
+    }
   ];
 
   const getNotificationIcon = (type) => {
@@ -518,7 +531,7 @@ const Topbar = () => {
                   className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-gray-600 dark:text-gray-300">{item.icon}</span>
+                    <span className={`${item.color || 'text-gray-600 dark:text-gray-300'}`}>{item.icon}</span>
                     <span className="font-medium text-gray-800 dark:text-white">{item.label}</span>
                   </div>
                   {item.badge && (
