@@ -6,14 +6,10 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen bg-white text-black dark:bg-zinc-950 dark:text-white transition-colors duration-300">
       <Sidebar />
-      <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col flex-1">
         <Topbar />
-        <main className="p-3 sm:p-6 flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 dark:bg-zinc-900 transition-colors duration-300 
-                       scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 
-                       touch-pan-y overscroll-y-contain">
-          <div className="min-h-full">
-            {children}
-          </div>
+        <main className="flex-1 p-6 md:overflow-auto bg-gray-50 dark:bg-zinc-900 transition-colors duration-300">
+          {children}
         </main>
       </div>
     </div>
