@@ -37,16 +37,16 @@ const useFCMToken = () => {
         // Get FCM token
         const token = await getToken(messaging, { vapidKey });
         if (token) {
-          console.log('✅ FCM token received:', token);
+          // console.log('✅ FCM token received:', token);
           setTokenStatus(prev => ({ ...prev, token }));
           
       
           const storedToken = localStorage.getItem('fcmToken');
           const tokenSentFlag = localStorage.getItem('fcmTokenSent');
           
-          console.log('🔍 Stored token:', storedToken);
-          console.log('🔍 Token sent flag:', tokenSentFlag);
-          console.log('🔍 Current token:', token);
+          // console.log('🔍 Stored token:', storedToken);
+          // console.log('🔍 Token sent flag:', tokenSentFlag);
+          // console.log('🔍 Current token:', token);
           
           // Send token if:
           // 1. No stored token exists (first time)
@@ -63,8 +63,8 @@ const useFCMToken = () => {
             const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000' || 'https://deadline-pobb.onrender.com';
             const authToken = localStorage.getItem('token');
             
-            console.log('🌐 Backend URL:', backendUrl);
-            console.log('🔑 Auth token exists:', !!authToken);
+            // console.log('🌐 Backend URL:', backendUrl);
+            // console.log('🔑 Auth token exists:', !!authToken);
             
             const response = await fetch(`${backendUrl}/api/notifications/token`, {
               method: 'POST',
@@ -75,8 +75,8 @@ const useFCMToken = () => {
               body: JSON.stringify({ token }),
             });
 
-            console.log('📡 Response status:', response.status);
-            console.log('📡 Response ok:', response.ok);
+            // console.log('📡 Response status:', response.status);
+            // console.log('📡 Response ok:', response.ok);
 
             if (response.ok) {
               // Store new token and mark as sent

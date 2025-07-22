@@ -275,7 +275,7 @@ const notificationSlice = createSlice({
       // Recalculate unread count
       state.unreadCount = state.notifications.filter(notif => !notif.isRead).length;
       
-      console.log(`Cleaned up ${beforeCount - state.notifications.length} old notifications`);
+      // console.log(`Cleaned up ${beforeCount - state.notifications.length} old notifications`);
     },
     
     // Clear all notifications

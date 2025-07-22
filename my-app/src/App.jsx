@@ -20,7 +20,7 @@ function App() {
       if (!messaging) return;
 
       unsubscribeOnMessage = onMessage(messaging, (payload) => {
-        console.log('📩 FCM foreground message:', payload);
+        // console.log('📩 FCM foreground message:', payload);
 
         const notificationData = {
           _id: payload.data?.notificationId || new Date().toISOString(),

@@ -19,7 +19,7 @@ export const SocketProvider = ({ children }) => {
  useEffect(() => {
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     if (user?.userId) {
-      console.log(`[SocketContext] Attempting to register user with userId: ${user.userId}`); 
+      // console.log(`[SocketContext] Attempting to register user with userId: ${user.userId}`); 
       socket.emit('register', user.userId);
     } else {
       console.warn('[SocketContext] No user.userId found in localStorage for socket registration.'); 
@@ -54,7 +54,7 @@ export const SocketProvider = ({ children }) => {
  
    // Listener for the new event
    const handleTaskUpdatedInOrg = (updatedTaskData) => {
-     console.log('[SocketContext] Received task_updated_in_organization:', updatedTaskData);
+    //  console.log('[SocketContext] Received task_updated_in_organization:', updatedTaskData);
   
      dispatch(applyTaskUpdateFromSocket(updatedTaskData));
    };
@@ -63,7 +63,7 @@ export const SocketProvider = ({ children }) => {
  
     // Listener for new task creation event
     const handleTaskCreatedInOrg = (newTaskData) => {
-      console.log('[SocketContext] Received task_created_in_organization:', newTaskData);
+      // console.log('[SocketContext] Received task_created_in_organization:', newTaskData);
       dispatch(applyTaskCreationFromSocket(newTaskData));
     };
 

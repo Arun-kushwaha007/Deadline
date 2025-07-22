@@ -100,11 +100,11 @@ export default function TaskCard({
       
       setIsDragging(false);
       
-      console.log(`🔍 ${label} button clicked:`, {
-        taskId: id,
-        title: title,
-        action: label
-      });
+      // console.log(`🔍 ${label} button clicked:`, {
+      //   taskId: id,
+      //   title: title,
+      //   action: label
+      // });
       
       if (onClick) {
         onClick();

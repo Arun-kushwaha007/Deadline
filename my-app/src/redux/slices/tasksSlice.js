@@ -50,7 +50,7 @@ export const updateTaskStatus = createAsyncThunk('tasks/updateTaskStatus', async
   dispatch(tasksSlice.actions.optimisticallyUpdateTaskStatus({ id, status }));
 
   try {
-    console.log('[tasksSlice] Attempting to update task status via API. ID:', id, 'Payload:', { status });
+    // console.log('[tasksSlice] Attempting to update task status via API. ID:', id, 'Payload:', { status });
     const response = await axios.put(`${API_BASE_URL}/tasks/${id}`, { status }, getAuthConfig());
     return { ...response.data, id: response.data._id };
   } catch (error) {
