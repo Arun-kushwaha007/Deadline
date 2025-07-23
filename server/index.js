@@ -149,7 +149,7 @@ const startServer = async () => {
 
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      // console.log(`🚀 Server running on http://localhost:${PORT}`);
     });
   } catch (err) {
     console.error('❌ MongoDB connection error:', err);
@@ -159,7 +159,7 @@ const startServer = async () => {
 
 // Socket.IO Events
 io.on('connection', async (socket) => {
-  console.log('🟢 User connected:', socket.id);
+  // console.log('🟢 User connected:', socket.id);
 
   socket.on('register', async (userId) => {
     if (!userId) {
@@ -168,7 +168,7 @@ io.on('connection', async (socket) => {
     }
     socket.userId = userId; 
     await redisClient.set(`socket:${userId}`, socket.id);
-    console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
+    // console.log(`✅ Registered user ${userId} with socket ${socket.id}`);
 
     // Join organization rooms
     try {
@@ -181,7 +181,7 @@ io.on('connection', async (socket) => {
         organizations.forEach(org => {
           const roomName = `org:${org._id}`;
           socket.join(roomName);
-          console.log(`[Socket Register] User ${userId} (${socket.id}) joined room ${roomName}`);
+          // console.log(`[Socket Register] User ${userId} (${socket.id}) joined room ${roomName}`);
         });
       } else {
         console.warn(`[Socket Register] User with userId ${userId} not found in database.`);
@@ -192,11 +192,11 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('disconnect', async () => {
-    console.log(`🔴 User ${socket.userId || socket.id} disconnected`);
+    // console.log(`🔴 User ${socket.userId || socket.id} disconnected`);
     if (socket.userId) {
       try {
         await redisClient.del(`socket:${socket.userId}`);
-        console.log(`[Socket Disconnect] Removed user ${socket.userId} from Redis.`);
+        // console.log(`[Socket Disconnect] Removed user ${socket.userId} from Redis.`);
      
       } catch (err) {
         console.error(`[Socket Disconnect] Redis DEL error for user ${socket.userId}:`, err);
@@ -209,7 +209,7 @@ io.on('connection', async (socket) => {
           const socketId = await redisClient.get(key);
           if (socketId === socket.id) {
             await redisClient.del(key);
-            console.log(`[Socket Disconnect Fallback] Removed key ${key} for socket ${socket.id}`);
+            // console.log(`[Socket Disconnect Fallback] Removed key ${key} for socket ${socket.id}`);
             break;
           }
         }

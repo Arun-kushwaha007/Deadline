@@ -41,7 +41,7 @@ export const getUserProfile = async (req, res) => {
     user.userProgress.organizationsJoined = organizationsJoined;
     user.userProgress.tasksCompleted = tasksCompleted;
   
-    console.log(`[getUserProfile] User: ${user.userId}, Orgs: ${organizationsJoined}, Tasks Done: ${tasksCompleted}`);
+    // console.log(`[getUserProfile] User: ${user.userId}, Orgs: ${organizationsJoined}, Tasks Done: ${tasksCompleted}`);
 
     res.status(200).json(user);
 
@@ -53,8 +53,8 @@ export const getUserProfile = async (req, res) => {
 
 
 export const updateUserProfile = async (req, res) => {
-  console.log('[updateUserProfile] Received request body:', JSON.stringify(req.body, null, 2));
-  console.log('[updateUserProfile] User from token:', req.user ? req.user._id : 'No user in req');
+  // console.log('[updateUserProfile] Received request body:', JSON.stringify(req.body, null, 2));
+  // console.log('[updateUserProfile] User from token:', req.user ? req.user._id : 'No user in req');
 
   if (!req.user || !req.user._id) {
     return res.status(401).json({ message: 'User not authenticated for profile update.' });

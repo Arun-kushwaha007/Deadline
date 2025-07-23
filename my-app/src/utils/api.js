@@ -17,7 +17,7 @@ const api = {
   // GET request
   get: async (endpoint) => {
     const token = localStorage.getItem('token');
-    console.log(`[api.js] Token for GET ${endpoint}:`, token);
+    // console.log(`[api.js] Token for GET ${endpoint}:`, token);
     const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
       method: 'GET',
       headers: {
@@ -31,7 +31,7 @@ const api = {
   // POST request
   post: async (endpoint, data) => {
     const token = localStorage.getItem('token');
-    console.log(`[api.js] Token for POST ${endpoint}:`, token); 
+    // console.log(`[api.js] Token for POST ${endpoint}:`, token); 
     const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
       method: 'POST',
       headers: {
@@ -46,7 +46,7 @@ const api = {
   // PUT request
   put: async (endpoint, data) => {
     const token = localStorage.getItem('token');
-    console.log(`[api.js] Token for PUT ${endpoint}:`, token); 
+    // console.log(`[api.js] Token for PUT ${endpoint}:`, token); 
     const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
       method: 'PUT',
       headers: {
@@ -61,7 +61,7 @@ const api = {
   // DELETE request
   delete: async (endpoint) => {
     const token = localStorage.getItem('token');
-    console.log(`[api.js] Token for DELETE ${endpoint}:`, token);
+    // console.log(`[api.js] Token for DELETE ${endpoint}:`, token);
     // console.log('Token from localStorage in api.delete:', token); 
     const headers = {
       'Content-Type': 'application/json',
