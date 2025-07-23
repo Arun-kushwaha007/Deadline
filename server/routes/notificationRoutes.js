@@ -21,7 +21,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }
     
     const notifications = await Notification.find(query).sort({ createdAt: -1 });
-    console.log(`[NotificationRoutes] Found ${notifications.length} notifications for user ${req.user.userId}`);
+    // console.log(`[NotificationRoutes] Found ${notifications.length} notifications for user ${req.user.userId}`);
     res.status(200).json(notifications);
   } catch (err) {
     console.error('Error fetching notifications:', err);

@@ -28,7 +28,7 @@ const checkIdleTasks = async () => {
       for (const task of idleTasks) {
         if (task.assignedTo && task.assignedTo.userId) {
   
-          console.log(`[SchedulerService-IdleTasks] Sending idle notification for task "${task.title}" to user ${task.assignedTo.userId}`);
+          // console.log(`[SchedulerService-IdleTasks] Sending idle notification for task "${task.title}" to user ${task.assignedTo.userId}`);
           await sendNotification({
             io: io_instance,
             redisClient: redis_client_instance,

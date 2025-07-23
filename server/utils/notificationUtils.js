@@ -44,7 +44,7 @@ export const sendNotification = async ({
 
     // 2. Emit via Socket.IO
     if (redisClient?.get) {
-      console.log(`[NotificationUtils] Attempting to get socketId for user ${userId} from Redis key: socket:${userId}`);
+      // console.log(`[NotificationUtils] Attempting to get socketId for user ${userId} from Redis key: socket:${userId}`);
       try {
         const socketId = await redisClient.get(`socket:${userId}`);
         if (socketId) {
