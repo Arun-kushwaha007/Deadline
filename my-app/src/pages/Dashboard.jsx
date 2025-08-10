@@ -81,7 +81,7 @@ const Dashboard = () => {
         
 
         {/* Quick Stats */}
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        {/* <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center gap-3">
@@ -131,7 +131,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Content */}
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
