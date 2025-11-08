@@ -1,7 +1,7 @@
 <div align="center">
 
-# 🚀 CollabNest
-### *Next-Generation Collaborative Workspace Platform*
+# CollabNest
+### Next-Generation Collaborative Workspace Platform
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18.3+-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
@@ -27,10 +27,8 @@
   <img src="https://img.shields.io/github/issues/Arun-kushwaha007/Deadline?style=for-the-badge" alt="Issues">
 </p>
 
-<br />
-
 <p align="center">
-  <strong>🌟 A comprehensive MERN-Stack collaboration platform designed for modern teams with advanced real-time features, intelligent notifications, and seamless user experience.</strong>
+  A comprehensive MERN-Stack collaboration platform designed for modern teams with advanced real-time features, intelligent notifications, and seamless user experience.
 </p>
 
 <p align="center">
@@ -38,124 +36,97 @@
 </p>
 
 <p align="center">
-  <a href="#-demo">🎥 Demo</a> •
-  <a href="#-quick-start">🚀 Quick Start</a> •
-  <a href="#-features">✨ Features</a> •
-  <a href="#-documentation">📚 Docs</a> •
-  <a href="#-contributing">🤝 Contributing</a>
+  <a href="#demo">Demo</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#features">Features</a> •
+  <a href="#documentation">Documentation</a> •
+  <a href="#contributing">Contributing</a>
 </p>
 
 </div>
 
 ---
 
-<div align="center">
+## Table of Contents
 
-## 🗂️ **Table of Contents**
-
-</div>
-<div align="left">
-
-- [🎯 **Project Overview**](#-project-overview)
-  - [🧭 Motive](#-motive)
-  - [💡 Core Concept](#-core-concept)
-  - [🎥 Demo](#-demo)
-- [✨ **Features & Capabilities**](#-features--capabilities)
-  - [🚀 Core Features](#-core-features)
-  - [🔧 Technical Features](#-technical-features)
-  - [🎨 UI/UX Features](#-uiux-features)
-- [⚙️ **How It Works**](#️-how-it-works)
-- [🛠️ **Getting Started**](#️-getting-started)
-  - [📋 Prerequisites](#-prerequisites)
-  - [🚀 Quick Start](#-quick-start)
-  - [🔧 Environment Configuration](#-environment-configuration)
-- [📁 **Project Architecture**](#-project-architecture)
-  - [📂 Project Structure](#-project-structure)
-  - [🔧 Key Integrations](#-key-integrations)
-  - [📊 Database Schema](#-database-schema)
-- [🚀 **Deployment**](#-deployment)
-- [📜 **Available Scripts**](#-available-scripts)
-- [🧪 **Testing**](#-testing)
-- [📈 **Performance & Benchmarking Report**](#-performance--benchmarking-report)
-- [📚 **API Documentation**](#-api-documentation)
-- [🤝 **Contributing**](#-contributing)
-- [📄 **License**](#-license)
-- [👨‍💻 **Author**](#-author)
-- [🙏 **Acknowledgments**](#-acknowledgments)
-
-</div>
-
+- [Project Overview](#project-overview)
+  - [Motive](#motive)
+  - [Core Concept](#core-concept)
+  - [Demo](#demo)
+- [Features & Capabilities](#features--capabilities)
+  - [Core Features](#core-features)
+  - [Technical Features](#technical-features)
+  - [UI/UX Features](#uiux-features)
+- [How It Works](#how-it-works)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Environment Configuration](#environment-configuration)
+- [Project Architecture](#project-architecture)
+  - [Project Structure](#project-structure)
+  - [Key Integrations](#key-integrations)
+  - [Database Schema](#database-schema)
+- [Deployment](#deployment)
+- [Available Scripts](#available-scripts)
+- [Testing](#testing)
+- [Performance & Benchmarking](#performance--benchmarking-report)
+- [API Documentation](#api-documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
 ---
 
-## 🎯 **Project Overview**
+## Project Overview
 
-### 🧭 **Motive**
+### Motive
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Globe%20with%20Meridians.png" alt="Globe" width="60" height="60" />
-</div>
+CollabNest revolutionizes the way distributed teams, students, and organizations collaborate in the digital age. The platform addresses critical challenges in modern remote work environments:
 
-**CollabNest** revolutionizes the way distributed teams, students, and organizations collaborate in the digital age. Our platform addresses critical challenges in modern remote work environments:
+**Core Objectives:**
+- **Global Collaboration:** Break down geographical barriers
+- **Real-time Synchronization:** Instant updates across all users
+- **Enterprise Security:** Secured with OAuth 2.0
+- **Cross-platform Access:** Web, mobile, and desktop compatibility
 
-<table>
-<tr>
-<td width="50%">
-
-#### 🎯 **Core Objectives**
-- 🌍 **Global Collaboration:** Break down geographical barriers
-- ⚡ **Real-time Synchronization:** Instant updates across all users
-- 🔒 **Enterprise Security:** Secured with OAuth 2.0
-- 📱 **Cross-platform Access:** Web, mobile, and desktop compatibility
-
-</td>
-<td width="50%">
-
-#### 🚀 **Key Benefits**
-- 📈 **Increased Productivity:** Streamlined workflows and task management
-- 🎨 **Enhanced UX:** Intuitive design with dark/light mode support
-- 🔔 **Smart Notifications:** AI-powered priority-based alerts
-- 📊 **Analytics Dashboard:** Comprehensive insights and reporting
-
-</td>
-</tr>
-</table>
+**Key Benefits:**
+- **Increased Productivity:** Streamlined workflows and task management
+- **Enhanced User Experience:** Intuitive design with dark/light mode support
+- **Smart Notifications:** AI-powered priority-based alerts
+- **Analytics Dashboard:** Comprehensive insights and reporting
 
 ---
 
-### 💡 **Core Concept**
+### Core Concept
 
-CollabNest is architected around **five fundamental pillars**:
+CollabNest is architected around five fundamental pillars:
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Electric%20Plug.png" alt="Core Concept" width="50" height="50" />
-</div>
-
-#### 1. ⚡ **Real-time Collaboration Engine**
+#### 1. Real-time Collaboration Engine
 - **WebSocket Infrastructure:** Ultra-low latency communication via Socket.io
 - **Live Updates:** Instant synchronization of tasks, comments, and file changes
 - **Conflict Resolution:** Smart merge algorithms for concurrent edits
 - **Offline Support:** Progressive Web App capabilities with sync on reconnect
 
-#### 2. 🔔 **Intelligent Notification System**
-- **Multi-channel Delivery:** Push notifications, email(in v2.0), SMS(in v2.0), and in-app alerts
-- **Smart Prioritization:** AI-powered importance scoring and filtering (comming soon)
+#### 2. Intelligent Notification System
+- **Multi-channel Delivery:** Push notifications, email (v2.0), SMS (v2.0), and in-app alerts
+- **Smart Prioritization:** AI-powered importance scoring and filtering
 - **Customizable Preferences:** Granular control over notification types and timing
 - **Analytics Integration:** Track engagement and optimize delivery strategies
 
-#### 3. 🛡️ **Enterprise-Grade Security**
+#### 3. Enterprise-Grade Security
 - **OAuth 2.0 Integration:** Seamless Google authentication with enterprise SSO support
 - **JWT Token Management:** Secure, stateless authentication with refresh tokens
 - **Role-based Access Control:** Granular permissions and organizational hierarchies
 - **Data Encryption:** End-to-end encryption for sensitive communications
 
-#### 4. 🎨 **Modern User Experience**
+#### 4. Modern User Experience
 - **Component-driven Architecture:** Reusable UI components with Storybook documentation
 - **Responsive Design:** Optimized for desktop, tablet, and mobile devices
 - **Accessibility First:** WCAG 2.1 AA compliance with screen reader support
 - **Performance Optimized:** Code splitting, lazy loading, and caching strategies
 
-#### 5. 📊 **Advanced Analytics & Insights**
+#### 5. Advanced Analytics & Insights
 - **Real-time Dashboards:** Live metrics and KPI tracking
 - **User Behavior Analytics:** Heatmaps, session recordings, and funnel analysis
 - **Performance Monitoring:** Application health and error tracking
@@ -163,115 +134,74 @@ CollabNest is architected around **five fundamental pillars**:
 
 ---
 
-### 🎥 **Demo**
+### Demo
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Movie%20Camera.png" alt="Demo" width="50" height="50" />
-</div>
-
-> 🚧 **Live Demo Coming Soon!** We're preparing an interactive demo environment. 
+> **Live Demo Coming Soon!** We're preparing an interactive demo environment.
 > 
-> In the meantime, check out our [📸 Screenshots Gallery](./docs/screenshots/) and [🎬 Feature Videos](./docs/videos/).
+> In the meantime, check out our [Screenshots Gallery](./docs/screenshots/) and [Feature Videos](./docs/videos/).
 
-**🔗 Quick Links:**
-- 🌐 **Live Application:** *Coming Soon*
-- 📱 **Mobile Preview:** *Coming Soon*
-- 🎮 **Interactive Playground:** *Coming Soon*
-- 📊 **Analytics Dashboard:** *Coming Soon*
-
----
-
-## ✨ **Features & Capabilities**
-
-### 🚀 **Core Features**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Features" width="60" height="60" />
-</div>
-
-<div align="left">
-
-| 🎯 **Feature Category** | 🔧 **Capabilities** | 📊 **Status** |
-|-------------------------|---------------------|---------------|
-| **🏢 Organization Management** | Multi-tenant workspace, role-based access, team hierarchies | ✅ Production Ready |
-| **📋 Task & Project Management** | Kanban boards, Gantt charts, deadline tracking, dependencies | ✅ Production Ready |
-| **💬 Real-time Communication** | Live chat, video calls, screen sharing, collaborative editing | 🚧 In Development |
-| **🔔 Smart Notifications** | Push notifications, email alerts, mobile notifications, digest emails | ✅ Production Ready |
-| **📊 Analytics & Reporting** | Custom dashboards, performance metrics, team insights, export tools | 🚧 Beta Version |
-| **🔐 Security & Privacy** | OAuth 2.0, SSO, data encryption, audit logs, compliance tools | ✅ Production Ready |
-| **📱 Mobile Responsive** | PWA support, mobile optimized, offline capabilities, native feel | ✅ Production Ready |
-| **🎨 Customization** | Themes, branding, custom fields, workflow automation | 🚧 In Development |
-
-</div>
-
-### 🔧 **Technical Features**
-
-<table>
-<tr>
-<td width="50%">
-
-#### **🏗️ Frontend Architecture**
-- ⚡ **React 18.3+** with Concurrent Features
-- 🚀 **Vite 5** for lightning-fast builds
-- 🎨 **Tailwind CSS 3.4** with custom design system
-- 🗃️ **Redux Toolkit** for state management
-- 📡 **React Query** for server state caching
-<!-- - 🧪 **TypeScript** for type safety (optional) -->
-
-#### **🔐 Authentication & Security**
-- 🛡️ **Google OAuth 2.0** integration
-- 🎫 **JWT** with refresh token rotation
-- 🔒 **HTTPS** everywhere with SSL/TLS
-- 🛡️ **CORS** and security headers
-- 🔐 **Rate limiting** and DDoS protection
-- 📊 **Audit logging** for compliance
-
-</td>
-<td width="50%">
-
-#### **🖥️ Backend Infrastructure**
-- 🟢 **Node.js 20+** with ES2023 features
-- ⚡ **Express.js** with middleware ecosystem
-- 🍃 **MongoDB 7** with aggregation pipelines
-- 🏎️ **Redis 7** for caching and sessions
-- 📡 **Socket.io 4** for real-time features
-- 🔥 **Firebase Admin SDK** for notifications
-
-#### **☁️ Cloud & DevOps**
-      (Soon)
-<!-- - 🐳 **Docker** containerization
-- ☁️ **AWS/Azure** cloud deployment
-- 🔄 **CI/CD** with GitHub Actions
-- 📊 **Monitoring** with application insights
-- 🚨 **Error tracking** with Sentry
-- 📈 **Performance monitoring** with New Relic -->
-
-</td>
-</tr>
-</table>
-
-### 🎨 **UI/UX Features**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Artist%20Palette.png" alt="UI/UX" width="50" height="50" />
-</div>
-
-| 🎨 **Design Element** | 📱 **Implementation** | 🌟 **Benefits** |
-|----------------------|----------------------|-----------------|
-| **🌓 Dark/Light Mode** | System preference detection, manual toggle, per-component theming | Reduced eye strain, better accessibility |
-| **📱 Responsive Design** | Mobile-first approach, flexible grids, adaptive components | Seamless experience across all devices |
-| **♿ Accessibility** | ARIA labels, keyboard navigation, screen reader support | Inclusive design for all users |
-| **🎭 Animations** | Framer Motion integration, micro-interactions, loading states | Enhanced user engagement |
-| **🎨 Design System** | Consistent color palette, typography scale, component library | Cohesive brand experience |
-| **🔍 Search & Filters** | Full-text search, advanced filters, saved searches | Quick content discovery |
+**Quick Links:**
+- **Live Application:** *Coming Soon*
+- **Mobile Preview:** *Coming Soon*
+- **Interactive Playground:** *Coming Soon*
+- **Analytics Dashboard:** *Coming Soon*
 
 ---
 
-## ⚙️ **How It Works**
+## Features & Capabilities
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Gear.png" alt="How It Works" width="60" height="60" />
-</div>
+### Core Features
+
+| Feature Category | Capabilities | Status |
+|------------------|--------------|--------|
+| **Organization Management** | Multi-tenant workspace, role-based access, team hierarchies | ✅ Production Ready |
+| **Task & Project Management** | Kanban boards, Gantt charts, deadline tracking, dependencies | ✅ Production Ready |
+| **Real-time Communication** | Live chat, video calls, screen sharing, collaborative editing | 🚧 In Development |
+| **Smart Notifications** | Push notifications, email alerts, mobile notifications, digest emails | ✅ Production Ready |
+| **Analytics & Reporting** | Custom dashboards, performance metrics, team insights, export tools | 🚧 Beta Version |
+| **Security & Privacy** | OAuth 2.0, SSO, data encryption, audit logs, compliance tools | ✅ Production Ready |
+| **Mobile Responsive** | PWA support, mobile optimized, offline capabilities, native feel | ✅ Production Ready |
+| **Customization** | Themes, branding, custom fields, workflow automation | 🚧 In Development |
+
+### Technical Features
+
+**Frontend Architecture:**
+- **React 18.3+** with Concurrent Features
+- **Vite 5** for lightning-fast builds
+- **Tailwind CSS 3.4** with custom design system
+- **Redux Toolkit** for state management
+- **React Query** for server state caching
+
+**Backend Infrastructure:**
+- **Node.js 20+** with ES2023 features
+- **Express.js** with middleware ecosystem
+- **MongoDB 7** with aggregation pipelines
+- **Redis 7** for caching and sessions
+- **Socket.io 4** for real-time features
+- **Firebase Admin SDK** for notifications
+
+**Authentication & Security:**
+- **Google OAuth 2.0** integration
+- **JWT** with refresh token rotation
+- **HTTPS** everywhere with SSL/TLS
+- **CORS** and security headers
+- **Rate limiting** and DDoS protection
+- **Audit logging** for compliance
+
+### UI/UX Features
+
+| Design Element | Implementation | Benefits |
+|----------------|----------------|----------|
+| **Dark/Light Mode** | System preference detection, manual toggle, per-component theming | Reduced eye strain, better accessibility |
+| **Responsive Design** | Mobile-first approach, flexible grids, adaptive components | Seamless experience across all devices |
+| **Accessibility** | ARIA labels, keyboard navigation, screen reader support | Inclusive design for all users |
+| **Animations** | Framer Motion integration, micro-interactions, loading states | Enhanced user engagement |
+| **Design System** | Consistent color palette, typography scale, component library | Cohesive brand experience |
+| **Search & Filters** | Full-text search, advanced filters, saved searches | Quick content discovery |
+
+---
+
+## How It Works
 
 <table>
 <tr>
@@ -321,83 +251,55 @@ CollabNest is architected around **five fundamental pillars**:
 </tr>
 </table>
 
+
 ---
 
-## 🛠️ **Getting Started**
+## Getting Started
 
-### 📋 **Prerequisites**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Clipboard.png" alt="Prerequisites" width="50" height="50" />
-</div>
+### Prerequisites
 
 Before you begin, ensure you have the following installed:
 
-| 🛠️ **Tool** | 📋 **Version** | 📥 **Download** | ✅ **Verification** |
-|-------------|---------------|----------------|-------------------|
-| ![Node.js](https://img.shields.io/badge/Node.js-v20+-339933?style=flat-square&logo=node.js&logoColor=white) | 20.0.0+ | [Download](https://nodejs.org/) | `node --version` |
-| ![npm](https://img.shields.io/badge/npm-v10+-CB3837?style=flat-square&logo=npm&logoColor=white) | 10.0.0+ | Included with Node.js | `npm --version` |
-| ![MongoDB](https://img.shields.io/badge/MongoDB-v7+-4EA94B?style=flat-square&logo=mongodb&logoColor=white) | 7.0.0+ | [Download](https://www.mongodb.com/try/download/community) | `mongod --version` |
-| ![Redis](https://img.shields.io/badge/Redis-v7+-DC382D?style=flat-square&logo=redis&logoColor=white) | 7.0.0+ | [Download](https://redis.io/download) | `redis-server --version` |
-| ![Git](https://img.shields.io/badge/Git-Latest-F05032?style=flat-square&logo=git&logoColor=white) | Latest | [Download](https://git-scm.com/) | `git --version` |
+| Tool | Version | Download | Verification |
+|------|---------|----------|--------------|
+| **Node.js** | 20.0.0+ | [Download](https://nodejs.org/) | `node --version` |
+| **npm** | 10.0.0+ | Included with Node.js | `npm --version` |
+| **MongoDB** | 7.0.0+ | [Download](https://www.mongodb.com/try/download/community) | `mongod --version` |
+| **Redis** | 7.0.0+ | [Download](https://redis.io/download) | `redis-server --version` |
+| **Git** | Latest | [Download](https://git-scm.com/) | `git --version` |
 
-**🔧 Optional Tools:**
-- ![Docker](https://img.shields.io/badge/Docker-Latest-2496ED?style=flat-square&logo=docker&logoColor=white) For containerized development
-- ![VS Code](https://img.shields.io/badge/VS_Code-Latest-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white) Recommended IDE with extensions
+**Optional Tools:**
+- **Docker** for containerized development
+- **VS Code** recommended IDE with extensions
 
 ---
 
-### 🚀 **Quick Start**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Quick Start" width="50" height="50" />
-</div>
+### Quick Start
 
 Follow these steps to get CollabNest running locally:
 
-#### **1️⃣ Clone the Repository**
+#### 1. Clone the Repository
 ```bash
-# Clone the repository
 git clone https://github.com/Arun-kushwaha007/Deadline.git
-
-# Navigate to project directory
 cd Deadline
-
-# Check project structure
-ls -la
 ```
 
-#### **2️⃣ Setup Frontend**
+#### 2. Setup Frontend
 ```bash
-# Navigate to frontend directory
 cd my-app
-
-# Install dependencies
 npm install
-
-# Copy environment file
 cp .env.example .env
-
-# Install additional development tools (optional)
-npm install -g @storybook/cli # For component documentation
 ```
 
-#### **3️⃣ Setup Backend**
+#### 3. Setup Backend
 ```bash
-# Navigate to backend directory (from project root)
 cd server
-
-# Install dependencies
 npm install
-
-# Copy environment file
 cp .env.example .env
-
-# Setup database (if needed)
 npm run db:setup
 ```
 
-#### **4️⃣ Configure Environment Variables**
+#### 4. Configure Environment Variables
 ```bash
 # Edit frontend environment file
 nano my-app/.env
@@ -406,11 +308,10 @@ nano my-app/.env
 nano server/.env
 ```
 
-#### **5️⃣ Start Development Servers**
+#### 5. Start Development Servers
 
 **Option A: Start All Services**
 ```bash
-# From project root
 npm run dev:all
 ```
 
@@ -422,30 +323,25 @@ cd server && npm run dev
 # Terminal 2: Start frontend
 cd my-app && npm run dev
 
-# Terminal 3: Start Redis (if not running as service)
+# Terminal 3: Start Redis
 redis-server
 
-# Terminal 4: Start MongoDB (if not running as service)
+# Terminal 4: Start MongoDB
 mongod
 ```
 
-#### **6️⃣ Access the Application**
-- 🌐 **Frontend:** http://localhost:5173
-- 🖥️ **Backend API:** http://localhost:5000
-- 📚 **API Documentation:** "coming soon"
-<!-- - 📊 **Storybook (if enabled):** http://localhost:6006 -->
+#### 6. Access the Application
+- **Frontend:** http://localhost:5173
+- **Backend API:** http://localhost:5000
+- **API Documentation:** *Coming Soon*
 
 ---
 
-### 🔧 **Environment Configuration**
+### Environment Configuration
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Gear.png" alt="Configuration" width="50" height="50" />
-</div>
-
-#### **🎨 Frontend Configuration (`my-app/.env`)**
+#### Frontend Configuration (`my-app/.env`)
 ```env
-# 🔥 Firebase Configuration
+# Firebase Configuration
 VITE_AI_FIREBASE_API_KEY=your_firebase_api_key
 VITE_AI_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_AI_FIREBASE_PROJECT_ID=your_firebase_project_id
@@ -454,62 +350,61 @@ VITE_AI_FIREBASE_MESSAGING_SENDER_ID=123456789012
 VITE_AI_FIREBASE_APP_ID=1:123456789012:web:abcdef123456
 VITE_AI_FIREBASE_MEASUREMENT_ID=G-ABCD123456
 
-# 🌐 API Configuration
+# API Configuration
 VITE_BACKEND_URL=http://localhost:5000
 VITE_API_VERSION=v1
 VITE_SOCKET_URL=http://localhost:5000
 
-# 🔐 Authentication
+# Authentication
 VITE_GOOGLE_CLIENT_ID=your_google_client_id.googleusercontent.com
 
-# 🎨 UI Configuration
+# UI Configuration
 VITE_APP_NAME=CollabNest
 VITE_APP_VERSION=2.0.0
 VITE_THEME_PRIMARY=#FF6B35
 VITE_THEME_SECONDARY=#38B2AC
-
 ```
 
-#### **🖥️ Backend Configuration (`server/.env`)**
+#### Backend Configuration (`server/.env`)
 ```env
-# 🌍 Server Configuration
+# Server Configuration
 NODE_ENV=development
 PORT=5000
 HOST=localhost
 API_VERSION=v1
 
-# 🗄️ Database Configuration
+# Database Configuration
 MONGO_URI=mongodb://localhost:27017/collabnest
 MONGO_DB_NAME=collabnest
 MONGO_OPTIONS=retryWrites=true&w=majority
 
-# 📊 Redis Configuration
+# Redis Configuration
 REDIS_URL=redis://localhost:6379
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=your_redis_password
 REDIS_DB=0
 
-# 🔐 Security & Authentication
+# Security & Authentication
 JWT_SECRET=your_super_secure_jwt_secret_key_here
 JWT_EXPIRE=7d
 JWT_REFRESH_EXPIRE=30d
 BCRYPT_ROUNDS=12
 
-# 🔑 OAuth Configuration
+# OAuth Configuration
 GOOGLE_CLIENT_ID=your_google_client_id.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-# 🔥 Firebase Admin SDK
+# Firebase Admin SDK
 FIREBASE_PROJECT_ID=your_firebase_project_id
 FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your_project.iam.gserviceaccount.com
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
 
-# 📧 Email Configuration (Optional)
+# Email Configuration
 RESEND_API_KEY=re_xxxxxxxxx
 RESEND_API_SECRET=your_resend_api_secret
 
-# 🚀 Performance & Caching
+# Performance & Caching
 CACHE_TTL=3600
 RATE_LIMIT_WINDOW=900000
 RATE_LIMIT_MAX=100
@@ -517,54 +412,42 @@ RATE_LIMIT_MAX=100
 
 ---
 
-## 📁 **Project Architecture**
+## Project Architecture
 
-### 📂 **Project Structure**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/File%20Folder.png" alt="Project Structure" width="50" height="50" />
-</div>
+### Project Structure
 
 ```
-📁 CollabNest/
-├── 📁 my-app/                          # Frontend (React + Vite)
-│   ├── 📁 src/
-│   │   ├── 📁 components/              # React components
-│   │   ├── 📁 pages/                   # Route pages
-│   │   ├── 📁 redux/                   # State management
-│   │   ├── 📁 services/                # API services
-│   │   ├── 📁 utils/                   # Utility functions
-│   │   └── App.jsx                     # Main app
+CollabNest/
+├── my-app/                          # Frontend (React + Vite)
+│   ├── src/
+│   │   ├── components/              # React components
+│   │   ├── pages/                   # Route pages
+│   │   ├── redux/                   # State management
+│   │   ├── services/                # API services
+│   │   ├── utils/                   # Utility functions
+│   │   └── App.jsx                  # Main app
 │   ├── package.json
 │   └── vite.config.js
 │
-├── 📁 server/                          # Backend (Node.js + Express)
-│   ├── 📁 controllers/                 # Route handlers
-│   ├── 📁 models/                      # Database schemas
-│   ├── 📁 routes/                      # API routes
-│   ├── 📁 middleware/                  # Express middleware
-│   ├── 📁 config/                      # App configuration
+├── server/                          # Backend (Node.js + Express)
+│   ├── controllers/                 # Route handlers
+│   ├── models/                      # Database schemas
+│   ├── routes/                      # API routes
+│   ├── middleware/                  # Express middleware
+│   ├── config/                      # App configuration
 │   ├── package.json
-│   └── index.js                        # Server entry
+│   └── index.js                     # Server entry
 │
-├── docker-compose.yml                  # Container setup
-├── README.md                           # Documentation
-└── .env   
+├── docker-compose.yml               # Container setup
+├── README.md                        # Documentation
+└── .env
 ```
 
 ---
 
-### 🔧 **Key Integrations**
+### Key Integrations
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Link.png" alt="Integrations" width="50" height="50" />
-</div>
-
-<table>
-<tr>
-<td width="50%">
-
-#### **🔔 Notification System**
+#### Notification System
 ```javascript
 // Firebase Cloud Messaging Integration
 const messaging = getMessaging(app);
@@ -582,16 +465,13 @@ await notificationService.send({
 ```
 
 **Features:**
-- 📱 Push notifications via FCM
-- 📧 Email notifications with templates
-- 💬 In-app toast notifications
-- 🔔 Smart notification bundling
-- 📊 Delivery analytics and tracking
+- Push notifications via FCM
+- Email notifications with templates
+- In-app toast notifications
+- Smart notification bundling
+- Delivery analytics and tracking
 
-</td>
-<td width="50%">
-
-#### **💬 Real-time Communication**
+#### Real-time Communication
 ```javascript
 // Socket.io Integration
 const socket = io(process.env.VITE_SOCKET_URL, {
@@ -607,18 +487,13 @@ socket.on('task:updated', (data) => {
 ```
 
 **Features:**
-- 🌐 WebSocket connections
-- ⚡ Real-time task updates
-- 💬 Live chat and messaging
-- 🔄 Auto-reconnection handling
-- 📊 Connection state management
+- WebSocket connections
+- Real-time task updates
+- Live chat and messaging
+- Auto-reconnection handling
+- Connection state management
 
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-#### **🔐 Authentication & Security**
+#### Authentication & Security
 ```javascript
 // Google OAuth 2.0 Integration
 const googleLogin = useGoogleLogin({
@@ -639,16 +514,13 @@ const authMiddleware = (req, res, next) => {
 ```
 
 **Features:**
-- 🛡️ Google OAuth 2.0 integration
-- 🎫 JWT token management
-- 🔒 Role-based access control
-- 🛡️ Rate limiting and DDoS protection
-- 📊 Security audit logging
+- Google OAuth 2.0 integration
+- JWT token management
+- Role-based access control
+- Rate limiting and DDoS protection
+- Security audit logging
 
-</td>
-<td width="50%">
-
-#### **🏎️ Performance & Caching**
+#### Performance & Caching
 ```javascript
 // Redis Caching Implementation
 const cacheService = {
@@ -667,38 +539,28 @@ const cacheService = {
 // Query optimization
 const tasks = await Task.find({ userId })
   .populate('assignees', 'name email')
-  .cache(300); // Cache for 5 minutes
+  .cache(300);
 ```
 
 **Features:**
-- 🏎️ Redis in-memory caching
-- 📊 Database query optimization
-- 🔄 Smart cache invalidation
-- 📈 Performance monitoring
-- ⚡ Code splitting and lazy loading
-
-</td>
-</tr>
-</table>
+- Redis in-memory caching
+- Database query optimization
+- Smart cache invalidation
+- Performance monitoring
+- Code splitting and lazy loading
 
 ---
 
-### 📊 **Database Schema**
+### Database Schema
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Card%20Index%20Dividers.png" alt="Database" width="50" height="50" />
-</div>
-
-#### **🗄️ MongoDB Collections Overview**
+#### MongoDB Collections Overview
 
 <img src="./assets/dbCollection.png">
 
-
-
 <details>
-<summary><strong>📝 Detailed Schema Definitions</strong></summary>
+<summary><strong>Detailed Schema Definitions</strong></summary>
 
-**👤 User Schema**
+**User Schema**
 ```javascript
 {
   _id: ObjectId,
@@ -721,7 +583,7 @@ const tasks = await Task.find({ userId })
 }
 ```
 
-**🏢 Organization Schema**
+**Organization Schema**
 ```javascript
 {
   _id: ObjectId,
@@ -742,7 +604,7 @@ const tasks = await Task.find({ userId })
 }
 ```
 
-**📋 Task Schema**
+**Task Schema**
 ```javascript
 {
   _id: ObjectId,
@@ -767,278 +629,93 @@ const tasks = await Task.find({ userId })
 
 ---
 
-## 🚀 **Deployment**
+## Deployment
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Deployment" width="60" height="60" />
-</div>
-Coming Soon
-<!-- 
-### **☁️ Cloud Deployment Options**
-
-<table>
-<tr>
-<td width="33%">
-
-#### **🟦 Azure Deployment**
-```bash
-# Azure Container Instances
-az container create \
-  --resource-group collabnest-rg \
-  --name collabnest-app \
-  --image collabnest:latest \
-  --environment-variables \
-    NODE_ENV=production
-
-# Azure Static Web Apps
-az staticwebapp create \
-  --name collabnest-frontend \
-  --source https://github.com/your-repo \
-  --branch main
-```
-
-**Benefits:**
-- 🔄 Auto-scaling capabilities
-- 🛡️ Built-in security features
-- 📊 Integrated monitoring
-- 💰 Cost-effective pricing
-
-</td>
-<td width="33%">
-
-#### **🟠 AWS Deployment**
-```bash
-# AWS ECS with Fargate
-aws ecs create-cluster \
-  --cluster-name collabnest-cluster
-
-# AWS S3 + CloudFront
-aws s3 sync ./dist s3://collabnest-frontend
-aws cloudfront create-invalidation \
-  --distribution-id E1234567890 \
-  --paths "/*"
-```
-
-**Benefits:**
-- 🌍 Global CDN distribution
-- 🔒 Advanced security options
-- 📈 Comprehensive analytics
-- 🔧 Extensive service ecosystem
-
-</td>
-<td width="33%">
-
-#### **🐳 Docker Deployment**
-```yaml
-# docker-compose.yml
-version: '3.8'
-services:
-  frontend:
-    build: ./my-app
-    ports:
-      - "3000:3000"
-  
-  backend:
-    build: ./server
-    ports:
-      - "5000:5000"
-    environment:
-      - NODE_ENV=production
-  
-  mongodb:
-    image: mongo:7
-    volumes:
-      - mongodb_data:/data/db
-  
-  redis:
-    image: redis:7-alpine
-```
-
-**Benefits:**
-- 📦 Consistent environments
-- 🔄 Easy scaling and updates
-- 🛠️ Development-production parity
-- 🚀 Quick deployment process
-
-</td>
-</tr>
-</table>
-
-### **🔄 CI/CD Pipeline**
-
-<details>
-<summary><strong>🔧 GitHub Actions Workflow</strong></summary>
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy CollabNest
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      
-      - name: Install dependencies
-        run: |
-          cd my-app && npm ci
-          cd ../server && npm ci
-      
-      - name: Run tests
-        run: |
-          cd my-app && npm test
-          cd ../server && npm test
-      
-      - name: Build application
-        run: cd my-app && npm run build
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy to Azure
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: collabnest-prod
-          slot-name: production
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-```
-
-</details> -->
+*Coming Soon*
 
 ---
 
-## 📜 **Available Scripts**
+## Available Scripts
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Scroll.png" alt="Scripts" width="50" height="50" />
-</div>
-
-### **🎨 Frontend Scripts (`my-app/`)**
+### Frontend Scripts (`my-app/`)
 
 | Command | Description | Environment |
 |---------|-------------|-------------|
-| `npm run dev` | 🚀 Start development server with hot reload | Development |
-| `npm run build` | 🏗️ Create optimized production build | Production |
-| `npm run preview` | 👀 Preview production build locally | Production |
-| `npm run test` | 🧪 Run unit tests with Vitest | Testing |
-<!-- | `npm run lint` | ✅ Run ESLint for code quality checks | Development |
-| `npm run lint:fix` | 🔧 Auto-fix ESLint issues | Development | -->
-<!-- | `npm run test:coverage` | 📊 Generate test coverage report | Testing |
-| `npm run storybook` | 📚 Start Storybook component library | Development |
-| `npm run type-check` | 🔍 TypeScript type checking | Development | -->
+| `npm run dev` | Start development server with hot reload | Development |
+| `npm run build` | Create optimized production build | Production |
+| `npm run preview` | Preview production build locally | Production |
+| `npm run test` | Run unit tests with Vitest | Testing |
 
-### **🖥️ Backend Scripts (`server/`)**
+### Backend Scripts (`server/`)
 
 | Command | Description | Environment |
 |---------|-------------|-------------|
-| `npm run dev` | 🚀 Start development server with nodemon | Development |
-| `npm start` | ▶️ Start production server | Production |
-| `npm run build` | 🏗️ Build TypeScript to JavaScript | Production |
-| `npm test` | 🧪 Run test suite with Jest | Testing |
-| `npm run logs` | 📝 View application logs | Production |
-<!-- | `npm run test:watch` | 👀 Run tests in watch mode | Development |
-| `npm run db:seed` | 🌱 Seed database with sample data | Development |
-| `npm run db:migrate` | 🔄 Run database migrations | Development | -->
-
-<!-- ### **🔧 Project-wide Scripts (Root)**
-
-| Command | Description | Usage |
-|---------|-------------|--------|
-| `npm run dev:all` | 🚀 Start both frontend and backend | `npm run dev:all` |
-| `npm run build:all` | 🏗️ Build both applications | `npm run build:all` |
-| `npm run test:all` | 🧪 Run all tests | `npm run test:all` |
-| `npm run docker:up` | 🐳 Start Docker containers | `npm run docker:up` |
-| `npm run docker:down` | 🛑 Stop Docker containers | `npm run docker:down` |
-| `npm run deploy` | 🚀 Deploy to production | `npm run deploy` | -->
+| `npm run dev` | Start development server with nodemon | Development |
+| `npm start` | Start production server | Production |
+| `npm run build` | Build TypeScript to JavaScript | Production |
+| `npm test` | Run test suite with Jest | Testing |
+| `npm run logs` | View application logs | Production |
 
 ---
 
-## 🧪 **Testing**
+## Testing
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Test%20Tube.png" alt="Testing" width="50" height="50" />
-</div>
+### Testing Strategy
 
-### **📋 Testing Strategy**
-
-<table>
-<tr>
-<td width="50%">
-
-#### **🎨 Frontend Testing**
-- ⚛️ **Unit Tests:** React component testing with React Testing Library
-- 🔗 **Integration Tests:** API integration and Redux store testing
-- 🌐 **E2E Tests:** User journey testing with Cypress
-- 📊 **Performance Tests:** Lighthouse CI for performance monitoring
-- ♿ **Accessibility Tests:** WCAG compliance testing
+**Frontend Testing:**
+- **Unit Tests:** React component testing with React Testing Library
+- **Integration Tests:** API integration and Redux store testing
+- **E2E Tests:** User journey testing with Cypress
+- **Performance Tests:** Lighthouse CI for performance monitoring
+- **Accessibility Tests:** WCAG compliance testing
 
 **Tools Used:**
-- 🧪 Vitest for unit testing
-- 🎭 Playwright for E2E testing
-- 📊 Jest for integration testing
-- 🔍 React Testing Library for component testing
+- Vitest for unit testing
+- Playwright for E2E testing
+- Jest for integration testing
+- React Testing Library for component testing
 
-</td>
-<td width="50%">
-
-#### **🖥️ Backend Testing**
-- 🔧 **Unit Tests:** Individual function and module testing
-- 🔗 **Integration Tests:** API endpoint and database testing
-- 🚀 **Load Tests:** Performance under high traffic
-- 🛡️ **Security Tests:** Vulnerability scanning and penetration testing
-- 📊 **API Tests:** Contract testing with OpenAPI
+**Backend Testing:**
+- **Unit Tests:** Individual function and module testing
+- **Integration Tests:** API endpoint and database testing
+- **Load Tests:** Performance under high traffic
+- **Security Tests:** Vulnerability scanning and penetration testing
+- **API Tests:** Contract testing with OpenAPI
 
 **Tools Used:**
-- 🧪 Jest for unit and integration testing
-- 🚀 Artillery for load testing
-- 🛡️ OWASP ZAP for security testing
-- 📋 Supertest for API testing
+- Jest for unit and integration testing
+- Artillery for load testing
+- OWASP ZAP for security testing
+- Supertest for API testing
 
-</td>
-</tr>
-</table>
-
-### **📊 Test Coverage Goals**
+### Test Coverage Goals
 
 | Component | Target Coverage | Current Status |
 |-----------|----------------|----------------|
-| 🎨 Frontend Components | 90%+ | ![Coverage](https://img.shields.io/badge/Coverage-85%25-yellow) |
-| 🔧 Backend APIs | 95%+ | ![Coverage](https://img.shields.io/badge/Coverage-92%25-green) |
-| 🔐 Authentication | 100% | ![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen) |
-| 🗃️ Database Models | 90%+ | ![Coverage](https://img.shields.io/badge/Coverage-88%25-yellow) |
+| Frontend Components | 90%+ | ![Coverage](https://img.shields.io/badge/Coverage-85%25-yellow) |
+| Backend APIs | 95%+ | ![Coverage](https://img.shields.io/badge/Coverage-92%25-green) |
+| Authentication | 100% | ![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen) |
+| Database Models | 90%+ | ![Coverage](https://img.shields.io/badge/Coverage-88%25-yellow) |
 
 ---
 
-## 📈 Performance & Benchmarking Report
+## Performance & Benchmarking Report
 
-I performed a full-stack performance analysis covering backend APIs, WebSockets, database operations, and frontend rendering. The goal was to understand how CollabNest behaves under real-world collaboration workloads and traffic spikes.
+A comprehensive full-stack performance analysis covering backend APIs, WebSockets, database operations, and frontend rendering has been conducted to understand how CollabNest behaves under real-world collaboration workloads and traffic spikes.
 
-### 🧪 Tools Used
+### Tools Used
 
 | Area | Tool | Purpose |
 |------|------|---------|
 | REST API Load | **Artillery** | Multi-phase scenario load tests |
-| WebSocket Realtime Load | **Artillery WS** | Measures live task + notification event speed |
-| Spike + Sustained Traffic | **Autocannon** | Forces server CPU + event loop under pressure |
+| WebSocket Realtime Load | **Artillery WS** | Measures live task and notification event speed |
+| Spike & Sustained Traffic | **Autocannon** | Forces server CPU and event loop under pressure |
 | Database Query Latency | **Custom Node Bench** | Measures CRUD latency at scale |
 | Frontend Performance | **Lighthouse CI** | Measures rendering speed, LCP, blocking time |
 
 ---
 
-### 🚀 Key Results (High-Level Summary)
+### Key Results
 
 | Test | p50 Latency | p95 Latency | Max | Error Rate | Notes |
 |------|------------|-------------|-----|------------|-------|
@@ -1050,91 +727,55 @@ I performed a full-stack performance analysis covering backend APIs, WebSockets,
 
 ---
 
-### 🎨 Frontend Performance (Lighthouse)
+### Frontend Performance (Lighthouse)
 
 | Page | Performance Score | Accessibility | LCP | Notes |
 |------|------------------|---------------|-----|------|
-| **Login** | **88** | 91 | ~3000ms | LCP impacted by unused JS + render-blocking assets |
+| **Login** | **88** | 91 | ~3000ms | LCP impacted by unused JS and render-blocking assets |
 | **Register** | **90** | 91 | ~1060ms | Much faster due to fewer above-the-fold elements |
 
-**Finding:** UI is visually responsive, but the Login page loads **~3× slower** due to redundant JS, unoptimized assets, and layout thrashing.
+**Finding:** UI is visually responsive, but the Login page loads approximately 3× slower due to redundant JS, unoptimized assets, and layout thrashing.
 
 ---
 
-### 🧠 Interpretation
+### Interpretation
 
 - **Database is not the bottleneck.** Query performance is extremely fast.
 - **WebSockets scale well** — real-time updates remain smooth.
 - **The authentication (login) path is the main performance bottleneck**, especially under spikes.
-- Frontend LCP slowdown on the Login screen is due to:
-  - heavy JS bundles,
-  - unnecessary blocking styles,
-  - no asset preloading.
+- Frontend LCP slowdown on the Login screen is due to heavy JS bundles, unnecessary blocking styles, and no asset preloading.
 
 ---
 
-### 🎯 Optimization Priorities (Ordered by Impact)
+### Optimization Priorities
 
 | Priority | Target | Reason | Planned Solution |
 |---------|--------|--------|-----------------|
-| ⭐⭐⭐⭐⭐ (First) | **Login Auth Pipeline** | Largest latency + timeout source | Reduce bcrypt cost → 8, cache auth lookups, apply login rate limiting |
-| ⭐⭐⭐⭐ | **WebSocket Broadcast Layer** | Occasional event-loop congestion | Move heavy notifications to **Redis Pub/Sub + worker queue** |
-| ⭐⭐⭐ | **Task Update + Notification Jobs** | Synchronous workload spikes | Shift to **BullMQ** async job workers |
-| ⭐⭐ | **Frontend Login LCP** | 3s LCP is noticeable lag | Tree-shake unused JS, preload hero assets, reduce bundle size |
-| ⭐ | **Analytics Precomputation** | Low urgency | Move dashboard aggregation to scheduled jobs |
+| **Critical** | **Login Auth Pipeline** | Largest latency and timeout source | Reduce bcrypt cost → 8, cache auth lookups, apply login rate limiting |
+| **High** | **WebSocket Broadcast Layer** | Occasional event-loop congestion | Move heavy notifications to Redis Pub/Sub and worker queue |
+| **Medium** | **Task Update & Notification Jobs** | Synchronous workload spikes | Shift to BullMQ async job workers |
+| **Low** | **Frontend Login LCP** | 3s LCP is noticeable lag | Tree-shake unused JS, preload hero assets, reduce bundle size |
+| **Low** | **Analytics Precomputation** | Low urgency | Move dashboard aggregation to scheduled jobs |
 
 ---
 
-### 📝 Interview-Ready Explanation
+### Benchmark Artifacts
 
-**“How would you optimize this system?”**
-
-I start where the system currently breaks under load: **the login/auth path**. Under 200 concurrent logins, p95 latency spikes to ~9s with ~50% timeouts. This directly affects user onboarding and reliability.
-
-**My approach:**
-
-1. **Reduce bcrypt cost factor** (12 → 8) → Cuts CPU load by ~3×.
-2. **Add Redis caching** for repeated login attempts (15-minute TTL).
-3. **Enable login rate limiting** (5–10 req/min per IP) to flatten spikes.
-4. **Move JWT signing + notification triggers** to async workers if required.
-5. **Re-run the Artillery & Autocannon tests** to confirm:
-   - p95 latency drops by **60–80%**
-   - error rate drops under **1%**
-   - throughput increases
-
-Once authentication stabilizes, I scale:
-- **WebSocket event broadcasts via Redis Pub/Sub**
-- **Notification + analytics jobs via BullMQ workers**
-
-This staged approach ensures **max impact, minimal churn, and measurable improvement**.
-
----
-
-### 📦 Benchmark Artifacts
-
-All benchmark reports are stored here:  
-`server/benchmarks/reports/`
-
-Including:
-
+All benchmark reports are stored in `server/benchmarks/reports/` including:
 - `artillery-baseline.json`
 - `artillery-ws.json`
 - `db-bench.json`
 
+### For more details regarding benchmarks checkout the Benchmark Directory or BENCHMARKS_SUMMARY.md 
+
 ---
 
+## API Documentation
 
-
-## 📚 **API Documentation**
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Books.png" alt="API Documentation" width="50" height="50" />
-</div>
-
-### **🔗 API Endpoints Overview**
+### API Endpoints Overview
 
 <details>
-<summary><strong>🔐 Authentication Endpoints</strong></summary>
+<summary><strong>Authentication Endpoints</strong></summary>
 
 | Method | Endpoint | Description | Authentication |
 |--------|----------|-------------|----------------|
@@ -1146,7 +787,7 @@ Including:
 </details>
 
 <details>
-<summary><strong>👤 User Management Endpoints</strong></summary>
+<summary><strong>User Management Endpoints</strong></summary>
 
 | Method | Endpoint | Description | Authentication |
 |--------|----------|-------------|----------------|
@@ -1158,7 +799,7 @@ Including:
 </details>
 
 <details>
-<summary><strong>🏢 Organization Endpoints</strong></summary>
+<summary><strong>Organization Endpoints</strong></summary>
 
 | Method | Endpoint | Description | Authentication |
 |--------|----------|-------------|----------------|
@@ -1171,7 +812,7 @@ Including:
 </details>
 
 <details>
-<summary><strong>📋 Task Management Endpoints</strong></summary>
+<summary><strong>Task Management Endpoints</strong></summary>
 
 | Method | Endpoint | Description | Authentication |
 |--------|----------|-------------|----------------|
@@ -1185,7 +826,7 @@ Including:
 </details>
 
 <details>
-<summary><strong>💬 Feedback Endpoints</strong></summary>
+<summary><strong>Feedback Endpoints</strong></summary>
 
 | Method | Endpoint | Description | Authentication |
 |--------|----------|-------------|----------------|
@@ -1197,154 +838,111 @@ Including:
 
 </details>
 
-<!-- ### **📋 Interactive API Documentation**
-
-- 🌐 **Swagger UI:** http://localhost:5000/api-docs
-- 📋 **Postman Collection:** [Download Collection](./docs/api/postman-collection.json)
-- 🔗 **OpenAPI Spec:** [View Specification](./docs/api/openapi.yaml) -->
-
 ---
 
-## 🤝 **Contributing**
+## Contributing
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Handshake.png" alt="Contributing" width="60" height="60" />
-</div>
+We welcome contributions from developers of all skill levels. Here's how you can help make CollabNest even better:
 
-We welcome contributions from developers of all skill levels! Here's how you can help make CollabNest even better:
+### Getting Started with Contributing
 
-### **🚀 Getting Started with Contributing**
-
-1. **🍴 Fork the Repository**
+1. **Fork the Repository**
    ```bash
-   # Fork the repo on GitHub, then clone your fork
    git clone https://github.com/YOUR_USERNAME/Deadline.git
    cd Deadline
    ```
 
-2. **🌿 Create a Feature Branch**
+2. **Create a Feature Branch**
    ```bash
-   # Create and switch to a new branch
    git checkout -b feature/amazing-new-feature
    ```
 
-3. **💻 Make Your Changes**
+3. **Make Your Changes**
    - Follow our coding standards
    - Add tests for new functionality
    - Update documentation as needed
 
-4. **✅ Test Your Changes**
+4. **Test Your Changes**
    ```bash
-   # Run all tests
    npm run test:all
-   
-   # Check code formatting
    npm run lint
    ```
 
-5. **📝 Commit Your Changes**
+5. **Commit Your Changes**
    ```bash
-   # Use conventional commit format
    git commit -m "feat: add amazing new feature"
    ```
 
-6. **🚀 Submit a Pull Request**
+6. **Submit a Pull Request**
    - Push to your fork and create a PR
    - Describe your changes clearly
    - Link any relevant issues
 
-### **📋 Contribution Guidelines**
+### Contribution Guidelines
 
-<table>
-<tr>
-<td width="50%">
+**What We're Looking For:**
+- Bug fixes
+- New features
+- Documentation improvements
+- UI/UX enhancements
+- Performance optimizations
+- Tests
+- Accessibility improvements
 
-#### **🎯 What We're Looking For**
-- 🐛 **Bug Fixes:** Help us squash bugs
-- ✨ **New Features:** Enhance functionality
-- 📚 **Documentation:** Improve our docs
-- 🎨 **UI/UX Improvements:** Better user experience
-- 🔧 **Performance Optimizations:** Make it faster
-- 🧪 **Tests:** Increase coverage
-- ♿ **Accessibility:** Make it inclusive
+**Code Standards:**
+- Follow ESLint rules
+- Use conventional commits
+- Maintain >85% test coverage
+- Document new features
+- All PRs need review
+- Consider performance impact
 
-</td>
-<td width="50%">
-
-#### **📏 Code Standards**
-- 🎨 **ESLint:** Follow our linting rules
-- 📝 **Commit Convention:** Use conventional commits
-- 🧪 **Test Coverage:** Maintain >85% coverage
-- 📚 **Documentation:** Document new features
-- 🔍 **Code Review:** All PRs need review
-- 🚀 **Performance:** Consider performance impact
-
-</td>
-</tr>
-</table>
-
-### **🏷️ Issue Labels**
+### Issue Labels
 
 | Label | Description | Difficulty |
 |-------|-------------|------------|
-| ![good first issue](https://img.shields.io/badge/-good%20first%20issue-7057ff) | Perfect for newcomers | ⭐ Beginner |
-| ![help wanted](https://img.shields.io/badge/-help%20wanted-008672) | Extra attention needed | ⭐⭐ Intermediate |
-| ![bug](https://img.shields.io/badge/-bug-d73a4a) | Something isn't working | ⭐⭐ Intermediate |
-| ![enhancement](https://img.shields.io/badge/-enhancement-a2eeef) | New feature or request | ⭐⭐⭐ Advanced |
-| ![documentation](https://img.shields.io/badge/-documentation-0075ca) | Improvements to docs | ⭐ Beginner |
+| ![good first issue](https://img.shields.io/badge/-good%20first%20issue-7057ff) | Perfect for newcomers | Beginner |
+| ![help wanted](https://img.shields.io/badge/-help%20wanted-008672) | Extra attention needed | Intermediate |
+| ![bug](https://img.shields.io/badge/-bug-d73a4a) | Something isn't working | Intermediate |
+| ![enhancement](https://img.shields.io/badge/-enhancement-a2eeef) | New feature or request | Advanced |
+| ![documentation](https://img.shields.io/badge/-documentation-0075ca) | Improvements to docs | Beginner |
 
-### **🎁 Recognition**
+### Recognition
 
 All contributors will be:
-- 📜 Listed in our [CONTRIBUTORS.md](./CONTRIBUTORS.md) file
-- 🏆 Featured in release notes for significant contributions
-- 🎉 Mentioned in our social media announcements
-- 💝 Eligible for special contributor badges
+- Listed in our [CONTRIBUTORS.md](./CONTRIBUTORS.md) file
+- Featured in release notes for significant contributions
+- Mentioned in our social media announcements
+- Eligible for special contributor badges
 
 ---
 
-## 📄 **License**
+## License
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Page%20with%20Curl.png" alt="License" width="50" height="50" />
-</div>
+This project is not currently licensed. Once licensing is implemented, it will likely be under the **MIT License**.
 
-## ⚠️ Heads up!
+### Future License Highlights (MIT)
 
-This project **isn’t licensed yet** because, well… I’m still figuring that part out!
+**You will be allowed to:**
+- Use it for commercial purposes
+- Modify and customize the code
+- Distribute the software
+- Use it privately
 
-But once it is, it’ll probably be under the **MIT License** — one of those chill, open-source licenses that basically says:
+**Limitations:**
+- No liability or warranty provided
+- Must include the original license and copyright notice
 
-> “Do whatever you want, just don’t blame me if your toaster catches fire because of my code.” 🔥🍞
-
-### 📋 Future License Highlights (MIT-ish)
-
-✅ **You’ll be allowed to:**
-- ✨ Use it for commercial stuff
-- 🛠️ Tweak it, remix it, and make it your own
-- 📦 Share it far and wide
-- 🤫 Keep it to yourself if you want
-
-❌ **But I’m off the hook for:**
-- 🛡️ Liability (I’m just a humble coder, not your lawyer)
-- 🔒 Warranty (No promises it won’t explode)
-
-📝 **And you’ll need to:**
-- 📄 Keep the license and copyright notice around
-
-Stay tuned for the official license file once I stop procrastinating. 😄
+Stay tuned for the official license file.
 
 ---
-## 👨‍💻 **Author**
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Technologist.png" alt="Author" width="80" height="80" />
-</div>
+## Author
 
 <div align="center">
 
-### **Arun Kushwaha**
-*Full-Stack Developer & Open-Source Enthusiast (and occasional bug whisperer 🐞)*
+### Arun Kushwaha
+*Full-Stack Developer & Open-Source Enthusiast*
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Arun-kushwaha007)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/arun-kushwaha-394b5a340/)
@@ -1353,67 +951,45 @@ Stay tuned for the official license file once I stop procrastinating. 😄
 
 </div>
 
-<div align="center">
+### About the Author
 
-💡 **Fueled by coffee, curiosity, and an unhealthy obsession with fixing “just one more bug.” ☕🚀**
-
-</div>
-
-### **🎯 About the Author**
-
-- 🚀 **Experience:** 3+ years making pixels dance and servers behave
-- 💼 **Specialization:** MERN Stack, React Native, Cloud Architecture, and surviving merge conflicts
-- 🌟 **Open Source:** Loves contributing and lurking around interesting repos
-- 🎓 **Education:** B.Tech in Electronics and Communication Engineering (because I thought wires and waves sounded cool…and accidentally became a professional bug magnet 🐞)
-
-- 🏆 **Achievements:** Hackathon hoarder 🏅 and occasional conference mic-dropper 🎤
+- **Experience:** 3+ years in full-stack development
+- **Specialization:** MERN Stack, React Native, Cloud Architecture
+- **Open Source:** Active contributor to various projects
+- **Education:** B.Tech in Electronics and Communication Engineering
+- **Achievements:** Multiple hackathon wins and conference presentations
 
 ---
 
-## 🙏 **Acknowledgments**
+## Acknowledgments
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Folded%20Hands.png" alt="Acknowledgments" width="50" height="50" />
-</div>
+### Special Thanks
 
-### **🌟 Special Thanks**
+**Technologies:**
+- **React Team** for the powerful UI library
+- **Firebase Team** for cloud infrastructure
+- **MongoDB** for flexible data storage
+- **Socket.io** for real-time capabilities
+- **Tailwind CSS** for utility-first styling
 
-<table>
-<tr>
-<td width="50%">
+**Community:**
+- **Open-Source Community** for continuous inspiration
+- **Stack Overflow** for problem-solving resources
+- **Fellow Developers** for collaboration and feedback
 
-#### 🛠️ **Tech That Makes Life Easier**
-- ⚛️ **React Team** — For making UI fun (and sometimes frustrating!)
-- 🔥 **Firebase Team** — For cloud magic ✨
-- 🟢 **MongoDB** — For letting me store chaos in JSON
-- 📡 **Socket.io** — For the “real-time” drama
-- 🎨 **Tailwind CSS** — For making me look like a designer when I’m definitely not
+### Resources & Inspiration
 
-</td>
-<td width="50%">
-
-#### 🤝 **Community Love**
-- 👥 **Open-Source Community** — For keeping coding exciting and slightly addictive
-- 📚 **Stack Overflow** — For saving my bacon countless times 🥓
-- 💬 **Fellow Devs** — For endless memes, debates, and PR reviews
-
-</td>
-</tr>
-</table>
-
-### **📚 Resources & Inspiration**
-
-- 🏗️ **Architecture Patterns:** Inspired by modern full-stack best practices (and the occasional midnight epiphany)
-- 🎨 **Design System:** Borrowed brilliance from Material Design & HIG
-- 🔒 **Security Practices:** Following OWASP because hackers don’t sleep
-- 📱 **User Experience:** Influenced by apps I love (and apps I rage-quit)
-- 🚀 **Performance:** Because nobody likes a slow spinner of doom
+- **Architecture Patterns:** Modern full-stack best practices
+- **Design System:** Material Design and Human Interface Guidelines
+- **Security Practices:** OWASP security standards
+- **User Experience:** Industry-leading application patterns
+- **Performance:** Optimization techniques from web performance research
 
 ---
 
 <div align="center">
 
-## 🌟 **Project Statistics**
+## Project Statistics
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/Arun-kushwaha007/Deadline?style=for-the-badge)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Arun-kushwaha007/Deadline?style=for-the-badge)
@@ -1422,21 +998,24 @@ Stay tuned for the official license file once I stop procrastinating. 😄
 
 ---
 
-## 💖 **Support the Project**
+## Support the Project
 
-If you find **CollabNest** helpful (or at least amusing), you can:
+If you find **CollabNest** helpful, consider:
 
-⭐ **Star this repo** — It’s free, like hugs, and boosts morale!
+⭐ **Star this repository** to show your support
 
-🐛 **Report bugs** — Help me fix things before they become features
+🐛 **Report bugs** to help improve the platform
 
-✨ **Contribute code** — Join the chaos, it’s fun!
+✨ **Contribute code** to add new features
 
-📢 **Spread the word** — Tell your dev friends, your dog, or your grandma
+📢 **Share the project** with your network
 
-☕ **Buy me a coffee** — Because coding runs on caffeine
+☕ **Support development** through sponsorship
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-F7DF1E?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://coff.ee/arunkushwaha)
 
 ---
 
+**Built with ❤️ by Arun Kushwaha**
+
+</div>
