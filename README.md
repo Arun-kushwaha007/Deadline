@@ -54,7 +54,6 @@
 ## 🗂️ **Table of Contents**
 
 </div>
-
 <div align="left">
 
 - [🎯 **Project Overview**](#-project-overview)
@@ -77,6 +76,7 @@
 - [🚀 **Deployment**](#-deployment)
 - [📜 **Available Scripts**](#-available-scripts)
 - [🧪 **Testing**](#-testing)
+- [📈 **Performance & Benchmarking Report**](#-performance--benchmarking-report)
 - [📚 **API Documentation**](#-api-documentation)
 - [🤝 **Contributing**](#-contributing)
 - [📄 **License**](#-license)
@@ -84,6 +84,7 @@
 - [🙏 **Acknowledgments**](#-acknowledgments)
 
 </div>
+
 
 ---
 
@@ -1020,6 +1021,109 @@ jobs:
 | 🗃️ Database Models | 90%+ | ![Coverage](https://img.shields.io/badge/Coverage-88%25-yellow) |
 
 ---
+
+## 📈 Performance & Benchmarking Report
+
+I performed a full-stack performance analysis covering backend APIs, WebSockets, database operations, and frontend rendering. The goal was to understand how CollabNest behaves under real-world collaboration workloads and traffic spikes.
+
+### 🧪 Tools Used
+
+| Area | Tool | Purpose |
+|------|------|---------|
+| REST API Load | **Artillery** | Multi-phase scenario load tests |
+| WebSocket Realtime Load | **Artillery WS** | Measures live task + notification event speed |
+| Spike + Sustained Traffic | **Autocannon** | Forces server CPU + event loop under pressure |
+| Database Query Latency | **Custom Node Bench** | Measures CRUD latency at scale |
+| Frontend Performance | **Lighthouse CI** | Measures rendering speed, LCP, blocking time |
+
+---
+
+### 🚀 Key Results (High-Level Summary)
+
+| Test | p50 Latency | p95 Latency | Max | Error Rate | Notes |
+|------|------------|-------------|-----|------------|-------|
+| **REST API (Baseline Load)** | 200–400ms | 700–1500ms | 3–6s | 2–4% | Stable under normal usage |
+| **WebSockets (Live Updates)** | 80–200ms | 300–700ms | 1–2s | <1% | Real-time UI is responsive |
+| **Spike Login (200 concurrent)** | 4–8s | 9–10s | 9.6s | **50–60% timeouts** | **Primary bottleneck** |
+| **Sustained Login (50 concurrent)** | 2.5–3.5s | 5–6s | 6.2s | 5–10% | Authentication path needs tuning |
+| **Database (1000 ops test)** | **p50 < 1ms**, p95 < 3ms | — | — | **0%** | DB performance is excellent |
+
+---
+
+### 🎨 Frontend Performance (Lighthouse)
+
+| Page | Performance Score | Accessibility | LCP | Notes |
+|------|------------------|---------------|-----|------|
+| **Login** | **88** | 91 | ~3000ms | LCP impacted by unused JS + render-blocking assets |
+| **Register** | **90** | 91 | ~1060ms | Much faster due to fewer above-the-fold elements |
+
+**Finding:** UI is visually responsive, but the Login page loads **~3× slower** due to redundant JS, unoptimized assets, and layout thrashing.
+
+---
+
+### 🧠 Interpretation
+
+- **Database is not the bottleneck.** Query performance is extremely fast.
+- **WebSockets scale well** — real-time updates remain smooth.
+- **The authentication (login) path is the main performance bottleneck**, especially under spikes.
+- Frontend LCP slowdown on the Login screen is due to:
+  - heavy JS bundles,
+  - unnecessary blocking styles,
+  - no asset preloading.
+
+---
+
+### 🎯 Optimization Priorities (Ordered by Impact)
+
+| Priority | Target | Reason | Planned Solution |
+|---------|--------|--------|-----------------|
+| ⭐⭐⭐⭐⭐ (First) | **Login Auth Pipeline** | Largest latency + timeout source | Reduce bcrypt cost → 8, cache auth lookups, apply login rate limiting |
+| ⭐⭐⭐⭐ | **WebSocket Broadcast Layer** | Occasional event-loop congestion | Move heavy notifications to **Redis Pub/Sub + worker queue** |
+| ⭐⭐⭐ | **Task Update + Notification Jobs** | Synchronous workload spikes | Shift to **BullMQ** async job workers |
+| ⭐⭐ | **Frontend Login LCP** | 3s LCP is noticeable lag | Tree-shake unused JS, preload hero assets, reduce bundle size |
+| ⭐ | **Analytics Precomputation** | Low urgency | Move dashboard aggregation to scheduled jobs |
+
+---
+
+### 📝 Interview-Ready Explanation
+
+**“How would you optimize this system?”**
+
+I start where the system currently breaks under load: **the login/auth path**. Under 200 concurrent logins, p95 latency spikes to ~9s with ~50% timeouts. This directly affects user onboarding and reliability.
+
+**My approach:**
+
+1. **Reduce bcrypt cost factor** (12 → 8) → Cuts CPU load by ~3×.
+2. **Add Redis caching** for repeated login attempts (15-minute TTL).
+3. **Enable login rate limiting** (5–10 req/min per IP) to flatten spikes.
+4. **Move JWT signing + notification triggers** to async workers if required.
+5. **Re-run the Artillery & Autocannon tests** to confirm:
+   - p95 latency drops by **60–80%**
+   - error rate drops under **1%**
+   - throughput increases
+
+Once authentication stabilizes, I scale:
+- **WebSocket event broadcasts via Redis Pub/Sub**
+- **Notification + analytics jobs via BullMQ workers**
+
+This staged approach ensures **max impact, minimal churn, and measurable improvement**.
+
+---
+
+### 📦 Benchmark Artifacts
+
+All benchmark reports are stored here:  
+`server/benchmarks/reports/`
+
+Including:
+
+- `artillery-baseline.json`
+- `artillery-ws.json`
+- `db-bench.json`
+
+---
+
+
 
 ## 📚 **API Documentation**
 
