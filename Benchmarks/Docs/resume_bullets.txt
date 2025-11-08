@@ -1,0 +1,12 @@
+Critical Finding: The REST API's p95 latency under load was 241.6ms, indicating a need to investigate tail-end response times to improve user experience.
+
+*   I designed and executed REST API load tests for a Node.js backend using Artillery, achieving a sustained throughput of 101.38 req/s with a 0% error rate over nearly 6,000 requests.
+*   I analyzed API performance under load, measuring a p95 latency of 241.6ms, which highlighted opportunities to optimize tail-latency for a more consistent user experience.
+*   I implemented WebSocket performance tests with Artillery to validate the real-time backend components, confirming a 100% success rate for user session connections in a Node.js environment.
+*   I conducted automated frontend audits using Lighthouse and Playwright, achieving a perfect performance score of 100 on the user registration page and improving baseline metrics.
+*   I identified and quantified accessibility issues on the login page via Lighthouse audits (score of 85), providing actionable data to improve usability for all users.
+*   I executed targeted microbenchmarks against a MongoDB database, verifying its efficiency with a p95 query latency of just 30ms and a 0% error rate under test conditions.
+*   I established a full-stack performance testing suite for a Node.js and React application, defining a CI workflow with GitHub Actions to automatically gate PRs on p95 latency or error rate regressions.
+*   I identified a critical observability gap by highlighting the absence of spike testing tools like Autocannon, proposing a strategy to mitigate risks associated with sudden traffic bursts.
+*   I delivered a comprehensive performance report that translated raw metrics (p95 latency, throughput, error rate) into actionable business risks and engineering priorities.
+*   I quantified the end-user experience by running Lighthouse audits, demonstrating a high-performance registration flow (score: 100) and setting a benchmark for future frontend development.
