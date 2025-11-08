@@ -1,0 +1,14 @@
+config:
+  target: "ws://localhost:5000"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: "Connect and register"
+scenarios:
+  - name: "WebSocket connection"
+    engine: "socketio"
+    flow:
+      - emit:
+          channel: "register"
+          data: "test-user-{{ $uuidv4 }}"
+      - think: 5

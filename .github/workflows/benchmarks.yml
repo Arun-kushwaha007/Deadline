@@ -1,0 +1,84 @@
+name: "Performance Benchmarks"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'server/**'
+      - 'my-app/**'
+
+jobs:
+  benchmarks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+
+      - name: "Setup Node.js"
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: "Install server dependencies"
+        run: npm install
+        working-directory: ./server
+
+      - name: "Install server benchmark dependencies"
+        run: npm install
+        working-directory: ./server/benchmarks
+
+      - name: "Install frontend dependencies"
+        run: npm install
+        working-directory: ./my-app
+
+      - name: "Build frontend"
+        run: npm run build
+        working-directory: ./my-app
+
+      - name: "Start server"
+        run: npm start &
+        working-directory: ./server
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+      - name: "Run backend benchmarks"
+        run: |
+          npm run bench:artillery
+          npm run bench:autocannon
+          npm run bench:db
+        working-directory: ./server
+        env:
+          HOST: "http://localhost:5000"
+
+      - name: "Run frontend benchmarks"
+        run: npm run bench:lighthouse
+        working-directory: ./my-app
+        env:
+          CI: true
+
+      - name: "Upload backend benchmark reports"
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-benchmark-reports
+          path: server/benchmarks/reports/
+
+      - name: "Upload frontend benchmark reports"
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-benchmark-reports
+          path: my-app/benchmarks/lighthouse-reports/
+
+      - name: "Compare results and generate summary"
+        run: |
+          node server/benchmarks/compare.js
+          node server/benchmarks/report-aggregate.js
+        env:
+          BASELINE_DIR: benchmarks/baselines
+          CURRENT_DIR: server/benchmarks/reports
+
+      - name: "Upload summary report"
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-summary
+          path: benchmarks/summary.md

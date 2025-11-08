@@ -1,0 +1,85 @@
+config:
+  target: "http://localhost:5000"
+
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      name: Warm-up
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: Sustained Load
+    - duration: 30
+      arrivalRate: 200
+      name: Spike
+
+  payload:
+    path: "users.csv"
+    fields:
+      - email
+      - password
+
+scenarios:
+
+  - name: Login Load
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.token"
+              as: authToken
+
+  - name: Authenticated Task Workflow
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "benchmark@demo.local"
+            password: "benchmark123"
+          capture:
+            - json: "$.token"
+              as: authToken
+
+      - post:
+          url: "/api/organizations/create"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            name: "LoadTest Org {{ $randomNumber }}"
+          capture:
+            - json: "$._id"
+              as: organizationId
+
+      - post:
+          url: "/api/tasks"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            title: "Load test task"
+            description: "Benchmark workload task"
+            organization: "{{ organizationId }}"
+            priority: "medium"
+            dueDate: "{{ $timestamp }}"
+          capture:
+            - json: "$._id"
+              as: taskId
+
+      - get:
+          url: "/api/tasks/{{ taskId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+      - put:
+          url: "/api/tasks/{{ taskId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            status: "completed"
+
+      - get:
+          url: "/api/tasks?organizationId={{ organizationId }}"
+          headers:
+            Authorization: "Bearer {{ authToken }}"

@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "echo \"No build step required\""
+    "build": "echo \"No build step required\"",
+    "bench:artillery": "artillery run benchmarks/artillery/baseline.yml --output benchmarks/reports/artillery-baseline.json && artillery run benchmarks/artillery/ws.yml --output benchmarks/reports/artillery-ws.json",
+    "bench:autocannon": "node benchmarks/autocannon/spike.js && node benchmarks/autocannon/sustained.js",
+    "bench:db": "node benchmarks/db-bench.js",
+    "bench:ci": "npm run bench:artillery && npm run bench:autocannon && npm run bench:db"
   },
   "keywords": [],
   "author": "",
@@ -31,5 +35,8 @@
   },
   "engines": {
     "node": ">=18.x"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.26"
   }
 }

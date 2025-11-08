@@ -1,0 +1,33 @@
+{
+  "cookies": [
+    {
+      "name": "g_state",
+      "value": "{\"i_l\":0,\"i_ll\":1762615668694,\"i_b\":\"rJCVNJ0s1DAxZWYOjiKgmzB8LbzCf2nbmcLCez5Jdj8\"}",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1778167668,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "light"
+        },
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTBmNDVmMzM2ZDE0YmRlZWM3ODEzM2YiLCJpYXQiOjE3NjI2MTU2NzAsImV4cCI6MTc2MjcwMjA3MH0.X01Cm3mjyNV--Pm6hjUljnzOy9bJ2O24w9Z-u-gFq0k"
+        },
+        {
+          "name": "loggedInUser",
+          "value": "{\"name\":\"Benchmark Bot\",\"email\":\"benchmark@demo.local\",\"userId\":\"fc920b8e-f04f-4464-9b2e-76f3f03d24f2\"}"
+        }
+      ]
+    }
+  ]
+}

@@ -40,8 +40,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Socket.IO Setup
 const allowedOrigins = [
   'http://localhost:5173', // Local development frontend
-  'https://deadline-pobb.onrender.com', 
-  'https://collabnest-iota.vercel.app', 
+  'https://deadline-pobb.onrender.com',
+  'https://collabnest-iota.vercel.app',
+  'http://localhost:3000'
 ];
 
 
