@@ -1,0 +1,34 @@
+{
+  "Find Org for User": {
+    "mean_latency_ms": 0.196,
+    "p50_latency_ms": 0.125,
+    "p90_latency_ms": 0.346,
+    "p95_latency_ms": 0.48,
+    "p99_latency_ms": 1.137,
+    "error_rate_percent": 0
+  },
+  "List Tasks (Paginated)": {
+    "mean_latency_ms": 0.149,
+    "p50_latency_ms": 0.104,
+    "p90_latency_ms": 0.234,
+    "p95_latency_ms": 0.294,
+    "p99_latency_ms": 0.546,
+    "error_rate_percent": 0
+  },
+  "Create Task": {
+    "mean_latency_ms": 0.118,
+    "p50_latency_ms": 0.089,
+    "p90_latency_ms": 0.203,
+    "p95_latency_ms": 0.287,
+    "p99_latency_ms": 0.432,
+    "error_rate_percent": 0
+  },
+  "Update Task": {
+    "mean_latency_ms": 0.099,
+    "p50_latency_ms": 0.074,
+    "p90_latency_ms": 0.152,
+    "p95_latency_ms": 0.219,
+    "p99_latency_ms": 0.481,
+    "error_rate_percent": 0
+  }
+}
