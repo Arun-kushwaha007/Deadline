@@ -1,5 +1,5 @@
 const autocannon = require('autocannon');
-const chalk = require('chalk');
+const chalk = require('chalk').default;   // ✅ Fix Chalk import
 
 const target = process.env.HOST || 'http://localhost:5000';
 const url = `${target}/api/auth/login`;
@@ -11,10 +11,10 @@ const instance = autocannon({
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    email: 'user1@example.com',
-    password: 'password123',
+    email: 'benchmark@demo.local',       // ✅ Same known working account
+    password: 'benchmark123',
   }),
-  connections: 50,
+  connections: 50,   // Sustained load
   duration: 120,
   title: 'Sustained Load Test',
 }, (err, result) => {
@@ -22,12 +22,10 @@ const instance = autocannon({
     console.error(chalk.red('Autocannon error:'), err);
     return;
   }
-  console.log(chalk.green('Sustained load test complete. Results:'));
+  console.log(chalk.green('\nSustained load test complete. Results:'));
   console.log(result);
 });
 
-process.once('SIGINT', () => {
-  instance.stop();
-});
+process.once('SIGINT', () => instance.stop());
 
 autocannon.track(instance, { renderProgressBar: true });

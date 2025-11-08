@@ -11,3 +11,6 @@
 /server/.env.local
 /my-app/.env 
 /my-app/.env.production
+
+/server/benchmarks/artillery/users.csv
+/server/benchmarks/artillery/reports/venv
