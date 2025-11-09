@@ -166,6 +166,12 @@ graph TB
   - [Quick Start](#quick-start)
   - [Environment Configuration](#environment-configuration)
 - [Project Architecture](#project-architecture)
+  - [System Architecture Diagram](#system-architecture-diagram)
+  - [Architecture Flow Diagram](#architecture-flow-diagram)
+  - [High-Level Architecture](#high-level-architecture)
+  - [Frontend Application Structure](#frontend-application-structure)
+  - [Backend Server Structure](#backend-server-structure)  
+  - [Real-Time WebSocket Flow](#real-time-websocket-flow)
   - [Project Structure](#project-structure)
   - [Key Integrations](#key-integrations)
   - [Database Schema](#database-schema)
@@ -517,7 +523,6 @@ RATE_LIMIT_MAX=100
 
 ## Project Architecture
 
-
 ### System Architecture Diagram  
 
 ```mermaid  
@@ -616,6 +621,7 @@ graph TB
     S3 --> CDN  
     CDN --> WEB
 ```
+
 ### Architecture Flow Diagram  
   
 ```mermaid  
