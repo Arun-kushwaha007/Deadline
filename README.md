@@ -46,6 +46,109 @@
 </div>
 
 ---
+# System Architecture Diagram  
+
+  
+
+```mermaid  
+graph TB  
+    subgraph "Client Layer"  
+        WEB["Web Browser<br/>React 18.3+ / Vite 5"]  
+        PWA["Progressive Web App<br/>Offline Support"]  
+    end  
+  
+    subgraph "Frontend Architecture"  
+        UI["UI Components<br/>Tailwind CSS 3.4"]  
+        STATE["State Management<br/>Redux Toolkit"]  
+        QUERY["Server State<br/>React Query"]  
+        ROUTER["Routing<br/>React Router"]  
+    end  
+  
+    subgraph "Authentication & Security"  
+        OAUTH["Google OAuth 2.0"]  
+        JWT["JWT Token Manager<br/>Access + Refresh"]  
+        GUARD["Route Guards"]  
+    end  
+  
+    subgraph "Real-time Layer"  
+        SOCKET["Socket.io Client"]  
+        FCM["Firebase Cloud Messaging"]  
+        NOTIF["Notification Manager"]  
+    end  
+  
+    subgraph "API Gateway"  
+        NGINX["Load Balancer<br/>nginx/HAProxy"]  
+    end  
+  
+    subgraph "Backend Services"  
+        EXPRESS["Express.js Server<br/>Node.js 20+"]  
+        MIDDLEWARE["Middleware Layer<br/>Auth/CORS/Rate Limit"]  
+        CONTROLLERS["Controllers<br/>Business Logic"]  
+        ROUTES["API Routes<br/>/api/v1"]  
+    end  
+  
+    subgraph "Real-time Backend"  
+        SOCKETIO["Socket.io Server<br/>WebSocket"]  
+        EVENTS["Event Handlers"]  
+    end  
+  
+    subgraph "Data Layer"  
+        MONGO[("MongoDB 7<br/>Primary Database")]  
+        REDIS[("Redis 7<br/>Cache & Sessions")]  
+    end  
+  
+    subgraph "External Services"  
+        FIREBASE["Firebase Admin SDK<br/>Push Notifications"]  
+        GOOGLE["Google OAuth API"]  
+    end  
+  
+    subgraph "Storage & CDN"  
+        S3["Cloud Storage<br/>AWS S3"]  
+        CDN["Content Delivery<br/>CloudFront"]  
+    end  
+  
+    WEB --> UI  
+    PWA --> UI  
+    UI --> STATE  
+    UI --> QUERY  
+    UI --> ROUTER  
+      
+    STATE --> OAUTH  
+    OAUTH --> JWT  
+    JWT --> GUARD  
+    GUARD --> ROUTES  
+      
+    UI --> SOCKET  
+    SOCKET --> NOTIF  
+    FCM --> NOTIF  
+      
+    QUERY --> NGINX  
+    ROUTER --> NGINX  
+      
+    NGINX --> EXPRESS  
+    EXPRESS --> MIDDLEWARE  
+    MIDDLEWARE --> CONTROLLERS  
+    CONTROLLERS --> ROUTES  
+      
+    SOCKET --> SOCKETIO  
+    SOCKETIO --> EVENTS  
+      
+    ROUTES --> MONGO  
+    ROUTES --> REDIS  
+    CONTROLLERS --> MONGO  
+    CONTROLLERS --> REDIS  
+    EVENTS --> MONGO  
+      
+    EXPRESS --> FIREBASE  
+    OAUTH --> GOOGLE  
+      
+    MONGO --> S3  
+    S3 --> CDN  
+    CDN --> WEB
+```
+
+
+---
 
 ## Table of Contents
 
@@ -413,6 +516,406 @@ RATE_LIMIT_MAX=100
 ---
 
 ## Project Architecture
+
+
+### System Architecture Diagram  
+
+```mermaid  
+graph TB  
+    subgraph "Client Layer"  
+        WEB["Web Browser<br/>React 18.3+ / Vite 5"]  
+        PWA["Progressive Web App<br/>Offline Support"]  
+    end  
+  
+    subgraph "Frontend Architecture"  
+        UI["UI Components<br/>Tailwind CSS 3.4"]  
+        STATE["State Management<br/>Redux Toolkit"]  
+        QUERY["Server State<br/>React Query"]  
+        ROUTER["Routing<br/>React Router"]  
+    end  
+  
+    subgraph "Authentication & Security"  
+        OAUTH["Google OAuth 2.0"]  
+        JWT["JWT Token Manager<br/>Access + Refresh"]  
+        GUARD["Route Guards"]  
+    end  
+  
+    subgraph "Real-time Layer"  
+        SOCKET["Socket.io Client"]  
+        FCM["Firebase Cloud Messaging"]  
+        NOTIF["Notification Manager"]  
+    end  
+  
+    subgraph "API Gateway"  
+        NGINX["Load Balancer<br/>nginx/HAProxy"]  
+    end  
+  
+    subgraph "Backend Services"  
+        EXPRESS["Express.js Server<br/>Node.js 20+"]  
+        MIDDLEWARE["Middleware Layer<br/>Auth/CORS/Rate Limit"]  
+        CONTROLLERS["Controllers<br/>Business Logic"]  
+        ROUTES["API Routes<br/>/api/v1"]  
+    end  
+  
+    subgraph "Real-time Backend"  
+        SOCKETIO["Socket.io Server<br/>WebSocket"]  
+        EVENTS["Event Handlers"]  
+    end  
+  
+    subgraph "Data Layer"  
+        MONGO[("MongoDB 7<br/>Primary Database")]  
+        REDIS[("Redis 7<br/>Cache & Sessions")]  
+    end  
+  
+    subgraph "External Services"  
+        FIREBASE["Firebase Admin SDK<br/>Push Notifications"]  
+        GOOGLE["Google OAuth API"]  
+    end  
+  
+    subgraph "Storage & CDN"  
+        S3["Cloud Storage<br/>AWS S3"]  
+        CDN["Content Delivery<br/>CloudFront"]  
+    end  
+  
+    WEB --> UI  
+    PWA --> UI  
+    UI --> STATE  
+    UI --> QUERY  
+    UI --> ROUTER  
+      
+    STATE --> OAUTH  
+    OAUTH --> JWT  
+    JWT --> GUARD  
+    GUARD --> ROUTES  
+      
+    UI --> SOCKET  
+    SOCKET --> NOTIF  
+    FCM --> NOTIF  
+      
+    QUERY --> NGINX  
+    ROUTER --> NGINX  
+      
+    NGINX --> EXPRESS  
+    EXPRESS --> MIDDLEWARE  
+    MIDDLEWARE --> CONTROLLERS  
+    CONTROLLERS --> ROUTES  
+      
+    SOCKET --> SOCKETIO  
+    SOCKETIO --> EVENTS  
+      
+    ROUTES --> MONGO  
+    ROUTES --> REDIS  
+    CONTROLLERS --> MONGO  
+    CONTROLLERS --> REDIS  
+    EVENTS --> MONGO  
+      
+    EXPRESS --> FIREBASE  
+    OAUTH --> GOOGLE  
+      
+    MONGO --> S3  
+    S3 --> CDN  
+    CDN --> WEB
+```
+### Architecture Flow Diagram  
+  
+```mermaid  
+sequenceDiagram  
+    participant User  
+    participant Frontend  
+    participant LoadBalancer  
+    participant Backend  
+    participant Redis  
+    participant MongoDB  
+    participant Firebase  
+    participant SocketIO  
+  
+    User->>Frontend: Access Application  
+    Frontend->>LoadBalancer: HTTP Request  
+    LoadBalancer->>Backend: Route Request  
+    Backend->>Redis: Check Cache  
+      
+    alt Cache Hit  
+        Redis-->>Backend: Return Cached Data  
+    else Cache Miss  
+        Backend->>MongoDB: Query Database  
+        MongoDB-->>Backend: Return Data  
+        Backend->>Redis: Update Cache  
+    end  
+      
+    Backend-->>Frontend: JSON Response  
+      
+    User->>Frontend: Perform Action  
+    Frontend->>Backend: API Call  
+    Backend->>MongoDB: Update Data  
+    Backend->>SocketIO: Emit Event  
+    SocketIO-->>Frontend: Real-time Update  
+    Backend->>Firebase: Send Notification  
+    Firebase-->>User: Push Notification
+```
+### High-Level Architecture  
+ 
+```mermaid  
+graph LR  
+    subgraph "Client Tier"  
+        BROWSER["Web Browser"]  
+        MOBILE["Mobile PWA"]  
+    end  
+      
+    subgraph "Presentation Layer"  
+        REACT["React 18.3+<br/>Vite 5<br/>Tailwind CSS"]  
+        REDUX["Redux Toolkit<br/>State Management"]  
+    end  
+      
+    subgraph "API Layer"  
+        LB["Load Balancer"]  
+        API["REST API<br/>Express.js"]  
+        WS["WebSocket<br/>Socket.io"]  
+    end  
+      
+    subgraph "Business Logic"  
+        AUTH["Authentication<br/>OAuth 2.0 + JWT"]  
+        TASKS["Task Management"]  
+        ORGS["Organization Logic"]  
+        NOTIF["Notification Service"]  
+    end  
+      
+    subgraph "Data Tier"  
+        MONGO["MongoDB 7<br/>Primary Store"]  
+        REDIS["Redis 7<br/>Cache + Sessions"]  
+    end  
+      
+    subgraph "External"  
+        GOOGLE["Google OAuth"]  
+        FCM["Firebase CM"]  
+    end  
+      
+    BROWSER --> REACT  
+    MOBILE --> REACT  
+    REACT --> REDUX  
+    REDUX --> LB  
+      
+    LB --> API  
+    LB --> WS  
+      
+    API --> AUTH  
+    API --> TASKS  
+    API --> ORGS  
+    API --> NOTIF  
+      
+    WS --> NOTIF  
+      
+    AUTH --> MONGO  
+    TASKS --> MONGO  
+    ORGS --> MONGO  
+    NOTIF --> MONGO  
+      
+    AUTH --> REDIS  
+    API --> REDIS  
+      
+    AUTH --> GOOGLE  
+    NOTIF --> FCM
+```
+### Frontend Application Structure  
+
+```mermaid  
+graph TB  
+    subgraph "Entry Point"  
+        MAIN["main.jsx<br/>App Bootstrap"]  
+        APP["App.jsx<br/>Root Component"]  
+    end  
+      
+    subgraph "Routing Layer"  
+        ROUTER["React Router<br/>Route Configuration"]  
+        GUARDS["Protected Routes<br/>Auth Guards"]  
+    end  
+      
+    subgraph "Pages"  
+        LOGIN["Login Page"]  
+        DASH["Dashboard"]  
+        TASKS["Tasks Page"]  
+        ORGS["Organizations"]  
+        PROFILE["Profile"]  
+    end  
+      
+    subgraph "Components"  
+        LAYOUT["Layout Components"]  
+        UI["UI Components<br/>Buttons, Forms, Cards"]  
+        SHARED["Shared Components<br/>Navbar, Sidebar"]  
+    end  
+      
+    subgraph "State Management"  
+        STORE["Redux Store"]  
+        SLICES["Slices<br/>auth, tasks, orgs"]  
+        THUNKS["Async Thunks<br/>API Calls"]  
+    end  
+      
+    subgraph "Services"  
+        API["API Service<br/>Axios Instance"]  
+        SOCKET["Socket Service<br/>Socket.io Client"]  
+        FCM_CLIENT["FCM Service<br/>Push Notifications"]  
+    end  
+      
+    subgraph "Utils"  
+        HELPERS["Helper Functions"]  
+        CONSTANTS["Constants"]  
+        HOOKS["Custom Hooks"]  
+    end  
+      
+    MAIN --> APP  
+    APP --> ROUTER  
+    ROUTER --> GUARDS  
+    GUARDS --> PAGES  
+      
+    LOGIN --> LAYOUT  
+    DASH --> LAYOUT  
+    TASKS --> LAYOUT  
+    ORGS --> LAYOUT  
+    PROFILE --> LAYOUT  
+      
+    LAYOUT --> UI  
+    LAYOUT --> SHARED  
+      
+    PAGES --> STORE  
+    COMPONENTS --> STORE  
+      
+    STORE --> SLICES  
+    SLICES --> THUNKS  
+      
+    THUNKS --> API  
+    THUNKS --> SOCKET  
+      
+    PAGES --> FCM_CLIENT  
+      
+    COMPONENTS --> HELPERS  
+    COMPONENTS --> HOOKS  
+    SERVICES --> CONSTANTS
+```
+### Backend Server Structure  
+
+```mermaid  
+graph TB  
+    subgraph "Entry Point"  
+        INDEX["index.js<br/>Server Bootstrap"]  
+        CONFIG["config/<br/>Environment Setup"]  
+    end  
+      
+    subgraph "Middleware Stack"  
+        CORS["CORS Handler"]  
+        AUTH_MW["Auth Middleware<br/>JWT Verification"]  
+        RATE["Rate Limiter"]  
+        ERROR["Error Handler"]  
+    end  
+      
+    subgraph "Routes"  
+        AUTH_R["auth routes<br/>/api/auth"]  
+        TASK_R["task routes<br/>/api/tasks"]  
+        ORG_R["org routes<br/>/api/organizations"]  
+        USER_R["user routes<br/>/api/users"]  
+    end  
+      
+    subgraph "Controllers"  
+        AUTH_C["authController<br/>Login, Register"]  
+        TASK_C["taskController<br/>CRUD Operations"]  
+        ORG_C["orgController<br/>Management"]  
+        USER_C["userController<br/>Profile"]  
+    end  
+      
+    subgraph "Models"  
+        USER_M["User Model<br/>MongoDB Schema"]  
+        TASK_M["Task Model"]  
+        ORG_M["Organization Model"]  
+        NOTIF_M["Notification Model"]  
+    end  
+      
+    subgraph "Services"  
+        JWT_S["JWT Service<br/>Token Generation"]  
+        REDIS_S["Redis Service<br/>Caching"]  
+        FCM_S["FCM Service<br/>Push Notifications"]  
+        SOCKET_S["Socket Service<br/>Real-time Events"]  
+    end  
+      
+    subgraph "Database"  
+        MONGO_DB["MongoDB Connection"]  
+        REDIS_DB["Redis Connection"]  
+    end  
+      
+    INDEX --> CONFIG  
+    INDEX --> MIDDLEWARE  
+      
+    CORS --> AUTH_MW  
+    AUTH_MW --> RATE  
+    RATE --> ERROR  
+      
+    MIDDLEWARE --> ROUTES  
+      
+    AUTH_R --> AUTH_C  
+    TASK_R --> TASK_C  
+    ORG_R --> ORG_C  
+    USER_R --> USER_C  
+      
+    AUTH_C --> USER_M  
+    TASK_C --> TASK_M  
+    ORG_C --> ORG_M  
+      
+    CONTROLLERS --> JWT_S  
+    CONTROLLERS --> REDIS_S  
+    CONTROLLERS --> FCM_S  
+    CONTROLLERS --> SOCKET_S  
+      
+    USER_M --> MONGO_DB  
+    TASK_M --> MONGO_DB  
+    ORG_M --> MONGO_DB  
+    NOTIF_M --> MONGO_DB  
+      
+    REDIS_S --> REDIS_DB
+```
+
+### Real-Time WebSocket Flow  
+
+```mermaid  
+sequenceDiagram  
+    participant Client1 as "Client 1<br/>Browser"  
+    participant Client2 as "Client 2<br/>Browser"  
+    participant SocketClient as "Socket.io Client"  
+    participant SocketServer as "Socket.io Server"  
+    participant EventHandler as "Event Handlers"  
+    participant MongoDB as "MongoDB"  
+    participant Redis as "Redis Cache"  
+      
+    Client1->>SocketClient: Connect with JWT  
+    SocketClient->>SocketServer: Establish WebSocket  
+    SocketServer->>EventHandler: Authenticate Connection  
+    EventHandler->>Redis: Verify Session  
+    Redis-->>EventHandler: Session Valid  
+    EventHandler-->>SocketServer: Connection Approved  
+    SocketServer-->>SocketClient: Connected  
+      
+    Client2->>SocketServer: Connect  
+    SocketServer-->>Client2: Connected  
+      
+    Note over Client1,Client2: Real-time Collaboration  
+      
+    Client1->>SocketClient: Emit "task:update"  
+    SocketClient->>SocketServer: Forward Event  
+    SocketServer->>EventHandler: Process Event  
+    EventHandler->>MongoDB: Update Task  
+    MongoDB-->>EventHandler: Update Confirmed  
+    EventHandler->>Redis: Invalidate Cache  
+    EventHandler->>SocketServer: Broadcast "task:updated"  
+    SocketServer-->>Client1: Emit to Client 1  
+    SocketServer-->>Client2: Emit to Client 2  
+      
+    Note over Client1,Client2: Notification Flow  
+      
+    EventHandler->>SocketServer: Emit "notification:new"  
+    SocketServer-->>Client1: Push Notification  
+    SocketServer-->>Client2: Push Notification  
+      
+    Client1->>SocketClient: Disconnect  
+    SocketClient->>SocketServer: Close Connection  
+    SocketServer->>EventHandler: Cleanup Session  
+    EventHandler->>Redis: Remove Session
+```
 
 ### Project Structure
 
