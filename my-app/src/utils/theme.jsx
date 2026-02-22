@@ -7,19 +7,17 @@ export const ThemeProvider = ({ children }) => {
     return localStorage.getItem('theme') || 'light';
   });
 
- // src/utils/theme.jsx
- useEffect(() => {
-   const root = window.document.documentElement;
-   if (theme === 'dark') {
-     root.classList.add('custom-dark');
-     root.classList.remove('custom-light');
-   } else {
-     root.classList.add('custom-light');
-     root.classList.remove('custom-dark');
-   }
-   localStorage.setItem('theme', theme);
- }, [theme]);
- 
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark', 'custom-dark');
+      root.classList.remove('custom-light');
+    } else {
+      root.classList.remove('dark', 'custom-dark');
+      root.classList.add('custom-light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

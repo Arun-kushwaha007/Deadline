@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import KanbanBoard from '../components/organisms/KanbanBoard';
@@ -9,6 +9,25 @@ const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const user = useSelector((state) => state.auth?.user || JSON.parse(localStorage.getItem('loggedInUser') || '{}'));
   const organizations = useSelector((state) => state.organization?.organizations || []);
+  const tasks = useSelector((state) => state.tasks?.tasks || []);
+
+  // Compute quick stats from Redux task state
+  const taskStats = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const activeTasks = tasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length;
+    const completedTasks = tasks.filter(t => t.status === 'Done').length;
+    const dueToday = tasks.filter(t => {
+      if (!t.deadline) return false;
+      const deadline = new Date(t.deadline);
+      return deadline >= today && deadline < tomorrow;
+    }).length;
+
+    return { activeTasks, completedTasks, dueToday };
+  }, [tasks]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -102,7 +121,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Active Tasks</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">{taskStats.activeTasks}</p>
                 </div>
               </div>
             </div>
@@ -114,7 +133,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Due Today</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">{taskStats.dueToday}</p>
                 </div>
               </div>
             </div>
@@ -126,7 +145,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">{taskStats.completedTasks}</p>
                 </div>
               </div>
             </div>

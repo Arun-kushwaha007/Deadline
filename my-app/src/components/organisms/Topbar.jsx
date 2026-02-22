@@ -232,8 +232,6 @@ const Topbar = () => {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    localStorage.setItem('theme', newTheme);
   };
 
   const handleNotificationClick = (notif) => {
@@ -489,7 +487,7 @@ const Topbar = () => {
           )}
 
           {/* Theme Toggle */}
-          {/* <button
+          <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
             aria-label="Toggle theme"
@@ -499,7 +497,7 @@ const Topbar = () => {
               <Sun size={20} className="text-yellow-500" /> : 
               <Moon size={20} className="text-gray-600" />
             }
-          </button> */}
+          </button>
 
           {/* Mobile Menu Button */}
           <button

@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import DefaultAvatar from '../components/common/DefaultAvatar';
+import ProfileOverviewTab from '../components/Profile/ProfileOverviewTab';
+import ProfileSkillsTab from '../components/Profile/ProfileSkillsTab';
+import ProfileAchievementsTab from '../components/Profile/ProfileAchievementsTab';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -630,271 +633,33 @@ useEffect(() => {
               {/* Enhanced Content Area */}
               <div className="lg:col-span-2">
                 {activeTab === 'overview' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {dashboardStats.map((stat, index) => (
-                      <div
-                        key={stat.label}
-                        className={`${stat.bgColor} border ${stat.borderColor} rounded-3xl p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
-                        style={{ animationDelay: `${index * 100}ms` }}
-                        onClick={stat.action}
-                      >
-                        {/* Progress bar */}
-                        <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-white/20 to-white/40 transition-all duration-1000" 
-                             style={{ width: `${stat.progress}%` }}></div>
-                        
-                        <div className="flex items-center justify-between mb-4">
-                          <div className={`w-14 h-14 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg`}>
-                            {stat.icon}
-                          </div>
-                          <div className="text-right">
-                            <div className="text-xs text-gray-500 dark:text-gray-400">Progress</div>
-                            <div className="text-sm font-bold text-gray-700 dark:text-gray-300">{Math.round(stat.progress)}%</div>
-                          </div>
-                        </div>
-                        
-                        <h3 className="text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
-                          {stat.label}
-                        </h3>
-                        
-                        <p className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                          {stat.value}
-                        </p>
-                        
-                        {stat.action && (
-                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">Click to test</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <ProfileOverviewTab dashboardStats={dashboardStats} />
                 )}
 
                 {activeTab === 'skills' && (
-                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                        🎯 Skills & Expertise
-                      </h3>
-                      <button
-                        onClick={() => setShowSkillsModal(true)}
-                        className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
-                      >
-                        ➕ Add Skill
-                      </button>
-                    </div>
-                    
-                    {userSkills.length === 0 ? (
-                      <div className="text-center py-12">
-                        <div className="text-6xl mb-4">🎯</div>
-                        <h4 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No Skills Added Yet</h4>
-                        <p className="text-gray-500 dark:text-gray-500 mb-6">Start building your profile by adding your skills and expertise</p>
-                        <button
-                          onClick={() => setShowSkillsModal(true)}
-                          className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
-                        >
-                          🚀 Add Your First Skill
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-6">
-                        {userSkills.map((skill, index) => (
-                          <div key={skill.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{skill.name}</span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-gray-500 dark:text-gray-400 text-sm">{skill.level}%</span>
-                                <button
-                                  onClick={() => removeSkill(skill.id)}
-                                  className="text-red-500 hover:text-red-700 transition-colors p-1"
-                                  title="Remove skill"
-                                >
-                                  ❌
-                                </button>
-                              </div>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                              <div 
-                                className={`h-full ${skill.color} rounded-full transition-all duration-1000 ease-out`}
-                                style={{ width: `${skill.level}%` }}
-                              ></div>
-                            </div>
-                            <input
-                              type="range"
-                              min="0"
-                              max="100"
-                              value={skill.level}
-                              onChange={(e) => updateSkillLevel(skill.id, parseInt(e.target.value))}
-                              className="w-full mt-2 opacity-50 hover:opacity-100 transition-opacity"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <ProfileSkillsTab
+                    userSkills={userSkills}
+                    showSkillsModal={showSkillsModal}
+                    setShowSkillsModal={setShowSkillsModal}
+                    newSkill={newSkill}
+                    setNewSkill={setNewSkill}
+                    addSkill={addSkill}
+                    removeSkill={removeSkill}
+                    updateSkillLevel={updateSkillLevel}
+                    skillColorOptions={skillColorOptions}
+                  />
                 )}
 
                 {activeTab === 'achievements' && (
-                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-                    <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                      🏆 Achievements & Badges
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {achievementDefinitions.map((achievement, index) => {
-                        const status = getAchievementStatus(achievement);
-                        return (
-                          <div 
-                            key={achievement.id} 
-                            className={`text-center p-4 rounded-2xl border transition-all duration-300 transform hover:scale-105 ${
-                              status.isUnlocked
-                                ? 'bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 border-yellow-200 dark:border-yellow-800 shadow-lg'
-                                : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-gray-200 dark:border-gray-600 opacity-60'
-                            }`}
-                            title={status.isUnlocked ? 'Achievement Unlocked!' : `Progress: ${status.progress}/${achievement.requirement}`}
-                          >
-                            <div className={`text-3xl mb-2 relative ${!status.isUnlocked ? 'filter grayscale' : ''}`}>
-                              {achievement.icon}
-                              {status.isUnlocked && (
-                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                  <span className="text-white text-xs">✓</span>
-                                </div>
-                              )}
-                              {!status.isUnlocked && (
-                                <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center">
-                                  <span className="text-white text-2xl">🔒</span>
-                                </div>
-                              )}
-                            </div>
-                            <h4 className={`font-semibold text-sm mb-1 ${
-                              status.isUnlocked 
-                                ? 'text-gray-800 dark:text-white' 
-                                : 'text-gray-500 dark:text-gray-400'
-                            }`}>
-                              {achievement.title}
-                            </h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                              {achievement.desc}
-                            </p>
-                            
-                            {/* Progress bar for locked achievements */}
-                            {!status.isUnlocked && (
-                              <div className="mt-3">
-                                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                  <div 
-                                    className="h-full bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full transition-all duration-500"
-                                    style={{ width: `${status.percentage}%` }}
-                                  ></div>
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  {status.progress}/{achievement.requirement} ({Math.round(status.percentage)}%)
-                                </div>
-                              </div>
-                            )}
-                            
-                            {/* Achievement unlocked indicator */}
-                            {status.isUnlocked && (
-                              <div className="mt-2">
-                                <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                  🎉 Unlocked!
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <ProfileAchievementsTab
+                    achievementDefinitions={achievementDefinitions}
+                    getAchievementStatus={getAchievementStatus}
+                  />
                 )}
               </div>
             </div>
           </div>
         </div>
-
-        {/* Skills Modal */}
-        {showSkillsModal && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl w-full max-w-md shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
-              
-              {/* Modal Header */}
-              <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-6 rounded-t-3xl">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span>🎯</span> Add New Skill
-                </h2>
-              </div>
-
-              <div className="p-6">
-                {/* Skill Name */}
-                <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Skill Name
-                  </label>
-                  <input
-                    type="text"
-                    value={newSkill.name}
-                    onChange={(e) => setNewSkill({...newSkill, name: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
-                    placeholder="e.g. JavaScript, Project Management, Design"
-                  />
-                </div>
-
-                {/* Skill Level */}
-                <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Proficiency Level: {newSkill.level}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={newSkill.level}
-                    onChange={(e) => setNewSkill({...newSkill, level: parseInt(e.target.value)})}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>Beginner</span>
-                    <span>Expert</span>
-                  </div>
-                </div>
-
-                {/* Color Selection */}
-                <div className="mb-6">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Color Theme
-                  </label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {skillColorOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => setNewSkill({...newSkill, color: option.value})}
-                        className={`w-full h-10 rounded-lg transition-all duration-200 ${option.value} ${
-                          newSkill.color === option.value ? 'ring-2 ring-offset-2 ring-gray-400' : ''
-                        }`}
-                        title={option.label}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setShowSkillsModal(false)}
-                    className="flex-1 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl transition-all duration-300 font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={addSkill}
-                    disabled={!newSkill.name.trim()}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Add Skill
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Enhanced Edit Profile Modal */}
         {showEditModal && (

@@ -1,15 +1,10 @@
 /* index.css */
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-/* ❌ REMOVE this line — it's using Tailwind's 'dark:' which won't work without config */
-/* body {
-  @apply bg-white dark:bg-gray-800 text-black dark:text-white;
-} */
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* ✅ Use your own theme system */
+/* Custom theme system */
 .custom-light {
   --bg-color: #f8fafc;
   --text-color: #1e293b;
