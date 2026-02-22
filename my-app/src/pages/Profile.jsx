@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import DashboardLayout from '../components/organisms/DashboardLayout';
+import DefaultAvatar from '../components/common/DefaultAvatar';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -30,28 +32,7 @@ const Profile = () => {
     lastLoginDate: null,
   });
 
-  // Enhanced Default Avatar component
-  const DefaultAvatar = ({ size = 32, className = "" }) => (
-    <div 
-      className={`bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow-xl relative overflow-hidden ${className}`}
-      style={{ width: `${size * 4}px`, height: `${size * 4}px` }}
-    >
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-amber-400/20 animate-pulse"></div>
-      
-      {/* Avatar icon */}
-      <svg
-        className="w-1/2 h-1/2 relative z-10"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-      </svg>
-      
-      {/* Shine effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shine"></div>
-    </div>
-  );
+  // DefaultAvatar is now imported from '../components/common/DefaultAvatar'
 
   // Achievement definitions with unlock conditions
   const achievementDefinitions = [
@@ -236,22 +217,16 @@ useEffect(() => {
 
   // Show achievement unlock notification
   const showAchievementUnlockNotification = (achievement) => {
-    const notification = document.createElement('div');
-    notification.className = 'fixed top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-4 rounded-2xl shadow-2xl z-50 animate-slide-in-right border-2 border-yellow-300';
-    notification.innerHTML = `
-      <div class="flex items-center gap-3">
-        <span class="text-2xl animate-bounce">${achievement.icon}</span>
-        <div>
-          <div class="font-bold">Achievement Unlocked!</div>
-          <div class="text-sm opacity-90">${achievement.title}</div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 5000);
+    toast.success(`${achievement.icon} Achievement Unlocked: ${achievement.title}`, {
+      duration: 5000,
+      style: {
+        background: 'linear-gradient(to right, #facc15, #f97316)',
+        color: 'white',
+        fontWeight: 'bold',
+        borderRadius: '1rem',
+        border: '2px solid #fde047',
+      },
+    });
   };
 
   // Helper function to make authenticated API calls for profile updates
@@ -311,11 +286,7 @@ useEffect(() => {
         setNewSkill({ name: '', level: 50, color: 'bg-blue-500' });
         setShowSkillsModal(false);
         
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
-        notification.innerHTML = `✅ Skill "${skillToAdd.name}" added successfully!`;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
+        toast.success(`✅ Skill "${skillToAdd.name}" added successfully!`);
       }
     }
   };
@@ -371,14 +342,7 @@ useEffect(() => {
       setShowEditModal(false);
       
 
-    const notification = document.createElement('div');
-    notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
-    notification.innerHTML = '✅ Profile updated successfully!';
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 3000);
+    toast.success('✅ Profile updated successfully!');
     } 
   };
 
@@ -394,16 +358,7 @@ useEffect(() => {
   const handleCopyUserId = () => {
     if (user?.userId) {
       navigator.clipboard.writeText(user.userId);
-      
-      // Copy notification
-      const notification = document.createElement('div');
-      notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right';
-      notification.innerHTML = '🔗 User ID copied to clipboard!';
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.remove();
-      }, 3000);
+      toast.success('🔗 User ID copied to clipboard!');
     }
   };
 

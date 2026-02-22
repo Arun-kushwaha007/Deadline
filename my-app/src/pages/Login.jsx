@@ -123,10 +123,11 @@ const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Email Address</label>
+              <label htmlFor="login-email" className="block text-sm font-medium text-gray-300">Email Address</label>
               <div className="relative">
                 <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  id="login-email"
                   type="email"
                   {...register('email', { 
                     required: 'Email is required',
@@ -149,10 +150,11 @@ const Login = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Password</label>
+              <label htmlFor="login-password" className="block text-sm font-medium text-gray-300">Password</label>
               <div className="relative">
                 <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
+                  id="login-password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password', { 
                     required: 'Password is required',
@@ -166,6 +168,7 @@ const Login = () => {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-400 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >

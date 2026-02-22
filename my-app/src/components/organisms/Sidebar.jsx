@@ -51,7 +51,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden lg:flex w-64 h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-950 border-r border-gray-200 dark:border-gray-700 flex-col transition-colors duration-300 shadow-lg">
+    <aside
+      className="hidden lg:flex w-64 h-screen bg-gradient-to-b from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-950 border-r border-gray-200 dark:border-gray-700 flex-col transition-colors duration-300 shadow-lg"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       {/* User Welcome Section - Compact */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
@@ -117,6 +121,7 @@ const Sidebar = () => {
       <div className="p-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <button
           onClick={handleLogout}
+          aria-label="Log out"
           className="flex items-center gap-2 w-full p-2.5 rounded-lg bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
         >
           <LogOut size={16} />

@@ -15,7 +15,7 @@ const menu = [
 ];
 
 const MenuItems = ({ onClick }) => (
-  <nav className="flex flex-col gap-3">
+  <nav className="flex flex-col gap-3" aria-label="Main menu">
     {menu.map(({ to, label, icon }) => (
       <NavLink
         key={to}

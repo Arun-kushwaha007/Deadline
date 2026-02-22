@@ -14,3 +14,6 @@
 
 /server/benchmarks/artillery/users.csv
 /server/benchmarks/artillery/reports/venv
+
+.agents
+skills-lock.json

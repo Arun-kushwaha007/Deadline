@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import KanbanBoard from '../components/organisms/KanbanBoard';
-import OrganizationDashboard from '../components/Organization/OrganiationDashboard';
+import OrganizationDashboard from '../components/Organization/OrganizationDashboard';
 import AIAssistantWrapper from '../components/organisms/AIAssistantWrapper';
 
 const Dashboard = () => {
@@ -81,9 +81,9 @@ const Dashboard = () => {
         
 
         {/* Quick Stats */}
-        {/* <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">
                   🏢
@@ -95,43 +95,43 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-6 border border-green-200 dark:border-green-800">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl">
                   ✅
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Active Tasks</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">12</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-6 border border-orange-200 dark:border-orange-800">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-xl">
                   ⏰
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Due Today</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">3</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white text-xl">
                   📈
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-white">28</p>
+                  <p className="text-2xl font-bold text-gray-800 dark:text-white">—</p>
                 </div>
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Main Content */}
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">

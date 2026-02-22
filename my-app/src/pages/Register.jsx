@@ -13,8 +13,29 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const passwordValue = watch('password', '');
+
+  const getPasswordStrength = (password) => {
+    if (!password) return { score: 0, label: '', color: 'bg-gray-600' };
+    let score = 0;
+    if (password.length >= 6) score++;
+    if (password.length >= 10) score++;
+    if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-red-500' };
+    if (score === 2) return { score: 2, label: 'Fair', color: 'bg-orange-500' };
+    if (score === 3) return { score: 3, label: 'Good', color: 'bg-yellow-500' };
+    if (score >= 4) return { score: 4, label: 'Strong', color: 'bg-green-500' };
+    return { score: 0, label: '', color: 'bg-gray-600' };
+  };
+
+  const passwordStrength = getPasswordStrength(passwordValue);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -207,6 +228,32 @@ const Register = () => {
                   <span className="w-1 h-1 bg-red-400 rounded-full"></span>
                   {errors.password.message}
                 </p>
+              )}
+
+              {/* Password Strength Indicator */}
+              {passwordValue && (
+                <div className="mt-2 space-y-1">
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4].map((level) => (
+                      <div
+                        key={level}
+                        className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                          passwordStrength.score >= level
+                            ? passwordStrength.color
+                            : 'bg-gray-700'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className={`text-xs font-medium ${
+                    passwordStrength.score <= 1 ? 'text-red-400' :
+                    passwordStrength.score === 2 ? 'text-orange-400' :
+                    passwordStrength.score === 3 ? 'text-yellow-400' :
+                    'text-green-400'
+                  }`}>
+                    {passwordStrength.label}
+                  </p>
+                </div>
               )}
             </div>
 

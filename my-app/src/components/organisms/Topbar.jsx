@@ -516,11 +516,62 @@ const Topbar = () => {
         </div>
       </header>
 
-      {/* Mobile Dropdown Menu */}
-      {showMobileMenu && (
-        <div className="lg:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-lg z-40">
-          <div className="p-4">
-            <nav className="flex flex-col gap-1">
+      {/* Mobile Slide-Over Sidebar */}
+      <div
+        className={`lg:hidden fixed inset-0 z-50 transition-opacity duration-300 ${
+          showMobileMenu ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop Overlay */}
+        <div
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          onClick={() => setShowMobileMenu(false)}
+        />
+
+        {/* Sidebar Panel */}
+        <aside
+          className={`absolute top-0 left-0 h-full w-72 bg-gradient-to-b from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-950 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
+            showMobileMenu ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          {/* Header with close button */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <img
+              src={logoDark}
+              alt="CollabNest"
+              className="h-8 object-contain"
+            />
+            <button
+              onClick={() => setShowMobileMenu(false)}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="Close menu"
+            >
+              <X size={20} className="text-gray-600 dark:text-gray-300" />
+            </button>
+          </div>
+
+          {/* User Welcome Section */}
+          {isLoggedIn && user && (
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                  {user.profilePic ? (
+                    <img src={user.profilePic} alt={user.name || 'User'} className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={16} className="text-white" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Links */}
+          <nav className="flex-1 overflow-y-auto px-3 py-3">
+            <div className="flex flex-col gap-1">
               {menuItems.map((item) => (
                 <button
                   key={item.to}
@@ -528,7 +579,7 @@ const Topbar = () => {
                     navigate(item.to);
                     setShowMobileMenu(false);
                   }}
-                  className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all"
+                  className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <span className={`${item.color || 'text-gray-600 dark:text-gray-300'}`}>{item.icon}</span>
@@ -541,37 +592,41 @@ const Topbar = () => {
                   )}
                 </button>
               ))}
-              
-              {isLoggedIn && (
-                <>
-                  <hr className="my-3 border-gray-200 dark:border-gray-700" />
-                  <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg mb-2">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-white">{user?.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      navigate('/profile');
-                      setShowMobileMenu(false);
-                    }}
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all"
-                  >
-                    <UserPen size={18} className="text-gray-600 dark:text-gray-300" />
-                    <span className="font-medium text-gray-800 dark:text-white">Profile</span>
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-sm transition-all"
-                  >
-                    <LogOut size={18} className="text-red-600 dark:text-red-400" />
-                    <span className="font-medium text-red-600 dark:text-red-400">Logout</span>
-                  </button>
-                </>
-              )}
-            </nav>
+            </div>
+          </nav>
+
+          {/* Footer Actions */}
+          {isLoggedIn && (
+            <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-2">
+              <button
+                onClick={() => {
+                  navigate('/profile');
+                  setShowMobileMenu(false);
+                }}
+                className="flex items-center gap-3 w-full px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all cursor-pointer"
+              >
+                <UserPen size={18} className="text-blue-600 dark:text-blue-400" />
+                <span className="font-medium text-gray-800 dark:text-white">Profile</span>
+              </button>
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setShowMobileMenu(false);
+                }}
+                className="flex items-center gap-2 w-full p-2.5 rounded-lg bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-medium transition-all duration-200 shadow-lg cursor-pointer"
+              >
+                <LogOut size={16} />
+                <span className="text-sm">Logout</span>
+              </button>
+            </div>
+          )}
+
+          {/* Version Info */}
+          <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-400 dark:text-gray-500">CollabNest v1.0</p>
           </div>
-        </div>
-      )}
+        </aside>
+      </div>
 
       {/* Toast Notifications Container */}
       <div className="fixed top-4 right-4 z-[9999] space-y-3 pointer-events-none">

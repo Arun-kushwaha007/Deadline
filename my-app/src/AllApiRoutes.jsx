@@ -12,7 +12,7 @@ import Profile from './pages/Profile';
 
 // import CreateOrganization from './pages/Organization/CreateOrganization';
 import JoinOrganization from './pages/Organization/JoinOrganization';
-import OrganizationDashboard from './components/Organization/OrganiationDashboard';
+import OrganizationDashboard from './components/Organization/OrganizationDashboard';
 import AddMember from './pages/Organization/AddMember';
 import EditOrganization from './pages/Organization/EditOrganization';
 import OrganizationDetails from './pages/Organization/OrganizationDetails';

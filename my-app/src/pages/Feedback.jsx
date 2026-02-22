@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import DashboardLayout from '../components/organisms/DashboardLayout';
+import DefaultAvatar from '../components/common/DefaultAvatar';
 import FeedbackModal from '../components/modals/FeedbackModal';
 import api from '../utils/api';
 const Feedback = () => {
@@ -218,18 +220,13 @@ const Feedback = () => {
 
   // Show notification
   const showNotification = (message, type = 'info') => {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-lg z-50 animate-slide-in-right ${
-      type === 'success' ? 'bg-green-500' : 
-      type === 'error' ? 'bg-red-500' : 
-      'bg-blue-500'
-    } text-white font-medium`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      notification.remove();
-    }, 5000);
+    if (type === 'success') {
+      toast.success(message);
+    } else if (type === 'error') {
+      toast.error(message);
+    } else {
+      toast(message);
+    }
   };
 
   // Format date
@@ -252,14 +249,7 @@ const Feedback = () => {
     ));
   };
 
-  // Default avatar component
-  const DefaultAvatar = ({ size = 12, name = 'User' }) => (
-    <div 
-      className={`w-${size} h-${size} bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg`}
-    >
-      {name.charAt(0).toUpperCase()}
-    </div>
-  );
+  // DefaultAvatar is now imported from '../components/common/DefaultAvatar'
 
   if (!user) {
     return (
