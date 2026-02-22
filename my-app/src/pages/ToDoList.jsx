@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Moon, Plus, CheckCircle, Trash2, Calendar, Filter } from 'lucide-react';
+import { Plus, CheckCircle, Trash2, Calendar, Filter } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import ToDoListLayout from '../components/organisms/ToDoListLayout';
 
@@ -18,15 +18,10 @@ const ToDoList = () => {
     }
   }, [navigate]);
 
-  const [darkMode, setDarkMode] = useState(false);
   const [task, setTask] = useState('');
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState('all'); 
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -115,15 +110,7 @@ const ToDoList = () => {
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                {/* <button
-                  onClick={() => setDarkMode(!darkMode)}
-                  className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                  aria-label="Toggle Theme"
-                >
-                  {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button> */}
-              </div>
+
             </div>
 
             {/* Progress Bar */}

@@ -121,11 +121,6 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-gray-800 to-zinc-900 text-white px-4 relative overflow-hidden">
-      {/* Background Decoration - Same as Login */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/20 to-red-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/20 to-purple-600/20 rounded-full blur-3xl"></div>
-      </div>
 
       <div className="relative w-full max-w-md">
         {/* Welcome Header - Orange/Red Theme */}

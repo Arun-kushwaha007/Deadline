@@ -42,7 +42,6 @@ const OrganizationDetails = () => {
     error: orgError,
   } = useSelector((state) => state.organization);
 
-  const [darkMode, setDarkMode] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: '' });
   const [showAllMembers, setShowAllMembers] = useState(false);
@@ -60,9 +59,7 @@ const OrganizationDetails = () => {
   const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
   const isAdmin = myRole === 'admin';
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
+
 
   useEffect(() => {
     if (orgId) {
@@ -178,11 +175,6 @@ const OrganizationDetails = () => {
   return (
     <DashboardLayout>
         <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-gray-800 to-zinc-900 text-white">
-          
-            <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-              <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
-            </div>
 
         <div className="relative p-6">
           {/* Project Disclaimer */}

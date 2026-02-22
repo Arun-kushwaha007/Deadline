@@ -174,11 +174,6 @@ const AddMember = () => {
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-gray-800 to-zinc-900 text-white p-6">
-        {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-green-500/10 to-blue-600/10 rounded-full blur-3xl"></div>
-        </div>
 
         <div className="relative max-w-2xl mx-auto">
           {/* Header Section */}

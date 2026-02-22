@@ -20,3 +20,71 @@ body, .app-wrapper {
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
 }
+
+/* Shared animation keyframes */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-delayed {
+  0% { opacity: 0; transform: translateY(20px); }
+  50% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in { animation: fade-in 0.6s ease-out; }
+.animate-fade-in-delayed { animation: fade-in-delayed 1s ease-out; }
+.animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
+.animation-delay-1000 { animation-delay: 1000ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+
+/* Profile animations */
+@keyframes scale-in {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+.animate-scale-in { animation: scale-in 0.4s ease-out; }
+.animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
+.animate-shine { animation: shine 2s infinite; }
+
+/* ToDoListLayout animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* AIAssistantWrapper animations */
+@keyframes animate-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progress-bar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-in { animation: animate-in 0.3s ease-out; }
+.animate-progress-bar { animation: progress-bar 10s linear forwards; }

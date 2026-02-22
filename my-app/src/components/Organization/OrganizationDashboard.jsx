@@ -88,18 +88,12 @@ const OrganizationDashboard = () => {
 
   const EmptyState = () => (
     <div className="col-span-full flex flex-col items-center justify-center py-24">
-      {/* Animated background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-32 w-80 h-80 bg-blue-400/10 dark:bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-32 w-80 h-80 bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-3xl animate-pulse animation-delay-1000"></div>
-      </div>
-      
       <div className="relative z-10 text-center">
         {/* Animated icon */}
-        <div className="w-40 h-40 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 dark:from-blue-900/30 dark:via-purple-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-8 mx-auto relative overflow-hidden group">
+        {/* <div className="w-40 h-40 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 dark:from-blue-900/30 dark:via-purple-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-8 mx-auto relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full animate-spin-slow"></div>
           <span className="text-8xl relative z-10 animate-bounce">🏢</span>
-        </div>
+        </div> */}
         
         <h3 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-600 to-gray-800 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent mb-6">
           No Organizations Found
@@ -150,21 +144,12 @@ const OrganizationDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-indigo-950/30 transition-all duration-500">
-      {/* Animated background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400/5 dark:bg-blue-600/5 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-400/5 dark:bg-purple-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-        <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-indigo-400/5 dark:bg-indigo-600/5 rounded-full blur-3xl animate-float-slow"></div>
-      </div>
 
       <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           
           {/* Enhanced Header Section */}
           <div className="text-center mb-16 relative">
-            <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-10">
-              <span className="text-[20rem] font-bold">🏢</span>
-            </div>
             <div className="relative z-10">
               <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6 animate-fade-in">
                 My Organizations
@@ -379,65 +364,5 @@ const OrganizationDashboard = () => {
     </div>
   );
 };
-
-// Enhanced CSS with new animations
-const styles = `
-  @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-  }
-  
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-  }
-  
-  @keyframes float-delayed {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(-180deg); }
-  }
-  
-  @keyframes float-slow {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(90deg); }
-  }
-  
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-delayed {
-    0% { opacity: 0; transform: translateY(20px); }
-    50% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  
-  .animate-float { animation: float 6s ease-in-out infinite; }
-  .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite; }
-  .animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
-  .animate-fade-in { animation: fade-in 0.6s ease-out; }
-  .animate-fade-in-delayed { animation: fade-in-delayed 1s ease-out; }
-  .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
-  .animate-spin-slow { animation: spin-slow 20s linear infinite; }
-  .animation-delay-1000 { animation-delay: 1000ms; }
-`;
-
-// Inject styles
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = styles;
-  document.head.appendChild(styleSheet);
-}
 
 export default OrganizationDashboard;

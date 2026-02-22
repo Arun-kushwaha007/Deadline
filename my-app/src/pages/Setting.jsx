@@ -79,11 +79,6 @@ const Setting = () => {
     <DashboardLayout> 
       {/* Removed the full-screen div that was blocking the layout */}
       <div className="relative min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-800 to-zinc-900 text-white">
-        {/* Background Decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-        </div>
 
         <div className="relative max-w-4xl mx-auto px-4 py-12">
           {/* Header */}

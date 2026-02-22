@@ -413,11 +413,6 @@ useEffect(() => {
     return (
       <DashboardLayout>
         <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 flex items-center justify-center">
-          {/* Animated background elements */}
-          <div className="fixed inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          </div>
           
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-gray-200/50 dark:border-gray-700/50 relative z-10 max-w-md mx-4">
             <div className="text-8xl mb-6 animate-bounce">🔐</div>
@@ -483,21 +478,12 @@ useEffect(() => {
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
-        {/* Animated background elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-yellow-400/5 dark:bg-yellow-600/5 rounded-full blur-3xl animate-float-slow"></div>
-        </div>
 
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             
-            {/* Enhanced Header Section */}
+            {/* Header Section */}
             <div className="text-center mb-16 relative">
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-10">
-                <span className="text-[20rem] font-bold">👤</span>
-              </div>
               <div className="relative z-10">
                 <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
                   My Profile
@@ -759,70 +745,5 @@ useEffect(() => {
   ); 
 }; 
 
-
-const styles = `
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-  }
-  
-  @keyframes float-delayed {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(-180deg); }
-  }
-  
-  @keyframes float-slow {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(90deg); }
-  }
-  
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-delayed {
-    0% { opacity: 0; transform: translateY(20px); }
-    50% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes scale-in {
-    from { transform: scale(0.9) translateY(20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-  }
-  
-  @keyframes slide-in-right {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  @keyframes shine {
-    0% { transform: translateX(-100%) skewX(-15deg); }
-    100% { transform: translateX(200%) skewX(-15deg); }
-  }
-  
-  .animate-float { animation: float 6s ease-in-out infinite; }
-  .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite; }
-  .animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
-  .animate-fade-in { animation: fade-in 0.6s ease-out; }
-  .animate-fade-in-delayed { animation: fade-in-delayed 1s ease-out; }
-  .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
-  .animate-scale-in { animation: scale-in 0.4s ease-out; }
-  .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
-  .animate-shine { animation: shine 2s infinite; }
-`;
-
-
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = styles;
-  document.head.appendChild(styleSheet);
-}
 
 export default Profile;

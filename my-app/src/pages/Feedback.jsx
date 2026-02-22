@@ -277,21 +277,12 @@ const Feedback = () => {
     <DashboardLayout>
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
         
-        {/* Background Effects */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-yellow-400/5 dark:bg-yellow-600/5 rounded-full blur-3xl animate-float-slow"></div>
-        </div>
-
+        
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             
             {/* Header */}
             <div className="text-center mb-16 relative">
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-10">
-                <span className="text-[20rem] font-bold">💬</span>
-              </div>
               <div className="relative z-10">
                 <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
                   Feedback Center
