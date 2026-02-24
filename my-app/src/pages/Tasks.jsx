@@ -30,21 +30,21 @@ const Tasks = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 transition-colors duration-300">
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-card dark:via-zinc-900 dark:to-zinc-800 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
           {/* Header Section */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 mb-8">
+          <div className="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
                   <span className="text-2xl">📋</span>
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
                     Task Management
                   </h1>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-muted-foreground">
                     Organize and track your work efficiently
                   </p>
                 </div>
@@ -53,13 +53,13 @@ const Tasks = () => {
               {/* Search Bar */}
               <div className="flex items-center gap-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     type="text"
                     placeholder="Search tasks..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="pl-10 pr-4 py-2 border border-slate-300 dark:border-border rounded-lg bg-white dark:bg-accent text-foreground placeholder-slate-500 dark:placeholder-muted-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -67,19 +67,19 @@ const Tasks = () => {
           </div>
 
           {/* View Controls */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 mb-8">
+          <div className="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-2">
-                <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                <span className="font-medium text-gray-700 dark:text-gray-300">View Mode:</span>
+                <Filter className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium text-foreground/80">View Mode:</span>
               </div>
               
-              <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
+              <div className="flex gap-2 p-1 bg-accent rounded-lg">
                 <button
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
                     view === 'kanban'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-600'
+                      ? 'bg-primary text-primary-foreground shadow-lg'
+                      : 'text-muted-foreground hover:bg-white dark:hover:bg-slate-600'
                   }`}
                   onClick={() => setView('kanban')}
                 >
@@ -89,8 +89,8 @@ const Tasks = () => {
                 <button
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
                     view === 'calendar'
-                      ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-600'
+                      ? 'bg-primary text-primary-foreground shadow-lg'
+                      : 'text-muted-foreground hover:bg-white dark:hover:bg-slate-600'
                   }`}
                   onClick={() => setView('calendar')}
                 >
@@ -108,8 +108,8 @@ const Tasks = () => {
                     <span className="text-white text-sm font-bold">📝</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-white">To Do</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Pending tasks</p>
+                    <h4 className="font-semibold text-foreground">To Do</h4>
+                    <p className="text-sm text-muted-foreground">Pending tasks</p>
                   </div>
                 </div>
               </div>
@@ -120,32 +120,32 @@ const Tasks = () => {
                     <span className="text-white text-sm font-bold">⚡</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-white">In Progress</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Active work</p>
+                    <h4 className="font-semibold text-foreground">In Progress</h4>
+                    <p className="text-sm text-muted-foreground">Active work</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-bold">👀</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-white">Review</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Under review</p>
+                    <h4 className="font-semibold text-foreground">Review</h4>
+                    <p className="text-sm text-muted-foreground">Under review</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
+              <div className="bg-gradient-to-r bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-bold">✅</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-white">Done</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
+                    <h4 className="font-semibold text-foreground">Done</h4>
+                    <p className="text-sm text-muted-foreground">Completed</p>
                   </div>
                 </div>
               </div>
@@ -153,9 +153,9 @@ const Tasks = () => {
           </div>
 
           {/* Main Content Area */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
             {/* Content Header */}
-            <div className="bg-gradient-to-r from-orange-500 to-red-600 p-6">
+            <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-white flex items-center gap-3">
@@ -197,8 +197,8 @@ const Tasks = () => {
           </div>
 
           {/* Quick Tips */}
-          <div className="mt-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-amber-200 dark:border-amber-800">
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+          <div className="mt-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-6 border border-border">
+            <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
               <span>💡</span>
               Productivity Tips
             </h3>
@@ -206,29 +206,29 @@ const Tasks = () => {
               <div className="flex items-start gap-3">
                 <span className="text-lg">🎯</span>
                 <div>
-                  <h4 className="font-medium text-gray-800 dark:text-white">Stay Focused</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Break large tasks into smaller, manageable pieces</p>
+                  <h4 className="font-medium text-foreground">Stay Focused</h4>
+                  <p className="text-muted-foreground">Break large tasks into smaller, manageable pieces</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-lg">⏰</span>
                 <div>
-                  <h4 className="font-medium text-gray-800 dark:text-white">Set Deadlines</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Use the calendar view to track important due dates</p>
+                  <h4 className="font-medium text-foreground">Set Deadlines</h4>
+                  <p className="text-muted-foreground">Use the calendar view to track important due dates</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-lg">🔄</span>
                 <div>
-                  <h4 className="font-medium text-gray-800 dark:text-white">Update Status</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Drag tasks between columns to show progress</p>
+                  <h4 className="font-medium text-foreground">Update Status</h4>
+                  <p className="text-muted-foreground">Drag tasks between columns to show progress</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <span className="text-lg">🤖</span>
                 <div>
-                  <h4 className="font-medium text-gray-800 dark:text-white">Get AI Help</h4>
-                  <p className="text-gray-600 dark:text-gray-400">Use the AI assistant for task management tips</p>
+                  <h4 className="font-medium text-foreground">Get AI Help</h4>
+                  <p className="text-muted-foreground">Use the AI assistant for task management tips</p>
                 </div>
               </div>
             </div>

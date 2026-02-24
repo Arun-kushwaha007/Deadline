@@ -15,7 +15,7 @@ const JoinOrganization = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-zinc-800 flex items-center justify-center px-4 py-8 transition-colors duration-300">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-card dark:to-zinc-800 flex items-center justify-center px-4 py-8 transition-colors duration-300">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Icon */}
           <div className="mb-8">
@@ -36,25 +36,25 @@ const JoinOrganization = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
             We're working on something amazing!
           </p>
 
           {/* Current Process Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700 mb-8">
+          <div className="bg-card rounded-2xl p-8 shadow-xl border border-border mb-8">
             <div className="flex items-center justify-center mb-6">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
                 <span className="text-3xl">💡</span>
               </div>
             </div>
             
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+            <h3 className="text-2xl font-bold text-foreground mb-4">
               Current Process
             </h3>
             
-            <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               For now, you can join organizations by sharing your{' '}
-              <span className="font-semibold text-orange-500">Profile ID</span>{' '}
+              <span className="font-semibold text-primary">Profile ID</span>{' '}
               with the Organization Admin or Coordinator.
             </p>
           </div>
@@ -65,8 +65,8 @@ const JoinOrganization = () => {
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 1
               </div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-2">Get Your ID</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h4 className="font-bold text-foreground mb-2">Get Your ID</h4>
+              <p className="text-sm text-muted-foreground">
                 Copy your Profile ID from your profile page
               </p>
             </div>
@@ -75,18 +75,18 @@ const JoinOrganization = () => {
               <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 2
               </div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-2">Share with Admin</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h4 className="font-bold text-foreground mb-2">Share with Admin</h4>
+              <p className="text-sm text-muted-foreground">
                 Send your ID to the organization admin
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+            <div className="bg-gradient-to-br bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
               <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 3
               </div>
-              <h4 className="font-bold text-gray-800 dark:text-white mb-2">Get Added</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h4 className="font-bold text-foreground mb-2">Get Added</h4>
+              <p className="text-sm text-muted-foreground">
                 Wait for the admin to add you to the team
               </p>
             </div>
@@ -103,14 +103,14 @@ const JoinOrganization = () => {
             
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors font-medium"
+              className="px-8 py-3 bg-muted0 hover:bg-slate-600 text-white rounded-lg transition-colors font-medium"
             >
               🏠 Back to Dashboard
             </button>
           </div>
 
           {/* Footer Note */}
-          <div className="mt-12 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+          <div className="mt-12 p-4 bg-secondary dark:bg-amber-900/20 border border-border rounded-lg">
             <p className="text-amber-800 dark:text-amber-300 text-sm">
               <span className="font-semibold">💡 Tip:</span> Stay tuned for our upcoming self-service join feature!
             </p>

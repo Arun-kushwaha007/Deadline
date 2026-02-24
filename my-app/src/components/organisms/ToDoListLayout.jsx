@@ -23,13 +23,13 @@ const ToDoListLayout = ({
     <div className="space-y-4">
       {tasks.length === 0 ? (
         <div className="text-center py-12">
-          <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-24 h-24 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-4xl">📝</span>
           </div>
-          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+          <h3 className="text-xl font-semibold text-foreground mb-2">
             No tasks yet
           </h3>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-muted-foreground">
             Add your first task to get started!
           </p>
         </div>
@@ -38,7 +38,7 @@ const ToDoListLayout = ({
           {tasks.map((t, index) => (
             <div
               key={t._id}
-              className={`group bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-600 hover:shadow-md transition-all duration-200 transform hover:scale-[1.02] ${
+              className={`group bg-white dark:bg-accent rounded-xl p-4 shadow-sm border border-border hover:shadow-md transition-all duration-200 transform hover:scale-[1.02] ${
                 t.completed 
                   ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800' 
                   : 'hover:border-blue-300 dark:hover:border-blue-600'
@@ -56,7 +56,7 @@ const ToDoListLayout = ({
                     className={`flex-shrink-0 mt-1 transition-all duration-200 ${
                       t.completed
                         ? 'text-green-500 hover:text-green-600'
-                        : 'text-gray-400 hover:text-blue-500'
+                        : 'text-muted-foreground hover:text-blue-500'
                     }`}
                   >
                     {t.completed ? (
@@ -72,8 +72,8 @@ const ToDoListLayout = ({
                       <span 
                         className={`text-base font-medium transition-all duration-200 ${
                           t.completed 
-                            ? 'line-through text-gray-500 dark:text-gray-400' 
-                            : 'text-gray-800 dark:text-white'
+                            ? 'line-through text-muted-foreground' 
+                            : 'text-foreground'
                         }`}
                       >
                         {t.text}
@@ -86,7 +86,7 @@ const ToDoListLayout = ({
                     </div>
                     
                     {/* Task Metadata */}
-                    <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         <span>Created {formatDate(t.createdAt || new Date())}</span>
@@ -105,7 +105,7 @@ const ToDoListLayout = ({
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <button
                     onClick={() => deleteTask(t._id)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200"
+                    className="p-2 text-muted-foreground hover:text-red-500 hover:bg-destructive/10 rounded-lg transition-all duration-200"
                     aria-label="Delete task"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -129,11 +129,11 @@ const ToDoListLayout = ({
 
       {/* Tasks Summary */}
       {tasks.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-6 pt-6 border-t border-border">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <Circle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Circle className="w-4 h-4 text-primary" />
                 <span className="text-sm font-medium text-blue-800 dark:text-blue-300">
                   {tasks.filter(t => !t.completed).length} Active
                 </span>
@@ -146,7 +146,7 @@ const ToDoListLayout = ({
               </div>
             </div>
             
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-muted-foreground">
               Total: {tasks.length} task{tasks.length !== 1 ? 's' : ''}
             </div>
           </div>
@@ -158,10 +158,10 @@ const ToDoListLayout = ({
         <div className="mt-6 p-4 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl border border-green-200 dark:border-green-800">
           <div className="text-center">
             <div className="text-4xl mb-2">🎉</div>
-            <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-1">
+            <h3 className="text-lg font-bold text-foreground mb-1">
               All tasks completed!
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Great job! You've finished everything on your list.
             </p>
           </div>

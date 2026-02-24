@@ -28,7 +28,7 @@ const Register = () => {
     if (/\d/.test(password)) score++;
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
-    if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-red-500' };
+    if (score <= 1) return { score: 1, label: 'Weak', color: 'bg-destructive' };
     if (score === 2) return { score: 2, label: 'Fair', color: 'bg-orange-500' };
     if (score === 3) return { score: 3, label: 'Good', color: 'bg-yellow-500' };
     if (score >= 4) return { score: 4, label: 'Strong', color: 'bg-green-500' };
@@ -120,18 +120,18 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-gray-800 to-zinc-900 text-white px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-background text-white px-4 relative overflow-hidden">
 
       <div className="relative w-full max-w-md">
         {/* Welcome Header - Orange/Red Theme */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
+          <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
             <UserPlusIcon className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-2">
             Join CollabNest
           </h1>
-          <p className="text-gray-400">Create your account to get started</p>
+          <p className="text-muted-foreground">Create your account to get started</p>
         </div>
 
         {/* Register Card */}
@@ -139,9 +139,9 @@ const Register = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Full Name</label>
+              <label className="block text-sm font-medium text-muted-foreground">Full Name</label>
               <div className="relative">
-                <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   {...register('name', { 
@@ -152,7 +152,7 @@ const Register = () => {
                     }
                   })}
                   placeholder="Enter your full name"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                 />
               </div>
               {errors.name && (
@@ -165,9 +165,9 @@ const Register = () => {
 
             {/* Email Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Email Address</label>
+              <label className="block text-sm font-medium text-muted-foreground">Email Address</label>
               <div className="relative">
-                <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="email"
                   {...register('email', { 
@@ -178,7 +178,7 @@ const Register = () => {
                     }
                   })}
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                 />
               </div>
               {errors.email && (
@@ -191,9 +191,9 @@ const Register = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-300">Password</label>
+              <label className="block text-sm font-medium text-muted-foreground">Password</label>
               <div className="relative">
-                <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type={showPassword ? 'text' : 'password'}  
                   {...register('password', { 
@@ -204,11 +204,11 @@ const Register = () => {
                     }
                   })}
                   placeholder="Create a strong password"
-                  className="w-full pl-10 pr-12 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-12 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-400 transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -235,7 +235,7 @@ const Register = () => {
                         className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
                           passwordStrength.score >= level
                             ? passwordStrength.color
-                            : 'bg-gray-700'
+                            : 'bg-slate-700'
                         }`}
                       />
                     ))}
@@ -253,14 +253,14 @@ const Register = () => {
             </div>
 
             {/* Terms and Privacy */}
-            <div className="bg-gray-800/30 rounded-lg p-4 border border-gray-700">
-              <p className="text-xs text-gray-400 leading-relaxed">
+            <div className="bg-muted/50 rounded-lg p-4 border border-slate-700">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 By creating an account, you agree to our{' '}
-                <Link to="/terms" className="text-orange-400 hover:text-orange-300 underline">
+                <Link to="/terms" className="text-primary hover:text-primary/80 underline">
                   Terms of Service
                 </Link>
                 {' '}and{' '}
-                <Link to="/privacy" className="text-orange-400 hover:text-orange-300 underline">
+                <Link to="/privacy" className="text-primary hover:text-primary/80 underline">
                   Privacy Policy
                 </Link>
               </p>
@@ -270,7 +270,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -286,10 +286,10 @@ const Register = () => {
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-gray-800/50 text-gray-400">Or continue with</span>
+              <span className="px-3 bg-muted text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
@@ -307,12 +307,12 @@ const Register = () => {
           </div>
 
           {/* Login Link - Orange Theme */}
-          <div className="text-center pt-4 border-t border-gray-600">
-            <p className="text-gray-400">
+          <div className="text-center pt-4 border-t border-border">
+            <p className="text-muted-foreground">
               Already have an account?{' '}
               <Link 
                 to="/login" 
-                className="text-orange-400 hover:text-orange-300 font-semibold transition-colors hover:underline"
+                className="text-primary hover:text-primary/80 font-semibold transition-colors hover:underline"
               >
                 Sign In
               </Link>
@@ -322,7 +322,7 @@ const Register = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Protected by industry-standard security
           </p>
         </div>

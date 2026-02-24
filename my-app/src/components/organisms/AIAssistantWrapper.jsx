@@ -70,29 +70,29 @@ export default function AIAssistantWrapper() {
  
       {!isOpen && hasNewMessage && (
         <div className="absolute bottom-16 right-0 mb-2 animate-in slide-in-from-bottom-3 fade-in duration-500">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-2xl border border-gray-200 dark:border-gray-700 max-w-xs relative">
+          <div className="bg-card rounded-xl p-4 shadow-2xl border border-border max-w-xs relative">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Bot className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-gray-800 dark:text-white mb-1">
+                <h4 className="text-sm font-semibold text-foreground mb-1">
                   AI Assistant Ready!
                 </h4>
-                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   I'm here to help with your tasks and productivity. Click to start chatting!
                 </p>
              
                 <div className="mt-2 flex items-center gap-1">
-                  <div className="w-1 h-1 bg-gray-400 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-gray-500 dark:text-gray-500">
+                  <div className="w-1 h-1 bg-slate-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                     Auto-closes in 10s
                   </span>
                 </div>
               </div>
               <button
                 onClick={handleCloseNotification}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="text-muted-foreground hover:text-muted-foreground dark:hover:text-muted-foreground transition-colors"
                 title="Close notification"
               >
                 <X className="w-3 h-3" />
@@ -100,12 +100,12 @@ export default function AIAssistantWrapper() {
             </div>
             
         
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-b-xl overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-purple-500 to-blue-600 animate-progress-bar"></div>
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-slate-200 dark:bg-accent rounded-b-xl overflow-hidden">
+              <div className="h-full bg-gradient-to-r bg-primary animate-progress-bar"></div>
             </div>
             
          
-            <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-2 h-2 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700"></div>
+            <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-2 h-2 bg-card border-r border-b border-border"></div>
           </div>
         </div>
       )}
@@ -119,16 +119,16 @@ export default function AIAssistantWrapper() {
             onMouseLeave={() => setIsHovered(false)}
             className={`relative w-14 h-14 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 ${
               isOpen
-                ? 'bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700'
-                : 'bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700'
+                ? 'bg-gradient-to-r bg-destructive hover:from-red-600 hover:to-pink-700'
+                : 'bg-gradient-to-r bg-primary hover:bg-primary/90'
             }`}
             aria-label={isOpen ? 'Close AI Assistant' : 'Open AI Assistant'}
           >
             {/* Background Glow */}
             <div className={`absolute inset-0 rounded-full transition-opacity duration-300 ${
               isOpen 
-                ? 'bg-gradient-to-r from-red-500 to-pink-600 opacity-30 blur-lg scale-150'
-                : 'bg-gradient-to-r from-purple-500 to-blue-600 opacity-30 blur-lg scale-150'
+                ? 'bg-gradient-to-r bg-destructive opacity-30 blur-lg scale-150'
+                : 'bg-gradient-to-r bg-primary opacity-30 blur-lg scale-150'
             }`}></div>
             
           
@@ -141,8 +141,8 @@ export default function AIAssistantWrapper() {
             </div>
 
             {!isOpen && hasNewMessage && (
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse">
-                <div className="absolute inset-0 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-destructive rounded-full border-2 border-white dark:border-gray-900 animate-pulse">
+                <div className="absolute inset-0 w-4 h-4 bg-destructive rounded-full animate-ping"></div>
               </div>
             )}
 
@@ -159,9 +159,9 @@ export default function AIAssistantWrapper() {
           {/* Hover Tooltip */}
           {isHovered && !isOpen && !hasNewMessage && (
             <div className="absolute bottom-16 right-0 mb-2 animate-in fade-in duration-200">
-              <div className="bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap">
+              <div className="bg-slate-900 dark:bg-accent text-white text-xs px-3 py-2 rounded-lg whitespace-nowrap">
                 Chat with AI Assistant
-                <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900 dark:bg-gray-700"></div>
+                <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-slate-900 dark:bg-accent"></div>
               </div>
             </div>
           )}

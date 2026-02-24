@@ -18,22 +18,22 @@ const ProfileOverviewTab = ({ dashboardStats }) => (
             {stat.icon}
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500 dark:text-gray-400">Progress</div>
-            <div className="text-sm font-bold text-gray-700 dark:text-gray-300">{Math.round(stat.progress)}%</div>
+            <div className="text-xs text-muted-foreground">Progress</div>
+            <div className="text-sm font-bold text-foreground/80">{Math.round(stat.progress)}%</div>
           </div>
         </div>
         
-        <h3 className="text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
+        <h3 className="text-foreground/80 text-sm font-semibold mb-2">
           {stat.label}
         </h3>
         
-        <p className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+        <p className="text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
           {stat.value}
         </p>
         
         {stat.action && (
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">Click to test</span>
+            <span className="text-xs text-muted-foreground bg-white/80 px-2 py-1 rounded">Click to test</span>
           </div>
         )}
       </div>

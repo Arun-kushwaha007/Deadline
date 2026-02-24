@@ -38,7 +38,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
     const configs = {
       admin: { 
         color: 'text-red-400', 
-        bg: 'bg-red-500/20', 
+        bg: 'bg-destructive/20', 
         border: 'border-red-500/30', 
         icon: ShieldCheckIcon,
         label: 'Administrator' 
@@ -51,8 +51,8 @@ const OrganizationCard = ({ organization, currentUserId }) => {
         label: 'Coordinator' 
       },
       member: { 
-        color: 'text-blue-400', 
-        bg: 'bg-blue-500/20', 
+        color: 'text-primary', 
+        bg: 'bg-primary/20', 
         border: 'border-blue-500/30', 
         icon: UserIcon,
         label: 'Member' 
@@ -94,7 +94,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
         onDoubleClick={handleViewDetails}
       >
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+        <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -105,8 +105,8 @@ const OrganizationCard = ({ organization, currentUserId }) => {
                   {organization.name}
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <UsersIcon className="w-4 h-4 text-blue-100" />
-                  <span className="text-blue-100 text-sm">
+                  <UsersIcon className="w-4 h-4 text-primary-foreground/80" />
+                  <span className="text-primary-foreground/80 text-sm">
                     {organization.members.length} member{organization.members.length !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -133,7 +133,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
                 Your role: {myRole}
               </span>
               {myName && myName !== 'You' && (
-                <span className="text-gray-400 text-sm">({myName})</span>
+                <span className="text-muted-foreground text-sm">({myName})</span>
               )}
             </div>
           </div>
@@ -149,7 +149,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
             </button>
 
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
               onClick={handleViewDetails}
             >
               <EyeIcon className="w-4 h-4" />
@@ -158,7 +158,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
 
             {isPrivileged && (
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
                 onClick={handleAddMember}
               >
                 <UserPlusIcon className="w-4 h-4" />
@@ -169,7 +169,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
         </div>
 
         {/* Hover Effect Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
         
         {/* Corner Accent */}
         <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-white/10 to-transparent rounded-bl-2xl"></div>

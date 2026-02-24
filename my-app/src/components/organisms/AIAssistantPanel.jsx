@@ -126,7 +126,7 @@ export default function AIAssistantPanel() {
   return (
     <aside 
       ref={panelRef}
-      className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300 select-none"
+      className="relative bg-card border border-border rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300 select-none"
       style={{ 
         width: `${panelSize.width}px`, 
         height: `${panelSize.height}px`,
@@ -139,29 +139,29 @@ export default function AIAssistantPanel() {
       {/* Resize Handles */}
       {/* Left resize handle (width) */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-purple-500/50 transition-colors z-10 bg-transparent"
+        className="absolute left-0 top-0 bottom-0 w-2 cursor-ew-resize hover:bg-primary/50 transition-colors z-10 bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'width')}
         title="Resize width"
       />
       
       {/* Top resize handle (height) */}
       <div
-        className="absolute top-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-purple-500/50 transition-colors z-10 bg-transparent"
+        className="absolute top-0 left-0 right-0 h-2 cursor-ns-resize hover:bg-primary/50 transition-colors z-10 bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'height')}
         title="Resize height"
       />
       
       {/* Top-left corner resize handle (both) */}
       <div
-        className="absolute top-0 left-0 w-6 h-6 cursor-nw-resize hover:bg-purple-500/70 transition-colors z-20 flex items-center justify-center bg-transparent"
+        className="absolute top-0 left-0 w-6 h-6 cursor-nw-resize hover:bg-primary/70 transition-colors z-20 flex items-center justify-center bg-transparent"
         onMouseDown={(e) => handleMouseDown(e, 'both')}
         title="Resize both dimensions"
       >
-        <GripVertical className="w-3 h-3 text-gray-400 hover:text-purple-500 transition-colors" />
+        <GripVertical className="w-3 h-3 text-muted-foreground hover:text-purple-500 transition-colors" />
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-500 to-blue-600 p-3">
+      <div className="bg-gradient-to-r bg-primary p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -169,7 +169,7 @@ export default function AIAssistantPanel() {
             </div>
             <div>
               <h2 className="text-base font-semibold text-white">AI Assistant</h2>
-              <p className="text-purple-100 text-xs">
+              <p className="text-primary-foreground/80 text-xs">
                 {panelSize.width}×{panelSize.height} • Resizable
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function AIAssistantPanel() {
 
       {/* Messages Area */}
       <div 
-        className="overflow-y-auto p-3 space-y-3 bg-gray-50 dark:bg-gray-900"
+        className="overflow-y-auto p-3 space-y-3 bg-background"
         style={{ height: `${messagesHeight}px` }}
       >
         {messages.length === 0 ? (
@@ -199,13 +199,13 @@ export default function AIAssistantPanel() {
             <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
               <Sparkles className="w-6 h-6 text-purple-500" />
             </div>
-            <h3 className="text-base font-semibold text-gray-800 dark:text-white mb-1">
+            <h3 className="text-base font-semibold text-foreground mb-1">
               AI Assistant
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-xs">
+            <p className="text-muted-foreground text-xs">
               Ask about tasks, productivity tips, or project management.
             </p>
-            <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-4 text-xs text-muted-foreground">
               💡 Drag the edges to resize this panel
             </div>
           </div>
@@ -218,10 +218,10 @@ export default function AIAssistantPanel() {
               {/* Avatar */}
               <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
                 msg.sender === 'user'
-                  ? 'bg-blue-500'
+                  ? 'bg-primary'
                   : msg.isError
-                  ? 'bg-red-500'
-                  : 'bg-purple-500'
+                  ? 'bg-destructive'
+                  : 'bg-primary'
               }`}>
                 {msg.sender === 'user' ? (
                   <User className="w-3 h-3 text-white" />
@@ -235,14 +235,14 @@ export default function AIAssistantPanel() {
                    style={{ maxWidth: `${panelSize.width - 100}px` }}>
                 <div className={`p-2 rounded-xl break-words ${
                   msg.sender === 'user'
-                    ? 'bg-blue-500 text-white rounded-br-sm'
+                    ? 'bg-primary text-white rounded-br-sm'
                     : msg.isError
                     ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-bl-sm'
-                    : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white rounded-bl-sm'
+                    : 'bg-white dark:bg-accent border border-border text-foreground rounded-bl-sm'
                 }`}>
                   <p className="text-xs leading-relaxed">{msg.message}</p>
                 </div>
-                <p className={`text-xs text-gray-500 dark:text-gray-400 mt-0.5 ${
+                <p className={`text-xs text-muted-foreground mt-0.5 ${
                   msg.sender === 'user' ? 'text-right' : 'text-left'
                 }`}>
                   {formatTime(msg.timestamp)}
@@ -255,14 +255,14 @@ export default function AIAssistantPanel() {
      
         {isLoading && (
           <div className="flex gap-2">
-            <div className="flex-shrink-0 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+            <div className="flex-shrink-0 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
               <Bot className="w-3 h-3 text-white" />
             </div>
-            <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-2 rounded-xl rounded-bl-sm">
+            <div className="bg-white dark:bg-accent border border-border p-2 rounded-xl rounded-bl-sm">
               <div className="flex space-x-1">
-                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
-                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
@@ -272,23 +272,23 @@ export default function AIAssistantPanel() {
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <div className="absolute bottom-0 left-0 right-0 p-3 bg-card border-t border-border">
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <input
-              className="w-full px-3 py-2 pr-8 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 border border-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm"
+              className="w-full px-3 py-2 pr-8 rounded-lg bg-accent text-foreground placeholder-slate-500 dark:placeholder-muted-foreground border border-border focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-sm"
               placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
             />
-            <MessageCircle className="absolute right-2.5 top-2.5 w-3.5 h-3.5 text-gray-400" />
+            <MessageCircle className="absolute right-2.5 top-2.5 w-3.5 h-3.5 text-muted-foreground" />
           </div>
           <button
             className={`px-3 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
               input.trim() && !isLoading
-                ? 'bg-gradient-to-r from-purple-500 to-blue-600 text-white hover:from-purple-600 hover:to-blue-700 shadow-lg'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                ? 'bg-gradient-to-r bg-primary text-white hover:bg-primary/90 shadow-lg'
+                : 'bg-slate-200 dark:bg-accent text-muted-foreground cursor-not-allowed'
             }`}
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
@@ -317,8 +317,8 @@ export default function AIAssistantPanel() {
 
       {/* Resize indicator overlay when resizing */}
       {isResizing && (
-        <div className="absolute inset-0 bg-purple-500/10 border-2 border-purple-500 border-dashed rounded-2xl pointer-events-none z-30 flex items-center justify-center">
-          <div className="bg-purple-500 text-white px-3 py-1 rounded-lg text-sm font-medium">
+        <div className="absolute inset-0 bg-primary/10 border-2 border-purple-500 border-dashed rounded-2xl pointer-events-none z-30 flex items-center justify-center">
+          <div className="bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
             {panelSize.width} × {panelSize.height}
           </div>
         </div>

@@ -253,39 +253,39 @@ const DashboardOverview = () => {
   );
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div className="p-6 min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 shadow-lg">
+        <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 shadow-lg">
           <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
             📊 Organization Analytics
           </h2>
-          <p className="text-blue-100">
+          <p className="text-primary-foreground/80">
             Comprehensive insights into your organization's performance and productivity
           </p>
         </div>
       </div>
 
       {/* Global Filters Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+      <div className="bg-card rounded-2xl p-6 shadow-lg border border-border mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
             <span className="text-white text-lg">🔍</span>
           </div>
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+          <h3 className="text-xl font-bold text-foreground">
             Global Filters
           </h3>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Priority Level
             </label>
             <select
               value={selectedPriority}
               onChange={(e) => setSelectedPriority(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             >
               <option value="">All Priorities</option>
               <option value="low">🟢 Low</option>
@@ -295,13 +295,13 @@ const DashboardOverview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Task Status
             </label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             >
               <option value="">All Statuses</option>
               <option value="todo">📝 To Do</option>
@@ -315,12 +315,12 @@ const DashboardOverview = () => {
       {/* Global Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Status Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div className="bg-card rounded-2xl p-6 shadow-lg border border-border">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
               <span className="text-white text-lg">📈</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            <h3 className="text-xl font-bold text-foreground">
               Tasks by Status
             </h3>
           </div>
@@ -354,25 +354,25 @@ const DashboardOverview = () => {
           
           <div className="flex flex-wrap justify-center gap-4 mt-4">
             {statusData.map((s, index) => (
-              <div key={index} className="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg">
+              <div key={index} className="flex items-center space-x-2 bg-muted dark:bg-accent px-3 py-2 rounded-lg">
                 <div
                   className="w-4 h-4 rounded-full"
                   style={{ backgroundColor: COLORS[index] }}
                 />
                 <span className="text-sm font-medium">{s.name}</span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">({s.value})</span>
+                <span className="text-sm text-muted-foreground">({s.value})</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Priority Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div className="bg-card rounded-2xl p-6 shadow-lg border border-border">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
               <span className="text-white text-lg">🎯</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            <h3 className="text-xl font-bold text-foreground">
               Tasks by Priority
             </h3>
           </div>
@@ -406,12 +406,12 @@ const DashboardOverview = () => {
       </div>
 
       {/* User Analysis Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+      <div className="bg-card rounded-2xl p-6 shadow-lg border border-border mb-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
             <span className="text-white text-lg">👥</span>
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 dark:text-white">
+          <h3 className="text-2xl font-bold text-foreground">
             User Performance Analysis
           </h3>
         </div>
@@ -419,13 +419,13 @@ const DashboardOverview = () => {
         {/* User Analysis Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Organization
             </label>
             <select
               value={selectedOrg}
               onChange={(e) => setSelectedOrg(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
             >
               <option value="">🏢 All Organizations</option>
               {organizations.map((org) => (
@@ -437,13 +437,13 @@ const DashboardOverview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Priority
             </label>
             <select
               value={analysisPriority}
               onChange={(e) => setAnalysisPriority(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
             >
               <option value="">All Priorities</option>
               <option value="low">🟢 Low</option>
@@ -453,13 +453,13 @@ const DashboardOverview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Status
             </label>
             <select
               value={analysisStatus}
               onChange={(e) => setAnalysisStatus(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
             >
               <option value="">All Statuses</option>
               <option value="todo">📝 To Do</option>
@@ -469,13 +469,13 @@ const DashboardOverview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-foreground/80 mb-2">
               Team Member
             </label>
             <select
               value={analysisUserId}
               onChange={(e) => setAnalysisUserId(e.target.value)}
-              className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
+              className="w-full bg-white dark:bg-accent border border-slate-300 dark:border-border text-foreground p-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all disabled:opacity-50"
               disabled={!selectedOrg}
             >
               <option value="">👤 All Users</option>
@@ -493,26 +493,26 @@ const DashboardOverview = () => {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           {userAnalysis.length === 0 ? (
             <div className="col-span-full text-center py-12">
-              <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-24 h-24 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-4xl">📊</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
+              <h3 className="text-xl font-semibold text-foreground mb-2">
                 No Data Available
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-muted-foreground">
                 Apply filters to see user performance analysis
               </p>
             </div>
           ) : (
             userAnalysis.map((user) => (
-              <div key={user.userId} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
+              <div key={user.userId} className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 rounded-xl p-6 border border-border">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-gray-800 dark:text-white">{user.name}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <h4 className="text-lg font-bold text-foreground">{user.name}</h4>
+                    <p className="text-sm text-muted-foreground">
                       📋 {user.totalTasks} total tasks
                     </p>
                   </div>
@@ -520,8 +520,8 @@ const DashboardOverview = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Status Breakdown */}
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-                    <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                  <div className="bg-card rounded-lg p-4">
+                    <h5 className="text-sm font-semibold text-foreground/80 mb-3 flex items-center gap-2">
                       📊 Status Distribution
                     </h5>
                     <ResponsiveContainer width="100%" height={120}>
@@ -548,8 +548,8 @@ const DashboardOverview = () => {
                   </div>
 
                   {/* Priority Breakdown */}
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-                    <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                  <div className="bg-card rounded-lg p-4">
+                    <h5 className="text-sm font-semibold text-foreground/80 mb-3 flex items-center gap-2">
                       🎯 Priority Distribution
                     </h5>
                     <ResponsiveContainer width="100%" height={120}>

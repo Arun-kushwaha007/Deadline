@@ -136,14 +136,14 @@ const OrganizationDashboard = () => {
         </div>
         <div>
           <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 dark:text-white">{value}</p>
+          <p className="text-3xl font-bold text-gray-800 dark:text-foreground">{value}</p>
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-indigo-950/30 transition-all duration-500">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-card dark:via-gray-900 dark:to-indigo-950/30 transition-all duration-500">
 
       <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -163,11 +163,11 @@ const OrganizationDashboard = () => {
           {/* Enhanced Action Section */}
           <div className="flex flex-col lg:flex-row justify-between items-center mb-12 gap-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-3xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg">
                 <span className="text-white text-2xl">📊</span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-foreground">
                   Organization Dashboard
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
@@ -197,7 +197,7 @@ const OrganizationDashboard = () => {
                   onClick={() => setViewMode('grid')}
                   className={`px-3 py-2 rounded-lg transition-all duration-200 ${
                     viewMode === 'grid'
-                      ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-400'
+                      ? 'bg-white dark:bg-gray-600 shadow-sm text-primary'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
@@ -207,7 +207,7 @@ const OrganizationDashboard = () => {
                   onClick={() => setViewMode('list')}
                   className={`px-3 py-2 rounded-lg transition-all duration-200 ${
                     viewMode === 'list'
-                      ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-400'
+                      ? 'bg-white dark:bg-gray-600 shadow-sm text-primary'
                       : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                   }`}
                 >
@@ -236,7 +236,7 @@ const OrganizationDashboard = () => {
                   <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span className="text-4xl">🔍</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+                  <h3 className="text-2xl font-bold text-gray-800 dark:text-foreground mb-4">
                     No Results Found
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
@@ -244,7 +244,7 @@ const OrganizationDashboard = () => {
                   </p>
                   <button
                     onClick={() => setSearchTerm('')}
-                    className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-colors"
+                    className="px-6 py-3 bg-primary hover:bg-primary text-white rounded-xl transition-colors"
                   >
                     Clear Search
                   </button>
@@ -296,7 +296,7 @@ const OrganizationDashboard = () => {
                 icon="✅"
                 title="Active Projects"
                 value={uniqueOrganizations.reduce((acc, org) => acc + (org.projectCount || 0), 0) || uniqueOrganizations.length}
-                color="from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800"
+                color="bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
                 delay={100}
               />
               <StatsCard
@@ -310,7 +310,7 @@ const OrganizationDashboard = () => {
                 icon="📈"
                 title="Completion Rate"
                 value="85%"
-                color="from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border-amber-200 dark:border-amber-800"
+                color="bg-secondary/50 border-border"
                 delay={300}
               />
             </div>
@@ -344,7 +344,7 @@ const OrganizationDashboard = () => {
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <span className="text-3xl animate-bounce">👆</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-foreground mb-3">
                 Select an Organization
               </h3>
               <p className="text-gray-600 dark:text-gray-400 text-lg max-w-md mx-auto">

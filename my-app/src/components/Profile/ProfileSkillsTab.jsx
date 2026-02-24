@@ -12,9 +12,9 @@ const ProfileSkillsTab = ({
   skillColorOptions,
 }) => (
   <>
-    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
+    <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
           🎯 Skills & Expertise
         </h3>
         <button
@@ -28,8 +28,8 @@ const ProfileSkillsTab = ({
       {userSkills.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">🎯</div>
-          <h4 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No Skills Added Yet</h4>
-          <p className="text-gray-500 dark:text-gray-500 mb-6">Start building your profile by adding your skills and expertise</p>
+          <h4 className="text-xl font-semibold text-muted-foreground mb-2">No Skills Added Yet</h4>
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">Start building your profile by adding your skills and expertise</p>
           <button
             onClick={() => setShowSkillsModal(true)}
             className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
@@ -42,9 +42,9 @@ const ProfileSkillsTab = ({
           {userSkills.map((skill, index) => (
             <div key={skill.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-700 dark:text-gray-300 font-medium">{skill.name}</span>
+                <span className="text-foreground/80 font-medium">{skill.name}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 dark:text-gray-400 text-sm">{skill.level}%</span>
+                  <span className="text-muted-foreground text-sm">{skill.level}%</span>
                   <button
                     onClick={() => removeSkill(skill.id)}
                     className="text-red-500 hover:text-red-700 transition-colors p-1"
@@ -54,7 +54,7 @@ const ProfileSkillsTab = ({
                   </button>
                 </div>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-slate-200 dark:bg-accent rounded-full h-3 overflow-hidden">
                 <div 
                   className={`h-full ${skill.color} rounded-full transition-all duration-1000 ease-out`}
                   style={{ width: `${skill.level}%` }}
@@ -77,7 +77,7 @@ const ProfileSkillsTab = ({
     {/* Skills Modal */}
     {showSkillsModal && (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-        <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl w-full max-w-md shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
+        <div className="bg-white/95 dark:bg-muted/95 backdrop-blur-sm rounded-3xl w-full max-w-md shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
           
           {/* Modal Header */}
           <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-6 rounded-t-3xl">
@@ -89,21 +89,21 @@ const ProfileSkillsTab = ({
           <div className="p-6">
             {/* Skill Name */}
             <div className="mb-4">
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-bold text-foreground/80 mb-2">
                 Skill Name
               </label>
               <input
                 type="text"
                 value={newSkill.name}
                 onChange={(e) => setNewSkill({...newSkill, name: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+                className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300"
                 placeholder="e.g. JavaScript, Project Management, Design"
               />
             </div>
 
             {/* Skill Level */}
             <div className="mb-4">
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-bold text-foreground/80 mb-2">
                 Proficiency Level: {newSkill.level}%
               </label>
               <input
@@ -114,7 +114,7 @@ const ProfileSkillsTab = ({
                 onChange={(e) => setNewSkill({...newSkill, level: parseInt(e.target.value)})}
                 className="w-full"
               />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>Beginner</span>
                 <span>Expert</span>
               </div>
@@ -122,7 +122,7 @@ const ProfileSkillsTab = ({
 
             {/* Color Selection */}
             <div className="mb-6">
-              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-bold text-foreground/80 mb-2">
                 Color Theme
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -143,7 +143,7 @@ const ProfileSkillsTab = ({
             <div className="flex gap-3">
               <button
                 onClick={() => setShowSkillsModal(false)}
-                className="flex-1 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl transition-all duration-300 font-medium"
+                className="flex-1 px-4 py-3 bg-muted0 hover:bg-slate-600 text-white rounded-xl transition-all duration-300 font-medium"
               >
                 Cancel
               </button>

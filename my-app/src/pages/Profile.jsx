@@ -113,12 +113,12 @@ const Profile = () => {
   const skillColorOptions = [
     { value: 'bg-blue-500', label: 'Blue', preview: '#3B82F6' },
     { value: 'bg-green-500', label: 'Green', preview: '#10B981' },
-    { value: 'bg-purple-500', label: 'Purple', preview: '#8B5CF6' },
+    { value: 'bg-primary', label: 'Purple', preview: '#8B5CF6' },
     { value: 'bg-orange-500', label: 'Orange', preview: '#F97316' },
-    { value: 'bg-red-500', label: 'Red', preview: '#EF4444' },
+    { value: 'bg-destructive', label: 'Red', preview: '#EF4444' },
     { value: 'bg-yellow-500', label: 'Yellow', preview: '#EAB308' },
     { value: 'bg-pink-500', label: 'Pink', preview: '#EC4899' },
-    { value: 'bg-indigo-500', label: 'Indigo', preview: '#6366F1' }
+    { value: 'bg-primary', label: 'Indigo', preview: '#6366F1' }
   ];
 
 
@@ -368,27 +368,27 @@ useEffect(() => {
   // Loading skeleton component
   const LoadingSkeleton = () => (
     <div className="animate-pulse">
-      <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg mb-4 w-1/3"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-2/3"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-8 w-1/2"></div>
+      <div className="h-8 bg-slate-300 dark:bg-slate-600 rounded-lg mb-4 w-1/3"></div>
+      <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-2 w-2/3"></div>
+      <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-8 w-1/2"></div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl">
-            <div className="w-32 h-32 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="bg-card rounded-3xl p-8 shadow-xl">
+            <div className="w-32 h-32 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mb-6"></div>
+            <div className="h-6 bg-slate-300 dark:bg-slate-600 rounded mb-2"></div>
+            <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-4"></div>
+            <div className="h-10 bg-slate-200 dark:bg-accent rounded"></div>
           </div>
         </div>
         
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-xl mb-4"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
+              <div key={i} className="bg-card rounded-2xl p-6">
+                <div className="w-12 h-12 bg-slate-300 dark:bg-slate-600 rounded-xl mb-4"></div>
+                <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-2"></div>
+                <div className="h-8 bg-slate-300 dark:bg-slate-600 rounded"></div>
               </div>
             ))}
           </div>
@@ -400,7 +400,7 @@ useEffect(() => {
   if (isLoading) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
           <div className="max-w-7xl mx-auto">
             <LoadingSkeleton />
           </div>
@@ -412,14 +412,14 @@ useEffect(() => {
   if (!user) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 flex items-center justify-center">
           
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-gray-200/50 dark:border-gray-700/50 relative z-10 max-w-md mx-4">
+          <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
             <div className="text-8xl mb-6 animate-bounce">🔐</div>
             <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
               Authentication Required
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+            <p className="text-muted-foreground mb-8 text-lg">
               Please log in to view your profile and access your personal dashboard.
             </p>
             <button
@@ -439,7 +439,7 @@ useEffect(() => {
       label: 'Organizations Joined',
       value: userProgress.organizationsJoined,
       icon: '🏢',
-      color: 'from-blue-500 to-blue-600',
+      color: 'bg-primary',
       bgColor: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20',
       borderColor: 'border-blue-200 dark:border-blue-800',
       progress: Math.min((userProgress.organizationsJoined / 5) * 100, 100),
@@ -450,7 +450,7 @@ useEffect(() => {
       value: userProgress.tasksCompleted,
       icon: '✅',
       color: 'from-green-500 to-green-600',
-      bgColor: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
+      bgColor: 'bg-gradient-to-br bg-green-50 dark:bg-green-900/20',
       borderColor: 'border-green-200 dark:border-green-800',
       progress: Math.min((userProgress.tasksCompleted / 50) * 100, 100),
       // action: () => simulateProgress('tasksCompleted')
@@ -468,7 +468,7 @@ useEffect(() => {
       label: 'Skills Added',
       value: userSkills.length,
       icon: '🎯',
-      color: 'from-purple-500 to-purple-600',
+      color: 'bg-primary',
       bgColor: 'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
       borderColor: 'border-purple-200 dark:border-purple-800',
       progress: Math.min((userSkills.length / 10) * 100, 100),
@@ -477,7 +477,7 @@ useEffect(() => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 transition-all duration-500">
 
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
@@ -488,7 +488,7 @@ useEffect(() => {
                 <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
                   My Profile
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
+                <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
                   Manage your personal information, track your progress, and showcase your achievements
                 </p>
               </div>
@@ -502,10 +502,10 @@ useEffect(() => {
                     <span className="text-white text-2xl">🔑</span>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
                       Your Unique ID
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-muted-foreground">
                       Share this ID with organizations to join their workspace
                     </p>
                   </div>
@@ -516,7 +516,7 @@ useEffect(() => {
                     type="text"
                     value={user.userId || 'N/A'}
                     readOnly
-                    className="flex-1 px-6 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-300/50 dark:border-gray-600/50 rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
+                    className="flex-1 px-6 py-4 bg-white/80 dark:bg-muted/80 backdrop-blur-sm border border-slate-300/50 dark:border-border/50 rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
                   />
                   <button
                     onClick={handleCopyUserId}
@@ -532,7 +532,7 @@ useEffect(() => {
             {/* Tab Navigation */}
             <div className="mb-8">
               <div className="flex justify-center">
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+                <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
                     { id: 'overview', label: '📊 Overview', icon: '📊' },
                     { id: 'skills', label: '🎯 Skills', icon: '🎯' },
@@ -544,7 +544,7 @@ useEffect(() => {
                       className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
                           ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
                       {tab.label}
@@ -559,7 +559,7 @@ useEffect(() => {
               
               {/* Enhanced Profile Card */}
               <div className="lg:col-span-1">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
+                <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50 relative overflow-hidden">
                   {/* Background pattern */}
                   <div className="absolute inset-0 opacity-5">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-400 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
@@ -582,11 +582,11 @@ useEffect(() => {
                       </div>
                     </div>
                     
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent mb-2">
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent mb-2">
                       {user.name}
                     </h2>
                     
-                    <p className="text-gray-600 dark:text-gray-400 mb-2 flex items-center justify-center gap-2">
+                    <p className="text-muted-foreground mb-2 flex items-center justify-center gap-2">
                       <span>📧</span> {user.email || 'user@example.com'}
                     </p>
 
@@ -599,8 +599,8 @@ useEffect(() => {
                     )}
 
                     {bio && (
-                      <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-gray-200 dark:border-gray-600">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 italic leading-relaxed">
+                      <div className="mt-6 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-2xl border border-border">
+                        <p className="text-sm text-foreground/80 italic leading-relaxed">
                           "{bio}"
                         </p>
                       </div>
@@ -650,7 +650,7 @@ useEffect(() => {
         {/* Enhanced Edit Profile Modal */}
         {showEditModal && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
+            <div className="bg-white/95 dark:bg-muted/95 backdrop-blur-sm rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
               
               {/* Enhanced Modal Header */}
               <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-8 rounded-t-3xl relative overflow-hidden">
@@ -664,7 +664,7 @@ useEffect(() => {
               <div className="p-8">
                 {/* Enhanced Profile Picture Section */}
                 <div className="mb-8">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
                     <span className="text-lg">📸</span> Profile Picture
                   </label>
                   
@@ -689,34 +689,34 @@ useEffect(() => {
                     type="file"
                     onChange={handleImageUpload}
                     accept="image/*"
-                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-gray-700 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
+                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-accent dark:text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
                   />
                 </div>
 
                 {/* Enhanced Bio Section */}
                 <div className="mb-8">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
                     <span className="text-lg">📝</span> Bio
                   </label>
                   <textarea
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={4}
-                    className="w-full px-6 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl dark:bg-gray-700 dark:text-white resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent dark:text-foreground resize-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="Tell us about yourself, your interests, and what motivates you..."
                   />
                 </div>
 
                 {/* Enhanced Skills Section */}
                 <div className="mb-10">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
                     <span className="text-lg">🎯</span> Job Title / Role
                   </label>
                   <input
                     type="text"
                     value={section}
                     onChange={(e) => setSection(e.target.value)}
-                    className="w-full px-6 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="E.g. Full Stack Developer, UI/UX Designer, Project Manager"
                   />
                 </div>
@@ -725,7 +725,7 @@ useEffect(() => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="flex-1 px-6 py-4 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     Cancel
                   </button>

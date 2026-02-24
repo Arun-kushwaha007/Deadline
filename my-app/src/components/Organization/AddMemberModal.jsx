@@ -34,7 +34,7 @@ const AddMemberModal = ({ orgId, closeModal }) => {
           <option value="coordinator">Coordinator</option>
         </select>
         <div className="flex justify-end gap-2">
-          <button className="px-4 py-2 bg-gray-300 rounded" onClick={closeModal}>Cancel</button>
+          <button className="px-4 py-2 bg-slate-300 rounded" onClick={closeModal}>Cancel</button>
           <button className="px-4 py-2 bg-green-600 text-white rounded" onClick={handleAdd}>Add</button>
         </div>
       </div>

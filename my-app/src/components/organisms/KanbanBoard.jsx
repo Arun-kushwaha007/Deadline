@@ -94,7 +94,7 @@ const KanbanBoard = () => {
       title: 'To Do',
       icon: ClockIcon,
       gradient: 'from-blue-500 to-indigo-600',
-      bg: 'bg-blue-500/10',
+      bg: 'bg-primary/10',
       border: 'border-blue-500/30',
       count: tasks.filter(t => t.status === 'todo').length
     },
@@ -158,11 +158,11 @@ const KanbanBoard = () => {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4">
             <ViewColumnsIcon className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-300 mb-2">No Organization Selected</h3>
-          <p className="text-gray-400">Please select an organization to view its Kanban board.</p>
+          <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Organization Selected</h3>
+          <p className="text-muted-foreground">Please select an organization to view its Kanban board.</p>
         </div>
       </div>
     );
@@ -174,14 +174,14 @@ const KanbanBoard = () => {
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center">
               <ViewColumnsIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 Kanban Board
               </h1>
-              <p className="text-gray-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Drag and drop tasks to update their status
               </p>
             </div>
@@ -190,7 +190,7 @@ const KanbanBoard = () => {
           {isPrivileged && (
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
             >
               <PlusIcon className="w-4 h-4" />
               New Task
@@ -201,8 +201,8 @@ const KanbanBoard = () => {
         {/* Filters */}
         <div className="mt-6 flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <FunnelIcon className="w-4 h-4 text-gray-400" />
-            <label className="text-sm font-medium text-gray-300" htmlFor="priorityFilter">
+            <FunnelIcon className="w-4 h-4 text-muted-foreground" />
+            <label className="text-sm font-medium text-muted-foreground" htmlFor="priorityFilter">
               Filter by Priority:
             </label>
           </div>
@@ -210,7 +210,7 @@ const KanbanBoard = () => {
             id="priorityFilter"
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
-            className="bg-gray-800/50 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            className="bg-muted border border-border text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             disabled={editTask !== null}
           >
             <option value="">All Priorities</option>
@@ -231,8 +231,8 @@ const KanbanBoard = () => {
                 className={`${config.bg} border ${config.border} rounded-lg p-3 text-center`}
               >
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <Icon className="w-4 h-4 text-gray-300" />
-                  <span className="text-sm font-medium text-gray-300">{config.title}</span>
+                  <Icon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">{config.title}</span>
                 </div>
                 <div className="text-2xl font-bold text-white">{config.count}</div>
               </div>
@@ -296,10 +296,10 @@ const KanbanBoard = () => {
                     <div className="space-y-3">
                       {tasksToShow.length === 0 ? (
                         <div className="text-center py-8">
-                          <div className="w-12 h-12 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <Icon className="w-6 h-6 text-gray-400" />
+                          <div className="w-12 h-12 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <Icon className="w-6 h-6 text-muted-foreground" />
                           </div>
-                          <p className="text-gray-400 text-sm">No tasks in {config.title.toLowerCase()}</p>
+                          <p className="text-muted-foreground text-sm">No tasks in {config.title.toLowerCase()}</p>
                         </div>
                       ) : (
                         tasksToShow.map((task) => (
@@ -327,7 +327,7 @@ const KanbanBoard = () => {
                   {/* Show More/Less Button */}
                   {columnTasks.length > 4 && (
                     <button
-                      className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded-lg transition-all duration-200"
+                      className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm text-primary hover:text-blue-300 hover:bg-primary/10 rounded-lg transition-all duration-200"
                       onClick={() =>
                         setExpandedColumns((prev) => ({
                           ...prev,
@@ -381,7 +381,7 @@ const KanbanBoard = () => {
       {taskStatus === 'loading' && (
         <div className="text-center py-8">
           <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-          <p className="text-gray-400">Loading tasks...</p>
+          <p className="text-muted-foreground">Loading tasks...</p>
         </div>
       )}
 

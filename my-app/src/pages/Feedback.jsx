@@ -33,7 +33,7 @@ const Feedback = () => {
 
   
   const categories = [
-    { value: '', label: 'All Categories', icon: '📂', color: 'bg-gray-100 text-gray-800' },
+    { value: '', label: 'All Categories', icon: '📂', color: 'bg-accent text-foreground' },
     { value: 'general', label: 'General', icon: '💬', color: 'bg-blue-100 text-blue-800' },
     { value: 'feature', label: 'Feature Request', icon: '✨', color: 'bg-purple-100 text-purple-800' },
     { value: 'bug', label: 'Bug Report', icon: '🐛', color: 'bg-red-100 text-red-800' },
@@ -243,7 +243,7 @@ const Feedback = () => {
   // Render stars
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
-      <span key={i} className={i < rating ? 'text-yellow-400' : 'text-gray-300'}>
+      <span key={i} className={i < rating ? 'text-yellow-400' : 'text-muted-foreground'}>
         ⭐
       </span>
     ));
@@ -255,10 +255,10 @@ const Feedback = () => {
     return (
       <DashboardLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg text-center">
+          <div className="bg-card rounded-xl p-8 shadow-lg text-center">
             <div className="text-6xl mb-4">🔐</div>
             <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-muted-foreground mb-4">
               Please log in to access feedback.
             </p>
             <button
@@ -275,7 +275,7 @@ const Feedback = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 transition-all duration-500">
         
         
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
@@ -287,7 +287,7 @@ const Feedback = () => {
                 <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
                   Feedback Center
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
+                <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
                   Share your thoughts, help us improve, and see what others are saying
                 </p>
               </div>
@@ -295,24 +295,24 @@ const Feedback = () => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-200/50 dark:border-blue-800/50 rounded-3xl p-6 text-center">
+              <div className="bg-gradient-to-r from-primary/10 to-primary/10 border border-primary/20 rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">📊</div>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{feedbacks.length}</div>
-                <div className="text-gray-600 dark:text-gray-400">Your Feedback</div>
+                <div className="text-2xl font-bold text-primary">{feedbacks.length}</div>
+                <div className="text-muted-foreground">Your Feedback</div>
               </div>
               <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-200/50 dark:border-green-800/50 rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">⭐</div>
                 <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {stats.averageRating || '4.8'}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Avg Rating</div>
+                <div className="text-muted-foreground">Avg Rating</div>
               </div>
-              <div className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-200/50 dark:border-purple-800/50 rounded-3xl p-6 text-center">
+              <div className="bg-gradient-to-r from-primary/10 to-primary/10 border border-primary/20 rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">🌐</div>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                <div className="text-2xl font-bold text-primary">
                   {stats.totalPublic || publicFeedbacks.length}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Public Reviews</div>
+                <div className="text-muted-foreground">Public Reviews</div>
               </div>
             </div>
 
@@ -329,7 +329,7 @@ const Feedback = () => {
             {/* Tabs */}
             <div className="mb-8">
               <div className="flex justify-center">
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+                <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
                     { id: 'my-feedback', label: '📝 My Feedback', icon: '📝' },
                     { id: 'testimonials', label: '⭐ Testimonials', icon: '⭐' },
@@ -341,7 +341,7 @@ const Feedback = () => {
                       className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
                           ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
                       {tab.label}
@@ -353,7 +353,7 @@ const Feedback = () => {
 
             {/* Filters for public reviews */}
             {activeTab !== 'my-feedback' && (
-              <div className="mb-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+              <div className="mb-8 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-border/50 dark:border-border/50">
                 <div className="flex flex-wrap gap-4 items-center">
                   {/* Search */}
                   <div className="flex-1 min-w-64">
@@ -362,7 +362,7 @@ const Feedback = () => {
                       placeholder="Search feedback..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
                     />
                   </div>
 
@@ -370,7 +370,7 @@ const Feedback = () => {
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
                   >
                     {categories.map(cat => (
                       <option key={cat.value} value={cat.value}>
@@ -383,7 +383,7 @@ const Feedback = () => {
                   <select
                     value={filterRating}
                     onChange={(e) => setFilterRating(parseInt(e.target.value))}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
                   >
                     <option value={1}>⭐ 1+ Stars</option>
                     <option value={2}>⭐ 2+ Stars</option>
@@ -400,7 +400,7 @@ const Feedback = () => {
                       setSortBy(field);
                       setSortOrder(order);
                     }}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
                   >
                     <option value="createdAt-desc">📅 Newest First</option>
                     <option value="createdAt-asc">📅 Oldest First</option>
@@ -425,13 +425,13 @@ const Feedback = () => {
                 {loading ? (
                   <div className="text-center py-12">
                     <div className="inline-block w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-gray-600 dark:text-gray-400">Loading your feedback...</p>
+                    <p className="text-muted-foreground">Loading your feedback...</p>
                   </div>
                 ) : feedbacks.length === 0 ? (
-                  <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+                  <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
                     <div className="text-8xl mb-6">📝</div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No Feedback Yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                    <h3 className="text-2xl font-bold text-foreground mb-4">No Feedback Yet</h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Start sharing your thoughts and experiences to help us improve our platform.
                     </p>
                     <button
@@ -445,7 +445,7 @@ const Feedback = () => {
                   feedbacks.map((feedback, index) => (
                     <div
                       key={feedback._id}
-                      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-fade-in-up"
+                      className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border/50 dark:border-border/50 animate-fade-in-up"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div className="flex justify-between items-start mb-6">
@@ -454,19 +454,19 @@ const Feedback = () => {
                             <div className="flex">
                               {renderStars(feedback.rating)}
                             </div>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="text-sm text-muted-foreground">
                               {feedback.rating}/5 stars
                             </span>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              categories.find(c => c.value === feedback.category)?.color || 'bg-gray-100 text-gray-800'
+                              categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                             }`}>
                               {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
                             </span>
                           </div>
-                          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                          <h3 className="text-xl font-bold text-foreground mb-2">
                             {feedback.title}
                           </h3>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                          <p className="text-foreground/80 leading-relaxed mb-4">
                             {feedback.message}
                           </p>
                           {feedback.tags && feedback.tags.length > 0 && (
@@ -485,7 +485,7 @@ const Feedback = () => {
                               setEditingFeedback(feedback);
                               setShowFeedbackModal(true);
                             }}
-                            className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                            className="p-2 text-primary hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                             title="Edit feedback"
                           >
                             ✏️
@@ -500,7 +500,7 @@ const Feedback = () => {
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
+                      <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
                         <div className="flex items-center gap-4">
                           <span>📅 {formatDate(feedback.createdAt)}</span>
                           {feedback.isPublic && (
@@ -522,12 +522,12 @@ const Feedback = () => {
             {(activeTab === 'testimonials' || activeTab === 'all-reviews') && (
               <div className="space-y-6">
                 {publicFeedbacks.length === 0 ? (
-                  <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+                  <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
                     {/* <div className="text-2xl mb-6">This part is still under Development- </div> */}
                     
                     <div className="text-8xl mb-6">⭐</div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No Public Reviews Yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                    <h3 className="text-2xl font-bold text-foreground mb-4">No Public Reviews Yet</h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Be the first to share a public testimonial and help others discover our platform.
                     </p>
                   </div>
@@ -537,7 +537,7 @@ const Feedback = () => {
                     .map((feedback, index) => (
                       <div
                         key={feedback._id}
-                        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-fade-in-up"
+                        className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border/50 dark:border-border/50 animate-fade-in-up"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <div className="flex items-start gap-6">
@@ -555,24 +555,24 @@ const Feedback = () => {
                           
                           <div className="flex-1">
                             <div className="flex items-center gap-4 mb-4">
-                              <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
+                              <h4 className="text-lg font-semibold text-foreground">
                                 {feedback.userName}
                               </h4>
                               <div className="flex">
                                 {renderStars(feedback.rating)}
                               </div>
                               <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                categories.find(c => c.value === feedback.category)?.color || 'bg-gray-100 text-gray-800'
+                                categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                               }`}>
                                 {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
                               </span>
                             </div>
                             
-                            <h5 className="text-xl font-bold text-gray-800 dark:text-white mb-3">
+                            <h5 className="text-xl font-bold text-foreground mb-3">
                               {feedback.title}
                             </h5>
                             
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            <p className="text-foreground/80 leading-relaxed mb-4">
                               {feedback.message}
                             </p>
                             
@@ -586,11 +586,11 @@ const Feedback = () => {
                               </div>
                             )}
                             
-                            <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
+                            <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
                               <span>📅 {formatDate(feedback.createdAt)}</span>
                               <button
                                 onClick={() => handleHelpfulVote(feedback._id)}
-                                className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                className="flex items-center gap-2 px-3 py-1 hover:bg-accent rounded-lg transition-colors"
                               >
                                 👍 {feedback.helpfulCount || 0} helpful
                               </button>

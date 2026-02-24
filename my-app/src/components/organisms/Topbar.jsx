@@ -136,7 +136,7 @@ const Topbar = () => {
   const getNotificationStyle = (type) => {
     const styles = {
       taskAssigned: {
-        bg: 'bg-gradient-to-r from-blue-500 to-blue-600',
+        bg: 'bg-gradient-to-r bg-primary',
         border: 'border-blue-400',
         icon: '📋',
         color: 'text-blue-50'
@@ -148,7 +148,7 @@ const Topbar = () => {
         color: 'text-green-50'
       },
       message: {
-        bg: 'bg-gradient-to-r from-purple-500 to-purple-600',
+        bg: 'bg-gradient-to-r bg-primary',
         border: 'border-purple-400',
         icon: '💬',
         color: 'text-purple-50'
@@ -267,14 +267,14 @@ const Topbar = () => {
       label: 'Settings',
       icon: <Settings size={18} />,
       badge: null,
-      color: 'text-gray-600 dark:text-gray-400'
+      color: 'text-muted-foreground'
     },
     {
       to: '/feedback',
       label: 'Feedback',
       icon: <Star size={18} />,
       badge: null,
-      color: 'text-red-600 dark:text-red-400'
+      color: 'text-amber-600 dark:text-amber-400'
     }
   ];
 
@@ -293,7 +293,7 @@ const Topbar = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center h-16 px-6 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300 shadow-sm">
+      <header className="flex justify-between items-center h-16 px-6 bg-card/95 backdrop-blur-lg border-b border-border transition-colors duration-300 shadow-sm">
         <div className="flex items-center gap-3">
           <a 
             href="https://collab-nest-home.vercel.app/" 
@@ -314,22 +314,22 @@ const Topbar = () => {
           <div className="relative">
             <button
               onClick={() => setShowNotifications((prev) => !prev)}
-              className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+              className="relative p-2 rounded-lg hover:bg-accent transition-all duration-200"
               aria-label="Show notifications"
               title="Notifications"
             >
-              <Bell size={20} className="text-gray-600 dark:text-gray-300" />
+              <Bell size={20} className="text-muted-foreground" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] h-[20px] flex items-center justify-center font-medium shadow-lg animate-pulse">
+                <span className="absolute -top-1 -right-1 bg-destructive text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] h-[20px] flex items-center justify-center font-medium shadow-lg animate-pulse">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
             </button>
             
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 md:w-96 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl z-50 overflow-hidden" aria-live="polite">
+              <div className="absolute right-0 mt-2 w-80 md:w-96 bg-card border border-border rounded-xl shadow-2xl z-50 overflow-hidden" aria-live="polite">
                 {/* Header */}
-                <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                <div className="p-4 bg-primary text-primary-foreground">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="font-bold text-lg flex items-center gap-2">
                       <Bell size={20} />
@@ -348,14 +348,14 @@ const Topbar = () => {
                   
                   {/* Filter */}
                   <div className="relative flex items-center gap-2">
-                    <Filter size={16} className="text-blue-100" />
+                    <Filter size={16} className="text-primary-foreground/80" />
                     <select
                       value={currentFilterType}
                       onChange={(e) => dispatch(setNotificationFilter(e.target.value))}
                       className="w-full p-2 text-sm border-0 rounded-lg bg-white/10 backdrop-blur-sm text-white placeholder-blue-100 focus:ring-2 focus:ring-white/30 outline-none"
                     >
                       {notificationFilterOptions.map(opt => (
-                        <option key={opt.value} value={opt.value} className="text-gray-900">
+                        <option key={opt.value} value={opt.value} className="text-foreground">
                           {opt.icon} {opt.label}
                         </option>
                       ))}
@@ -367,10 +367,10 @@ const Topbar = () => {
                 <div className="max-h-80 overflow-y-auto">
                   {filteredNotifications.length === 0 ? (
                     <div className="p-6 text-center">
-                      <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <Bell className="w-8 h-8 text-gray-400" />
+                      <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-3">
+                        <Bell className="w-8 h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         {currentFilterType === 'all' ? 'No new notifications' : `No ${currentFilterType} notifications`}
                       </p>
                     </div>
@@ -378,20 +378,20 @@ const Topbar = () => {
                     filteredNotifications.map((notif) => (
                       <div
                         key={notif._id || notif.id}
-                        className={`p-4 border-b border-gray-100 dark:border-gray-700 last:border-b-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all cursor-pointer ${
-                          !notif.isRead ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500' : ''
+                        className={`p-4 border-b border-border last:border-b-0 hover:bg-accent/50 transition-all cursor-pointer ${
+                          !notif.isRead ? 'bg-secondary border-l-4 border-l-primary' : ''
                         }`}
                         onClick={() => handleNotificationClick(notif)}
                       >
                         <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                          <div className="flex-shrink-0 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
                             <span className="text-sm">{getNotificationIcon(notif.type)}</span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-sm ${!notif.isRead ? 'font-semibold text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>
+                            <p className={`text-sm ${!notif.isRead ? 'font-semibold text-foreground' : 'text-foreground/80'}`}>
                               {notif.message}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {new Date(notif.createdAt || Date.now()).toLocaleString([], { 
                                 month: 'short', 
                                 day: 'numeric', 
@@ -401,14 +401,14 @@ const Topbar = () => {
                             </p>
                             <button
                               onClick={(e) => handleSnoozeNotification(e, notif._id || notif.id)}
-                              className="mt-2 text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 py-1 px-2 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                              className="mt-2 text-xs text-primary hover:text-indigo-800 dark:text-primary dark:hover:text-indigo-300 flex items-center gap-1 py-1 px-2 rounded-md hover:bg-secondary transition-colors"
                               title="Snooze for 10 minutes"
                             >
                               <AlarmClockCheck size={12} /> Snooze 
                             </button>
                           </div>
                           {!notif.isRead && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1"></div>
                           )}
                         </div>
                       </div>
@@ -424,9 +424,9 @@ const Topbar = () => {
             <div className="relative">
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="hidden sm:flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                className="hidden sm:flex items-center gap-2 p-2 rounded-lg hover:bg-accent transition-all duration-200"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center overflow-hidden">
                   {user.profilePic ? (
                     <img
                       src={user.profilePic}
@@ -437,14 +437,14 @@ const Topbar = () => {
                     <User size={16} className="text-white" />
                   )}
                 </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user.name}</span>
+                <span className="text-sm font-medium text-foreground/80">{user.name}</span>
               </button>
 
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden">
-                  <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+                <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-xl shadow-xl z-50 overflow-hidden">
+                  <div className="p-3 bg-primary text-primary-foreground">
                     <p className="font-semibold">{user.name}</p>
-                    <p className="text-xs text-blue-100">{user.email}</p>
+                    <p className="text-xs text-primary-foreground/80">{user.email}</p>
                   </div>
                   <div className="py-2">
                     <button
@@ -452,7 +452,7 @@ const Topbar = () => {
                         navigate('/profile');
                         setShowUserMenu(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-accent flex items-center gap-2"
                     >
                       <UserPen size={16} /> Profile
                     </button>
@@ -461,14 +461,14 @@ const Topbar = () => {
                         navigate('/settings');
                         setShowUserMenu(false);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-accent flex items-center gap-2"
                     >
                       <Settings size={16} /> Settings
                     </button>
-                    <hr className="my-2 border-gray-200 dark:border-gray-700" />
+                    <hr className="my-2 border-border" />
                     <button
                       onClick={handleLogout}
-                      className="w-full px-4 py-2 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-destructive/10 text-destructive flex items-center gap-2"
                     >
                       <LogOut size={16} /> Logout
                     </button>
@@ -479,7 +479,7 @@ const Topbar = () => {
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all transform hover:scale-105 shadow-lg"
+              className="bg-gradient-to-r bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all transform hover:scale-105 shadow-lg"
               title="Login"
             >
               <LogIn size={18} /> Login
@@ -489,25 +489,25 @@ const Topbar = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+            className="p-2 rounded-lg hover:bg-accent transition-all duration-200"
             aria-label="Toggle theme"
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             {theme === 'dark' ? 
               <Sun size={20} className="text-yellow-500" /> : 
-              <Moon size={20} className="text-gray-600" />
+              <Moon size={20} className="text-muted-foreground" />
             }
           </button>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+            className="lg:hidden p-2 rounded-lg hover:bg-accent transition-all duration-200"
             onClick={() => setShowMobileMenu((prev) => !prev)}
             title="Menu"
           >
             <Menu
               className={`transform transition-all duration-300 ${
-                showMobileMenu ? 'rotate-90 scale-110 text-blue-500' : 'rotate-0 scale-100 text-gray-600 dark:text-gray-300'
+                showMobileMenu ? 'rotate-90 scale-110 text-primary' : 'rotate-0 scale-100 text-muted-foreground'
               }`}
             />
           </button>
@@ -528,12 +528,12 @@ const Topbar = () => {
 
         {/* Sidebar Panel */}
         <aside
-          className={`absolute top-0 left-0 h-full w-72 bg-gradient-to-b from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-950 shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
+          className={`absolute top-0 left-0 h-full w-72 bg-sidebar shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out ${
             showMobileMenu ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           {/* Header with close button */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-border">
             <img
               src={logoDark}
               alt="CollabNest"
@@ -541,18 +541,18 @@ const Topbar = () => {
             />
             <button
               onClick={() => setShowMobileMenu(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
               aria-label="Close menu"
             >
-              <X size={20} className="text-gray-600 dark:text-gray-300" />
+              <X size={20} className="text-muted-foreground" />
             </button>
           </div>
 
           {/* User Welcome Section */}
           {isLoggedIn && user && (
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="p-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
                   {user.profilePic ? (
                     <img src={user.profilePic} alt={user.name || 'User'} className="w-full h-full object-cover" />
                   ) : (
@@ -560,8 +560,8 @@ const Topbar = () => {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{user.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 </div>
               </div>
             </div>
@@ -577,14 +577,14 @@ const Topbar = () => {
                     navigate(item.to);
                     setShowMobileMenu(false);
                   }}
-                  className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all duration-200 cursor-pointer"
+                  className="flex items-center justify-between px-3 py-3 rounded-lg hover:bg-accent text-sm transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <span className={`${item.color || 'text-gray-600 dark:text-gray-300'}`}>{item.icon}</span>
-                    <span className="font-medium text-gray-800 dark:text-white">{item.label}</span>
+                    <span className={`${item.color || 'text-muted-foreground'}`}>{item.icon}</span>
+                    <span className="font-medium text-foreground">{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full font-medium">
+                    <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full font-medium">
                       {item.badge}
                     </span>
                   )}
@@ -595,23 +595,23 @@ const Topbar = () => {
 
           {/* Footer Actions */}
           {isLoggedIn && (
-            <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-2">
+            <div className="border-t border-border p-3 space-y-2">
               <button
                 onClick={() => {
                   navigate('/profile');
                   setShowMobileMenu(false);
                 }}
-                className="flex items-center gap-3 w-full px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm transition-all cursor-pointer"
+                className="flex items-center gap-3 w-full px-3 py-3 rounded-lg hover:bg-accent text-sm transition-all cursor-pointer"
               >
-                <UserPen size={18} className="text-blue-600 dark:text-blue-400" />
-                <span className="font-medium text-gray-800 dark:text-white">Profile</span>
+                <UserPen size={18} className="text-primary" />
+                <span className="font-medium text-foreground">Profile</span>
               </button>
               <button
                 onClick={() => {
                   handleLogout();
                   setShowMobileMenu(false);
                 }}
-                className="flex items-center gap-2 w-full p-2.5 rounded-lg bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-medium transition-all duration-200 shadow-lg cursor-pointer"
+                className="flex items-center gap-2 w-full p-2.5 rounded-lg bg-destructive hover:bg-destructive/90 text-white font-medium transition-all duration-200 shadow-md cursor-pointer"
               >
                 <LogOut size={16} />
                 <span className="text-sm">Logout</span>
@@ -620,8 +620,8 @@ const Topbar = () => {
           )}
 
           {/* Version Info */}
-          <div className="p-2 text-center border-t border-gray-200 dark:border-gray-700">
-            <p className="text-xs text-gray-400 dark:text-gray-500">CollabNest v1.0</p>
+          <div className="p-2 text-center border-t border-border">
+            <p className="text-xs text-muted-foreground">CollabNest v1.0</p>
           </div>
         </aside>
       </div>

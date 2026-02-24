@@ -125,8 +125,8 @@ const TaskReportDashboard = () => {
   const statusConfig = {
     todo: {
       icon: ClockIcon,
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/20',
+      color: 'text-primary',
+      bg: 'bg-primary/20',
       border: 'border-blue-500/30',
       gradient: 'from-blue-500 to-indigo-600'
     },
@@ -149,7 +149,7 @@ const TaskReportDashboard = () => {
   const priorityConfig = {
     low: { color: 'text-green-400', bg: 'bg-green-500/20', border: 'border-green-500/30' },
     medium: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30' },
-    high: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30' }
+    high: { color: 'text-red-400', bg: 'bg-destructive/20', border: 'border-red-500/30' }
   };
 
   // Get array of users for carousel navigation
@@ -197,7 +197,7 @@ const TaskReportDashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
           <ChartBarIcon className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -217,7 +217,7 @@ const TaskReportDashboard = () => {
               <p className="text-gray-400 text-sm font-medium">Total Tasks</p>
               <p className="text-3xl font-bold text-white mt-1">{totalTasks}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center">
               <ChartPieIcon className="w-6 h-6 text-white" />
             </div>
           </div>
@@ -268,7 +268,7 @@ const TaskReportDashboard = () => {
         {/* Status Breakdown */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-lg flex items-center justify-center">
               <ChartBarIcon className="w-4 h-4 text-white" />
             </div>
             <h2 className="text-xl font-bold text-white">Tasks by Status</h2>
@@ -309,7 +309,7 @@ const TaskReportDashboard = () => {
         {/* Priority Breakdown */}
         <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-lg flex items-center justify-center">
               <FlagIcon className="w-4 h-4 text-white" />
             </div>
             <h2 className="text-xl font-bold text-white">Tasks by Priority</h2>
@@ -401,7 +401,7 @@ const TaskReportDashboard = () => {
                               onClick={() => setCurrentUserIndex(i)}
                               className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors ${
                                 i === currentUserIndex
-                                  ? 'bg-indigo-500 text-white'
+                                  ? 'bg-primary text-white'
                                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
                               }`}
                             >
@@ -431,7 +431,7 @@ const TaskReportDashboard = () => {
                       <div key={userId} className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5 hover:bg-gray-700/50 transition-all duration-200">
                         {/* User Header */}
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
                             <UserIcon className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1">
@@ -455,11 +455,11 @@ const TaskReportDashboard = () => {
                             <p className="text-yellow-400 font-bold text-lg">{inProgressTasks}</p>
                             <p className="text-gray-300 text-xs">In Progress</p>
                           </div>
-                          <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3 text-center">
-                            <p className="text-blue-400 font-bold text-lg">{todoTasks}</p>
+                          <div className="bg-primary/20 border border-blue-500/30 rounded-lg p-3 text-center">
+                            <p className="text-primary font-bold text-lg">{todoTasks}</p>
                             <p className="text-gray-300 text-xs">To Do</p>
                           </div>
-                          <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center">
+                          <div className="bg-destructive/20 border border-red-500/30 rounded-lg p-3 text-center">
                             <p className="text-red-400 font-bold text-lg">{overdueTasks}</p>
                             <p className="text-gray-300 text-xs">Overdue</p>
                           </div>
@@ -553,7 +553,7 @@ const TaskReportDashboard = () => {
                     <h2 className="text-xl font-bold text-white">
                       {selectedUserTasks.userName}'s Tasks
                     </h2>
-                    <p className="text-indigo-100 text-sm">
+                    <p className="text-primary-foreground/80 text-sm">
                       {selectedUserTasks.tasks.length} total tasks
                     </p>
                   </div>
@@ -663,7 +663,7 @@ const TaskReportDashboard = () => {
                           onClick={() => setCurrentTaskIndex(index)}
                           className={`p-3 rounded-lg border text-left transition-all ${
                             index === currentTaskIndex
-                              ? 'bg-indigo-500/20 border-indigo-500/50'
+                              ? 'bg-primary/20 border-indigo-500/50'
                               : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
                           }`}
                         >

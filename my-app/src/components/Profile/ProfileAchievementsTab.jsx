@@ -1,8 +1,8 @@
 import React from 'react';
 
 const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }) => (
-  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-    <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+  <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50">
+    <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
       🏆 Achievements & Badges
     </h3>
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -14,7 +14,7 @@ const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }
             className={`text-center p-4 rounded-2xl border transition-all duration-300 transform hover:scale-105 ${
               status.isUnlocked
                 ? 'bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 border-yellow-200 dark:border-yellow-800 shadow-lg'
-                : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-gray-200 dark:border-gray-600 opacity-60'
+                : 'bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-border opacity-60'
             }`}
             title={status.isUnlocked ? 'Achievement Unlocked!' : `Progress: ${status.progress}/${achievement.requirement}`}
           >
@@ -33,25 +33,25 @@ const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }
             </div>
             <h4 className={`font-semibold text-sm mb-1 ${
               status.isUnlocked 
-                ? 'text-gray-800 dark:text-white' 
-                : 'text-gray-500 dark:text-gray-400'
+                ? 'text-foreground' 
+                : 'text-muted-foreground'
             }`}>
               {achievement.title}
             </h4>
-            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-xs text-muted-foreground mb-2">
               {achievement.desc}
             </p>
             
             {/* Progress bar for locked achievements */}
             {!status.isUnlocked && (
               <div className="mt-3">
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-slate-200 dark:bg-accent rounded-full h-2">
                   <div 
                     className="h-full bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full transition-all duration-500"
                     style={{ width: `${status.percentage}%` }}
                   ></div>
                 </div>
-                <div className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-muted-foreground mt-1">
                   {status.progress}/{achievement.requirement} ({Math.round(status.percentage)}%)
                 </div>
               </div>

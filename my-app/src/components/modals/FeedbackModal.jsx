@@ -133,7 +133,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const showNotification = (message, type) => {
     const notification = document.createElement('div');
     notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in-right ${
-      type === 'success' ? 'bg-green-500' : 'bg-red-500'
+      type === 'success' ? 'bg-green-500' : 'bg-destructive'
     } text-white`;
     notification.textContent = message;
     document.body.appendChild(notification);
@@ -153,7 +153,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
         className={`text-3xl transition-all duration-200 transform hover:scale-110 ${
           index < formData.rating
             ? 'text-yellow-400 hover:text-yellow-500'
-            : 'text-gray-300 hover:text-gray-400'
+            : 'text-muted-foreground hover:text-muted-foreground'
         }`}
       >
         ⭐
@@ -165,7 +165,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-      <div className="bg-white dark:bg-gray-800 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
+      <div className="bg-card rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
         
 
         <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-6 rounded-t-3xl relative overflow-hidden">
@@ -190,16 +190,16 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
           
     
           <div>
-            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-foreground/80 mb-4 flex items-center gap-2">
               <span className="text-xl">⭐</span> Rating
             </label>
             <div className="flex items-center gap-2 mb-2">
               {renderStars()}
-              <span className="ml-4 text-gray-600 dark:text-gray-400 font-medium">
+              <span className="ml-4 text-muted-foreground font-medium">
                 {formData.rating} out of 5 stars
               </span>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Click on stars to rate your experience
             </p>
             {errors.rating && <p className="text-red-500 text-sm mt-1">{errors.rating}</p>}
@@ -207,7 +207,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Category Selection */}
           <div>
-            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-foreground/80 mb-4 flex items-center gap-2">
               <span className="text-xl">📂</span> Category
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -219,13 +219,13 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                   className={`p-4 rounded-xl border-2 transition-all duration-200 text-left ${
                     formData.category === category.value
                       ? 'border-orange-400 bg-orange-50 dark:bg-orange-900/20 shadow-lg'
-                      : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      : 'border-border hover:border-orange-300 hover:bg-accent'
                   }`}
                 >
-                  <div className="font-semibold text-gray-800 dark:text-white mb-1">
+                  <div className="font-semibold text-foreground mb-1">
                     {category.label}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted-foreground">
                     {category.desc}
                   </div>
                 </button>
@@ -235,22 +235,22 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Title */}
           <div>
-            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-foreground/80 mb-4 flex items-center gap-2">
               <span className="text-xl">📝</span> Title
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
-              className={`w-full px-6 py-4 border-2 rounded-2xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 ${
-                errors.title ? 'border-red-300' : 'border-gray-300 dark:border-gray-600'
+              className={`w-full px-6 py-4 border-2 rounded-2xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 ${
+                errors.title ? 'border-red-300' : 'border-slate-300 dark:border-border'
               }`}
               placeholder="Give your feedback a title..."
               maxLength={100}
             />
             <div className="flex justify-between mt-2">
               {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
-              <p className="text-sm text-gray-500 dark:text-gray-400 ml-auto">
+              <p className="text-sm text-muted-foreground ml-auto">
                 {formData.title.length}/100
               </p>
             </div>
@@ -258,22 +258,22 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Message */}
           <div>
-            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-foreground/80 mb-4 flex items-center gap-2">
               <span className="text-xl">💭</span> Message
             </label>
             <textarea
               value={formData.message}
               onChange={(e) => handleInputChange('message', e.target.value)}
               rows={6}
-              className={`w-full px-6 py-4 border-2 rounded-2xl dark:bg-gray-700 dark:text-white resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 ${
-                errors.message ? 'border-red-300' : 'border-gray-300 dark:border-gray-600'
+              className={`w-full px-6 py-4 border-2 rounded-2xl dark:bg-accent dark:text-foreground resize-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 ${
+                errors.message ? 'border-red-300' : 'border-slate-300 dark:border-border'
               }`}
               placeholder="Share your detailed feedback, suggestions, or experience..."
               maxLength={1000}
             />
             <div className="flex justify-between mt-2">
               {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
-              <p className="text-sm text-gray-500 dark:text-gray-400 ml-auto">
+              <p className="text-sm text-muted-foreground ml-auto">
                 {formData.message.length}/1000
               </p>
             </div>
@@ -281,7 +281,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
           {/* Tags */}
           <div>
-            <label className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <label className="text-lg font-bold text-foreground/80 mb-4 flex items-center gap-2">
               <span className="text-xl">🏷️</span> Tags (Optional)
             </label>
             
@@ -292,7 +292,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                 value={currentTag}
                 onChange={(e) => setCurrentTag(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+                className="flex-1 px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300"
                 placeholder="Add custom tags..."
               />
               <button
@@ -306,7 +306,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
 
             {/* Predefined Tags */}
             <div className="mb-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Quick tags:</p>
+              <p className="text-sm text-muted-foreground mb-2">Quick tags:</p>
               <div className="flex flex-wrap gap-2">
                 {predefinedTags.map((tag) => (
                   <button
@@ -316,7 +316,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                     disabled={formData.tags.includes(tag)}
                     className={`px-3 py-1 text-sm rounded-full transition-colors ${
                       formData.tags.includes(tag)
-                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        ? 'bg-slate-200 text-muted-foreground cursor-not-allowed'
                         : 'bg-orange-100 text-orange-700 hover:bg-orange-200'
                     }`}
                   >
@@ -329,7 +329,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
             {/* Selected Tags */}
             {formData.tags.length > 0 && (
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Selected tags:</p>
+                <p className="text-sm text-muted-foreground mb-2">Selected tags:</p>
                 <div className="flex flex-wrap gap-2">
                   {formData.tags.map((tag) => (
                     <span
@@ -359,13 +359,13 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                 id="isPublic"
                 checked={formData.isPublic}
                 onChange={(e) => handleInputChange('isPublic', e.target.checked)}
-                className="mt-1 w-5 h-5 text-orange-500 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2"
+                className="mt-1 w-5 h-5 text-primary bg-accent border-slate-300 rounded focus:ring-ring focus:ring-2"
               />
               <div className="flex-1">
-                <label htmlFor="isPublic" className="text-lg font-bold text-gray-700 dark:text-gray-300 cursor-pointer flex items-center gap-2">
+                <label htmlFor="isPublic" className="text-lg font-bold text-foreground/80 cursor-pointer flex items-center gap-2">
                   <span className="text-xl">🌐</span> Make this feedback public
                 </label>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   Allow us to use your feedback as a testimonial on our website. Your name and rating will be displayed, but your email will remain private.
                 </p>
               </div>
@@ -377,7 +377,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-4 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               Cancel
             </button>

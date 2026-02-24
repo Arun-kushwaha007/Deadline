@@ -4,27 +4,27 @@ import { ArrowLeftIcon, ShieldCheckIcon, EyeIcon, CircleStackIcon, CogIcon, Glob
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
 
       <div className="relative max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6"
           >
             <ArrowLeftIcon className="w-4 h-4" />
             Back to Registration
           </Link>
           
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+          <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
             <ShieldCheckIcon className="w-10 h-10 text-white" />
           </div>
           
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-4">
             Privacy Policy
           </h1>
-          <p className="text-gray-400 text-lg">
+          <p className="text-muted-foreground text-lg">
             Effective Date: January 1, 2024
           </p>
         </div>
@@ -35,12 +35,12 @@ const Privacy = () => {
           {/* Introduction */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">1</span>
               </div>
               <h2 className="text-2xl font-bold text-white">Our Commitment to Privacy</h2>
             </div>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed">
               At CollabNest, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, 
               and safeguard your information when you use our collaborative workspace platform. We are committed to 
               protecting your personal data and being transparent about our practices.
@@ -83,7 +83,7 @@ const Privacy = () => {
           {/* Information We Collect */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <CircleStackIcon className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">Information We Collect</h2>
@@ -121,35 +121,35 @@ const Privacy = () => {
           {/* How We Use Your Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <CogIcon className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">How We Use Your Information</h2>
             </div>
             
-            <div className="space-y-4 text-gray-300">
+            <div className="space-y-4 text-muted-foreground">
               <p>We use the information we collect for the following purposes:</p>
               
               <div className="grid gap-4">
-                <div className="bg-gray-800/50 border border-gray-600 rounded-lg p-4">
+                <div className="bg-muted border border-border rounded-lg p-4">
                   <h4 className="text-white font-semibold mb-2">🚀 Service Provision</h4>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     To provide, maintain, and improve our collaborative workspace features, including task management, 
                     team communication, and project organization tools.
                   </p>
                 </div>
                 
-                <div className="bg-gray-800/50 border border-gray-600 rounded-lg p-4">
+                <div className="bg-muted border border-border rounded-lg p-4">
                   <h4 className="text-white font-semibold mb-2">🔒 Security & Authentication</h4>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     To verify your identity, secure your account, prevent fraud, and protect against unauthorized access 
                     to your personal and organizational data.
                   </p>
                 </div>
                 
-                <div className="bg-gray-800/50 border border-gray-600 rounded-lg p-4">
+                <div className="bg-muted border border-border rounded-lg p-4">
                   <h4 className="text-white font-semibold mb-2">📈 Analytics & Improvement</h4>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     To analyze usage patterns, optimize performance, and develop new features that enhance your 
                     collaboration experience.
                   </p>
@@ -161,7 +161,7 @@ const Privacy = () => {
           {/* Data Sharing */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
                 {/* <UserShieldIcon className="w-4 h-4 text-white" /> */}
               </div>
               <h2 className="text-2xl font-bold text-white">Information Sharing</h2>
@@ -175,7 +175,7 @@ const Privacy = () => {
               </p>
             </div>
             
-            <div className="space-y-4 text-gray-300">
+            <div className="space-y-4 text-muted-foreground">
               <h4 className="font-semibold text-white">We may share your information when:</h4>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>You explicitly consent to the sharing</li>
@@ -190,7 +190,7 @@ const Privacy = () => {
           {/* Data Security */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">🔐</span>
               </div>
               <h2 className="text-2xl font-bold text-white">Data Security</h2>
@@ -198,10 +198,10 @@ const Privacy = () => {
             
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <p className="text-gray-300">
+                <p className="text-muted-foreground">
                   We implement industry-standard security measures to protect your information:
                 </p>
-                <ul className="text-gray-300 text-sm space-y-2">
+                <ul className="text-muted-foreground text-sm space-y-2">
                   <li>• End-to-end encryption for sensitive data</li>
                   <li>• Secure HTTPS connections</li>
                   <li>• Regular security audits and updates</li>
@@ -225,14 +225,14 @@ const Privacy = () => {
           {/* Your Rights */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <EyeIcon className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">Your Privacy Rights</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
+              <div className="bg-secondary/30 border border-primary/20 rounded-lg p-4">
                 <h4 className="text-purple-300 font-semibold mb-2">Access & Control</h4>
                 <ul className="text-purple-200 text-sm space-y-1">
                   <li>• View your personal data</li>
@@ -263,7 +263,7 @@ const Privacy = () => {
               <h2 className="text-2xl font-bold text-white">Cookies & Tracking</h2>
             </div>
             
-            <p className="text-gray-300 mb-4">
+            <p className="text-muted-foreground mb-4">
               We use cookies and similar technologies to enhance your experience and analyze usage patterns.
             </p>
             
@@ -289,12 +289,12 @@ const Privacy = () => {
           {/* International Transfers */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <GlobeAltIcon className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">International Data Transfers</h2>
             </div>
-            <p className="text-gray-300 leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed">
               Your information may be transferred to and maintained on servers located outside of your state, province, 
               country, or other governmental jurisdiction. We ensure appropriate safeguards are in place to protect your 
               data in accordance with this Privacy Policy and applicable laws.
@@ -304,31 +304,31 @@ const Privacy = () => {
           {/* Contact Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">📧</span>
               </div>
               <h2 className="text-2xl font-bold text-white">Contact Us About Privacy</h2>
             </div>
-            <div className="bg-gray-800/50 border border-gray-600 rounded-lg p-6">
-              <p className="text-gray-300 mb-4">
+            <div className="bg-muted border border-border rounded-lg p-6">
+              <p className="text-muted-foreground mb-4">
                 If you have any questions about this Privacy Policy or our data practices, please contact us:
               </p>
               <div className="grid md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <p className="text-gray-400">Privacy Officer:</p>
-                  <p className="text-blue-400">privacy@collabnest.com</p>
+                  <p className="text-muted-foreground">Privacy Officer:</p>
+                  <p className="text-primary">privacy@collabnest.com</p>
                 </div>
                 <div>
-                  <p className="text-gray-400">Data Protection:</p>
-                  <p className="text-blue-400">dpo@collabnest.com</p>
+                  <p className="text-muted-foreground">Data Protection:</p>
+                  <p className="text-primary">dpo@collabnest.com</p>
                 </div>
               </div>
             </div>
           </section>
 
           {/* Last Updated */}
-          <div className="text-center pt-6 border-t border-gray-600">
-            <p className="text-gray-400 text-sm">
+          <div className="text-center pt-6 border-t border-border">
+            <p className="text-muted-foreground text-sm">
               Last updated: January 1, 2024 • We may update this policy and will notify you of significant changes
             </p>
           </div>
@@ -338,13 +338,13 @@ const Privacy = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <Link
             to="/register"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-center"
+            className="bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-center"
           >
             I Understand - Continue Registration
           </Link>
           <Link
             to="/terms"
-            className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 text-center"
+            className="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 text-center"
           >
             View Terms of Service
           </Link>
