@@ -387,7 +387,7 @@ const Setting = () => {
 
           {/* Save Changes Button */}
           <div className="flex justify-center mt-8">
-            <button className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+            <button className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl">
               Save Changes
             </button>
           </div>

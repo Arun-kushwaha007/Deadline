@@ -76,7 +76,7 @@ const Tasks = () => {
               
               <div className="flex gap-2 p-1 bg-accent rounded-lg">
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all hover:scale-[1.01] ${
                     view === 'kanban'
                       ? 'bg-primary text-primary-foreground shadow-lg'
                       : 'text-muted-foreground hover:bg-white dark:hover:bg-slate-600'
@@ -87,7 +87,7 @@ const Tasks = () => {
                   Kanban Board
                 </button>
                 <button
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all hover:scale-[1.01] ${
                     view === 'calendar'
                       ? 'bg-primary text-primary-foreground shadow-lg'
                       : 'text-muted-foreground hover:bg-white dark:hover:bg-slate-600'
@@ -181,7 +181,7 @@ const Tasks = () => {
                 
                 {/* <button
                   onClick={() => navigate('/create-task')}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all transform hover:scale-105 font-medium"
+                  className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all hover:scale-[1.01] font-medium"
                 >
                   <Plus className="w-4 h-4" />
                   New Task

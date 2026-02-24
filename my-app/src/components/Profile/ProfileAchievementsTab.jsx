@@ -11,7 +11,7 @@ const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }
         return (
           <div 
             key={achievement.id} 
-            className={`text-center p-4 rounded-2xl border transition-all duration-300 transform hover:scale-105 ${
+            className={`text-center p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${
               status.isUnlocked
                 ? 'bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 border-yellow-200 dark:border-yellow-800 shadow-lg'
                 : 'bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-border opacity-60'

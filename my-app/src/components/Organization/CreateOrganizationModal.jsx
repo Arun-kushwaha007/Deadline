@@ -173,7 +173,7 @@ const CreateOrganizationModal = ({ closeModal }) => {
             <button
               onClick={handleCreate}
               disabled={isLoading || !name.trim()}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
             >
               {isLoading ? (
                 <>

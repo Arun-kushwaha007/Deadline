@@ -5,7 +5,7 @@ const ProfileOverviewTab = ({ dashboardStats }) => (
     {dashboardStats.map((stat, index) => (
       <div
         key={stat.label}
-        className={`${stat.bgColor} border ${stat.borderColor} rounded-3xl p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
+        className={`${stat.bgColor} border ${stat.borderColor} rounded-3xl p-6 hover:shadow-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
         style={{ animationDelay: `${index * 100}ms` }}
         onClick={stat.action}
       >

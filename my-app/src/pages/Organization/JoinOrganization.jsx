@@ -19,14 +19,14 @@ const JoinOrganization = () => {
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Icon */}
           <div className="mb-8">
-            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center shadow-2xl ">
               <span className="text-6xl">🚀</span>
             </div>
           </div>
 
           {/* Coming Soon Badge */}
           <div className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full text-sm font-medium mb-6 shadow-lg">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+            <span className="w-2 h-2 bg-white rounded-full mr-2 "></span>
             Coming Soon
           </div>
 
@@ -96,7 +96,7 @@ const JoinOrganization = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/profile')}
-              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all transform hover:scale-105 font-medium shadow-lg"
+              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all hover:scale-[1.01] font-medium shadow-lg"
             >
               📋 View My Profile ID
             </button>

@@ -142,7 +142,7 @@ const OrganizationDetails = () => {
       <DashboardLayout>
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 ">
               <BuildingOfficeIcon className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">
@@ -249,7 +249,7 @@ const OrganizationDetails = () => {
                 {isPrivileged && (
                   <button
                     onClick={handleAddMember}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                   >
                     <UserPlusIcon className="w-4 h-4" />
                     Add Member
@@ -261,14 +261,14 @@ const OrganizationDetails = () => {
                     <div className="flex gap-2">
                       {/* <button
                         onClick={handleSave}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                       >
                         <CheckIcon className="w-4 h-4" />
                         Save
                       </button> */}
                       <button
                         onClick={handleEditToggle}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                       >
                         <XMarkIcon className="w-4 h-4" />
                         Cancel
@@ -277,7 +277,7 @@ const OrganizationDetails = () => {
                   ) : (
                     <button
                       onClick={handleEditToggle}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                     >
                       <PencilIcon className="w-4 h-4" />
                       Edit
@@ -287,7 +287,7 @@ const OrganizationDetails = () => {
                 {isAdmin && !isEditing && (
                   <button
                     onClick={handleDeleteOrganizationClick}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                     title="Delete Organization"
                   >
                     <TrashIcon className="w-4 h-4" />
@@ -301,7 +301,7 @@ const OrganizationDetails = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setActiveView('kanban')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-[1.01] ${
                   activeView === 'kanban'
                     ? 'bg-primary text-primary-foreground shadow-lg'
                     : 'bg-slate-700/50 text-muted-foreground hover:bg-slate-600/50'
@@ -312,7 +312,7 @@ const OrganizationDetails = () => {
               </button>
               <button
                 onClick={() => setActiveView('calendar')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-[1.01] ${
                   activeView === 'calendar'
                     ? 'bg-primary text-primary-foreground shadow-lg'
                     : 'bg-slate-700/50 text-muted-foreground hover:bg-slate-600/50'
@@ -395,7 +395,7 @@ const OrganizationDetails = () => {
                                   <></>
                                   // <button
                                   //   onClick={handleAddMember}
-                                  //   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                  //   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                   // >
                                   //   <UserPlusIcon className="w-4 h-4" />
                                   //   Add Member
@@ -407,14 +407,14 @@ const OrganizationDetails = () => {
                                     <div className="flex gap-2">
                                       {/* <button
                                         onClick={handleSave}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                       >
                                         <CheckIcon className="w-4 h-4" />
                                         Save
                                       </button> */}
                                       <button
                                         onClick={handleEditToggle}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                       >
                                         <XMarkIcon className="w-4 h-4" />
                                         Cancel
@@ -423,7 +423,7 @@ const OrganizationDetails = () => {
                                   ) : (
                                     <button
                                       onClick={handleEditToggle}
-                                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                     >
                                       <PencilIcon className="w-4 h-4" />
                                       Edit
@@ -479,7 +479,7 @@ const OrganizationDetails = () => {
             {hasMoreMembers && (
               <button
                 onClick={() => setShowAllMembers(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
               >
                 <EyeIcon className="w-4 h-4" />
                 View All Members ({selectedOrganization.members.length})

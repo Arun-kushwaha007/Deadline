@@ -150,7 +150,7 @@ const ToDoList = () => {
               <button
                 onClick={addTask}
                 disabled={!task.trim()}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 font-medium shadow-lg flex items-center gap-2"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-[1.01] font-medium shadow-lg flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Add Task
@@ -216,7 +216,7 @@ const ToDoList = () => {
               {loading ? (
                 <div className="space-y-4">
                   {Array.from({ length: 3 }).map((_, index) => (
-                    <div key={index} className="animate-pulse">
+                    <div key={index} className="">
                       <div className="flex items-center gap-3 p-4 bg-muted dark:bg-accent rounded-lg">
                         <div className="w-5 h-5 bg-slate-300 dark:bg-slate-600 rounded"></div>
                         <div className="flex-1 h-4 bg-slate-300 dark:bg-slate-600 rounded"></div>

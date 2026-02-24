@@ -367,7 +367,7 @@ useEffect(() => {
 
   // Loading skeleton component
   const LoadingSkeleton = () => (
-    <div className="animate-pulse">
+    <div className="">
       <div className="h-8 bg-slate-300 dark:bg-slate-600 rounded-lg mb-4 w-1/3"></div>
       <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-2 w-2/3"></div>
       <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-8 w-1/2"></div>
@@ -415,7 +415,7 @@ useEffect(() => {
         <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 flex items-center justify-center">
           
           <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
-            <div className="text-8xl mb-6 animate-bounce">🔐</div>
+            <div className="text-8xl mb-6 ">🔐</div>
             <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
               Authentication Required
             </h2>
@@ -424,9 +424,9 @@ useEffect(() => {
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+              className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
             >
-              <span className="group-hover:animate-pulse">🚀</span> Go to Login
+              <span className="group-hover:">🚀</span> Go to Login
             </button>
           </div>
         </div>
@@ -520,9 +520,9 @@ useEffect(() => {
                   />
                   <button
                     onClick={handleCopyUserId}
-                    className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                    className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
                   >
-                    <span className="group-hover:animate-pulse">📋</span> Copy
+                    <span className="group-hover:">📋</span> Copy
                   </button>
                 </div>
               </div>
@@ -608,9 +608,9 @@ useEffect(() => {
 
                     <button
                       onClick={() => setShowEditModal(true)}
-                      className="mt-8 w-full group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                      className="mt-8 w-full group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
                     >
-                      <span className="group-hover:animate-pulse">✏️</span> Edit Profile
+                      <span className="group-hover:">✏️</span> Edit Profile
                     </button>
                   </div>
                 </div>
@@ -654,9 +654,9 @@ useEffect(() => {
               
               {/* Enhanced Modal Header */}
               <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-8 rounded-t-3xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 animate-pulse"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 "></div>
                 <h2 className="text-3xl font-bold text-white flex items-center gap-3 relative z-10">
-                  <span className="animate-bounce">✏️</span> Edit Profile
+                  <span className="">✏️</span> Edit Profile
                 </h2>
                 <p className="text-orange-100 mt-2 relative z-10">Update your personal information and preferences</p>
               </div>
@@ -689,7 +689,7 @@ useEffect(() => {
                     type="file"
                     onChange={handleImageUpload}
                     accept="image/*"
-                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-accent dark:text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
+                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-accent  file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
                   />
                 </div>
 
@@ -702,7 +702,7 @@ useEffect(() => {
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={4}
-                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent dark:text-foreground resize-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent  resize-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="Tell us about yourself, your interests, and what motivates you..."
                   />
                 </div>
@@ -716,7 +716,7 @@ useEffect(() => {
                     type="text"
                     value={section}
                     onChange={(e) => setSection(e.target.value)}
-                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent  focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="E.g. Full Stack Developer, UI/UX Designer, Project Manager"
                   />
                 </div>
@@ -725,15 +725,15 @@ useEffect(() => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="flex-1 group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
                   >
-                    <span className="group-hover:animate-pulse">💾</span> Save Changes
+                    <span className="group-hover:">💾</span> Save Changes
                   </button>
                 </div>
               </div>

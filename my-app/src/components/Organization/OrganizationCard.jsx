@@ -89,7 +89,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
   return (
     <div className="group relative">
       <div
-        className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden transform hover:scale-105"
+        className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden hover:scale-[1.01]"
         onClick={handleSelect}
         onDoubleClick={handleViewDetails}
       >
@@ -141,7 +141,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2">
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
               onClick={handleSelect}
             >
               <CheckCircleIcon className="w-4 h-4" />
@@ -149,7 +149,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
             </button>
 
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
               onClick={handleViewDetails}
             >
               <EyeIcon className="w-4 h-4" />
@@ -158,7 +158,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
 
             {isPrivileged && (
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                 onClick={handleAddMember}
               >
                 <UserPlusIcon className="w-4 h-4" />

@@ -270,7 +270,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -295,7 +295,7 @@ const Register = () => {
 
           {/* Google Login */}
           <div className="flex justify-center">
-            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all hover:scale-[1.01]">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => alert('Google registration failed')}

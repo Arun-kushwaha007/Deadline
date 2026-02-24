@@ -48,7 +48,7 @@ const CreateOrganization = () => {
             </div>
             
             <button
-              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all transform hover:scale-105 font-medium shadow-lg flex items-center gap-2"
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-lg flex items-center gap-2"
               onClick={() => setShowModal(true)}
             >
               <span className="text-lg">➕</span>
@@ -61,7 +61,7 @@ const CreateOrganization = () => {
             {loading ? (
               // Loading skeleton
               Array.from({ length: 3 }).map((_, index) => (
-                <div key={index} className="bg-card rounded-2xl p-6 shadow-lg border border-border animate-pulse">
+                <div key={index} className="bg-card rounded-2xl p-6 shadow-lg border border-border ">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
                     <div className="flex-1">
@@ -89,7 +89,7 @@ const CreateOrganization = () => {
                 </p>
                 <button
                   onClick={() => setShowModal(true)}
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all transform hover:scale-105 font-medium shadow-lg flex items-center gap-2"
+                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-lg flex items-center gap-2"
                 >
                   <span className="text-lg">🚀</span>
                   Create Your First Organization
@@ -98,7 +98,7 @@ const CreateOrganization = () => {
             ) : (
               // Organizations list
               organizations.map((org) => (
-                <div key={org._id} className="transform hover:scale-105 transition-transform duration-200">
+                <div key={org._id} className="hover:scale-[1.01] transition-transform duration-200">
                   <OrganizationCard organization={org} />
                 </div>
               ))

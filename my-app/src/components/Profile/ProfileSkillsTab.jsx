@@ -19,7 +19,7 @@ const ProfileSkillsTab = ({
         </h3>
         <button
           onClick={() => setShowSkillsModal(true)}
-          className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
+          className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-medium shadow-lg"
         >
           ➕ Add Skill
         </button>
@@ -32,7 +32,7 @@ const ProfileSkillsTab = ({
           <p className="text-muted-foreground dark:text-muted-foreground mb-6">Start building your profile by adding your skills and expertise</p>
           <button
             onClick={() => setShowSkillsModal(true)}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
+            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-medium shadow-lg"
           >
             🚀 Add Your First Skill
           </button>
@@ -96,7 +96,7 @@ const ProfileSkillsTab = ({
                 type="text"
                 value={newSkill.name}
                 onChange={(e) => setNewSkill({...newSkill, name: e.target.value})}
-                className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300"
+                className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300"
                 placeholder="e.g. JavaScript, Project Management, Design"
               />
             </div>

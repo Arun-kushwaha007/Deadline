@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { Building2, CheckCircle, Clock, TrendingUp, LayoutGrid, Target, CalendarDays } from 'lucide-react';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import KanbanBoard from '../components/organisms/KanbanBoard';
 import OrganizationDashboard from '../components/Organization/OrganizationDashboard';
@@ -39,9 +40,9 @@ const Dashboard = () => {
 
   const getGreeting = () => {
     const hour = currentTime.getHours();
-    if (hour < 12) return '🌅 Good Morning';
-    if (hour < 18) return '☀️ Good Afternoon';
-    return '🌙 Good Evening';
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
   };
 
   const formatDate = (date) => {
@@ -74,23 +75,23 @@ const Dashboard = () => {
                         </h1>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-muted-foreground">
                           <div className="flex items-center gap-2">
-                            <span className="text-lg">📅</span>
+                            <CalendarDays className="w-5 h-5" />
                             <span className="text-lg font-medium">{formatDate(currentTime)}</span>
                           </div>
-                          <div className="hidden sm:block w-2 h-2 bg-slate-400 rounded-full"></div>
+                          <div className="hidden sm:block w-1.5 h-1.5 bg-muted-foreground/40 rounded-full"></div>
                           <div className="flex items-center gap-2">
-                            <span className="text-lg">⏰</span>
+                            <Clock className="w-5 h-5" />
                             <span className="text-lg font-mono">{formatTime(currentTime)}</span>
                           </div>
                         </div>
                       </div>
         
                       {/* Welcome Message */}
-                      {/* <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 max-w-3xl mx-auto">
-                        <h2 className="text-xl font-bold text-gray-800 dark:text-foreground mb-3">
+                      {/* <div className="bg-white dark:bg-muted rounded-2xl p-6 shadow-lg border border-border dark:border-border max-w-3xl mx-auto">
+                        <h2 className="text-xl font-bold text-foreground  mb-3">
                           🚀 Welcome to CollabNest - Deadline
                         </h2>
-                        <p className="text-gray-600 dark:text-gray-400 text-md leading-relaxed">
+                        <p className="text-muted-foreground text-md leading-relaxed">
                           Your productivity command center where teams collaborate, deadlines are met, and success is achieved together.
                         </p>
                       </div> */}
@@ -102,10 +103,10 @@ const Dashboard = () => {
         {/* Quick Stats */}
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-gradient-to-br bg-secondary/50 rounded-2xl p-6 border border-border">
+            <div className="bg-card rounded-2xl p-6 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl">
-                  🏢
+                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                  <Building2 className="w-6 h-6" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Organizations</p>
@@ -114,37 +115,37 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br bg-green-50 dark:bg-green-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-800">
+            <div className="bg-card rounded-2xl p-6 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl">
-                  ✅
+                <div className="w-12 h-12 bg-green-600 dark:bg-green-500 rounded-full flex items-center justify-center text-white">
+                  <CheckCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Active Tasks</p>
+                  <p className="text-sm text-muted-foreground">Active Tasks</p>
                   <p className="text-2xl font-bold text-foreground">{taskStats.activeTasks}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br bg-secondary/50 rounded-2xl p-6 border border-border">
+            <div className="bg-card rounded-2xl p-6 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-secondary0 rounded-full flex items-center justify-center text-white text-xl">
-                  ⏰
+                <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white">
+                  <Clock className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Due Today</p>
+                  <p className="text-sm text-muted-foreground">Due Today</p>
                   <p className="text-2xl font-bold text-foreground">{taskStats.dueToday}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-secondary to-secondary/80 dark:from-violet-900/20 dark:to-violet-800/20 rounded-2xl p-6 border border-border">
+            <div className="bg-card rounded-2xl p-6 border border-border">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl">
-                  📈
+                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                  <TrendingUp className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Completed</p>
+                  <p className="text-sm text-muted-foreground">Completed</p>
                   <p className="text-2xl font-bold text-foreground">{taskStats.completedTasks}</p>
                 </div>
               </div>
@@ -157,12 +158,12 @@ const Dashboard = () => {
           
           {/* Organizations Section */}
           <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
-            <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
-              <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span>🏢</span>
+            <div className="bg-primary p-6">
+              <h3 className="text-2xl font-bold text-primary-foreground flex items-center gap-3">
+                <Building2 className="w-6 h-6" />
                 Organizations
               </h3>
-              <p className="text-primary-foreground/80 mt-2">
+              <p className="text-primary-foreground/70 mt-2">
                 Manage your workspaces and collaborate with your teams
               </p>
             </div>
@@ -173,12 +174,12 @@ const Dashboard = () => {
 
           {/* Kanban Section */}
           <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
-            <div className="bg-gradient-to-r from-green-500 to-teal-600 p-6">
-              <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span>📋</span>
+            <div className="bg-primary p-6">
+              <h3 className="text-2xl font-bold text-primary-foreground flex items-center gap-3">
+                <LayoutGrid className="w-6 h-6" />
                 Task Board
               </h3>
-              <p className="text-green-100 mt-2">
+              <p className="text-primary-foreground/70 mt-2">
                 Organize and track your tasks with our intuitive Kanban board
               </p>
             </div>
@@ -188,7 +189,7 @@ const Dashboard = () => {
           </div>
 
           {/* AI Assistant Section */}
-          {/* <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          {/* <div className="bg-white dark:bg-muted rounded-2xl shadow-lg border border-border dark:border-border overflow-hidden">
             <div className="bg-gradient-to-r bg-primary p-6">
               <h3 className="text-2xl font-bold text-white flex items-center gap-3">
                 <span>🤖</span>
@@ -205,9 +206,10 @@ const Dashboard = () => {
               <AIAssistantWrapper />
           {/* Footer Message */}
           <div className="text-center py-8">
-            <div className="bg-card rounded-xl p-6 border border-border dark:border-border">
-              <p className="text-muted-foreground text-lg">
-                🎯 This is your productivity control center. Let's achieve great things together!
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
+                <Target className="w-5 h-5 text-primary" />
+                This is your productivity control center. Let's achieve great things together!
               </p>
             </div>
           </div>

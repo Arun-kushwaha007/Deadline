@@ -298,7 +298,7 @@ const AddMember = () => {
                   <button
                     type="submit"
                     disabled={isLoading || !joiningUserId.trim()}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
                   >
                     {isLoading ? (
                       <>
@@ -436,7 +436,7 @@ const AddMember = () => {
                       <button
                         onClick={handleInvite}
                         disabled={isLoading}
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg"
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
                       >
                         {isLoading ? (
                           <>

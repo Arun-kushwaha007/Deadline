@@ -11,14 +11,14 @@ const Help = () => {
       <div className="max-w-4xl mx-auto text-center">
         {/* Main Icon */}
         <div className="mb-8">
-          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
+          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center shadow-2xl ">
             <span className="text-6xl">❓</span>
           </div>
         </div>
 
         {/* Coming Soon Badge */}
         <div className="inline-flex items-center px-6 py-2 bg-gradient-to-r bg-primary text-white rounded-full text-xl font-medium mb-6 shadow-lg">
-          <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+          <span className="w-2 h-2 bg-white rounded-full mr-2 "></span>
           Coming Soon
         </div>
 
@@ -104,14 +104,14 @@ const Help = () => {
           {isLoggedIn ? (
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-gradient-to-r bg-primary text-white rounded-lg hover:bg-primary/90 transition-all transform hover:scale-105 font-medium shadow-lg"
+              className="px-8 py-3 bg-gradient-to-r bg-primary text-white rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-lg"
             >
               🏠 Back to Dashboard
             </button>
           ) : (
             <Link
               to="/login"
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:from-orange-600 hover:to-red-700 transition-all transform hover:scale-105 font-medium shadow-lg text-center"
+              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:from-orange-600 hover:to-red-700 transition-all hover:scale-[1.01] font-medium shadow-lg text-center"
             >
               🚀 Sign In to Get Started
             </Link>

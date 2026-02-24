@@ -320,9 +320,9 @@ const Feedback = () => {
             <div className="text-center mb-12">
               <button
                 onClick={() => setShowFeedbackModal(true)}
-                className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold text-lg shadow-xl"
+                className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-xl"
               >
-                <span className="group-hover:animate-pulse">✨</span> Share Your Feedback
+                <span className="group-hover:">✨</span> Share Your Feedback
               </button>
             </div>
 
@@ -362,7 +362,7 @@ const Feedback = () => {
                       placeholder="Search feedback..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring focus:border-transparent"
                     />
                   </div>
 
@@ -370,7 +370,7 @@ const Feedback = () => {
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
                     {categories.map(cat => (
                       <option key={cat.value} value={cat.value}>
@@ -383,7 +383,7 @@ const Feedback = () => {
                   <select
                     value={filterRating}
                     onChange={(e) => setFilterRating(parseInt(e.target.value))}
-                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
                     <option value={1}>⭐ 1+ Stars</option>
                     <option value={2}>⭐ 2+ Stars</option>
@@ -400,7 +400,7 @@ const Feedback = () => {
                       setSortBy(field);
                       setSortOrder(order);
                     }}
-                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent dark:text-foreground focus:ring-2 focus:ring-ring"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
                     <option value="createdAt-desc">📅 Newest First</option>
                     <option value="createdAt-asc">📅 Oldest First</option>
@@ -436,7 +436,7 @@ const Feedback = () => {
                     </p>
                     <button
                       onClick={() => setShowFeedbackModal(true)}
-                      className="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg"
+                      className="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-lg"
                     >
                       🚀 Give Your First Feedback
                     </button>

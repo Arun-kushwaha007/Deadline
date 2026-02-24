@@ -244,7 +244,7 @@ const Terms = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <Link
             to="/register"
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-center"
+            className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl text-center"
           >
             I Accept - Continue Registration
           </Link>

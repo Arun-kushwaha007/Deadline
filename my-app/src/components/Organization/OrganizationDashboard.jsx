@@ -61,7 +61,7 @@ const OrganizationDashboard = () => {
       {Array.from({ length: 6 }).map((_, index) => (
         <div 
           key={`skeleton-${index}`} 
-          className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 animate-pulse overflow-hidden relative"
+          className="bg-white dark:bg-muted rounded-3xl p-6 shadow-lg border border-border dark:border-border  overflow-hidden relative"
         >
           {/* Shimmer effect */}
           <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/60 dark:via-gray-700/60 to-transparent"></div>
@@ -70,16 +70,16 @@ const OrganizationDashboard = () => {
             <div className="w-14 h-14 bg-gray-300 dark:bg-gray-600 rounded-2xl"></div>
             <div className="flex-1">
               <div className="h-5 bg-gray-300 dark:bg-gray-600 rounded-lg mb-2"></div>
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-lg w-2/3"></div>
+              <div className="h-4 bg-accent dark:bg-accent rounded-lg w-2/3"></div>
             </div>
           </div>
           <div className="space-y-3">
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-lg w-4/5"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-lg w-3/5"></div>
+            <div className="h-3 bg-accent dark:bg-accent rounded-lg"></div>
+            <div className="h-3 bg-accent dark:bg-accent rounded-lg w-4/5"></div>
+            <div className="h-3 bg-accent dark:bg-accent rounded-lg w-3/5"></div>
           </div>
           <div className="mt-6">
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+            <div className="h-10 bg-accent dark:bg-accent rounded-xl"></div>
           </div>
         </div>
       ))}
@@ -92,21 +92,21 @@ const OrganizationDashboard = () => {
         {/* Animated icon */}
         {/* <div className="w-40 h-40 bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 dark:from-blue-900/30 dark:via-purple-900/30 dark:to-indigo-900/30 rounded-full flex items-center justify-center mb-8 mx-auto relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full animate-spin-slow"></div>
-          <span className="text-8xl relative z-10 animate-bounce">🏢</span>
+          <span className="text-8xl relative z-10 ">🏢</span>
         </div> */}
         
         <h3 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-gray-600 to-gray-800 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent mb-6">
           No Organizations Found
         </h3>
         
-        <p className="text-gray-600 dark:text-gray-400 text-center mb-10 max-w-lg text-lg leading-relaxed">
+        <p className="text-muted-foreground text-center mb-10 max-w-lg text-lg leading-relaxed">
           You haven't joined any organizations yet. Create your first organization or ask an admin to invite you to get started!
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={handleCreateOrganization}
-            className="group px-8 py-4 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-2xl flex items-center gap-3"
+            className="group px-8 py-4 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-2xl hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-2xl flex items-center gap-3"
           >
             <span className="text-xl group-hover:rotate-12 transition-transform duration-300">🚀</span>
             Create Organization
@@ -115,9 +115,9 @@ const OrganizationDashboard = () => {
           
           <button
             onClick={() => navigate('/join_organization')}
-            className="group px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 hover:-translate-y-1 flex items-center gap-3"
+            className="group px-8 py-4 bg-muted0 hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01] hover:-translate-y-1 flex items-center gap-3"
           >
-            <span className="text-xl group-hover:scale-110 transition-transform duration-300">🤝</span>
+            <span className="text-xl group-hover:scale-[1.01] transition-transform duration-300">🤝</span>
             Join Organization
           </button>
         </div>
@@ -127,7 +127,7 @@ const OrganizationDashboard = () => {
 
   const StatsCard = ({ icon, title, value, color, delay = 0 }) => (
     <div 
-      className={`bg-gradient-to-br ${color} rounded-2xl p-6 border border-opacity-20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-1`}
+      className={`bg-gradient-to-br ${color} rounded-2xl p-6 border border-opacity-20 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1`}
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center gap-4">
@@ -135,8 +135,8 @@ const OrganizationDashboard = () => {
           {icon}
         </div>
         <div>
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 dark:text-foreground">{value}</p>
+          <p className="text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-1">{title}</p>
+          <p className="text-3xl font-bold text-foreground ">{value}</p>
         </div>
       </div>
     </div>
@@ -154,23 +154,23 @@ const OrganizationDashboard = () => {
               <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6 animate-fade-in">
                 My Organizations
               </h1>
-              <p className="text-gray-600 dark:text-gray-400 text-xl max-w-4xl mx-auto leading-relaxed animate-fade-in-delayed">
+              <p className="text-muted-foreground text-xl max-w-4xl mx-auto leading-relaxed animate-fade-in-delayed">
                 Manage and oversee all your organizational projects in one unified dashboard
               </p>
             </div>
           </div>
 
           {/* Enhanced Action Section */}
-          <div className="flex flex-col lg:flex-row justify-between items-center mb-12 gap-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-3xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+          <div className="flex flex-col lg:flex-row justify-between items-center mb-12 gap-6 bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-3xl p-6 border border-border/50 dark:border-border/50 shadow-lg">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg">
                 <span className="text-white text-2xl">📊</span>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-foreground">
+                <h2 className="text-2xl font-bold text-foreground ">
                   Organization Dashboard
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-muted-foreground">
                   {filteredOrganizations.length} of {uniqueOrganizations.length} organization{uniqueOrganizations.length !== 1 ? 's' : ''} {searchTerm && 'found'}
                 </p>
               </div>
@@ -184,21 +184,21 @@ const OrganizationDashboard = () => {
                   placeholder="Search organizations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 w-64"
+                  className="pl-10 pr-4 py-3 bg-white dark:bg-accent border border-border dark:border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 w-64"
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-gray-400">🔍</span>
+                  <span className="text-muted-foreground">🔍</span>
                 </div>
               </div>
 
               {/* View Mode Toggle */}
-              <div className="flex bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+              <div className="flex bg-accent dark:bg-accent rounded-xl p-1">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`px-3 py-2 rounded-lg transition-all duration-200 ${
                     viewMode === 'grid'
                       ? 'bg-white dark:bg-gray-600 shadow-sm text-primary'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                      : 'text-muted-foreground hover:text-foreground dark:hover:text-gray-200'
                   }`}
                 >
                   ⊞
@@ -208,7 +208,7 @@ const OrganizationDashboard = () => {
                   className={`px-3 py-2 rounded-lg transition-all duration-200 ${
                     viewMode === 'list'
                       ? 'bg-white dark:bg-gray-600 shadow-sm text-primary'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
+                      : 'text-muted-foreground hover:text-foreground dark:hover:text-gray-200'
                   }`}
                 >
                   ☰
@@ -217,7 +217,7 @@ const OrganizationDashboard = () => {
 
               {/* Create Organization Button */}
               <button
-                className="group px-6 py-3 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 font-semibold shadow-lg hover:shadow-xl flex items-center gap-3"
+                className="group px-6 py-3 bg-gradient-to-r from-blue-500 via-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:via-blue-700 hover:to-purple-700 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 font-semibold shadow-lg hover:shadow-xl flex items-center gap-3"
                 onClick={handleCreateOrganization}
               >
                 <span className="text-lg group-hover:rotate-90 transition-transform duration-300">➕</span>
@@ -236,10 +236,10 @@ const OrganizationDashboard = () => {
                   <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span className="text-4xl">🔍</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-800 dark:text-foreground mb-4">
+                  <h3 className="text-2xl font-bold text-foreground  mb-4">
                     No Results Found
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     No organizations match your search for "{searchTerm}"
                   </p>
                   <button
@@ -263,7 +263,7 @@ const OrganizationDashboard = () => {
                   return (
                     <div 
                       key={orgKey} 
-                      className={`animate-fade-in-up transform hover:scale-105 transition-all duration-300 ${
+                      className={`animate-fade-in-up hover:scale-[1.01] transition-all duration-300 ${
                         viewMode === 'list' ? 'hover:scale-100 hover:translate-x-2' : ''
                       }`}
                       style={{ animationDelay: `${index * 100}ms` }}
@@ -319,7 +319,7 @@ const OrganizationDashboard = () => {
           {/* Enhanced Selected Organization Overview */}
           {selectedOrganization && (
             <div className="mt-12 animate-fade-in">
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50 mb-8">
+              <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border/50 dark:border-border/50 mb-8">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
                     📋
@@ -328,7 +328,7 @@ const OrganizationDashboard = () => {
                     <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
                       {selectedOrganization.name} Overview
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                    <p className="text-muted-foreground text-lg">
                       Comprehensive insights and detailed analytics
                     </p>
                   </div>
@@ -342,12 +342,12 @@ const OrganizationDashboard = () => {
           {uniqueOrganizations.length > 0 && !selectedOrganization && (
             <div className="text-center py-16 animate-fade-in">
               <div className="w-20 h-20 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <span className="text-3xl animate-bounce">👆</span>
+                <span className="text-3xl ">👆</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-foreground mb-3">
+              <h3 className="text-2xl font-bold text-foreground  mb-3">
                 Select an Organization
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg max-w-md mx-auto">
+              <p className="text-muted-foreground text-lg max-w-md mx-auto">
                 Click on any organization card above to explore its detailed overview and manage tasks efficiently.
               </p>
             </div>

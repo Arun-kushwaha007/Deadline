@@ -512,7 +512,7 @@ const OrgCalendarView = () => {
                 <div className="flex justify-end">
                   <button
                     onClick={closeModal}
-                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                   >
                     Close
                   </button>
