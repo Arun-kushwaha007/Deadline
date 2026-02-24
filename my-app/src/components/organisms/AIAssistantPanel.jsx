@@ -161,7 +161,7 @@ export default function AIAssistantPanel() {
       </div>
 
       {/* Header */}
-      <div className="bg-gradient-to-r bg-primary p-3">
+      <div className="bg-primary border-b border-border p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
@@ -196,8 +196,8 @@ export default function AIAssistantPanel() {
       >
         {messages.length === 0 ? (
           <div className="text-center py-6">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Sparkles className="w-6 h-6 text-purple-500" />
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm border border-border">
+              <Sparkles className="w-6 h-6 text-muted-foreground" />
             </div>
             <h3 className="text-base font-semibold text-foreground mb-1">
               AI Assistant
@@ -287,7 +287,7 @@ export default function AIAssistantPanel() {
           <button
             className={`px-3 py-2 rounded-lg font-medium transition-all transform hover:scale-105 ${
               input.trim() && !isLoading
-                ? 'bg-gradient-to-r bg-primary text-white hover:bg-primary/90 shadow-lg'
+                ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm'
                 : 'bg-slate-200 dark:bg-accent text-muted-foreground cursor-not-allowed'
             }`}
             onClick={sendMessage}

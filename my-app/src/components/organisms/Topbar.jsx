@@ -136,43 +136,43 @@ const Topbar = () => {
   const getNotificationStyle = (type) => {
     const styles = {
       taskAssigned: {
-        bg: 'bg-gradient-to-r bg-primary',
+        bg: 'bg-primary',
         border: 'border-blue-400',
         icon: '📋',
         color: 'text-blue-50'
       },
       invite: {
-        bg: 'bg-gradient-to-r from-green-500 to-green-600',
+        bg: 'bg-green-600',
         border: 'border-green-400',
         icon: '📨',
         color: 'text-green-50'
       },
       message: {
-        bg: 'bg-gradient-to-r bg-primary',
+        bg: 'bg-primary',
         border: 'border-purple-400',
         icon: '💬',
         color: 'text-purple-50'
       },
       deadline: {
-        bg: 'bg-gradient-to-r from-red-500 to-red-600',
+        bg: 'bg-red-600',
         border: 'border-red-400',
         icon: '⏰',
         color: 'text-red-50'
       },
       info: {
-        bg: 'bg-gradient-to-r from-cyan-500 to-cyan-600',
+        bg: 'bg-cyan-600',
         border: 'border-cyan-400',
         icon: 'ℹ️',
         color: 'text-cyan-50'
       },
       newComment: {
-        bg: 'bg-gradient-to-r from-orange-500 to-orange-600',
+        bg: 'bg-orange-600',
         border: 'border-orange-400',
         icon: '💭',
         color: 'text-orange-50'
       },
       default: {
-        bg: 'bg-gradient-to-r from-gray-500 to-gray-600',
+        bg: 'bg-gray-600',
         border: 'border-gray-400',
         icon: '🔔',
         color: 'text-gray-50'
@@ -426,7 +426,7 @@ const Topbar = () => {
                 onClick={() => setShowUserMenu(!showUserMenu)}
                 className="hidden sm:flex items-center gap-2 p-2 rounded-lg hover:bg-accent transition-all duration-200"
               >
-                <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center overflow-hidden">
                   {user.profilePic ? (
                     <img
                       src={user.profilePic}
@@ -479,7 +479,7 @@ const Topbar = () => {
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="bg-gradient-to-r bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all transform hover:scale-105 shadow-lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-all transform hover:scale-[1.05] shadow-sm"
               title="Login"
             >
               <LogIn size={18} /> Login
@@ -552,7 +552,7 @@ const Topbar = () => {
           {isLoggedIn && user && (
             <div className="p-4 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center shadow-sm overflow-hidden">
                   {user.profilePic ? (
                     <img src={user.profilePic} alt={user.name || 'User'} className="w-full h-full object-cover" />
                   ) : (
@@ -692,7 +692,7 @@ const Topbar = () => {
               </div>
 
               {/* Shine effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-white/10 -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
             </div>
           );
         })}

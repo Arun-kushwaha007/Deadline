@@ -74,7 +74,6 @@ const Sidebar = () => {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
-              <span className="text-sm">👋</span>
               <span className="text-xs text-muted-foreground">Welcome!</span>
             </div>
             <h3 className="font-semibold text-sm text-sidebar-foreground truncate">
@@ -88,7 +87,7 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation Menu - Flexible */}
-      <div className="flex-1 overflow-y-auto px-3 py-3 min-h-0">
+      <div className="flex-1 overflow-y-auto px-3 py-3 min-h-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <MenuItems />
       </div>
 
@@ -122,7 +121,7 @@ const Sidebar = () => {
         <button
           onClick={handleLogout}
           aria-label="Log out"
-          className="flex items-center gap-2 w-full p-2.5 rounded-lg bg-destructive hover:bg-destructive/90 text-destructive-foreground font-medium transition-all duration-200 transform hover:scale-[1.02] shadow-md hover:shadow-lg"
+          className="flex items-center gap-2 w-full p-2.5 rounded-lg text-destructive hover:bg-destructive/10 font-medium transition-all duration-200"
         >
           <LogOut size={16} />
           <span className="text-sm">Logout</span>

@@ -256,11 +256,11 @@ const DashboardOverview = () => {
     <div className="p-6 min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Header Section */}
       <div className="mb-8">
-        <div className="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-6 shadow-lg">
-          <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+        <div className="bg-muted border border-border rounded-2xl p-6 shadow-sm">
+          <h2 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
             📊 Organization Analytics
           </h2>
-          <p className="text-primary-foreground/80">
+          <p className="text-muted-foreground">
             Comprehensive insights into your organization's performance and productivity
           </p>
         </div>
@@ -505,9 +505,9 @@ const DashboardOverview = () => {
             </div>
           ) : (
             userAnalysis.map((user) => (
-              <div key={user.userId} className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 rounded-xl p-6 border border-border">
+              <div key={user.userId} className="bg-card rounded-xl p-6 border border-border shadow-sm">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 bg-muted border border-border rounded-full flex items-center justify-center text-muted-foreground font-bold">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
                   <div>

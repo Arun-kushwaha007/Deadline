@@ -78,7 +78,7 @@ const Setting = () => {
   return (
     <DashboardLayout> 
       {/* Removed the full-screen div that was blocking the layout */}
-      <div className="relative min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-800 to-zinc-900 text-white">
+      <div className="relative min-h-screen bg-background text-foreground">
 
         <div className="relative max-w-4xl mx-auto px-4 py-12">
           {/* Header */}
@@ -91,11 +91,11 @@ const Setting = () => {
               Back to Dashboard
             </Link> */}
             
-            <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-              <CogIcon className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+              <CogIcon className="w-10 h-10 text-muted-foreground" />
             </div>
             
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-4">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
               Settings
             </h1>
             <p className="text-muted-foreground text-lg">
@@ -107,8 +107,8 @@ const Setting = () => {
           <div className="mb-8">
             <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-white text-sm font-bold">⚠️</span>
+                <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">⚠️</span>
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
@@ -142,8 +142,8 @@ const Setting = () => {
             {/* Profile Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                  <UserIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <UserIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
               </div>
@@ -184,8 +184,8 @@ const Setting = () => {
             {/* Notification Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                  <BellIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <BellIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Notification Preferences (Under Development)</h2>
               </div>
@@ -224,8 +224,8 @@ const Setting = () => {
             {/* Privacy Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                  <ShieldCheckIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <ShieldCheckIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Privacy & Security</h2>
               </div>
@@ -293,8 +293,8 @@ const Setting = () => {
             {/* Appearance Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center">
-                  <PaintBrushIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <PaintBrushIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Appearance & Display</h2>
               </div>
@@ -362,8 +362,8 @@ const Setting = () => {
             {/* Danger Zone */}
             <div className="bg-red-900/20 border border-red-500/30 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                  <TrashIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                  <TrashIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Danger Zone</h2>
               </div>
@@ -387,7 +387,7 @@ const Setting = () => {
 
           {/* Save Changes Button */}
           <div className="flex justify-center mt-8">
-            <button className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl">
+            <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm">
               Save Changes
             </button>
           </div>

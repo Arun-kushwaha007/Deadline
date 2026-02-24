@@ -93,25 +93,25 @@ const KanbanBoard = () => {
     todo: {
       title: 'To Do',
       icon: ClockIcon,
-      gradient: 'from-blue-500 to-indigo-600',
-      bg: 'bg-primary/10',
-      border: 'border-blue-500/30',
+      headerBg: 'bg-muted/80',
+      bg: 'bg-muted/30',
+      border: 'border-border',
       count: tasks.filter(t => t.status === 'todo').length
     },
     inprogress: {
       title: 'In Progress',
       icon: PlayIcon,
-      gradient: 'from-yellow-500 to-orange-600',
-      bg: 'bg-yellow-500/10',
-      border: 'border-yellow-500/30',
+      headerBg: 'bg-primary/10',
+      bg: 'bg-primary/5',
+      border: 'border-primary/20',
       count: tasks.filter(t => t.status === 'inprogress').length
     },
     done: {
       title: 'Done',
       icon: CheckCircleIcon,
-      gradient: 'from-green-500 to-emerald-600',
-      bg: 'bg-green-500/10',
-      border: 'border-green-500/30',
+      headerBg: 'bg-green-500/10 dark:bg-green-500/20',
+      bg: 'bg-green-50 dark:bg-green-900/10',
+      border: 'border-green-200 dark:border-green-800',
       count: tasks.filter(t => t.status === 'done').length
     }
   };
@@ -158,8 +158,8 @@ const KanbanBoard = () => {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ViewColumnsIcon className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-4">
+            <ViewColumnsIcon className="w-8 h-8 text-muted-foreground" />
           </div>
           <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Organization Selected</h3>
           <p className="text-muted-foreground">Please select an organization to view its Kanban board.</p>
@@ -174,13 +174,13 @@ const KanbanBoard = () => {
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-xl flex items-center justify-center">
-              <ViewColumnsIcon className="w-6 h-6 text-white" />
-            </div>
+            {/* <div className="w-12 h-12 bg-card border border-border shadow-sm rounded-xl flex items-center justify-center">
+              <ViewColumnsIcon className="w-6 h-6 text-primary" />
+            </div> */}
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              {/* <h1 className="text-xl font-semibold text-foreground">
                 Kanban Board
-              </h1>
+              </h1> */}
               <p className="text-muted-foreground text-sm">
                 Drag and drop tasks to update their status
               </p>
@@ -190,7 +190,7 @@ const KanbanBoard = () => {
           {isPrivileged && (
             <button
               onClick={() => setShowModal(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all shadow-md"
             >
               <PlusIcon className="w-4 h-4" />
               New Task
@@ -228,13 +228,13 @@ const KanbanBoard = () => {
             return (
               <div
                 key={status}
-                className={`${config.bg} border ${config.border} rounded-lg p-3 text-center`}
+                className={`${config.bg} border ${config.border} rounded-xl p-4 text-center shadow-sm`}
               >
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <Icon className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm font-medium text-muted-foreground">{config.title}</span>
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Icon className="w-4 h-4 text-foreground" />
+                  <span className="text-sm font-semibold text-foreground">{config.title}</span>
                 </div>
-                <div className="text-2xl font-bold text-white">{config.count}</div>
+                <div className="text-3xl font-bold text-foreground">{config.count}</div>
               </div>
             );
           })}
@@ -270,18 +270,18 @@ const KanbanBoard = () => {
               <DroppableColumn
                 key={status}
                 id={status}
-                className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden"
+                className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col"
               >
                 {/* Column Header */}
-                <div className={`bg-gradient-to-r ${config.gradient} p-4`}>
+                <div className={`${config.headerBg} border-b border-border p-4`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Icon className="w-5 h-5 text-white" />
-                      <h2 className="text-lg font-bold text-white">
+                       <Icon className="w-5 h-5 text-foreground" />
+                      <h2 className="text-lg font-bold text-foreground hover:text-primary transition-colors cursor-default">
                         {config.title}
                       </h2>
                     </div>
-                    <div className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                    <div className="bg-background border border-border text-foreground text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
                       {columnTasks.length}
                     </div>
                   </div>

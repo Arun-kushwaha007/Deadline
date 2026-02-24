@@ -4,7 +4,7 @@ import { ArrowLeftIcon, DocumentTextIcon, ShieldCheckIcon, UserGroupIcon, GlobeA
 
 const Terms = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-background text-foreground">
 
       <div className="relative max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
@@ -17,11 +17,11 @@ const Terms = () => {
             Back to Registration
           </Link>
           
-          <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-            <DocumentTextIcon className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <DocumentTextIcon className="w-10 h-10 text-muted-foreground" />
           </div>
           
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Terms of Service
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -35,10 +35,10 @@ const Terms = () => {
           {/* Introduction */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">1</span>
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-bold">1</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Introduction</h2>
+              <h2 className="text-2xl font-bold text-foreground">Introduction</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Welcome to CollabNest! These Terms of Service ("Terms") govern your use of our collaborative workspace platform. 
@@ -51,8 +51,8 @@ const Terms = () => {
 <div className="mb-8">
   <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
     <div className="flex items-start gap-3">
-      <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-        <span className="text-white text-sm font-bold">⚠️</span>
+      <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+        <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">⚠️</span>
       </div>
       <div className="space-y-2">
         <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
@@ -82,10 +82,10 @@ const Terms = () => {
           {/* Acceptance of Terms */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">2</span>
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-bold">2</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Acceptance of Terms</h2>
+              <h2 className="text-2xl font-bold text-foreground">Acceptance of Terms</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-4">
               By creating an account or using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.
@@ -100,10 +100,10 @@ const Terms = () => {
           {/* User Accounts */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <UserGroupIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <UserGroupIcon className="w-4 h-4 text-muted-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">User Accounts</h2>
+              <h2 className="text-2xl font-bold text-foreground">User Accounts</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times.</p>
@@ -119,10 +119,10 @@ const Terms = () => {
           {/* Acceptable Use */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                <ShieldCheckIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <ShieldCheckIcon className="w-4 h-4 text-muted-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">Acceptable Use Policy</h2>
+              <h2 className="text-2xl font-bold text-foreground">Acceptable Use Policy</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>You agree not to use CollabNest for any unlawful purpose or in any way that could damage, disable, or impair the service.</p>
@@ -154,10 +154,10 @@ const Terms = () => {
           {/* Privacy & Data */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">🔒</span>
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-bold">🔒</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Privacy & Data Protection</h2>
+              <h2 className="text-2xl font-bold text-foreground">Privacy & Data Protection</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed mb-4">
               Your privacy is important to us. We collect and use your information in accordance with our Privacy Policy. 
@@ -175,10 +175,10 @@ const Terms = () => {
           {/* Service Availability */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center">
-                <GlobeAltIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <GlobeAltIcon className="w-4 h-4 text-muted-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">Service Availability</h2>
+              <h2 className="text-2xl font-bold text-foreground">Service Availability</h2>
             </div>
             <div className="space-y-4 text-muted-foreground">
               <p>We strive to provide reliable service, but cannot guarantee 100% uptime. We reserve the right to:</p>
@@ -194,10 +194,10 @@ const Terms = () => {
           {/* Limitation of Liability */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-slate-500 to-slate-700 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">⚖️</span>
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-bold">⚖️</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Limitation of Liability</h2>
+              <h2 className="text-2xl font-bold text-foreground">Limitation of Liability</h2>
             </div>
             <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
               <p className="text-yellow-200 text-sm leading-relaxed">
@@ -210,10 +210,10 @@ const Terms = () => {
           {/* Contact Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">📧</span>
+              <div className="w-8 h-8 bg-muted border border-border rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-sm font-bold">📧</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Contact Us</h2>
+              <h2 className="text-2xl font-bold text-foreground">Contact Us</h2>
             </div>
             <div className="bg-muted border border-border rounded-lg p-6">
               <p className="text-muted-foreground mb-4">
@@ -244,7 +244,7 @@ const Terms = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <Link
             to="/register"
-            className="bg-gradient-to-r from-primary to-primary/80 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl text-center"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm text-center"
           >
             I Accept - Continue Registration
           </Link>

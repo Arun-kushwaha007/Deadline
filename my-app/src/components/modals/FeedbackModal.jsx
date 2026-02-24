@@ -168,8 +168,8 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
       <div className="bg-card rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
         
 
-        <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-6 rounded-t-3xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 animate-pulse"></div>
+        <div className="bg-orange-500 p-6 rounded-t-3xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-orange-400/20 animate-pulse"></div>
           <div className="relative z-10 flex justify-between items-center">
             <div>
               <h2 className="text-3xl font-bold text-white flex items-center gap-3">
@@ -352,7 +352,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
           </div>
 
           {/* Public Feedback Option */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
+          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800">
             <div className="flex items-start gap-4">
               <input
                 type="checkbox"
@@ -384,7 +384,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="flex-1 group px-6 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-sm hover:shadow transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">

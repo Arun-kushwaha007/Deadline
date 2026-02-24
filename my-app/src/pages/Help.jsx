@@ -7,23 +7,23 @@ const Help = () => {
   const isLoggedIn = !!localStorage.getItem('token');
 
   const helpContent = (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-card dark:to-card flex items-center justify-center px-4 py-8 transition-colors duration-300">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8 transition-colors duration-300">
       <div className="max-w-4xl mx-auto text-center">
         {/* Main Icon */}
         <div className="mb-8">
-          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center shadow-2xl ">
+          <div className="w-32 h-32 mx-auto bg-muted border border-border rounded-full flex items-center justify-center shadow-lg ">
             <span className="text-6xl">❓</span>
           </div>
         </div>
 
         {/* Coming Soon Badge */}
-        <div className="inline-flex items-center px-6 py-2 bg-gradient-to-r bg-primary text-white rounded-full text-xl font-medium mb-6 shadow-lg">
-          <span className="w-2 h-2 bg-white rounded-full mr-2 "></span>
+        <div className="inline-flex items-center px-6 py-2 bg-primary text-primary-foreground rounded-full text-xl font-medium mb-6 shadow-md">
+          <span className="w-2 h-2 bg-primary-foreground rounded-full mr-2"></span>
           Coming Soon
         </div>
 
         {/* Main Title */}
-        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r bg-primary bg-clip-text text-transparent mb-6 animate-fade-in">
+        <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
           Help & Support
         </h1>
 
@@ -68,8 +68,8 @@ const Help = () => {
 
         {/* Features Coming Soon */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
-            <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
+          <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center text-foreground text-xl font-bold mb-4 mx-auto">
               📚
             </div>
             <h4 className="font-bold text-foreground mb-2">Knowledge Base</h4>
@@ -78,8 +78,8 @@ const Help = () => {
             </p>
           </div>
 
-          <div className="bg-gradient-to-br bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
-            <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
+          <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
+            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center text-foreground text-xl font-bold mb-4 mx-auto">
               🎥
             </div>
             <h4 className="font-bold text-foreground mb-2">Video Tutorials</h4>
@@ -88,8 +88,8 @@ const Help = () => {
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
-            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
+          <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
+            <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary text-xl font-bold mb-4 mx-auto">
               ❓
             </div>
             <h4 className="font-bold text-foreground mb-2">FAQ Section</h4>
@@ -104,14 +104,14 @@ const Help = () => {
           {isLoggedIn ? (
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-gradient-to-r bg-primary text-white rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-lg"
+              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md"
             >
               🏠 Back to Dashboard
             </button>
           ) : (
             <Link
               to="/login"
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:from-orange-600 hover:to-red-700 transition-all hover:scale-[1.01] font-medium shadow-lg text-center"
+              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md text-center"
             >
               🚀 Sign In to Get Started
             </Link>
@@ -126,9 +126,9 @@ const Help = () => {
         </div>
 
         {/* Quick Tips */}
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-6 border border-border">
+        <div className="bg-card rounded-xl p-6 border border-border mt-8 shadow-sm">
           <h3 className="text-lg font-bold text-foreground mb-4 flex items-center justify-center gap-2">
-            <span>🚀</span>
+            <span className="text-primary">💡</span>
             Quick Tips While You Wait
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
@@ -183,14 +183,14 @@ const Help = () => {
       {/* Simple header for non-authenticated visitors */}
       <header className="bg-card border-b border-border px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <Link to="/login" className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
+          <Link to="/login" className="text-2xl font-bold text-primary">
             CollabNest
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Sign In
             </Link>
-            <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:from-orange-600 hover:to-red-700 transition-all">
+            <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
               Get Started
             </Link>
           </div>

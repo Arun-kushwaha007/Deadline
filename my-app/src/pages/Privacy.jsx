@@ -4,7 +4,7 @@ import { ArrowLeftIcon, ShieldCheckIcon, EyeIcon, CircleStackIcon, CogIcon, Glob
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-background text-foreground">
 
       <div className="relative max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
@@ -17,11 +17,11 @@ const Privacy = () => {
             Back to Registration
           </Link>
           
-          <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-            <ShieldCheckIcon className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+            <ShieldCheckIcon className="w-10 h-10 text-primary-foreground" />
           </div>
           
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             Privacy Policy
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -35,10 +35,10 @@ const Privacy = () => {
           {/* Introduction */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">1</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-sm font-bold">1</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Our Commitment to Privacy</h2>
+              <h2 className="text-2xl font-bold text-foreground">Our Commitment to Privacy</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               At CollabNest, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, 
@@ -51,7 +51,7 @@ const Privacy = () => {
           <div className="mb-8">
             <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-white text-sm font-bold">⚠️</span>
                 </div>
                 <div className="space-y-2">
@@ -83,10 +83,10 @@ const Privacy = () => {
           {/* Information We Collect */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <CircleStackIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <CircleStackIcon className="w-4 h-4 text-primary-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">Information We Collect</h2>
+              <h2 className="text-2xl font-bold text-foreground">Information We Collect</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -121,10 +121,10 @@ const Privacy = () => {
           {/* How We Use Your Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <CogIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <CogIcon className="w-4 h-4 text-primary-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">How We Use Your Information</h2>
+              <h2 className="text-2xl font-bold text-foreground">How We Use Your Information</h2>
             </div>
             
             <div className="space-y-4 text-muted-foreground">
@@ -161,10 +161,10 @@ const Privacy = () => {
           {/* Data Sharing */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 {/* <UserShieldIcon className="w-4 h-4 text-white" /> */}
               </div>
-              <h2 className="text-2xl font-bold text-white">Information Sharing</h2>
+              <h2 className="text-2xl font-bold text-foreground">Information Sharing</h2>
             </div>
             
             <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-6 mb-4">
@@ -190,10 +190,10 @@ const Privacy = () => {
           {/* Data Security */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">🔐</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-sm font-bold">🔐</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Data Security</h2>
+              <h2 className="text-2xl font-bold text-foreground">Data Security</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -225,10 +225,10 @@ const Privacy = () => {
           {/* Your Rights */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <EyeIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <EyeIcon className="w-4 h-4 text-primary-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">Your Privacy Rights</h2>
+              <h2 className="text-2xl font-bold text-foreground">Your Privacy Rights</h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-4">
@@ -257,10 +257,10 @@ const Privacy = () => {
           {/* Cookies & Tracking */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
                 <span className="text-white text-sm font-bold">🍪</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Cookies & Tracking</h2>
+              <h2 className="text-2xl font-bold text-foreground">Cookies & Tracking</h2>
             </div>
             
             <p className="text-muted-foreground mb-4">
@@ -289,10 +289,10 @@ const Privacy = () => {
           {/* International Transfers */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <GlobeAltIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <GlobeAltIcon className="w-4 h-4 text-primary-foreground" />
               </div>
-              <h2 className="text-2xl font-bold text-white">International Data Transfers</h2>
+              <h2 className="text-2xl font-bold text-foreground">International Data Transfers</h2>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Your information may be transferred to and maintained on servers located outside of your state, province, 
@@ -304,10 +304,10 @@ const Privacy = () => {
           {/* Contact Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">📧</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-sm font-bold">📧</span>
               </div>
-              <h2 className="text-2xl font-bold text-white">Contact Us About Privacy</h2>
+              <h2 className="text-2xl font-bold text-foreground">Contact Us About Privacy</h2>
             </div>
             <div className="bg-muted border border-border rounded-lg p-6">
               <p className="text-muted-foreground mb-4">
@@ -338,7 +338,7 @@ const Privacy = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <Link
             to="/register"
-            className="bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl text-center"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-sm text-center"
           >
             I Understand - Continue Registration
           </Link>

@@ -400,7 +400,7 @@ useEffect(() => {
   if (isLoading) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
+        <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
           <div className="max-w-7xl mx-auto">
             <LoadingSkeleton />
           </div>
@@ -412,11 +412,11 @@ useEffect(() => {
   if (!user) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           
-          <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
+          <div className="bg-card dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
             <div className="text-8xl mb-6 ">🔐</div>
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold mb-4 text-foreground">
               Authentication Required
             </h2>
             <p className="text-muted-foreground mb-8 text-lg">
@@ -424,7 +424,7 @@ useEffect(() => {
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+              className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
             >
               <span className="group-hover:">🚀</span> Go to Login
             </button>
@@ -440,8 +440,8 @@ useEffect(() => {
       value: userProgress.organizationsJoined,
       icon: '🏢',
       color: 'bg-primary',
-      bgColor: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20',
-      borderColor: 'border-blue-200 dark:border-blue-800',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.organizationsJoined / 5) * 100, 100),
       // action: () => simulateProgress('organizationsJoined')
     },
@@ -449,9 +449,9 @@ useEffect(() => {
       label: 'Tasks Completed',
       value: userProgress.tasksCompleted,
       icon: '✅',
-      color: 'from-green-500 to-green-600',
-      bgColor: 'bg-gradient-to-br bg-green-50 dark:bg-green-900/20',
-      borderColor: 'border-green-200 dark:border-green-800',
+      color: 'bg-green-500',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.tasksCompleted / 50) * 100, 100),
       // action: () => simulateProgress('tasksCompleted')
     },
@@ -459,9 +459,9 @@ useEffect(() => {
       label: 'Login Streak',
       value: `${userProgress.loginStreak} days`,
       icon: '🔥',
-      color: 'from-amber-500 to-orange-600',
-      bgColor: 'bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-800/20',
-      borderColor: 'border-amber-200 dark:border-orange-800',
+      color: 'bg-amber-500',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.loginStreak / 30) * 100, 100),
     },
     {
@@ -469,15 +469,15 @@ useEffect(() => {
       value: userSkills.length,
       icon: '🎯',
       color: 'bg-primary',
-      bgColor: 'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
-      borderColor: 'border-purple-200 dark:border-purple-800',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userSkills.length / 10) * 100, 100),
     },
   ];
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 transition-all duration-500">
+      <div className="min-h-screen bg-background transition-all duration-500">
 
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
@@ -485,7 +485,7 @@ useEffect(() => {
             {/* Header Section */}
             <div className="text-center mb-16 relative">
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
+                <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
                   My Profile
                 </h1>
                 <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
@@ -496,13 +496,13 @@ useEffect(() => {
 
             {/* Enhanced User ID Section */}
             <div className="mb-12 max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-yellow-500/10 border border-orange-200/50 dark:border-orange-800/50 rounded-3xl p-8 backdrop-blur-sm shadow-lg">
+              <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white text-2xl">🔑</span>
+                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center shadow-sm">
+                    <span className="text-muted-foreground text-2xl">🔑</span>
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold text-foreground">
                       Your Unique ID
                     </h2>
                     <p className="text-muted-foreground">
@@ -516,11 +516,11 @@ useEffect(() => {
                     type="text"
                     value={user.userId || 'N/A'}
                     readOnly
-                    className="flex-1 px-6 py-4 bg-white/80 dark:bg-muted/80 backdrop-blur-sm border border-slate-300/50 dark:border-border/50 rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
+                    className="flex-1 px-6 py-4 bg-muted border border-border rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
                   />
                   <button
                     onClick={handleCopyUserId}
-                    className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                    className="group px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
                   >
                     <span className="group-hover:">📋</span> Copy
                   </button>
@@ -543,7 +543,7 @@ useEffect(() => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
+                          ? 'bg-primary text-primary-foreground shadow-sm transform scale-105'
                           : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
@@ -559,12 +559,7 @@ useEffect(() => {
               
               {/* Enhanced Profile Card */}
               <div className="lg:col-span-1">
-                <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50 relative overflow-hidden">
-                  {/* Background pattern */}
-                  <div className="absolute inset-0 opacity-5">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-400 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-amber-400 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
-                  </div>
+                <div className="bg-card backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-border relative overflow-hidden">
                   
                   <div className="relative z-10 text-center">
                     <div className="relative inline-block mb-6">
@@ -582,7 +577,7 @@ useEffect(() => {
                       </div>
                     </div>
                     
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent mb-2">
+                    <h2 className="text-3xl font-bold text-foreground mb-2">
                       {user.name}
                     </h2>
                     
@@ -592,14 +587,14 @@ useEffect(() => {
 
                     {section && (
                       <div className="mb-4">
-                        <span className="inline-block bg-gradient-to-r from-orange-500/20 to-amber-500/20 text-orange-700 dark:text-orange-300 px-4 py-2 rounded-full text-sm font-medium border border-orange-200 dark:border-orange-800">
+                        <span className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
                           🎯 {section}
                         </span>
                       </div>
                     )}
 
                     {bio && (
-                      <div className="mt-6 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 rounded-2xl border border-border">
+                      <div className="mt-6 p-4 bg-muted rounded-2xl border border-border">
                         <p className="text-sm text-foreground/80 italic leading-relaxed">
                           "{bio}"
                         </p>
@@ -608,7 +603,7 @@ useEffect(() => {
 
                     <button
                       onClick={() => setShowEditModal(true)}
-                      className="mt-8 w-full group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                      className="mt-8 w-full group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
                     >
                       <span className="group-hover:">✏️</span> Edit Profile
                     </button>
@@ -650,15 +645,14 @@ useEffect(() => {
         {/* Enhanced Edit Profile Modal */}
         {showEditModal && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-            <div className="bg-white/95 dark:bg-muted/95 backdrop-blur-sm rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
+            <div className="bg-card w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-border animate-scale-in">
               
               {/* Enhanced Modal Header */}
-              <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-8 rounded-t-3xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 "></div>
-                <h2 className="text-3xl font-bold text-white flex items-center gap-3 relative z-10">
+              <div className="bg-card border-b border-border p-8 relative overflow-hidden">
+                <h2 className="text-3xl font-bold text-foreground flex items-center gap-3 relative z-10">
                   <span className="">✏️</span> Edit Profile
                 </h2>
-                <p className="text-orange-100 mt-2 relative z-10">Update your personal information and preferences</p>
+                <p className="text-muted-foreground mt-2 relative z-10">Update your personal information and preferences</p>
               </div>
 
               <div className="p-8">
@@ -731,7 +725,7 @@ useEffect(() => {
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="flex-1 group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
+                    className="flex-1 group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 font-semibold shadow-sm hover:scale-[1.01]"
                   >
                     <span className="group-hover:">💾</span> Save Changes
                   </button>

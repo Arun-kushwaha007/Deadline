@@ -94,19 +94,19 @@ const OrganizationCard = ({ organization, currentUserId }) => {
         onDoubleClick={handleViewDetails}
       >
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
+        <div className="bg-muted p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <BuildingOfficeIcon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-background border border-border rounded-xl flex items-center justify-center shadow-sm">
+                <BuildingOfficeIcon className="w-6 h-6 text-foreground" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white truncate max-w-[200px]">
+                <h2 className="text-xl font-bold text-foreground truncate max-w-[200px]">
                   {organization.name}
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <UsersIcon className="w-4 h-4 text-primary-foreground/80" />
-                  <span className="text-primary-foreground/80 text-sm">
+                  <UsersIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground text-sm">
                     {organization.members.length} member{organization.members.length !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -115,8 +115,8 @@ const OrganizationCard = ({ organization, currentUserId }) => {
             
             {/* Role Badge */}
             <div className={`flex items-center gap-2 px-3 py-1 rounded-full border ${roleConfig.bg} ${roleConfig.border}`}>
-              <RoleIcon className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-medium">
+              <RoleIcon className={`w-4 h-4 ${roleConfig.color}`} />
+              <span className={`text-xs font-medium ${roleConfig.color}`}>
                 {roleConfig.label}
               </span>
             </div>
@@ -141,7 +141,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-2">
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
               onClick={handleSelect}
             >
               <CheckCircleIcon className="w-4 h-4" />
@@ -149,7 +149,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
             </button>
 
             <button
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
+              className="flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground border border-border font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
               onClick={handleViewDetails}
             >
               <EyeIcon className="w-4 h-4" />
@@ -158,7 +158,7 @@ const OrganizationCard = ({ organization, currentUserId }) => {
 
             {isPrivileged && (
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
                 onClick={handleAddMember}
               >
                 <UserPlusIcon className="w-4 h-4" />
@@ -168,11 +168,8 @@ const OrganizationCard = ({ organization, currentUserId }) => {
           </div>
         </div>
 
-        {/* Hover Effect Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
-        
         {/* Corner Accent */}
-        <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-white/10 to-transparent rounded-bl-2xl"></div>
+        <div className="absolute top-0 right-0 w-16 h-16 bg-white/5 rounded-bl-2xl"></div>
       </div>
     </div>
   );

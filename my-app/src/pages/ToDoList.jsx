@@ -90,18 +90,18 @@ const ToDoList = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br dark:from-card dark:to-card text-foreground transition-colors duration-300">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           
           {/* Header Section */}
           <div className="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">📝</span>
+                <div className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center shadow-sm">
+                  <span className="text-primary text-2xl">📝</span>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r bg-primary bg-clip-text text-transparent">
+                  <h1 className="text-3xl font-bold text-foreground">
                     My To-Do Board
                   </h1>
                   <p className="text-muted-foreground">
@@ -125,7 +125,7 @@ const ToDoList = () => {
               </div>
               <div className="w-full bg-slate-200 dark:bg-accent rounded-full h-2">
                 <div 
-                  className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-300"
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
@@ -199,13 +199,13 @@ const ToDoList = () => {
           </div>
 
           {/* Tasks Section */}
-          <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
-            <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                <span>📋</span>
+          <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+            <div className="bg-muted border-b border-border p-6">
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-3">
+                <span className="text-primary">📋</span>
                 Your Tasks ({filteredTasks.length})
               </h2>
-              <p className="text-primary-foreground/80 mt-2">
+              <p className="text-muted-foreground mt-2">
                 {filter === 'all' ? 'All your tasks' : 
                  filter === 'active' ? 'Tasks pending completion' : 
                  'Completed tasks'}
@@ -258,7 +258,7 @@ const ToDoList = () => {
 
           {/* Summary Card */}
           {totalCount > 0 && (
-            <div className="mt-8 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-800">
+            <div className="mt-8 bg-card rounded-2xl p-6 border border-border shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-bold text-foreground mb-2">
@@ -269,7 +269,7 @@ const ToDoList = () => {
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                  <div className="text-3xl font-bold text-primary">
                     {Math.round(progressPercentage)}%
                   </div>
                   <div className="text-sm text-muted-foreground">

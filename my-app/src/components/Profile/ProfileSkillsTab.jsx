@@ -14,12 +14,12 @@ const ProfileSkillsTab = ({
   <>
     <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+        <h3 className="text-2xl font-bold text-foreground">
           🎯 Skills & Expertise
         </h3>
         <button
           onClick={() => setShowSkillsModal(true)}
-          className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-medium shadow-lg"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-medium shadow-sm"
         >
           ➕ Add Skill
         </button>
@@ -32,7 +32,7 @@ const ProfileSkillsTab = ({
           <p className="text-muted-foreground dark:text-muted-foreground mb-6">Start building your profile by adding your skills and expertise</p>
           <button
             onClick={() => setShowSkillsModal(true)}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-medium shadow-lg"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-medium shadow-sm"
           >
             🚀 Add Your First Skill
           </button>
@@ -80,8 +80,8 @@ const ProfileSkillsTab = ({
         <div className="bg-white/95 dark:bg-muted/95 backdrop-blur-sm rounded-3xl w-full max-w-md shadow-2xl border border-border/50 dark:border-border/50 animate-scale-in">
           
           {/* Modal Header */}
-          <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-6 rounded-t-3xl">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+          <div className="bg-muted p-6 rounded-t-3xl border-b border-border">
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-3">
               <span>🎯</span> Add New Skill
             </h2>
           </div>
@@ -150,7 +150,7 @@ const ProfileSkillsTab = ({
               <button
                 onClick={addSkill}
                 disabled={!newSkill.name.trim()}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add Skill
               </button>

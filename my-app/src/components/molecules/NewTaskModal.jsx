@@ -356,33 +356,33 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
 
-      <div className="relative bg-muted border border-slate-700 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
+      <div className="relative bg-muted border border-border rounded-2xl shadow-sm w-full max-w-3xl max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
+        <div className="bg-primary/10 border-b border-border p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                 {taskToEdit ? (
-                  <FlagIcon className="w-5 h-5 text-white" />
+                  <FlagIcon className="w-5 h-5 text-primary" />
                 ) : (
-                  <PlusIcon className="w-5 h-5 text-white" />
+                  <PlusIcon className="w-5 h-5 text-primary" />
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-primary">
                   {viewOnly ? 'View Task' : taskToEdit ? 'Edit Task' : 'Create New Task'}
                 </h2>
-                <p className="text-primary-foreground/80 text-sm">
+                <p className="text-muted-foreground text-sm">
                   {viewOnly ? 'Task details' : taskToEdit ? 'Update task information' : 'Add a new task to your workflow'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-2 hover:bg-accent rounded-lg transition-colors"
               aria-label="Close modal"
             >
-              <XMarkIcon className="w-5 h-5 text-white" />
+              <XMarkIcon className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -614,10 +614,10 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                           }}
                           className="px-4 py-3 hover:bg-slate-700/50 cursor-pointer border-b border-slate-700/30 last:border-b-0 flex items-center gap-3"
                         >
-                          <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                            <UserIcon className="w-4 h-4 text-white" />
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <UserIcon className="w-4 h-4 text-primary-foreground" />
                           </div>
-                          <span className="text-white">{user.name}</span>
+                          <span className="text-foreground">{user.name}</span>
                         </div>
                       ))}
                     </div>
@@ -648,7 +648,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                             {assignee._id === 'everyone' ? (
                               <UsersIcon className="w-4 h-4 text-white" />
                             ) : (
@@ -728,8 +728,8 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                                className="w-full px-4 py-3 bg-slate-600/50 border border-gray-500/50 rounded-lg text-muted-foreground cursor-not-allowed opacity-75"
                              />
                              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                               <div className="w-6 h-6 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                                 <UserIcon className="w-3 h-3 text-white" />
+                               <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                 <UserIcon className="w-3 h-3 text-primary-foreground" />
                                </div>
                              </div>
                            </div>
@@ -779,7 +779,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                                </div>
                              </div>
                           
-                             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                             <div className="absolute -top-2 -right-2 bg-muted-foreground text-white text-xs px-2 py-1 rounded-full font-medium">
                                Soon
                              </div>
                            </div>
@@ -851,7 +851,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg"
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-primary-foreground font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-sm"
                 >
                   {loading ? (
                     <>

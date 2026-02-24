@@ -65,12 +65,12 @@ const Dashboard = () => {
   return (
     <DashboardLayout>
       <div className="min-h-screen bg-muted transition-colors duration-300">
-          <div className="bg-muted mb-8">
-                  <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="bg-muted ">
+                  <div className="max-w-xl mx-auto px-2 sm:px-3 lg:px-4 py-2">
                     <div className="text-center">
                       {/* Greeting and Time */}
                       <div className="mb-1">
-                        <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-secondary-foreground bg-clip-text text-transparent mb-2">
+                        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                           {getGreeting()}, {user.name || 'User'}!
                         </h1>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-muted-foreground">

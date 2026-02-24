@@ -104,10 +104,10 @@ const Login = () => {
       <div className="relative w-full max-w-md">
         {/* Welcome Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <UserIcon className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <UserIcon className="w-10 h-10 text-foreground" />
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             Welcome Back
           </h1>
           <p className="text-muted-foreground">Sign in to continue to CollabNest</p>
@@ -196,7 +196,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">

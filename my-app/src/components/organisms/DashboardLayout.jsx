@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }) {
         <Topbar />
         <main
           id="main-content"
-          className="flex-1 p-6 md:overflow-auto bg-muted transition-colors duration-300"
+          className="flex-1 p-1 md:overflow-auto bg-muted transition-colors duration-300"
           role="main"
         >
           {children}

@@ -202,18 +202,18 @@ const CalendarView = () => {
   const stats = getTaskStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
 
       <div className="relative p-6 space-y-6">
         {/* Header Section */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-r bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                <CalendarIcon className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center shadow-sm">
+                <CalendarIcon className="w-8 h-8 text-muted-foreground" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold text-foreground">
                   Task Calendar
                 </h1>
                 <p className="text-muted-foreground text-lg mt-1">
@@ -265,37 +265,37 @@ const CalendarView = () => {
 
           {/* Stats Row */}
           <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-primary/20 border border-blue-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-white">{stats.total}</div>
-              <div className="text-primary text-sm">Total Tasks</div>
+            <div className="bg-muted border border-border rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-foreground">{stats.total}</div>
+              <div className="text-muted-foreground text-sm">Total Tasks</div>
             </div>
-            <div className="bg-primary/20 border border-blue-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{stats.todo}</div>
+            <div className="bg-muted border border-border rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-foreground">{stats.todo}</div>
               <div className="text-muted-foreground text-sm">To Do</div>
             </div>
-            <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-400">{stats.inprogress}</div>
+            <div className="bg-muted border border-border rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-foreground">{stats.inprogress}</div>
               <div className="text-muted-foreground text-sm">In Progress</div>
             </div>
-            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-400">{stats.done}</div>
+            <div className="bg-muted border border-border rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-foreground">{stats.done}</div>
               <div className="text-muted-foreground text-sm">Completed</div>
             </div>
-            <div className="bg-destructive/20 border border-red-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-red-400">{stats.overdue}</div>
+            <div className="bg-muted border border-border rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-destructive">{stats.overdue}</div>
               <div className="text-muted-foreground text-sm">Overdue</div>
             </div>
           </div>
         </div>
 
         {/* Calendar Section */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
           <div className="p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r bg-primary rounded-lg flex items-center justify-center">
-                <CalendarDaysIcon className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center">
+                <CalendarDaysIcon className="w-4 h-4 text-muted-foreground" />
               </div>
-              <h2 className="text-xl font-bold text-white">Calendar View</h2>
+              <h2 className="text-xl font-bold text-foreground">Calendar View</h2>
             </div>
 
             {/* Priority Legend */}
@@ -347,22 +347,22 @@ const CalendarView = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
             <div className="bg-muted border border-slate-700 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
               {/* Modal Header */}
-              <div className="bg-gradient-to-r bg-primary p-6 rounded-t-2xl">
+              <div className="bg-muted border-b border-border p-6 rounded-t-2xl">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                      <FlagIcon className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center">
+                      <FlagIcon className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">{selectedTask.title}</h2>
-                      <p className="text-primary-foreground/80 text-sm">Task Details</p>
+                      <h2 className="text-xl font-bold text-foreground">{selectedTask.title}</h2>
+                      <p className="text-muted-foreground text-sm">Task Details</p>
                     </div>
                   </div>
                   <button
                     onClick={closeModal}
-                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-2 hover:bg-accent rounded-lg transition-colors"
                   >
-                    <XMarkIcon className="w-5 h-5 text-white" />
+                    <XMarkIcon className="w-5 h-5 text-muted-foreground" />
                   </button>
                 </div>
               </div>
@@ -501,7 +501,7 @@ const CalendarView = () => {
                       {selectedTask.labels.map((label, idx) => (
                         <span
                           key={idx}
-                          className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-primary/20 px-3 py-1 rounded-full text-sm text-purple-300"
+                          className="bg-muted text-foreground border border-border px-3 py-1 rounded-full text-sm font-medium"
                         >
                           #{label}
                         </span>
@@ -514,7 +514,7 @@ const CalendarView = () => {
                 <div className="flex justify-end">
                   <button
                     onClick={closeModal}
-                    className="px-6 py-3 bg-gradient-to-r bg-primary hover:from-purple-600 hover:to-pink-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="px-6 py-3 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-sm"
                   >
                     Close
                   </button>

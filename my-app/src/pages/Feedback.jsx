@@ -275,7 +275,7 @@ const Feedback = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-card dark:via-slate-900 dark:to-orange-950/30 transition-all duration-500">
+      <div className="min-h-screen bg-background transition-all duration-500">
         
         
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
@@ -284,7 +284,7 @@ const Feedback = () => {
             {/* Header */}
             <div className="text-center mb-16 relative">
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
+                <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
                   Feedback Center
                 </h1>
                 <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
@@ -295,19 +295,19 @@ const Feedback = () => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gradient-to-r from-primary/10 to-primary/10 border border-primary/20 rounded-3xl p-6 text-center">
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">📊</div>
                 <div className="text-2xl font-bold text-primary">{feedbacks.length}</div>
                 <div className="text-muted-foreground">Your Feedback</div>
               </div>
-              <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-200/50 dark:border-green-800/50 rounded-3xl p-6 text-center">
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">⭐</div>
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="text-2xl font-bold text-primary">
                   {stats.averageRating || '4.8'}
                 </div>
                 <div className="text-muted-foreground">Avg Rating</div>
               </div>
-              <div className="bg-gradient-to-r from-primary/10 to-primary/10 border border-primary/20 rounded-3xl p-6 text-center">
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
                 <div className="text-3xl mb-2">🌐</div>
                 <div className="text-2xl font-bold text-primary">
                   {stats.totalPublic || publicFeedbacks.length}
@@ -320,7 +320,7 @@ const Feedback = () => {
             <div className="text-center mb-12">
               <button
                 onClick={() => setShowFeedbackModal(true)}
-                className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-xl"
+                className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-md"
               >
                 <span className="group-hover:">✨</span> Share Your Feedback
               </button>
@@ -340,7 +340,7 @@ const Feedback = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
+                          ? 'bg-primary text-primary-foreground shadow-md transform scale-105'
                           : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
@@ -411,7 +411,7 @@ const Feedback = () => {
 
                   <button
                     onClick={fetchPublicFeedbacks}
-                    className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors"
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
                   >
                     🔍 Search
                   </button>
@@ -436,7 +436,7 @@ const Feedback = () => {
                     </p>
                     <button
                       onClick={() => setShowFeedbackModal(true)}
-                      className="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-lg"
+                      className="px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-md"
                     >
                       🚀 Give Your First Feedback
                     </button>

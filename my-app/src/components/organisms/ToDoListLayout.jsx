@@ -38,10 +38,10 @@ const ToDoListLayout = ({
           {tasks.map((t, index) => (
             <div
               key={t._id}
-              className={`group bg-white dark:bg-accent rounded-xl p-4 shadow-sm border border-border hover:shadow-md transition-all duration-200 transform hover:scale-[1.02] ${
+              className={`group bg-card rounded-xl p-4 shadow-sm border hover:shadow-md transition-all duration-200 transform hover:scale-[1.02] ${
                 t.completed 
-                  ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800' 
-                  : 'hover:border-blue-300 dark:hover:border-blue-600'
+                  ? 'bg-muted border-border' 
+                  : 'border-border hover:border-primary/50'
               }`}
               style={{
                 animationDelay: `${index * 100}ms`,
@@ -155,7 +155,7 @@ const ToDoListLayout = ({
 
       {/* Motivational Message */}
       {tasks.length > 0 && tasks.every(t => t.completed) && (
-        <div className="mt-6 p-4 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl border border-green-200 dark:border-green-800">
+        <div className="mt-6 p-4 bg-muted border border-border rounded-xl">
           <div className="text-center">
             <div className="text-4xl mb-2">🎉</div>
             <h3 className="text-lg font-bold text-foreground mb-1">

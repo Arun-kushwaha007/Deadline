@@ -2,7 +2,7 @@ import React from 'react';
 
 const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }) => (
   <div className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-border/50 dark:border-border/50">
-    <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+    <h3 className="text-2xl font-bold mb-6 text-foreground">
       🏆 Achievements & Badges
     </h3>
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -13,8 +13,8 @@ const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }
             key={achievement.id} 
             className={`text-center p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${
               status.isUnlocked
-                ? 'bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 border-yellow-200 dark:border-yellow-800 shadow-lg'
-                : 'bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-600 border-border opacity-60'
+                ? 'bg-primary/10 border-primary text-primary shadow-sm'
+                : 'bg-muted border-border opacity-60'
             }`}
             title={status.isUnlocked ? 'Achievement Unlocked!' : `Progress: ${status.progress}/${achievement.requirement}`}
           >
@@ -47,7 +47,7 @@ const ProfileAchievementsTab = ({ achievementDefinitions, getAchievementStatus }
               <div className="mt-3">
                 <div className="w-full bg-slate-200 dark:bg-accent rounded-full h-2">
                   <div 
-                    className="h-full bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full transition-all duration-500"
+                    className="h-full bg-primary rounded-full transition-all duration-500"
                     style={{ width: `${status.percentage}%` }}
                   ></div>
                 </div>

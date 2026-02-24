@@ -53,23 +53,23 @@ const CreateOrganizationModal = ({ closeModal }) => {
 
       <div className="relative bg-muted border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-primary to-primary/80 p-6">
+        <div className="bg-muted p-6 border-b border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <BuildingOfficeIcon className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 bg-background border border-border rounded-full flex items-center justify-center">
+                <BuildingOfficeIcon className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Create New Organization</h2>
-                <p className="text-primary-foreground/80 text-sm">Build your team workspace</p>
+                <h2 className="text-xl font-bold text-foreground">Create New Organization</h2>
+                <p className="text-muted-foreground text-sm">Build your team workspace</p>
               </div>
             </div>
             <button
               onClick={closeModal}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-2 hover:bg-background rounded-lg transition-colors border border-transparent hover:border-border"
               aria-label="Close modal"
             >
-              <XMarkIcon className="w-5 h-5 text-white" />
+              <XMarkIcon className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -173,7 +173,7 @@ const CreateOrganizationModal = ({ closeModal }) => {
             <button
               onClick={handleCreate}
               disabled={isLoading || !name.trim()}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-sm"
             >
               {isLoading ? (
                 <>
@@ -190,10 +190,10 @@ const CreateOrganizationModal = ({ closeModal }) => {
           </div>
 
           {/* Keyboard Shortcuts */}
-          <div className="text-xs text-muted-foreground text-center pt-2 border-t border-slate-700/50">
+          {/* <div className="text-xs text-muted-foreground text-center pt-2 border-t border-slate-700/50">
             Press <kbd className="px-1.5 py-0.5 bg-slate-700/50 rounded text-xs">Enter</kbd> to create • 
             <kbd className="px-1.5 py-0.5 bg-slate-700/50 rounded text-xs ml-1">Esc</kbd> to cancel
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

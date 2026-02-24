@@ -15,23 +15,23 @@ const JoinOrganization = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-card dark:to-zinc-800 flex items-center justify-center px-4 py-8 transition-colors duration-300">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8 transition-colors duration-300">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Icon */}
           <div className="mb-8">
-            <div className="w-32 h-32 mx-auto bg-gradient-to-br from-orange-400 to-amber-500 rounded-full flex items-center justify-center shadow-2xl ">
+            <div className="w-32 h-32 mx-auto bg-orange-500/20 rounded-full flex items-center justify-center shadow-sm">
               <span className="text-6xl">🚀</span>
             </div>
           </div>
 
           {/* Coming Soon Badge */}
-          <div className="inline-flex items-center px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full text-sm font-medium mb-6 shadow-lg">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 "></span>
+          <div className="inline-flex items-center px-6 py-2 bg-orange-500/10 text-orange-500 rounded-full text-sm font-medium mb-6 shadow-sm border border-orange-500/20">
+            <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
             Coming Soon
           </div>
 
           {/* Main Title */}
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent mb-6 animate-fade-in">
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
             Join Organizations
           </h1>
 
@@ -61,7 +61,7 @@ const JoinOrganization = () => {
 
           {/* Steps Card */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+            <div className="bg-blue-500/5 dark:bg-blue-900/10 rounded-xl p-6 border border-blue-200 dark:border-blue-800/30">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 1
               </div>
@@ -71,7 +71,7 @@ const JoinOrganization = () => {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800">
+            <div className="bg-orange-500/5 dark:bg-orange-900/10 rounded-xl p-6 border border-orange-200 dark:border-orange-800/30">
               <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 2
               </div>
@@ -81,7 +81,7 @@ const JoinOrganization = () => {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+            <div className="bg-green-500/5 dark:bg-green-900/10 rounded-xl p-6 border border-green-200 dark:border-green-800/30">
               <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white text-xl font-bold mb-4 mx-auto">
                 3
               </div>
@@ -96,7 +96,7 @@ const JoinOrganization = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => navigate('/profile')}
-              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 transition-all hover:scale-[1.01] font-medium shadow-lg"
+              className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-all hover:scale-[1.01] font-medium shadow-sm"
             >
               📋 View My Profile ID
             </button>

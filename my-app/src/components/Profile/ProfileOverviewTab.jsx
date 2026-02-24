@@ -10,11 +10,11 @@ const ProfileOverviewTab = ({ dashboardStats }) => (
         onClick={stat.action}
       >
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-white/20 to-white/40 transition-all duration-1000" 
+        <div className="absolute bottom-0 left-0 h-1 bg-primary/20 transition-all duration-1000" 
              style={{ width: `${stat.progress}%` }}></div>
         
         <div className="flex items-center justify-between mb-4">
-          <div className={`w-14 h-14 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg`}>
+          <div className={`w-14 h-14 bg-primary/10 border border-border rounded-2xl flex items-center justify-center text-primary text-2xl shadow-sm`}>
             {stat.icon}
           </div>
           <div className="text-right">
@@ -27,7 +27,7 @@ const ProfileOverviewTab = ({ dashboardStats }) => (
           {stat.label}
         </h3>
         
-        <p className="text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+        <p className="text-4xl font-bold text-foreground">
           {stat.value}
         </p>
         

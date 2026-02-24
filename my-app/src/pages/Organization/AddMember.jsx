@@ -173,17 +173,17 @@ const AddMember = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-b from-zinc-900 via-slate-800 to-zinc-900 text-white p-6">
+      <div className="min-h-screen bg-background text-foreground p-6">
 
         <div className="relative max-w-2xl mx-auto">
           {/* Header Section */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8 mb-6">
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-8 mb-6">
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-primary to-primary/80 rounded-2xl flex items-center justify-center shadow-lg">
-                <UserPlusIcon className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-sm">
+                <UserPlusIcon className="w-8 h-8 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold text-foreground">
                   Add Team Member
                 </h1>
                 <p className="text-muted-foreground text-lg mt-1">
@@ -226,15 +226,15 @@ const AddMember = () => {
           </div>
 
           {/* Main Content */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
             {/* Add by User ID Mode */}
             {mode === 'userId' && (
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                    <IdentificationIcon className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <IdentificationIcon className="w-4 h-4 text-primary-foreground" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">Add by User ID</h2>
+                  <h2 className="text-xl font-bold text-foreground">Add by User ID</h2>
                 </div>
 
                 <form onSubmit={handleUserIdSubmit} className="space-y-6">
@@ -298,7 +298,7 @@ const AddMember = () => {
                   <button
                     type="submit"
                     disabled={isLoading || !joiningUserId.trim()}
-                    className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-primary to-primary/80 hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-sm"
                   >
                     {isLoading ? (
                       <>
@@ -320,10 +320,10 @@ const AddMember = () => {
             {mode === 'search' && (
               <div className="space-y-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                    <MagnifyingGlassIcon className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <MagnifyingGlassIcon className="w-4 h-4 text-primary-foreground" />
                   </div>
-                  <h2 className="text-xl font-bold text-white">Search & Invite Users (Under Development - Use Id method for now)</h2>
+                  <h2 className="text-xl font-bold text-foreground">Search & Invite Users (Under Development - Use Id method for now)</h2>
                 </div>
 
                 <div className="relative space-y-4" ref={dropdownRef}>
@@ -368,11 +368,11 @@ const AddMember = () => {
                             className="w-full p-4 text-left hover:bg-slate-700/50 border-b border-slate-700/50 last:border-b-0 transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-to-r from-primary to-primary/80 rounded-full flex items-center justify-center">
-                                <UserIcon className="w-5 h-5 text-white" />
+                              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                                <UserIcon className="w-5 h-5 text-primary-foreground" />
                               </div>
                               <div>
-                                <div className="font-medium text-white">{user.name}</div>
+                                <div className="font-medium text-foreground">{user.name}</div>
                                 <div className="text-sm text-muted-foreground">{user.email}</div>
                               </div>
                             </div>
@@ -386,15 +386,14 @@ const AddMember = () => {
                     </div>
                   )}
 
-                  {/* Selected User Section */}
                   {selectedUser && (
-                    <div className="bg-slate-700/30 rounded-lg p-6 border border-border/50 space-y-6">
+                    <div className="bg-muted rounded-lg p-6 border border-border space-y-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
-                          <UserIcon className="w-6 h-6 text-white" />
+                        <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                          <UserIcon className="w-6 h-6 text-primary-foreground" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-white">{selectedUser.name}</h3>
+                          <h3 className="text-lg font-bold text-foreground">{selectedUser.name}</h3>
                           <p className="text-muted-foreground">{selectedUser.email}</p>
                         </div>
                       </div>
@@ -436,7 +435,7 @@ const AddMember = () => {
                       <button
                         onClick={handleInvite}
                         disabled={isLoading}
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-white font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-lg"
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:scale-[1.01] disabled:scale-100 shadow-sm"
                       >
                         {isLoading ? (
                           <>
