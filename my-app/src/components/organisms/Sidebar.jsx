@@ -131,7 +131,7 @@ const Sidebar = () => {
       {/* Version Info - Minimal */}
       <div className="p-2 text-center border-t border-sidebar-border">
         <p className="text-xs text-muted-foreground">
-          CollabNest v1.0
+          CollabNest v1.1
         </p>
       </div>
     </aside>

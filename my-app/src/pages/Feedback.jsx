@@ -5,6 +5,8 @@ import DashboardLayout from '../components/organisms/DashboardLayout';
 import DefaultAvatar from '../components/common/DefaultAvatar';
 import FeedbackModal from '../components/modals/FeedbackModal';
 import api from '../utils/api';
+import { Folder, MessageSquare, Sparkles, Bug, Rocket, Star, CheckCircle, Trash2, ThumbsUp, Lock, BarChart3, Globe, PenSquare, Calendar, Search, Edit2 } from 'lucide-react';
+
 const Feedback = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -33,12 +35,12 @@ const Feedback = () => {
 
   
   const categories = [
-    { value: '', label: 'All Categories', icon: '📂', color: 'bg-accent text-foreground' },
-    { value: 'general', label: 'General', icon: '💬', color: 'bg-blue-100 text-blue-800' },
-    { value: 'feature', label: 'Feature Request', icon: '✨', color: 'bg-purple-100 text-purple-800' },
-    { value: 'bug', label: 'Bug Report', icon: '🐛', color: 'bg-red-100 text-red-800' },
-    { value: 'improvement', label: 'Improvement', icon: '🚀', color: 'bg-green-100 text-green-800' },
-    { value: 'testimonial', label: 'Testimonial', icon: '⭐', color: 'bg-yellow-100 text-yellow-800' }
+    { value: '', label: 'All Categories', icon: <Folder className="w-4 h-4" />, color: 'bg-accent text-foreground' },
+    { value: 'general', label: 'General', icon: <MessageSquare className="w-4 h-4" />, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' },
+    { value: 'feature', label: 'Feature Request', icon: <Sparkles className="w-4 h-4" />, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300' },
+    { value: 'bug', label: 'Bug Report', icon: <Bug className="w-4 h-4" />, color: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300' },
+    { value: 'improvement', label: 'Improvement', icon: <Rocket className="w-4 h-4" />, color: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' },
+    { value: 'testimonial', label: 'Testimonial', icon: <Star className="w-4 h-4 fill-current" />, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' }
   ];
 
  
@@ -138,7 +140,12 @@ const Feedback = () => {
       if (response && response.data) { 
         setFeedbacks(prev => [response.data, ...prev]);
         setUserFeedbackCount(prev => prev + 1);
-        showNotification('🎉 Feedback submitted successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Feedback submitted successfully!</span>
+          </div>
+        );
         fetchUserFeedbacks(); 
         if (response.data.isPublic && response.data.isApproved) {
              fetchPublicFeedbacks(); 
@@ -159,7 +166,12 @@ const Feedback = () => {
       const response = await api.put(`/feedback/${editingFeedback._id}`, feedbackData);
       if (response && response.data) {
         setFeedbacks(prev => prev.map(f => f._id === editingFeedback._id ? response.data : f));
-        showNotification('✅ Feedback updated successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Feedback updated successfully!</span>
+          </div>
+        );
         if (response.data.isPublic && response.data.isApproved) {
             fetchPublicFeedbacks(); 
         } else if (!response.data.isPublic || !response.data.isApproved) {
@@ -186,7 +198,12 @@ const Feedback = () => {
         setFeedbacks(prev => prev.filter(f => f._id !== feedbackId));
         setUserFeedbackCount(prev => prev -1);
         setPublicFeedbacks(prev => prev.filter(pf => pf._id !== feedbackId));
-        showNotification('🗑️ Feedback deleted successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <Trash2 className="w-5 h-5" />
+            <span>Feedback deleted successfully!</span>
+          </div>
+        );
       } else {
         throw new Error(response.message || 'Failed to delete feedback');
       }
@@ -208,7 +225,12 @@ const Feedback = () => {
         if(feedbacks.some(f => f._id === feedbackId)) {
             setFeedbacks(updateList);
         }
-        showNotification('👍 Thank you for your vote!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <ThumbsUp className="w-5 h-5" />
+            <span>Thank you for your vote!</span>
+          </div>
+        );
       } else {
         throw new Error(response.message || 'Failed to vote helpful');
       }
@@ -243,9 +265,10 @@ const Feedback = () => {
   // Render stars
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
-      <span key={i} className={i < rating ? 'text-yellow-400' : 'text-muted-foreground'}>
-        ⭐
-      </span>
+      <Star 
+        key={i} 
+        className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} 
+      />
     ));
   };
 
@@ -255,15 +278,17 @@ const Feedback = () => {
     return (
       <DashboardLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="bg-card rounded-xl p-8 shadow-lg text-center">
-            <div className="text-6xl mb-4">🔐</div>
-            <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
-            <p className="text-muted-foreground mb-4">
+          <div className="bg-card rounded-xl p-8 shadow-lg text-center max-w-md w-full border border-border">
+            <div className="flex justify-center mb-6">
+              <Lock className="w-20 h-20 text-muted-foreground" />
+            </div>
+            <h2 className="text-2xl font-bold mb-4 text-foreground">Authentication Required</h2>
+            <p className="text-muted-foreground mb-8">
               Please log in to access feedback.
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+              className="px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl transition-colors shadow-sm w-full"
             >
               Go to Login
             </button>
@@ -284,7 +309,7 @@ const Feedback = () => {
             {/* Header */}
             <div className="text-center mb-16 relative">
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 animate-fade-in">
                   Feedback Center
                 </h1>
                 <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
@@ -296,19 +321,25 @@ const Feedback = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">📊</div>
+                <div className="flex justify-center mb-4 text-primary">
+                  <BarChart3 className="w-8 h-8" />
+                </div>
                 <div className="text-2xl font-bold text-primary">{feedbacks.length}</div>
                 <div className="text-muted-foreground">Your Feedback</div>
               </div>
               <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">⭐</div>
+                <div className="flex justify-center mb-4 text-yellow-500">
+                  <Star className="w-8 h-8 fill-current" />
+                </div>
                 <div className="text-2xl font-bold text-primary">
                   {stats.averageRating || '4.8'}
                 </div>
                 <div className="text-muted-foreground">Avg Rating</div>
               </div>
               <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">🌐</div>
+                <div className="flex justify-center mb-4 text-blue-500">
+                  <Globe className="w-8 h-8" />
+                </div>
                 <div className="text-2xl font-bold text-primary">
                   {stats.totalPublic || publicFeedbacks.length}
                 </div>
@@ -320,9 +351,9 @@ const Feedback = () => {
             <div className="text-center mb-12">
               <button
                 onClick={() => setShowFeedbackModal(true)}
-                className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-md"
+                className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-md flex items-center justify-center gap-2 mx-auto"
               >
-                <span className="group-hover:">✨</span> Share Your Feedback
+                <Sparkles className="w-5 h-5" /> Share Your Feedback
               </button>
             </div>
 
@@ -331,9 +362,9 @@ const Feedback = () => {
               <div className="flex justify-center">
                 <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
-                    { id: 'my-feedback', label: '📝 My Feedback', icon: '📝' },
-                    { id: 'testimonials', label: '⭐ Testimonials', icon: '⭐' },
-                    { id: 'all-reviews', label: '💬 All Reviews', icon: '💬' },
+                    { id: 'my-feedback', label: 'My Feedback', icon: <PenSquare className="w-4 h-4" /> },
+                    { id: 'testimonials', label: 'Testimonials', icon: <Star className="w-4 h-4 fill-current" /> },
+                    { id: 'all-reviews', label: 'All Reviews', icon: <MessageSquare className="w-4 h-4" /> },
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -344,7 +375,7 @@ const Feedback = () => {
                           : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
-                      {tab.label}
+                      {tab.icon} {tab.label}
                     </button>
                   ))}
                 </div>
@@ -385,11 +416,11 @@ const Feedback = () => {
                     onChange={(e) => setFilterRating(parseInt(e.target.value))}
                     className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
-                    <option value={1}>⭐ 1+ Stars</option>
-                    <option value={2}>⭐ 2+ Stars</option>
-                    <option value={3}>⭐ 3+ Stars</option>
-                    <option value={4}>⭐ 4+ Stars</option>
-                    <option value={5}>⭐ 5 Stars</option>
+                    <option value={1}>★ 1+ Stars</option>
+                    <option value={2}>★ 2+ Stars</option>
+                    <option value={3}>★ 3+ Stars</option>
+                    <option value={4}>★ 4+ Stars</option>
+                    <option value={5}>★ 5 Stars</option>
                   </select>
 
                   {/* Sort */}
@@ -402,18 +433,18 @@ const Feedback = () => {
                     }}
                     className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
-                    <option value="createdAt-desc">📅 Newest First</option>
-                    <option value="createdAt-asc">📅 Oldest First</option>
-                    <option value="rating-desc">⭐ Highest Rating</option>
-                    <option value="rating-asc">⭐ Lowest Rating</option>
-                    <option value="helpfulCount-desc">👍 Most Helpful</option>
+                    <option value="createdAt-desc">Newest First</option>
+                    <option value="createdAt-asc">Oldest First</option>
+                    <option value="rating-desc">Highest Rating</option>
+                    <option value="rating-asc">Lowest Rating</option>
+                    <option value="helpfulCount-desc">Most Helpful</option>
                   </select>
 
                   <button
                     onClick={fetchPublicFeedbacks}
-                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2"
                   >
-                    🔍 Search
+                    <Search className="w-5 h-5" /> Search
                   </button>
                 </div>
               </div>
@@ -429,16 +460,18 @@ const Feedback = () => {
                   </div>
                 ) : feedbacks.length === 0 ? (
                   <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
-                    <div className="text-8xl mb-6">📝</div>
+                    <div className="flex justify-center mb-6 text-muted-foreground">
+                      <PenSquare className="w-20 h-20" />
+                    </div>
                     <h3 className="text-2xl font-bold text-foreground mb-4">No Feedback Yet</h3>
                     <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Start sharing your thoughts and experiences to help us improve our platform.
                     </p>
                     <button
                       onClick={() => setShowFeedbackModal(true)}
-                      className="px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-md"
+                      className="px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-md flex items-center justify-center gap-2 mx-auto"
                     >
-                      🚀 Give Your First Feedback
+                      <Rocket className="w-5 h-5" /> Give Your First Feedback
                     </button>
                   </div>
                 ) : (
@@ -457,10 +490,10 @@ const Feedback = () => {
                             <span className="text-sm text-muted-foreground">
                               {feedback.rating}/5 stars
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            <span className={`px-3 py-1 rounded-full flex items-center gap-1 text-xs font-medium ${
                               categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                             }`}>
-                              {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
+                              {categories.find(c => c.value === feedback.category)?.icon} {categories.find(c => c.value === feedback.category)?.label}
                             </span>
                           </div>
                           <h3 className="text-xl font-bold text-foreground mb-2">
@@ -485,32 +518,32 @@ const Feedback = () => {
                               setEditingFeedback(feedback);
                               setShowFeedbackModal(true);
                             }}
-                            className="p-2 text-primary hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                            className="p-2 text-primary hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors flex items-center justify-center"
                             title="Edit feedback"
                           >
-                            ✏️
+                            <Edit2 className="w-5 h-5" />
                           </button>
                           <button
                             onClick={() => handleDeleteFeedback(feedback._id)}
-                            className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                            className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors flex items-center justify-center"
                             title="Delete feedback"
                           >
-                            🗑️
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       </div>
                       
                       <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
                         <div className="flex items-center gap-4">
-                          <span>📅 {formatDate(feedback.createdAt)}</span>
+                          <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(feedback.createdAt)}</span>
                           {feedback.isPublic && (
                             <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
-                              🌐 Public
+                              <Globe className="w-3 h-3" /> Public
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-1">
-                          👍 {feedback.helpfulCount || 0} helpful
+                        <div className="flex items-center gap-1 font-medium bg-muted/50 px-2 py-1 rounded-lg">
+                          <ThumbsUp className="w-3 h-3 text-primary" /> {feedback.helpfulCount || 0} helpful
                         </div>
                       </div>
                     </div>
@@ -523,9 +556,9 @@ const Feedback = () => {
               <div className="space-y-6">
                 {publicFeedbacks.length === 0 ? (
                   <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
-                    {/* <div className="text-2xl mb-6">This part is still under Development- </div> */}
-                    
-                    <div className="text-8xl mb-6">⭐</div>
+                    <div className="flex justify-center mb-6 text-yellow-500">
+                      <Star className="w-20 h-20 fill-current" />
+                    </div>
                     <h3 className="text-2xl font-bold text-foreground mb-4">No Public Reviews Yet</h3>
                     <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Be the first to share a public testimonial and help others discover our platform.
@@ -561,10 +594,10 @@ const Feedback = () => {
                               <div className="flex">
                                 {renderStars(feedback.rating)}
                               </div>
-                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              <span className={`px-3 py-1 flex items-center gap-1 rounded-full text-xs font-medium ${
                                 categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                               }`}>
-                                {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
+                                {categories.find(c => c.value === feedback.category)?.icon} {categories.find(c => c.value === feedback.category)?.label}
                               </span>
                             </div>
                             
@@ -587,12 +620,12 @@ const Feedback = () => {
                             )}
                             
                             <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
-                              <span>📅 {formatDate(feedback.createdAt)}</span>
+                              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(feedback.createdAt)}</span>
                               <button
                                 onClick={() => handleHelpfulVote(feedback._id)}
-                                className="flex items-center gap-2 px-3 py-1 hover:bg-accent rounded-lg transition-colors"
+                                className="flex items-center gap-2 px-3 py-1 hover:bg-accent rounded-lg transition-colors font-medium"
                               >
-                                👍 {feedback.helpfulCount || 0} helpful
+                                <ThumbsUp className="w-4 h-4 text-primary" /> {feedback.helpfulCount || 0} helpful
                               </button>
                             </div>
                           </div>

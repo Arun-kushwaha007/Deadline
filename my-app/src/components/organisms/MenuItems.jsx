@@ -11,7 +11,7 @@ const menu = [
   { to: '/join_Organization', label: 'Join Organization', icon: <CirclePlus size={20} /> },
   { to: '/todo', label: 'To Do List', icon: <LayoutList size={20} /> },
   { to: '/team', label: 'Team', icon: <Users size={20} /> },
-  { to: '/help', label: 'Help', icon: <CircleHelp size={20} /> },
+//   { to: '/help', label: 'Help', icon: <CircleHelp size={20} /> },
 ];
 
 const MenuItems = ({ onClick }) => (

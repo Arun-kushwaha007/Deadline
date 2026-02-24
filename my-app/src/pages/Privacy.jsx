@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeftIcon, ShieldCheckIcon, EyeIcon, CircleStackIcon, CogIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { AlertTriangle, User, Monitor, Rocket, Lock, BarChart3, Shield, Cookie, Trophy } from 'lucide-react';
 
 const Privacy = () => {
   return (
@@ -51,8 +52,8 @@ const Privacy = () => {
           <div className="mb-8">
             <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-white text-sm font-bold">⚠️</span>
+                <div className="w-8 h-8 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1 text-amber-900">
+                  <AlertTriangle className="w-5 h-5 font-bold" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
@@ -92,7 +93,7 @@ const Privacy = () => {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-6">
                 <h4 className="text-blue-300 font-semibold mb-3 flex items-center gap-2">
-                  <span className="text-lg">👤</span>
+                  <User className="w-5 h-5" />
                   Personal Information
                 </h4>
                 <ul className="text-blue-200 text-sm space-y-2">
@@ -105,7 +106,7 @@ const Privacy = () => {
               
               <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-6">
                 <h4 className="text-green-300 font-semibold mb-3 flex items-center gap-2">
-                  <span className="text-lg">💻</span>
+                  <Monitor className="w-5 h-5" />
                   Usage Information
                 </h4>
                 <ul className="text-green-200 text-sm space-y-2">
@@ -132,7 +133,7 @@ const Privacy = () => {
               
               <div className="grid gap-4">
                 <div className="bg-muted border border-border rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">🚀 Service Provision</h4>
+                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2"><Rocket className="w-4 h-4 text-primary" /> Service Provision</h4>
                   <p className="text-muted-foreground text-sm">
                     To provide, maintain, and improve our collaborative workspace features, including task management, 
                     team communication, and project organization tools.
@@ -140,7 +141,7 @@ const Privacy = () => {
                 </div>
                 
                 <div className="bg-muted border border-border rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">🔒 Security & Authentication</h4>
+                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2"><Lock className="w-4 h-4 text-green-500" /> Security & Authentication</h4>
                   <p className="text-muted-foreground text-sm">
                     To verify your identity, secure your account, prevent fraud, and protect against unauthorized access 
                     to your personal and organizational data.
@@ -148,7 +149,7 @@ const Privacy = () => {
                 </div>
                 
                 <div className="bg-muted border border-border rounded-lg p-4">
-                  <h4 className="text-white font-semibold mb-2">📈 Analytics & Improvement</h4>
+                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2"><BarChart3 className="w-4 h-4 text-blue-500" /> Analytics & Improvement</h4>
                   <p className="text-muted-foreground text-sm">
                     To analyze usage patterns, optimize performance, and develop new features that enhance your 
                     collaboration experience.
@@ -168,7 +169,7 @@ const Privacy = () => {
             </div>
             
             <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-6 mb-4">
-              <h4 className="text-yellow-300 font-semibold mb-2">🛡️ Our Promise</h4>
+              <h4 className="text-yellow-300 font-semibold mb-2 flex items-center gap-2"><Shield className="w-4 h-4" /> Our Promise</h4>
               <p className="text-yellow-200 text-sm">
                 We do not sell, trade, or rent your personal information to third parties. Your data is shared only in 
                 the limited circumstances outlined below.
@@ -190,8 +191,8 @@ const Privacy = () => {
           {/* Data Security */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-bold">🔐</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                <Lock className="w-4 h-4" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">Data Security</h2>
             </div>
@@ -211,7 +212,7 @@ const Privacy = () => {
               </div>
               
               <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4">
-                <h4 className="text-green-300 font-semibold mb-2">🏆 Certifications</h4>
+                <h4 className="text-green-300 font-semibold mb-2 flex items-center gap-2"><Trophy className="w-4 h-4" /> Certifications</h4>
                 <ul className="text-green-200 text-sm space-y-1">
                   <li>• SOC 2 Type II Compliant</li>
                   <li>• GDPR Compliant</li>
@@ -257,8 +258,8 @@ const Privacy = () => {
           {/* Cookies & Tracking */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-bold">🍪</span>
+              <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-yellow-900">
+                <Cookie className="w-4 h-4" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">Cookies & Tracking</h2>
             </div>
@@ -304,8 +305,8 @@ const Privacy = () => {
           {/* Contact Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-bold">📧</span>
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground">
+                <GlobeAltIcon className="w-5 h-5" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">Contact Us About Privacy</h2>
             </div>

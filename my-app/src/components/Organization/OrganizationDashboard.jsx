@@ -5,6 +5,7 @@ import { fetchOrganizations, selectOrganization } from '../../redux/organization
 import OrganizationCard from './OrganizationCard';
 import CreateOrganizationModal from './CreateOrganizationModal';
 import DashboardOverview from '../organisms/DashboardOverview';
+import { Rocket, Handshake, BarChart3, Search, Plus, Building2, CheckCircle, Users, TrendingUp, ClipboardList, MousePointerClick } from 'lucide-react';
 
 const OrganizationDashboard = () => {
   const dispatch = useDispatch();
@@ -108,7 +109,7 @@ const OrganizationDashboard = () => {
             onClick={handleCreateOrganization}
             className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-lg hover:shadow-2xl flex items-center gap-3"
           >
-            <span className="text-xl group-hover:rotate-12 transition-transform duration-300">🚀</span>
+            <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
             Create Organization
             <div className="absolute inset-0 bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
@@ -117,7 +118,7 @@ const OrganizationDashboard = () => {
             onClick={() => navigate('/join_organization')}
             className="group px-8 py-4 bg-muted hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01] hover:-translate-y-1 flex items-center gap-3"
           >
-            <span className="text-xl group-hover:scale-[1.01] transition-transform duration-300">🤝</span>
+            <Handshake className="w-6 h-6 group-hover:scale-[1.01] transition-transform duration-300" />
             Join Organization
           </button>
         </div>
@@ -163,8 +164,8 @@ const OrganizationDashboard = () => {
           {/* Enhanced Action Section */}
           <div className="flex flex-col lg:flex-row justify-between items-center mb-12 gap-6 bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-3xl p-6 border border-border/50 dark:border-border/50 shadow-lg">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-card border border-border rounded-2xl flex items-center justify-center shadow-sm">
-                <span className="text-primary text-2xl">📊</span>
+              <div className="w-14 h-14 bg-card border border-border rounded-2xl flex items-center justify-center shadow-sm text-primary">
+                <BarChart3 className="w-7 h-7" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground ">
@@ -186,8 +187,8 @@ const OrganizationDashboard = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 pr-4 py-3 bg-white dark:bg-accent border border-border dark:border-border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 w-64"
                 />
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                  <span className="text-muted-foreground">🔍</span>
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                  <Search className="w-5 h-5" />
                 </div>
               </div>
 
@@ -220,7 +221,7 @@ const OrganizationDashboard = () => {
                 className="group px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-0.5 font-semibold shadow-md hover:shadow-lg flex items-center gap-3"
                 onClick={handleCreateOrganization}
               >
-                <span className="text-lg group-hover:rotate-90 transition-transform duration-300">➕</span>
+                <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                 Create Organization
               </button>
             </div>
@@ -233,8 +234,8 @@ const OrganizationDashboard = () => {
             ) : filteredOrganizations.length === 0 ? (
               searchTerm ? (
                 <div className="text-center py-16">
-                  <div className="w-24 h-24 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6">
-                    <span className="text-4xl filter grayscale">🔍</span>
+                  <div className="w-24 h-24 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 text-muted-foreground">
+                    <Search className="w-10 h-10" />
                   </div>
                   <h3 className="text-2xl font-bold text-foreground  mb-4">
                     No Results Found
@@ -286,28 +287,28 @@ const OrganizationDashboard = () => {
           {uniqueOrganizations.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               <StatsCard
-                icon="🏢"
+                icon={<Building2 className="w-7 h-7 text-primary" />}
                 title="Total Organizations"
                 value={uniqueOrganizations.length}
                 color="border-border"
                 delay={0}
               />
               <StatsCard
-                icon="✅"
+                icon={<CheckCircle className="w-7 h-7 text-green-500" />}
                 title="Active Projects"
                 value={uniqueOrganizations.reduce((acc, org) => acc + (org.projectCount || 0), 0) || uniqueOrganizations.length}
                 color="border-border"
                 delay={100}
               />
               <StatsCard
-                icon="👥"
+                icon={<Users className="w-7 h-7 text-blue-500" />}
                 title="Team Members"
                 value={uniqueOrganizations.reduce((acc, org) => acc + (org.memberCount || 1), 0) || "—"}
                 color="border-border"
                 delay={200}
               />
               <StatsCard
-                icon="📈"
+                icon={<TrendingUp className="w-7 h-7 text-amber-500" />}
                 title="Completion Rate"
                 value="85%"
                 color="border-border"
@@ -321,8 +322,8 @@ const OrganizationDashboard = () => {
             <div className="mt-12 animate-fade-in">
               <div className="bg-card rounded-3xl p-8 shadow-sm border border-border mb-8">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center text-foreground text-3xl shadow-sm">
-                    📋
+                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center text-primary shadow-sm">
+                    <ClipboardList className="w-8 h-8" />
                   </div>
                   <div>
                     <h3 className="text-3xl font-bold text-foreground">
@@ -341,8 +342,8 @@ const OrganizationDashboard = () => {
           {/* Enhanced Helper Text */}
           {uniqueOrganizations.length > 0 && !selectedOrganization && (
             <div className="text-center py-16 animate-fade-in">
-              <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <span className="text-3xl ">👆</span>
+              <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm text-primary">
+                <MousePointerClick className="w-10 h-10" />
               </div>
               <h3 className="text-2xl font-bold text-foreground  mb-3">
                 Select an Organization

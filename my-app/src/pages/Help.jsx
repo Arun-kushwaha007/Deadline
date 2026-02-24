@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/organisms/DashboardLayout';
+import { HelpCircle, Lightbulb, Mail, MessageCircle, Book, Video, FileQuestion, Home, LogIn, Compass, CheckSquare, Users, Bot, Bell } from 'lucide-react';
 
 const Help = () => {
   const navigate = useNavigate();
@@ -11,8 +12,8 @@ const Help = () => {
       <div className="max-w-4xl mx-auto text-center">
         {/* Main Icon */}
         <div className="mb-8">
-          <div className="w-32 h-32 mx-auto bg-muted border border-border rounded-full flex items-center justify-center shadow-lg ">
-            <span className="text-6xl">❓</span>
+          <div className="w-32 h-32 mx-auto bg-muted border border-border rounded-full flex items-center justify-center shadow-lg text-primary">
+            <HelpCircle className="w-16 h-16" />
           </div>
         </div>
 
@@ -23,7 +24,7 @@ const Help = () => {
         </div>
 
         {/* Main Title */}
-        <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
+        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 animate-fade-in">
           Help & Support
         </h1>
 
@@ -35,8 +36,8 @@ const Help = () => {
         {/* Current Help Card */}
         <div className="bg-card rounded-2xl p-8 shadow-xl border border-border mb-8">
           <div className="flex items-center justify-center mb-6">
-            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-              <span className="text-3xl">💡</span>
+            <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-500">
+              <Lightbulb className="w-8 h-8" />
             </div>
           </div>
           
@@ -50,7 +51,7 @@ const Help = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-              <h4 className="font-semibold text-foreground mb-2">📧 Email Support</h4>
+              <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Mail className="w-4 h-4" /> Email Support</h4>
               <p className="text-sm text-muted-foreground">
                 Contact the Developer at{' '}
                 <span className="font-medium text-primary">arunsk1310@gmail.com</span>
@@ -58,7 +59,7 @@ const Help = () => {
             </div>
             
             <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
-              <h4 className="font-semibold text-foreground mb-2">💬 Live Chat (Coming Soon)</h4>
+              <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><MessageCircle className="w-4 h-4" /> Live Chat (Coming Soon)</h4>
               <p className="text-sm text-muted-foreground">
                 Chat with our team using the support widget
               </p>
@@ -70,7 +71,7 @@ const Help = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center text-foreground text-xl font-bold mb-4 mx-auto">
-              📚
+              <Book className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-foreground mb-2">Knowledge Base</h4>
             <p className="text-sm text-muted-foreground">
@@ -80,7 +81,7 @@ const Help = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center text-foreground text-xl font-bold mb-4 mx-auto">
-              🎥
+              <Video className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-foreground mb-2">Video Tutorials</h4>
             <p className="text-sm text-muted-foreground">
@@ -90,7 +91,7 @@ const Help = () => {
 
           <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary text-xl font-bold mb-4 mx-auto">
-              ❓
+              <FileQuestion className="w-6 h-6" />
             </div>
             <h4 className="font-bold text-foreground mb-2">FAQ Section</h4>
             <p className="text-sm text-muted-foreground">
@@ -104,57 +105,57 @@ const Help = () => {
           {isLoggedIn ? (
             <button
               onClick={() => navigate('/')}
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md"
+              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md flex items-center justify-center gap-2"
             >
-              🏠 Back to Dashboard
+              <Home className="w-5 h-5" /> Back to Dashboard
             </button>
           ) : (
             <Link
               to="/login"
-              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md text-center"
+              className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.01] font-medium shadow-md text-center flex items-center justify-center gap-2"
             >
-              🚀 Sign In to Get Started
+              <LogIn className="w-5 h-5" /> Sign In to Get Started
             </Link>
           )}
           
           <button
             onClick={() => window.open('mailto:arunsk1310@gmail.com', '_blank')}
-            className="px-8 py-3 bg-muted0 hover:bg-slate-600 text-white rounded-lg transition-colors font-medium"
+            className="px-8 py-3 bg-muted hover:bg-muted/80 border border-border text-foreground rounded-lg transition-colors font-medium flex items-center justify-center gap-2"
           >
-            📧 Contact Support
+            <Mail className="w-5 h-5" /> Contact Support
           </button>
         </div>
 
         {/* Quick Tips */}
         <div className="bg-card rounded-xl p-6 border border-border mt-8 shadow-sm">
           <h3 className="text-lg font-bold text-foreground mb-4 flex items-center justify-center gap-2">
-            <span className="text-primary">💡</span>
+            <Lightbulb className="w-6 h-6 text-primary" />
             Quick Tips While You Wait
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
             <div className="flex items-start gap-3">
-              <span className="text-lg">💡</span>
+              <Compass className="w-6 h-6 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-medium text-foreground">Explore the Dashboard</h4>
                 <p className="text-sm text-muted-foreground">Familiarize yourself with the main navigation</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-lg">📋</span>
+              <CheckSquare className="w-6 h-6 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-medium text-foreground">Create Your First Task</h4>
                 <p className="text-sm text-muted-foreground">Start organizing your work with the Kanban board</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-lg">🏢</span>
+              <Users className="w-6 h-6 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-medium text-foreground">Join Organizations</h4>
                 <p className="text-sm text-muted-foreground">Collaborate with your team members</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <span className="text-lg">🤖</span>
+              <Bot className="w-6 h-6 text-primary flex-shrink-0" />
               <div>
                 <h4 className="font-medium text-foreground">Try AI Assistant</h4>
                 <p className="text-sm text-muted-foreground">Get help with task management and productivity</p>
@@ -164,9 +165,10 @@ const Help = () => {
         </div>
 
         {/* Footer Note */}
-        <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg flex items-center gap-3">
+          <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
           <p className="text-blue-800 dark:text-blue-300 text-sm">
-            <span className="font-semibold">🔔 Stay Updated:</span> We'll notify you when our comprehensive help center is ready!
+            <span className="font-semibold">Stay Updated:</span> We'll notify you when our comprehensive help center is ready!
           </p>
         </div>
       </div>

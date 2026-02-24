@@ -6,6 +6,7 @@ import DefaultAvatar from '../components/common/DefaultAvatar';
 import ProfileOverviewTab from '../components/Profile/ProfileOverviewTab';
 import ProfileSkillsTab from '../components/Profile/ProfileSkillsTab';
 import ProfileAchievementsTab from '../components/Profile/ProfileAchievementsTab';
+import { Trophy, Flame, Star, Target, BookOpen, Rocket, CheckCircle, Link2, Lock, Building2, Key, Copy, BarChart3, Mail, Pen, Camera, FileText, Save } from 'lucide-react';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Profile = () => {
   const achievementDefinitions = [
     {
       id: 'task_master',
-      icon: '🏆',
+      icon: <Trophy className="w-5 h-5 text-yellow-500" />,
       title: 'Task Master',
       desc: 'Complete 50+ tasks',
       requirement: 50,
@@ -50,7 +51,7 @@ const Profile = () => {
     },
     {
       id: 'streak_keeper',
-      icon: '🔥',
+      icon: <Flame className="w-5 h-5 text-orange-500" />,
       title: 'Streak Keeper',
       desc: '30 day login streak',
       requirement: 30,
@@ -59,7 +60,7 @@ const Profile = () => {
     },
     {
       id: 'team_player',
-      icon: '⭐',
+      icon: <Star className="w-5 h-5 text-amber-500" />,
       title: 'Team Player',
       desc: 'Join 3+ organizations',
       requirement: 3,
@@ -68,7 +69,7 @@ const Profile = () => {
     },
     {
       id: 'goal_achiever',
-      icon: '🎯',
+      icon: <Target className="w-5 h-5 text-blue-500" />,
       title: 'Goal Achiever',
       desc: 'Complete 10+ projects',
       requirement: 10,
@@ -77,7 +78,7 @@ const Profile = () => {
     },
     {
       id: 'learner',
-      icon: '📚',
+      icon: <BookOpen className="w-5 h-5 text-green-500" />,
       title: 'Learner',
       desc: 'Add 5+ skills',
       requirement: 5,
@@ -86,7 +87,7 @@ const Profile = () => {
     },
     {
       id: 'innovator',
-      icon: '🚀',
+      icon: <Rocket className="w-5 h-5 text-purple-500" />,
       title: 'Innovator',
       desc: 'Make 10+ improvements',
       requirement: 10,
@@ -220,7 +221,11 @@ useEffect(() => {
 
   // Show achievement unlock notification
   const showAchievementUnlockNotification = (achievement) => {
-    toast.success(`${achievement.icon} Achievement Unlocked: ${achievement.title}`, {
+    toast.success(
+      <div className="flex items-center gap-2">
+        {achievement.icon}
+        <span>Achievement Unlocked: {achievement.title}</span>
+      </div>, {
       duration: 5000,
       style: {
         background: 'linear-gradient(to right, #facc15, #f97316)',
@@ -289,7 +294,12 @@ useEffect(() => {
         setNewSkill({ name: '', level: 50, color: 'bg-blue-500' });
         setShowSkillsModal(false);
         
-        toast.success(`✅ Skill "${skillToAdd.name}" added successfully!`);
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Skill "{skillToAdd.name}" added successfully!</span>
+          </div>
+        );
       }
     }
   };
@@ -345,7 +355,12 @@ useEffect(() => {
       setShowEditModal(false);
       
 
-    toast.success('✅ Profile updated successfully!');
+    toast.success(
+      <div className="flex items-center gap-2">
+        <CheckCircle className="w-5 h-5" />
+        <span>Profile updated successfully!</span>
+      </div>
+    );
     } 
   };
 
@@ -361,7 +376,12 @@ useEffect(() => {
   const handleCopyUserId = () => {
     if (user?.userId) {
       navigator.clipboard.writeText(user.userId);
-      toast.success('🔗 User ID copied to clipboard!');
+      toast.success(
+        <div className="flex items-center gap-2">
+          <Link2 className="w-5 h-5" />
+          <span>User ID copied to clipboard!</span>
+        </div>
+      );
     }
   };
 
@@ -415,7 +435,9 @@ useEffect(() => {
         <div className="min-h-screen bg-background flex items-center justify-center">
           
           <div className="bg-card dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
-            <div className="text-8xl mb-6 ">🔐</div>
+            <div className="flex justify-center mb-6 text-muted-foreground">
+              <Lock className="w-20 h-20" />
+            </div>
             <h2 className="text-3xl font-bold mb-4 text-foreground">
               Authentication Required
             </h2>
@@ -424,9 +446,9 @@ useEffect(() => {
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
+              className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center justify-center gap-2"
             >
-              <span className="group-hover:">🚀</span> Go to Login
+              <Rocket className="w-5 h-5" /> Go to Login
             </button>
           </div>
         </div>
@@ -438,27 +460,25 @@ useEffect(() => {
     {
       label: 'Organizations Joined',
       value: userProgress.organizationsJoined,
-      icon: '🏢',
+      icon: <Building2 className="w-6 h-6 text-white" />,
       color: 'bg-primary',
       bgColor: 'bg-card',
       borderColor: 'border-border',
       progress: Math.min((userProgress.organizationsJoined / 5) * 100, 100),
-      // action: () => simulateProgress('organizationsJoined')
     },
     {
       label: 'Tasks Completed',
       value: userProgress.tasksCompleted,
-      icon: '✅',
+      icon: <CheckCircle className="w-6 h-6 text-white" />,
       color: 'bg-green-500',
       bgColor: 'bg-card',
       borderColor: 'border-border',
       progress: Math.min((userProgress.tasksCompleted / 50) * 100, 100),
-      // action: () => simulateProgress('tasksCompleted')
     },
     {
       label: 'Login Streak',
       value: `${userProgress.loginStreak} days`,
-      icon: '🔥',
+      icon: <Flame className="w-6 h-6 text-white" />,
       color: 'bg-amber-500',
       bgColor: 'bg-card',
       borderColor: 'border-border',
@@ -467,7 +487,7 @@ useEffect(() => {
     {
       label: 'Skills Added',
       value: userSkills.length,
-      icon: '🎯',
+      icon: <Target className="w-6 h-6 text-white" />,
       color: 'bg-primary',
       bgColor: 'bg-card',
       borderColor: 'border-border',
@@ -485,7 +505,7 @@ useEffect(() => {
             {/* Header Section */}
             <div className="text-center mb-16 relative">
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 animate-fade-in">
                   My Profile
                 </h1>
                 <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
@@ -498,8 +518,8 @@ useEffect(() => {
             <div className="mb-12 max-w-4xl mx-auto">
               <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center shadow-sm">
-                    <span className="text-muted-foreground text-2xl">🔑</span>
+                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center shadow-sm text-primary">
+                    <Key className="w-8 h-8" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-foreground">
@@ -520,9 +540,9 @@ useEffect(() => {
                   />
                   <button
                     onClick={handleCopyUserId}
-                    className="group px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
+                    className="group px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center gap-2"
                   >
-                    <span className="group-hover:">📋</span> Copy
+                    <Copy className="w-5 h-5" /> Copy
                   </button>
                 </div>
               </div>
@@ -534,20 +554,20 @@ useEffect(() => {
               <div className="flex justify-center">
                 <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
-                    { id: 'overview', label: '📊 Overview', icon: '📊' },
-                    { id: 'skills', label: '🎯 Skills', icon: '🎯' },
-                    { id: 'achievements', label: '🏆 Achievements', icon: '🏆' },
+                    { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },
+                    { id: 'skills', label: 'Skills', icon: <Target className="w-4 h-4" /> },
+                    { id: 'achievements', label: 'Achievements', icon: <Trophy className="w-4 h-4" /> },
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
                           ? 'bg-primary text-primary-foreground shadow-sm transform scale-105'
                           : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
-                      {tab.label}
+                      {tab.icon} {tab.label}
                     </button>
                   ))}
                 </div>
@@ -582,13 +602,13 @@ useEffect(() => {
                     </h2>
                     
                     <p className="text-muted-foreground mb-2 flex items-center justify-center gap-2">
-                      <span>📧</span> {user.email || 'user@example.com'}
+                      <Mail className="w-4 h-4" /> {user.email || 'user@example.com'}
                     </p>
 
                     {section && (
                       <div className="mb-4">
-                        <span className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
-                          🎯 {section}
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
+                          <Target className="w-4 h-4" /> {section}
                         </span>
                       </div>
                     )}
@@ -603,9 +623,9 @@ useEffect(() => {
 
                     <button
                       onClick={() => setShowEditModal(true)}
-                      className="mt-8 w-full group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm"
+                      className="mt-8 w-full group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center justify-center gap-2"
                     >
-                      <span className="group-hover:">✏️</span> Edit Profile
+                      <Pen className="w-5 h-5" /> Edit Profile
                     </button>
                   </div>
                 </div>
@@ -650,7 +670,7 @@ useEffect(() => {
               {/* Enhanced Modal Header */}
               <div className="bg-card border-b border-border p-8 relative overflow-hidden">
                 <h2 className="text-3xl font-bold text-foreground flex items-center gap-3 relative z-10">
-                  <span className="">✏️</span> Edit Profile
+                  <Pen className="w-6 h-6 text-primary" /> Edit Profile
                 </h2>
                 <p className="text-muted-foreground mt-2 relative z-10">Update your personal information and preferences</p>
               </div>
@@ -659,7 +679,7 @@ useEffect(() => {
                 {/* Enhanced Profile Picture Section */}
                 <div className="mb-8">
                   <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
-                    <span className="text-lg">📸</span> Profile Picture
+                    <Camera className="w-5 h-5" /> Profile Picture
                   </label>
                   
                   <div className="flex justify-center mb-6">
@@ -673,8 +693,8 @@ useEffect(() => {
                       ) : (
                         <DefaultAvatar size={32} />
                       )}
-                      <div className="absolute inset-0 bg-black/20 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
-                        <span className="text-white text-2xl">📷</span>
+                      <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer text-white">
+                        <Camera className="w-8 h-8" />
                       </div>
                     </div>
                   </div>
@@ -690,7 +710,7 @@ useEffect(() => {
                 {/* Enhanced Bio Section */}
                 <div className="mb-8">
                   <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
-                    <span className="text-lg">📝</span> Bio
+                    <FileText className="w-5 h-5" /> Bio
                   </label>
                   <textarea
                     value={bio}
@@ -704,7 +724,7 @@ useEffect(() => {
                 {/* Enhanced Skills Section */}
                 <div className="mb-10">
                   <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
-                    <span className="text-lg">🎯</span> Job Title / Role
+                    <Target className="w-5 h-5" /> Job Title / Role
                   </label>
                   <input
                     type="text"
@@ -725,9 +745,9 @@ useEffect(() => {
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="flex-1 group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 font-semibold shadow-sm hover:scale-[1.01]"
+                    className="flex-1 group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 font-semibold shadow-sm hover:scale-[1.01] flex items-center justify-center gap-2"
                   >
-                    <span className="group-hover:">💾</span> Save Changes
+                    <Save className="w-5 h-5" /> Save Changes
                   </button>
                 </div>
               </div>

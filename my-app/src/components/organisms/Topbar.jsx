@@ -293,7 +293,7 @@ const Topbar = () => {
 
   return (
     <>
-      <header className="flex justify-between items-center h-16 px-6 bg-card/95 backdrop-blur-lg border-b border-border transition-colors duration-300 shadow-sm">
+      <header className="relative z-50 flex justify-between items-center h-16 px-6 bg-card/95 backdrop-blur-lg border-b border-border transition-colors duration-300 shadow-sm">
         <div className="flex items-center gap-3">
           <a 
             href="https://collab-nest-home.vercel.app/" 
@@ -621,7 +621,7 @@ const Topbar = () => {
 
           {/* Version Info */}
           <div className="p-2 text-center border-t border-border">
-            <p className="text-xs text-muted-foreground">CollabNest v1.0</p>
+            <p className="text-xs text-muted-foreground">CollabNest v1.1</p>
           </div>
         </aside>
       </div>

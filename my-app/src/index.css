@@ -53,6 +53,7 @@
 
 /* Dark theme */
 .dark, .custom-dark {
+  color-scheme: dark;
   --background: #111111;
   --foreground: #eeeeee;
   --card: #191919;
@@ -136,6 +137,15 @@
 }
 
 /* Base styles */
+select {
+  color-scheme: inherit;
+}
+
+select option {
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
 html {
   scroll-behavior: smooth;
 }
