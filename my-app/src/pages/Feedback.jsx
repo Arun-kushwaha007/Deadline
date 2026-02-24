@@ -5,6 +5,8 @@ import DashboardLayout from '../components/organisms/DashboardLayout';
 import DefaultAvatar from '../components/common/DefaultAvatar';
 import FeedbackModal from '../components/modals/FeedbackModal';
 import api from '../utils/api';
+import { Folder, MessageSquare, Sparkles, Bug, Rocket, Star, CheckCircle, Trash2, ThumbsUp, Lock, BarChart3, Globe, PenSquare, Calendar, Search, Edit2 } from 'lucide-react';
+
 const Feedback = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -33,12 +35,12 @@ const Feedback = () => {
 
   
   const categories = [
-    { value: '', label: 'All Categories', icon: '📂', color: 'bg-gray-100 text-gray-800' },
-    { value: 'general', label: 'General', icon: '💬', color: 'bg-blue-100 text-blue-800' },
-    { value: 'feature', label: 'Feature Request', icon: '✨', color: 'bg-purple-100 text-purple-800' },
-    { value: 'bug', label: 'Bug Report', icon: '🐛', color: 'bg-red-100 text-red-800' },
-    { value: 'improvement', label: 'Improvement', icon: '🚀', color: 'bg-green-100 text-green-800' },
-    { value: 'testimonial', label: 'Testimonial', icon: '⭐', color: 'bg-yellow-100 text-yellow-800' }
+    { value: '', label: 'All Categories', icon: <Folder className="w-4 h-4" />, color: 'bg-accent text-foreground' },
+    { value: 'general', label: 'General', icon: <MessageSquare className="w-4 h-4" />, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300' },
+    { value: 'feature', label: 'Feature Request', icon: <Sparkles className="w-4 h-4" />, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300' },
+    { value: 'bug', label: 'Bug Report', icon: <Bug className="w-4 h-4" />, color: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300' },
+    { value: 'improvement', label: 'Improvement', icon: <Rocket className="w-4 h-4" />, color: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' },
+    { value: 'testimonial', label: 'Testimonial', icon: <Star className="w-4 h-4 fill-current" />, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300' }
   ];
 
  
@@ -138,7 +140,12 @@ const Feedback = () => {
       if (response && response.data) { 
         setFeedbacks(prev => [response.data, ...prev]);
         setUserFeedbackCount(prev => prev + 1);
-        showNotification('🎉 Feedback submitted successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Feedback submitted successfully!</span>
+          </div>
+        );
         fetchUserFeedbacks(); 
         if (response.data.isPublic && response.data.isApproved) {
              fetchPublicFeedbacks(); 
@@ -159,7 +166,12 @@ const Feedback = () => {
       const response = await api.put(`/feedback/${editingFeedback._id}`, feedbackData);
       if (response && response.data) {
         setFeedbacks(prev => prev.map(f => f._id === editingFeedback._id ? response.data : f));
-        showNotification('✅ Feedback updated successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Feedback updated successfully!</span>
+          </div>
+        );
         if (response.data.isPublic && response.data.isApproved) {
             fetchPublicFeedbacks(); 
         } else if (!response.data.isPublic || !response.data.isApproved) {
@@ -186,7 +198,12 @@ const Feedback = () => {
         setFeedbacks(prev => prev.filter(f => f._id !== feedbackId));
         setUserFeedbackCount(prev => prev -1);
         setPublicFeedbacks(prev => prev.filter(pf => pf._id !== feedbackId));
-        showNotification('🗑️ Feedback deleted successfully!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <Trash2 className="w-5 h-5" />
+            <span>Feedback deleted successfully!</span>
+          </div>
+        );
       } else {
         throw new Error(response.message || 'Failed to delete feedback');
       }
@@ -208,7 +225,12 @@ const Feedback = () => {
         if(feedbacks.some(f => f._id === feedbackId)) {
             setFeedbacks(updateList);
         }
-        showNotification('👍 Thank you for your vote!', 'success');
+        toast.success(
+          <div className="flex items-center gap-2">
+            <ThumbsUp className="w-5 h-5" />
+            <span>Thank you for your vote!</span>
+          </div>
+        );
       } else {
         throw new Error(response.message || 'Failed to vote helpful');
       }
@@ -243,9 +265,10 @@ const Feedback = () => {
   // Render stars
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
-      <span key={i} className={i < rating ? 'text-yellow-400' : 'text-gray-300'}>
-        ⭐
-      </span>
+      <Star 
+        key={i} 
+        className={`w-4 h-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-muted-foreground'}`} 
+      />
     ));
   };
 
@@ -255,15 +278,17 @@ const Feedback = () => {
     return (
       <DashboardLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg text-center">
-            <div className="text-6xl mb-4">🔐</div>
-            <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+          <div className="bg-card rounded-xl p-8 shadow-lg text-center max-w-md w-full border border-border">
+            <div className="flex justify-center mb-6">
+              <Lock className="w-20 h-20 text-muted-foreground" />
+            </div>
+            <h2 className="text-2xl font-bold mb-4 text-foreground">Authentication Required</h2>
+            <p className="text-muted-foreground mb-8">
               Please log in to access feedback.
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+              className="px-8 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl transition-colors shadow-sm w-full"
             >
               Go to Login
             </button>
@@ -275,28 +300,19 @@ const Feedback = () => {
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
+      <div className="min-h-screen bg-background transition-all duration-500">
         
-        {/* Background Effects */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-yellow-400/5 dark:bg-yellow-600/5 rounded-full blur-3xl animate-float-slow"></div>
-        </div>
-
+        
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             
             {/* Header */}
             <div className="text-center mb-16 relative">
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-10">
-                <span className="text-[20rem] font-bold">💬</span>
-              </div>
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 animate-fade-in">
                   Feedback Center
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
+                <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
                   Share your thoughts, help us improve, and see what others are saying
                 </p>
               </div>
@@ -304,24 +320,30 @@ const Feedback = () => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-200/50 dark:border-blue-800/50 rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">📊</div>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{feedbacks.length}</div>
-                <div className="text-gray-600 dark:text-gray-400">Your Feedback</div>
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
+                <div className="flex justify-center mb-4 text-primary">
+                  <BarChart3 className="w-8 h-8" />
+                </div>
+                <div className="text-2xl font-bold text-primary">{feedbacks.length}</div>
+                <div className="text-muted-foreground">Your Feedback</div>
               </div>
-              <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-200/50 dark:border-green-800/50 rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">⭐</div>
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
+                <div className="flex justify-center mb-4 text-yellow-500">
+                  <Star className="w-8 h-8 fill-current" />
+                </div>
+                <div className="text-2xl font-bold text-primary">
                   {stats.averageRating || '4.8'}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Avg Rating</div>
+                <div className="text-muted-foreground">Avg Rating</div>
               </div>
-              <div className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-200/50 dark:border-purple-800/50 rounded-3xl p-6 text-center">
-                <div className="text-3xl mb-2">🌐</div>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+              <div className="bg-card border border-border shadow-sm rounded-3xl p-6 text-center">
+                <div className="flex justify-center mb-4 text-blue-500">
+                  <Globe className="w-8 h-8" />
+                </div>
+                <div className="text-2xl font-bold text-primary">
                   {stats.totalPublic || publicFeedbacks.length}
                 </div>
-                <div className="text-gray-600 dark:text-gray-400">Public Reviews</div>
+                <div className="text-muted-foreground">Public Reviews</div>
               </div>
             </div>
 
@@ -329,31 +351,31 @@ const Feedback = () => {
             <div className="text-center mb-12">
               <button
                 onClick={() => setShowFeedbackModal(true)}
-                className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold text-lg shadow-xl"
+                className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold text-lg shadow-md flex items-center justify-center gap-2 mx-auto"
               >
-                <span className="group-hover:animate-pulse">✨</span> Share Your Feedback
+                <Sparkles className="w-5 h-5" /> Share Your Feedback
               </button>
             </div>
 
             {/* Tabs */}
             <div className="mb-8">
               <div className="flex justify-center">
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+                <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
-                    { id: 'my-feedback', label: '📝 My Feedback', icon: '📝' },
-                    { id: 'testimonials', label: '⭐ Testimonials', icon: '⭐' },
-                    { id: 'all-reviews', label: '💬 All Reviews', icon: '💬' },
+                    { id: 'my-feedback', label: 'My Feedback', icon: <PenSquare className="w-4 h-4" /> },
+                    { id: 'testimonials', label: 'Testimonials', icon: <Star className="w-4 h-4 fill-current" /> },
+                    { id: 'all-reviews', label: 'All Reviews', icon: <MessageSquare className="w-4 h-4" /> },
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          ? 'bg-primary text-primary-foreground shadow-md transform scale-105'
+                          : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
-                      {tab.label}
+                      {tab.icon} {tab.label}
                     </button>
                   ))}
                 </div>
@@ -362,7 +384,7 @@ const Feedback = () => {
 
             {/* Filters for public reviews */}
             {activeTab !== 'my-feedback' && (
-              <div className="mb-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+              <div className="mb-8 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-border/50 dark:border-border/50">
                 <div className="flex flex-wrap gap-4 items-center">
                   {/* Search */}
                   <div className="flex-1 min-w-64">
@@ -371,7 +393,7 @@ const Feedback = () => {
                       placeholder="Search feedback..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring focus:border-transparent"
                     />
                   </div>
 
@@ -379,7 +401,7 @@ const Feedback = () => {
                   <select
                     value={filterCategory}
                     onChange={(e) => setFilterCategory(e.target.value)}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
                     {categories.map(cat => (
                       <option key={cat.value} value={cat.value}>
@@ -392,13 +414,13 @@ const Feedback = () => {
                   <select
                     value={filterRating}
                     onChange={(e) => setFilterRating(parseInt(e.target.value))}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
-                    <option value={1}>⭐ 1+ Stars</option>
-                    <option value={2}>⭐ 2+ Stars</option>
-                    <option value={3}>⭐ 3+ Stars</option>
-                    <option value={4}>⭐ 4+ Stars</option>
-                    <option value={5}>⭐ 5 Stars</option>
+                    <option value={1}>★ 1+ Stars</option>
+                    <option value={2}>★ 2+ Stars</option>
+                    <option value={3}>★ 3+ Stars</option>
+                    <option value={4}>★ 4+ Stars</option>
+                    <option value={5}>★ 5 Stars</option>
                   </select>
 
                   {/* Sort */}
@@ -409,20 +431,20 @@ const Feedback = () => {
                       setSortBy(field);
                       setSortOrder(order);
                     }}
-                    className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500"
+                    className="px-4 py-3 border border-slate-300 dark:border-border rounded-xl dark:bg-accent  focus:ring-2 focus:ring-ring"
                   >
-                    <option value="createdAt-desc">📅 Newest First</option>
-                    <option value="createdAt-asc">📅 Oldest First</option>
-                    <option value="rating-desc">⭐ Highest Rating</option>
-                    <option value="rating-asc">⭐ Lowest Rating</option>
-                    <option value="helpfulCount-desc">👍 Most Helpful</option>
+                    <option value="createdAt-desc">Newest First</option>
+                    <option value="createdAt-asc">Oldest First</option>
+                    <option value="rating-desc">Highest Rating</option>
+                    <option value="rating-asc">Lowest Rating</option>
+                    <option value="helpfulCount-desc">Most Helpful</option>
                   </select>
 
                   <button
                     onClick={fetchPublicFeedbacks}
-                    className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors"
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2"
                   >
-                    🔍 Search
+                    <Search className="w-5 h-5" /> Search
                   </button>
                 </div>
               </div>
@@ -434,27 +456,29 @@ const Feedback = () => {
                 {loading ? (
                   <div className="text-center py-12">
                     <div className="inline-block w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                    <p className="text-gray-600 dark:text-gray-400">Loading your feedback...</p>
+                    <p className="text-muted-foreground">Loading your feedback...</p>
                   </div>
                 ) : feedbacks.length === 0 ? (
-                  <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-                    <div className="text-8xl mb-6">📝</div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No Feedback Yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                  <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
+                    <div className="flex justify-center mb-6 text-muted-foreground">
+                      <PenSquare className="w-20 h-20" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground mb-4">No Feedback Yet</h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Start sharing your thoughts and experiences to help us improve our platform.
                     </p>
                     <button
                       onClick={() => setShowFeedbackModal(true)}
-                      className="px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg"
+                      className="px-8 py-4 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] font-semibold shadow-md flex items-center justify-center gap-2 mx-auto"
                     >
-                      🚀 Give Your First Feedback
+                      <Rocket className="w-5 h-5" /> Give Your First Feedback
                     </button>
                   </div>
                 ) : (
                   feedbacks.map((feedback, index) => (
                     <div
                       key={feedback._id}
-                      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-fade-in-up"
+                      className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border/50 dark:border-border/50 animate-fade-in-up"
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div className="flex justify-between items-start mb-6">
@@ -463,19 +487,19 @@ const Feedback = () => {
                             <div className="flex">
                               {renderStars(feedback.rating)}
                             </div>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="text-sm text-muted-foreground">
                               {feedback.rating}/5 stars
                             </span>
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              categories.find(c => c.value === feedback.category)?.color || 'bg-gray-100 text-gray-800'
+                            <span className={`px-3 py-1 rounded-full flex items-center gap-1 text-xs font-medium ${
+                              categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                             }`}>
-                              {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
+                              {categories.find(c => c.value === feedback.category)?.icon} {categories.find(c => c.value === feedback.category)?.label}
                             </span>
                           </div>
-                          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+                          <h3 className="text-xl font-bold text-foreground mb-2">
                             {feedback.title}
                           </h3>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                          <p className="text-foreground/80 leading-relaxed mb-4">
                             {feedback.message}
                           </p>
                           {feedback.tags && feedback.tags.length > 0 && (
@@ -494,32 +518,32 @@ const Feedback = () => {
                               setEditingFeedback(feedback);
                               setShowFeedbackModal(true);
                             }}
-                            className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                            className="p-2 text-primary hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors flex items-center justify-center"
                             title="Edit feedback"
                           >
-                            ✏️
+                            <Edit2 className="w-5 h-5" />
                           </button>
                           <button
                             onClick={() => handleDeleteFeedback(feedback._id)}
-                            className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                            className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors flex items-center justify-center"
                             title="Delete feedback"
                           >
-                            🗑️
+                            <Trash2 className="w-5 h-5" />
                           </button>
                         </div>
                       </div>
                       
-                      <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
+                      <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
                         <div className="flex items-center gap-4">
-                          <span>📅 {formatDate(feedback.createdAt)}</span>
+                          <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(feedback.createdAt)}</span>
                           {feedback.isPublic && (
                             <span className="text-green-600 dark:text-green-400 flex items-center gap-1">
-                              🌐 Public
+                              <Globe className="w-3 h-3" /> Public
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center gap-1">
-                          👍 {feedback.helpfulCount || 0} helpful
+                        <div className="flex items-center gap-1 font-medium bg-muted/50 px-2 py-1 rounded-lg">
+                          <ThumbsUp className="w-3 h-3 text-primary" /> {feedback.helpfulCount || 0} helpful
                         </div>
                       </div>
                     </div>
@@ -531,12 +555,12 @@ const Feedback = () => {
             {(activeTab === 'testimonials' || activeTab === 'all-reviews') && (
               <div className="space-y-6">
                 {publicFeedbacks.length === 0 ? (
-                  <div className="text-center py-16 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-                    {/* <div className="text-2xl mb-6">This part is still under Development- </div> */}
-                    
-                    <div className="text-8xl mb-6">⭐</div>
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">No Public Reviews Yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                  <div className="text-center py-16 bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl shadow-xl border border-border/50 dark:border-border/50">
+                    <div className="flex justify-center mb-6 text-yellow-500">
+                      <Star className="w-20 h-20 fill-current" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground mb-4">No Public Reviews Yet</h3>
+                    <p className="text-muted-foreground mb-8 max-w-md mx-auto">
                       Be the first to share a public testimonial and help others discover our platform.
                     </p>
                   </div>
@@ -546,7 +570,7 @@ const Feedback = () => {
                     .map((feedback, index) => (
                       <div
                         key={feedback._id}
-                        className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-gray-200/50 dark:border-gray-700/50 animate-fade-in-up"
+                        className="bg-white/80 dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-border/50 dark:border-border/50 animate-fade-in-up"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
                         <div className="flex items-start gap-6">
@@ -564,24 +588,24 @@ const Feedback = () => {
                           
                           <div className="flex-1">
                             <div className="flex items-center gap-4 mb-4">
-                              <h4 className="text-lg font-semibold text-gray-800 dark:text-white">
+                              <h4 className="text-lg font-semibold text-foreground">
                                 {feedback.userName}
                               </h4>
                               <div className="flex">
                                 {renderStars(feedback.rating)}
                               </div>
-                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                categories.find(c => c.value === feedback.category)?.color || 'bg-gray-100 text-gray-800'
+                              <span className={`px-3 py-1 flex items-center gap-1 rounded-full text-xs font-medium ${
+                                categories.find(c => c.value === feedback.category)?.color || 'bg-accent text-foreground'
                               }`}>
-                                {categories.find(c => c.value === feedback.category)?.icon} {feedback.category}
+                                {categories.find(c => c.value === feedback.category)?.icon} {categories.find(c => c.value === feedback.category)?.label}
                               </span>
                             </div>
                             
-                            <h5 className="text-xl font-bold text-gray-800 dark:text-white mb-3">
+                            <h5 className="text-xl font-bold text-foreground mb-3">
                               {feedback.title}
                             </h5>
                             
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            <p className="text-foreground/80 leading-relaxed mb-4">
                               {feedback.message}
                             </p>
                             
@@ -595,13 +619,13 @@ const Feedback = () => {
                               </div>
                             )}
                             
-                            <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
-                              <span>📅 {formatDate(feedback.createdAt)}</span>
+                            <div className="flex justify-between items-center text-sm text-muted-foreground border-t border-border pt-4">
+                              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(feedback.createdAt)}</span>
                               <button
                                 onClick={() => handleHelpfulVote(feedback._id)}
-                                className="flex items-center gap-2 px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                className="flex items-center gap-2 px-3 py-1 hover:bg-accent rounded-lg transition-colors font-medium"
                               >
-                                👍 {feedback.helpfulCount || 0} helpful
+                                <ThumbsUp className="w-4 h-4 text-primary" /> {feedback.helpfulCount || 0} helpful
                               </button>
                             </div>
                           </div>

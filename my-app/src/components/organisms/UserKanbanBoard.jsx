@@ -67,25 +67,25 @@ const UserKanbanBoard = () => {
     todo: {
       title: 'To Do',
       icon: ClockIcon,
-      gradient: 'from-blue-500 to-indigo-600',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/30',
+      headerBg: 'bg-muted/80',
+      bg: 'bg-muted/30',
+      border: 'border-border',
       count: 0
     },
     inprogress: {
       title: 'In Progress',
       icon: PlayIcon,
-      gradient: 'from-yellow-500 to-orange-600',
-      bg: 'bg-yellow-500/10',
-      border: 'border-yellow-500/30',
+      headerBg: 'bg-primary/10',
+      bg: 'bg-primary/5',
+      border: 'border-primary/20',
       count: 0
     },
     done: {
       title: 'Done',
       icon: CheckCircleIcon,
-      gradient: 'from-green-500 to-emerald-600',
-      bg: 'bg-green-500/10',
-      border: 'border-green-500/30',
+      headerBg: 'bg-green-500/10 dark:bg-green-500/20',
+      bg: 'bg-green-50 dark:bg-green-900/10',
+      border: 'border-green-200 dark:border-green-800',
       count: 0
     }
   };
@@ -222,13 +222,13 @@ const UserKanbanBoard = () => {
   // Show message if no user is logged in
   if (!currentUserId) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <UserIcon className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6">
+            <UserIcon className="w-10 h-10 text-muted-foreground" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Authentication Required</h2>
-          <p className="text-gray-400">Please log in to view your personal task board.</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Authentication Required</h2>
+          <p className="text-muted-foreground">Please log in to view your personal task board.</p>
         </div>
       </div>
     );
@@ -237,44 +237,39 @@ const UserKanbanBoard = () => {
   // Show loading state
   if (taskStatus === 'loading') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-            <UserIcon className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 ">
+            <UserIcon className="w-8 h-8 text-muted-foreground" />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Loading Your Tasks</h2>
-          <p className="text-gray-400">Please wait while we fetch your personal assignments...</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Loading Your Tasks</h2>
+          <p className="text-muted-foreground">Please wait while we fetch your personal assignments...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-      </div>
+    <div className="min-h-screen bg-background text-foreground">
 
-      <div className="relative p-6 space-y-6">
+      <div className="relative p-6 space-y-6 max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <UserIcon className="w-8 h-8 text-white" />
+              <div className="w-16 h-16 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-center shadow-sm">
+                <UserIcon className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold text-foreground">
                   My Task Board
                 </h1>
-                <p className="text-gray-400 text-lg mt-1">
+                <p className="text-muted-foreground text-lg mt-1">
                   {userTasks.length} task{userTasks.length !== 1 ? 's' : ''} assigned to you across all organizations
                 </p>
                 <div className="flex items-center gap-2 mt-2">
-                  <SparklesIcon className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-400 text-sm">
+                  <SparklesIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-muted-foreground text-sm">
                     Personal workspace for {loggedInUser?.name || 'User'}
                   </span>
                 </div>
@@ -285,8 +280,8 @@ const UserKanbanBoard = () => {
           {/* Filter Section */}
           <div className="mt-6 flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <FunnelIcon className="w-4 h-4 text-gray-400" />
-              <label className="text-sm font-medium text-gray-300" htmlFor="priorityFilter">
+              <FunnelIcon className="w-4 h-4 text-muted-foreground" />
+              <label className="text-sm font-medium text-muted-foreground" htmlFor="priorityFilter">
                 Filter by Priority:
               </label>
             </div>
@@ -294,7 +289,7 @@ const UserKanbanBoard = () => {
               id="priorityFilter"
               value={filterPriority}
               onChange={(e) => setFilterPriority(e.target.value)}
-              className="bg-gray-800/50 border border-gray-600 text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+              className="bg-muted border border-border text-white px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
               disabled={editTask !== null}
             >
               <option value="">All Priorities</option>
@@ -305,20 +300,20 @@ const UserKanbanBoard = () => {
           </div>
 
           {/* Quick Stats */}
-          <div className="mt-6 grid grid-cols-3 gap-4">
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             {columns.map((status) => {
               const config = columnConfig[status];
               const Icon = config.icon;
               return (
                 <div
                   key={status}
-                  className={`${config.bg} border ${config.border} rounded-lg p-3 text-center`}
+                  className={`${config.bg} border ${config.border} rounded-xl p-4 text-center shadow-sm`}
                 >
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Icon className="w-4 h-4 text-gray-300" />
-                    <span className="text-sm font-medium text-gray-300">{config.title}</span>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Icon className="w-4 h-4 text-foreground" />
+                    <span className="text-sm font-semibold text-foreground">{config.title}</span>
                   </div>
-                  <div className="text-2xl font-bold text-white">{config.count}</div>
+                  <div className="text-3xl font-bold text-foreground">{config.count}</div>
                 </div>
               );
             })}
@@ -327,19 +322,19 @@ const UserKanbanBoard = () => {
 
         {/* Main Content */}
         {userTasks.length === 0 ? (
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-12">
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-12">
             <div className="text-center">
-              <div className="w-24 h-24 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                <UserIcon className="w-12 h-12 text-gray-400" />
+              <div className="w-24 h-24 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6">
+                <UserIcon className="w-12 h-12 text-muted-foreground" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">No Tasks Found</h3>
-              <p className="text-gray-400 text-lg">
+              <h3 className="text-2xl font-bold text-foreground mb-2">No Tasks Found</h3>
+              <p className="text-muted-foreground text-lg">
                 {filterPriority 
                   ? `No tasks found with ${filterPriority} priority.`
                   : 'No tasks are currently assigned to you.'
                 }
               </p>
-              <p className="text-gray-500 text-sm mt-2">
+              <p className="text-muted-foreground text-sm mt-2">
                 Tasks assigned to you from any organization will appear here.
               </p>
             </div>
@@ -378,18 +373,18 @@ const UserKanbanBoard = () => {
                   <DroppableColumn
                     key={status}
                     id={status}
-                    className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl overflow-hidden"
+                    className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col"
                   >
                     {/* Column Header */}
-                    <div className={`bg-gradient-to-r ${config.gradient} p-4`}>
+                    <div className={`${config.headerBg} border-b border-border p-4`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Icon className="w-5 h-5 text-white" />
-                          <h2 className="text-lg font-bold text-white">
+                          <Icon className="w-5 h-5 text-foreground" />
+                          <h2 className="text-lg font-bold text-foreground hover:text-primary transition-colors cursor-default">
                             {config.title}
                           </h2>
                         </div>
-                        <div className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                        <div className="bg-background border border-border text-foreground text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
                           {columnTasks.length}
                         </div>
                       </div>
@@ -404,10 +399,10 @@ const UserKanbanBoard = () => {
                         <div className="space-y-3">
                           {tasksToShow.length === 0 ? (
                             <div className="text-center py-8">
-                              <div className="w-12 h-12 bg-gray-700/50 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <Icon className="w-6 h-6 text-gray-400" />
+                              <div className="w-12 h-12 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <Icon className="w-6 h-6 text-muted-foreground" />
                               </div>
-                              <p className="text-gray-400 text-sm">No tasks in {config.title.toLowerCase()}</p>
+                              <p className="text-muted-foreground text-sm">No tasks in {config.title.toLowerCase()}</p>
                             </div>
                           ) : (
                             tasksToShow.map((task) => (
@@ -431,10 +426,10 @@ const UserKanbanBoard = () => {
                                   }
                                 />
                                 {/* Organization Badge */}
-                                <div className="absolute top-2 right-2 bg-gray-800/80 backdrop-blur-sm border border-gray-600/50 rounded-lg px-2 py-1">
+                                <div className="absolute top-2 right-2 bg-muted/80 backdrop-blur-sm border border-border/50 rounded-lg px-2 py-1">
                                   <div className="flex items-center gap-1">
-                                    <BuildingOfficeIcon className="w-3 h-3 text-gray-400" />
-                                    <span className="text-xs text-gray-300 truncate max-w-[100px]">
+                                    <BuildingOfficeIcon className="w-3 h-3 text-muted-foreground" />
+                                    <span className="text-xs text-muted-foreground truncate max-w-[100px]">
                                       {getOrganizationName(task)}
                                     </span>
                                   </div>
@@ -448,7 +443,7 @@ const UserKanbanBoard = () => {
                       {/* Show More/Less Button */}
                       {columnTasks.length > 4 && (
                         <button
-                          className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 rounded-lg transition-all duration-200"
+                          className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm text-primary hover:text-primary/80 hover:bg-orange-500/10 rounded-lg transition-all duration-200"
                           onClick={() =>
                             setExpandedColumns((prev) => ({
                               ...prev,

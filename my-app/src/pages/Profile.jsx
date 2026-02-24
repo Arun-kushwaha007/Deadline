@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import DashboardLayout from '../components/organisms/DashboardLayout';
 import DefaultAvatar from '../components/common/DefaultAvatar';
+import ProfileOverviewTab from '../components/Profile/ProfileOverviewTab';
+import ProfileSkillsTab from '../components/Profile/ProfileSkillsTab';
+import ProfileAchievementsTab from '../components/Profile/ProfileAchievementsTab';
+import { Trophy, Flame, Star, Target, BookOpen, Rocket, CheckCircle, Link2, Lock, Building2, Key, Copy, BarChart3, Mail, Pen, Camera, FileText, Save } from 'lucide-react';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,7 +42,7 @@ const Profile = () => {
   const achievementDefinitions = [
     {
       id: 'task_master',
-      icon: '🏆',
+      icon: <Trophy className="w-5 h-5 text-yellow-500" />,
       title: 'Task Master',
       desc: 'Complete 50+ tasks',
       requirement: 50,
@@ -47,7 +51,7 @@ const Profile = () => {
     },
     {
       id: 'streak_keeper',
-      icon: '🔥',
+      icon: <Flame className="w-5 h-5 text-orange-500" />,
       title: 'Streak Keeper',
       desc: '30 day login streak',
       requirement: 30,
@@ -56,7 +60,7 @@ const Profile = () => {
     },
     {
       id: 'team_player',
-      icon: '⭐',
+      icon: <Star className="w-5 h-5 text-amber-500" />,
       title: 'Team Player',
       desc: 'Join 3+ organizations',
       requirement: 3,
@@ -65,7 +69,7 @@ const Profile = () => {
     },
     {
       id: 'goal_achiever',
-      icon: '🎯',
+      icon: <Target className="w-5 h-5 text-blue-500" />,
       title: 'Goal Achiever',
       desc: 'Complete 10+ projects',
       requirement: 10,
@@ -74,7 +78,7 @@ const Profile = () => {
     },
     {
       id: 'learner',
-      icon: '📚',
+      icon: <BookOpen className="w-5 h-5 text-green-500" />,
       title: 'Learner',
       desc: 'Add 5+ skills',
       requirement: 5,
@@ -83,7 +87,7 @@ const Profile = () => {
     },
     {
       id: 'innovator',
-      icon: '🚀',
+      icon: <Rocket className="w-5 h-5 text-purple-500" />,
       title: 'Innovator',
       desc: 'Make 10+ improvements',
       requirement: 10,
@@ -110,12 +114,12 @@ const Profile = () => {
   const skillColorOptions = [
     { value: 'bg-blue-500', label: 'Blue', preview: '#3B82F6' },
     { value: 'bg-green-500', label: 'Green', preview: '#10B981' },
-    { value: 'bg-purple-500', label: 'Purple', preview: '#8B5CF6' },
+    { value: 'bg-primary', label: 'Purple', preview: '#8B5CF6' },
     { value: 'bg-orange-500', label: 'Orange', preview: '#F97316' },
-    { value: 'bg-red-500', label: 'Red', preview: '#EF4444' },
+    { value: 'bg-destructive', label: 'Red', preview: '#EF4444' },
     { value: 'bg-yellow-500', label: 'Yellow', preview: '#EAB308' },
     { value: 'bg-pink-500', label: 'Pink', preview: '#EC4899' },
-    { value: 'bg-indigo-500', label: 'Indigo', preview: '#6366F1' }
+    { value: 'bg-primary', label: 'Indigo', preview: '#6366F1' }
   ];
 
 
@@ -217,7 +221,11 @@ useEffect(() => {
 
   // Show achievement unlock notification
   const showAchievementUnlockNotification = (achievement) => {
-    toast.success(`${achievement.icon} Achievement Unlocked: ${achievement.title}`, {
+    toast.success(
+      <div className="flex items-center gap-2">
+        {achievement.icon}
+        <span>Achievement Unlocked: {achievement.title}</span>
+      </div>, {
       duration: 5000,
       style: {
         background: 'linear-gradient(to right, #facc15, #f97316)',
@@ -286,7 +294,12 @@ useEffect(() => {
         setNewSkill({ name: '', level: 50, color: 'bg-blue-500' });
         setShowSkillsModal(false);
         
-        toast.success(`✅ Skill "${skillToAdd.name}" added successfully!`);
+        toast.success(
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>Skill "{skillToAdd.name}" added successfully!</span>
+          </div>
+        );
       }
     }
   };
@@ -342,7 +355,12 @@ useEffect(() => {
       setShowEditModal(false);
       
 
-    toast.success('✅ Profile updated successfully!');
+    toast.success(
+      <div className="flex items-center gap-2">
+        <CheckCircle className="w-5 h-5" />
+        <span>Profile updated successfully!</span>
+      </div>
+    );
     } 
   };
 
@@ -358,34 +376,39 @@ useEffect(() => {
   const handleCopyUserId = () => {
     if (user?.userId) {
       navigator.clipboard.writeText(user.userId);
-      toast.success('🔗 User ID copied to clipboard!');
+      toast.success(
+        <div className="flex items-center gap-2">
+          <Link2 className="w-5 h-5" />
+          <span>User ID copied to clipboard!</span>
+        </div>
+      );
     }
   };
 
   // Loading skeleton component
   const LoadingSkeleton = () => (
-    <div className="animate-pulse">
-      <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded-lg mb-4 w-1/3"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2 w-2/3"></div>
-      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-8 w-1/2"></div>
+    <div className="">
+      <div className="h-8 bg-slate-300 dark:bg-slate-600 rounded-lg mb-4 w-1/3"></div>
+      <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-2 w-2/3"></div>
+      <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-8 w-1/2"></div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl">
-            <div className="w-32 h-32 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-6"></div>
-            <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded mb-2"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-            <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="bg-card rounded-3xl p-8 shadow-xl">
+            <div className="w-32 h-32 bg-slate-300 dark:bg-slate-600 rounded-full mx-auto mb-6"></div>
+            <div className="h-6 bg-slate-300 dark:bg-slate-600 rounded mb-2"></div>
+            <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-4"></div>
+            <div className="h-10 bg-slate-200 dark:bg-accent rounded"></div>
           </div>
         </div>
         
         <div className="lg:col-span-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-6">
-                <div className="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-xl mb-4"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                <div className="h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
+              <div key={i} className="bg-card rounded-2xl p-6">
+                <div className="w-12 h-12 bg-slate-300 dark:bg-slate-600 rounded-xl mb-4"></div>
+                <div className="h-4 bg-slate-200 dark:bg-accent rounded mb-2"></div>
+                <div className="h-8 bg-slate-300 dark:bg-slate-600 rounded"></div>
               </div>
             ))}
           </div>
@@ -397,7 +420,7 @@ useEffect(() => {
   if (isLoading) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
+        <div className="min-h-screen bg-background py-8 px-4 sm:px-6 lg:px-8 transition-all duration-500">
           <div className="max-w-7xl mx-auto">
             <LoadingSkeleton />
           </div>
@@ -409,26 +432,23 @@ useEffect(() => {
   if (!user) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 flex items-center justify-center">
-          {/* Animated background elements */}
-          <div className="fixed inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          </div>
+        <div className="min-h-screen bg-background flex items-center justify-center">
           
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-gray-200/50 dark:border-gray-700/50 relative z-10 max-w-md mx-4">
-            <div className="text-8xl mb-6 animate-bounce">🔐</div>
-            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+          <div className="bg-card dark:bg-muted/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center border border-border/50 dark:border-border/50 relative z-10 max-w-md mx-4">
+            <div className="flex justify-center mb-6 text-muted-foreground">
+              <Lock className="w-20 h-20" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 text-foreground">
               Authentication Required
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">
+            <p className="text-muted-foreground mb-8 text-lg">
               Please log in to view your profile and access your personal dashboard.
             </p>
             <button
               onClick={() => navigate('/login')}
-              className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+              className="group px-8 py-4 bg-primary text-primary-foreground rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center justify-center gap-2"
             >
-              <span className="group-hover:animate-pulse">🚀</span> Go to Login
+              <Rocket className="w-5 h-5" /> Go to Login
             </button>
           </div>
         </div>
@@ -440,66 +460,55 @@ useEffect(() => {
     {
       label: 'Organizations Joined',
       value: userProgress.organizationsJoined,
-      icon: '🏢',
-      color: 'from-blue-500 to-blue-600',
-      bgColor: 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20',
-      borderColor: 'border-blue-200 dark:border-blue-800',
+      icon: <Building2 className="w-6 h-6 text-white" />,
+      color: 'bg-primary',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.organizationsJoined / 5) * 100, 100),
-      // action: () => simulateProgress('organizationsJoined')
     },
     {
       label: 'Tasks Completed',
       value: userProgress.tasksCompleted,
-      icon: '✅',
-      color: 'from-green-500 to-green-600',
-      bgColor: 'bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20',
-      borderColor: 'border-green-200 dark:border-green-800',
+      icon: <CheckCircle className="w-6 h-6 text-white" />,
+      color: 'bg-green-500',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.tasksCompleted / 50) * 100, 100),
-      // action: () => simulateProgress('tasksCompleted')
     },
     {
       label: 'Login Streak',
       value: `${userProgress.loginStreak} days`,
-      icon: '🔥',
-      color: 'from-amber-500 to-orange-600',
-      bgColor: 'bg-gradient-to-br from-amber-50 to-orange-100 dark:from-amber-900/20 dark:to-orange-800/20',
-      borderColor: 'border-amber-200 dark:border-orange-800',
+      icon: <Flame className="w-6 h-6 text-white" />,
+      color: 'bg-amber-500',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userProgress.loginStreak / 30) * 100, 100),
     },
     {
       label: 'Skills Added',
       value: userSkills.length,
-      icon: '🎯',
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20',
-      borderColor: 'border-purple-200 dark:border-purple-800',
+      icon: <Target className="w-6 h-6 text-white" />,
+      color: 'bg-primary',
+      bgColor: 'bg-card',
+      borderColor: 'border-border',
       progress: Math.min((userSkills.length / 10) * 100, 100),
     },
   ];
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50/30 to-yellow-50/30 dark:from-zinc-900 dark:via-gray-900 dark:to-orange-950/30 transition-all duration-500">
-        {/* Animated background elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-400/5 dark:bg-orange-600/5 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-amber-400/5 dark:bg-amber-600/5 rounded-full blur-3xl animate-float-delayed"></div>
-          <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-yellow-400/5 dark:bg-yellow-600/5 rounded-full blur-3xl animate-float-slow"></div>
-        </div>
+      <div className="min-h-screen bg-background transition-all duration-500">
 
         <div className="relative z-10 py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             
-            {/* Enhanced Header Section */}
+            {/* Header Section */}
             <div className="text-center mb-16 relative">
-              <div className="absolute inset-0 flex items-center justify-center opacity-5 dark:opacity-10">
-                <span className="text-[20rem] font-bold">👤</span>
-              </div>
               <div className="relative z-10">
-                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent mb-6 animate-fade-in">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6 animate-fade-in">
                   My Profile
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
+                <p className="text-muted-foreground text-xl max-w-2xl mx-auto leading-relaxed animate-fade-in-delayed">
                   Manage your personal information, track your progress, and showcase your achievements
                 </p>
               </div>
@@ -507,16 +516,16 @@ useEffect(() => {
 
             {/* Enhanced User ID Section */}
             <div className="mb-12 max-w-4xl mx-auto">
-              <div className="bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-yellow-500/10 border border-orange-200/50 dark:border-orange-800/50 rounded-3xl p-8 backdrop-blur-sm shadow-lg">
+              <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 via-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white text-2xl">🔑</span>
+                  <div className="w-16 h-16 bg-muted border border-border rounded-2xl flex items-center justify-center shadow-sm text-primary">
+                    <Key className="w-8 h-8" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold text-foreground">
                       Your Unique ID
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-muted-foreground">
                       Share this ID with organizations to join their workspace
                     </p>
                   </div>
@@ -527,13 +536,13 @@ useEffect(() => {
                     type="text"
                     value={user.userId || 'N/A'}
                     readOnly
-                    className="flex-1 px-6 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-300/50 dark:border-gray-600/50 rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
+                    className="flex-1 px-6 py-4 bg-muted border border-border rounded-xl font-mono text-lg cursor-not-allowed shadow-inner"
                   />
                   <button
                     onClick={handleCopyUserId}
-                    className="group px-8 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                    className="group px-8 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center gap-2"
                   >
-                    <span className="group-hover:animate-pulse">📋</span> Copy
+                    <Copy className="w-5 h-5" /> Copy
                   </button>
                 </div>
               </div>
@@ -543,22 +552,22 @@ useEffect(() => {
             {/* Tab Navigation */}
             <div className="mb-8">
               <div className="flex justify-center">
-                <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+                <div className="bg-white/50 dark:bg-muted/50 backdrop-blur-sm rounded-2xl p-2 border border-border/50 dark:border-border/50 shadow-lg">
                   {[
-                    { id: 'overview', label: '📊 Overview', icon: '📊' },
-                    { id: 'skills', label: '🎯 Skills', icon: '🎯' },
-                    { id: 'achievements', label: '🏆 Achievements', icon: '🏆' },
+                    { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },
+                    { id: 'skills', label: 'Skills', icon: <Target className="w-4 h-4" /> },
+                    { id: 'achievements', label: 'Achievements', icon: <Trophy className="w-4 h-4" /> },
                   ].map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
-                          ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg transform scale-105'
-                          : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          ? 'bg-primary text-primary-foreground shadow-sm transform scale-105'
+                          : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
                       }`}
                     >
-                      {tab.label}
+                      {tab.icon} {tab.label}
                     </button>
                   ))}
                 </div>
@@ -570,12 +579,7 @@ useEffect(() => {
               
               {/* Enhanced Profile Card */}
               <div className="lg:col-span-1">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
-                  {/* Background pattern */}
-                  <div className="absolute inset-0 opacity-5">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-orange-400 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-amber-400 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
-                  </div>
+                <div className="bg-card backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-border relative overflow-hidden">
                   
                   <div className="relative z-10 text-center">
                     <div className="relative inline-block mb-6">
@@ -593,25 +597,25 @@ useEffect(() => {
                       </div>
                     </div>
                     
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent mb-2">
+                    <h2 className="text-3xl font-bold text-foreground mb-2">
                       {user.name}
                     </h2>
                     
-                    <p className="text-gray-600 dark:text-gray-400 mb-2 flex items-center justify-center gap-2">
-                      <span>📧</span> {user.email || 'user@example.com'}
+                    <p className="text-muted-foreground mb-2 flex items-center justify-center gap-2">
+                      <Mail className="w-4 h-4" /> {user.email || 'user@example.com'}
                     </p>
 
                     {section && (
                       <div className="mb-4">
-                        <span className="inline-block bg-gradient-to-r from-orange-500/20 to-amber-500/20 text-orange-700 dark:text-orange-300 px-4 py-2 rounded-full text-sm font-medium border border-orange-200 dark:border-orange-800">
-                          🎯 {section}
+                        <span className="inline-flex items-center gap-1 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium border border-primary/20">
+                          <Target className="w-4 h-4" /> {section}
                         </span>
                       </div>
                     )}
 
                     {bio && (
-                      <div className="mt-6 p-4 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-2xl border border-gray-200 dark:border-gray-600">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 italic leading-relaxed">
+                      <div className="mt-6 p-4 bg-muted rounded-2xl border border-border">
+                        <p className="text-sm text-foreground/80 italic leading-relaxed">
                           "{bio}"
                         </p>
                       </div>
@@ -619,9 +623,9 @@ useEffect(() => {
 
                     <button
                       onClick={() => setShowEditModal(true)}
-                      className="mt-8 w-full group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 text-white rounded-2xl hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 font-semibold shadow-lg hover:shadow-xl"
+                      className="mt-8 w-full group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 hover:scale-[1.01] hover:-translate-y-1 font-semibold shadow-sm flex items-center justify-center gap-2"
                     >
-                      <span className="group-hover:animate-pulse">✏️</span> Edit Profile
+                      <Pen className="w-5 h-5" /> Edit Profile
                     </button>
                   </div>
                 </div>
@@ -630,291 +634,52 @@ useEffect(() => {
               {/* Enhanced Content Area */}
               <div className="lg:col-span-2">
                 {activeTab === 'overview' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {dashboardStats.map((stat, index) => (
-                      <div
-                        key={stat.label}
-                        className={`${stat.bgColor} border ${stat.borderColor} rounded-3xl p-6 hover:shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
-                        style={{ animationDelay: `${index * 100}ms` }}
-                        onClick={stat.action}
-                      >
-                        {/* Progress bar */}
-                        <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-white/20 to-white/40 transition-all duration-1000" 
-                             style={{ width: `${stat.progress}%` }}></div>
-                        
-                        <div className="flex items-center justify-between mb-4">
-                          <div className={`w-14 h-14 bg-gradient-to-r ${stat.color} rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg`}>
-                            {stat.icon}
-                          </div>
-                          <div className="text-right">
-                            <div className="text-xs text-gray-500 dark:text-gray-400">Progress</div>
-                            <div className="text-sm font-bold text-gray-700 dark:text-gray-300">{Math.round(stat.progress)}%</div>
-                          </div>
-                        </div>
-                        
-                        <h3 className="text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">
-                          {stat.label}
-                        </h3>
-                        
-                        <p className="text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                          {stat.value}
-                        </p>
-                        
-                        {stat.action && (
-                          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">Click to test</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <ProfileOverviewTab dashboardStats={dashboardStats} />
                 )}
 
                 {activeTab === 'skills' && (
-                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                        🎯 Skills & Expertise
-                      </h3>
-                      <button
-                        onClick={() => setShowSkillsModal(true)}
-                        className="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
-                      >
-                        ➕ Add Skill
-                      </button>
-                    </div>
-                    
-                    {userSkills.length === 0 ? (
-                      <div className="text-center py-12">
-                        <div className="text-6xl mb-4">🎯</div>
-                        <h4 className="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No Skills Added Yet</h4>
-                        <p className="text-gray-500 dark:text-gray-500 mb-6">Start building your profile by adding your skills and expertise</p>
-                        <button
-                          onClick={() => setShowSkillsModal(true)}
-                          className="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg"
-                        >
-                          🚀 Add Your First Skill
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-6">
-                        {userSkills.map((skill, index) => (
-                          <div key={skill.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 100}ms` }}>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-gray-700 dark:text-gray-300 font-medium">{skill.name}</span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-gray-500 dark:text-gray-400 text-sm">{skill.level}%</span>
-                                <button
-                                  onClick={() => removeSkill(skill.id)}
-                                  className="text-red-500 hover:text-red-700 transition-colors p-1"
-                                  title="Remove skill"
-                                >
-                                  ❌
-                                </button>
-                              </div>
-                            </div>
-                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                              <div 
-                                className={`h-full ${skill.color} rounded-full transition-all duration-1000 ease-out`}
-                                style={{ width: `${skill.level}%` }}
-                              ></div>
-                            </div>
-                            <input
-                              type="range"
-                              min="0"
-                              max="100"
-                              value={skill.level}
-                              onChange={(e) => updateSkillLevel(skill.id, parseInt(e.target.value))}
-                              className="w-full mt-2 opacity-50 hover:opacity-100 transition-opacity"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <ProfileSkillsTab
+                    userSkills={userSkills}
+                    showSkillsModal={showSkillsModal}
+                    setShowSkillsModal={setShowSkillsModal}
+                    newSkill={newSkill}
+                    setNewSkill={setNewSkill}
+                    addSkill={addSkill}
+                    removeSkill={removeSkill}
+                    updateSkillLevel={updateSkillLevel}
+                    skillColorOptions={skillColorOptions}
+                  />
                 )}
 
                 {activeTab === 'achievements' && (
-                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-gray-200/50 dark:border-gray-700/50">
-                    <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
-                      🏆 Achievements & Badges
-                    </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {achievementDefinitions.map((achievement, index) => {
-                        const status = getAchievementStatus(achievement);
-                        return (
-                          <div 
-                            key={achievement.id} 
-                            className={`text-center p-4 rounded-2xl border transition-all duration-300 transform hover:scale-105 ${
-                              status.isUnlocked
-                                ? 'bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-800/20 border-yellow-200 dark:border-yellow-800 shadow-lg'
-                                : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-gray-200 dark:border-gray-600 opacity-60'
-                            }`}
-                            title={status.isUnlocked ? 'Achievement Unlocked!' : `Progress: ${status.progress}/${achievement.requirement}`}
-                          >
-                            <div className={`text-3xl mb-2 relative ${!status.isUnlocked ? 'filter grayscale' : ''}`}>
-                              {achievement.icon}
-                              {status.isUnlocked && (
-                                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                  <span className="text-white text-xs">✓</span>
-                                </div>
-                              )}
-                              {!status.isUnlocked && (
-                                <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center">
-                                  <span className="text-white text-2xl">🔒</span>
-                                </div>
-                              )}
-                            </div>
-                            <h4 className={`font-semibold text-sm mb-1 ${
-                              status.isUnlocked 
-                                ? 'text-gray-800 dark:text-white' 
-                                : 'text-gray-500 dark:text-gray-400'
-                            }`}>
-                              {achievement.title}
-                            </h4>
-                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                              {achievement.desc}
-                            </p>
-                            
-                            {/* Progress bar for locked achievements */}
-                            {!status.isUnlocked && (
-                              <div className="mt-3">
-                                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                                  <div 
-                                    className="h-full bg-gradient-to-r from-orange-400 to-yellow-500 rounded-full transition-all duration-500"
-                                    style={{ width: `${status.percentage}%` }}
-                                  ></div>
-                                </div>
-                                <div className="text-xs text-gray-500 mt-1">
-                                  {status.progress}/{achievement.requirement} ({Math.round(status.percentage)}%)
-                                </div>
-                              </div>
-                            )}
-                            
-                            {/* Achievement unlocked indicator */}
-                            {status.isUnlocked && (
-                              <div className="mt-2">
-                                <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                                  🎉 Unlocked!
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <ProfileAchievementsTab
+                    achievementDefinitions={achievementDefinitions}
+                    getAchievementStatus={getAchievementStatus}
+                  />
                 )}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Skills Modal */}
-        {showSkillsModal && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl w-full max-w-md shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
-              
-              {/* Modal Header */}
-              <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-6 rounded-t-3xl">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span>🎯</span> Add New Skill
-                </h2>
-              </div>
-
-              <div className="p-6">
-                {/* Skill Name */}
-                <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Skill Name
-                  </label>
-                  <input
-                    type="text"
-                    value={newSkill.name}
-                    onChange={(e) => setNewSkill({...newSkill, name: e.target.value})}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
-                    placeholder="e.g. JavaScript, Project Management, Design"
-                  />
-                </div>
-
-                {/* Skill Level */}
-                <div className="mb-4">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Proficiency Level: {newSkill.level}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={newSkill.level}
-                    onChange={(e) => setNewSkill({...newSkill, level: parseInt(e.target.value)})}
-                    className="w-full"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>Beginner</span>
-                    <span>Expert</span>
-                  </div>
-                </div>
-
-                {/* Color Selection */}
-                <div className="mb-6">
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    Color Theme
-                  </label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {skillColorOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => setNewSkill({...newSkill, color: option.value})}
-                        className={`w-full h-10 rounded-lg transition-all duration-200 ${option.value} ${
-                          newSkill.color === option.value ? 'ring-2 ring-offset-2 ring-gray-400' : ''
-                        }`}
-                        title={option.label}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setShowSkillsModal(false)}
-                    className="flex-1 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl transition-all duration-300 font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={addSkill}
-                    disabled={!newSkill.name.trim()}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl transition-all duration-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Add Skill
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Enhanced Edit Profile Modal */}
         {showEditModal && (
           <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex justify-center items-center z-50 p-4 animate-fade-in">
-            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200/50 dark:border-gray-700/50 animate-scale-in">
+            <div className="bg-card w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-border animate-scale-in">
               
               {/* Enhanced Modal Header */}
-              <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-8 rounded-t-3xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-yellow-400/20 animate-pulse"></div>
-                <h2 className="text-3xl font-bold text-white flex items-center gap-3 relative z-10">
-                  <span className="animate-bounce">✏️</span> Edit Profile
+              <div className="bg-card border-b border-border p-8 relative overflow-hidden">
+                <h2 className="text-3xl font-bold text-foreground flex items-center gap-3 relative z-10">
+                  <Pen className="w-6 h-6 text-primary" /> Edit Profile
                 </h2>
-                <p className="text-orange-100 mt-2 relative z-10">Update your personal information and preferences</p>
+                <p className="text-muted-foreground mt-2 relative z-10">Update your personal information and preferences</p>
               </div>
 
               <div className="p-8">
                 {/* Enhanced Profile Picture Section */}
                 <div className="mb-8">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
-                    <span className="text-lg">📸</span> Profile Picture
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
+                    <Camera className="w-5 h-5" /> Profile Picture
                   </label>
                   
                   <div className="flex justify-center mb-6">
@@ -928,8 +693,8 @@ useEffect(() => {
                       ) : (
                         <DefaultAvatar size={32} />
                       )}
-                      <div className="absolute inset-0 bg-black/20 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
-                        <span className="text-white text-2xl">📷</span>
+                      <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer text-white">
+                        <Camera className="w-8 h-8" />
                       </div>
                     </div>
                   </div>
@@ -938,34 +703,34 @@ useEffect(() => {
                     type="file"
                     onChange={handleImageUpload}
                     accept="image/*"
-                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-gray-700 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
+                    className="w-full px-4 py-3 border-2 border-dashed border-orange-300 dark:border-orange-600 rounded-xl dark:bg-accent  file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200 transition-all duration-300 hover:border-orange-400"
                   />
                 </div>
 
                 {/* Enhanced Bio Section */}
                 <div className="mb-8">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
-                    <span className="text-lg">📝</span> Bio
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5" /> Bio
                   </label>
                   <textarea
                     value={bio}
                     onChange={(e) => setBio(e.target.value)}
                     rows={4}
-                    className="w-full px-6 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl dark:bg-gray-700 dark:text-white resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent  resize-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="Tell us about yourself, your interests, and what motivates you..."
                   />
                 </div>
 
                 {/* Enhanced Skills Section */}
                 <div className="mb-10">
-                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4 flex items-center gap-2">
-                    <span className="text-lg">🎯</span> Job Title / Role
+                  <label className="text-sm font-bold text-foreground/80 mb-4 flex items-center gap-2">
+                    <Target className="w-5 h-5" /> Job Title / Role
                   </label>
                   <input
                     type="text"
                     value={section}
                     onChange={(e) => setSection(e.target.value)}
-                    className="w-full px-6 py-4 border border-gray-300 dark:border-gray-600 rounded-2xl dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 shadow-inner"
+                    className="w-full px-6 py-4 border border-slate-300 dark:border-border rounded-2xl dark:bg-accent  focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 shadow-inner"
                     placeholder="E.g. Full Stack Developer, UI/UX Designer, Project Manager"
                   />
                 </div>
@@ -974,15 +739,15 @@ useEffect(() => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="flex-1 px-6 py-4 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="flex-1 group px-6 py-4 bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 hover:from-orange-600 hover:via-amber-600 hover:to-yellow-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex-1 group px-6 py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl transition-all duration-300 font-semibold shadow-sm hover:scale-[1.01] flex items-center justify-center gap-2"
                   >
-                    <span className="group-hover:animate-pulse">💾</span> Save Changes
+                    <Save className="w-5 h-5" /> Save Changes
                   </button>
                 </div>
               </div>
@@ -994,70 +759,5 @@ useEffect(() => {
   ); 
 }; 
 
-
-const styles = `
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-  }
-  
-  @keyframes float-delayed {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(-180deg); }
-  }
-  
-  @keyframes float-slow {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(90deg); }
-  }
-  
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-delayed {
-    0% { opacity: 0; transform: translateY(20px); }
-    50% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes fade-in-up {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes scale-in {
-    from { transform: scale(0.9) translateY(20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
-  }
-  
-  @keyframes slide-in-right {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  @keyframes shine {
-    0% { transform: translateX(-100%) skewX(-15deg); }
-    100% { transform: translateX(200%) skewX(-15deg); }
-  }
-  
-  .animate-float { animation: float 6s ease-in-out infinite; }
-  .animate-float-delayed { animation: float-delayed 8s ease-in-out infinite; }
-  .animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
-  .animate-fade-in { animation: fade-in 0.6s ease-out; }
-  .animate-fade-in-delayed { animation: fade-in-delayed 1s ease-out; }
-  .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
-  .animate-scale-in { animation: scale-in 0.4s ease-out; }
-  .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
-  .animate-shine { animation: shine 2s infinite; }
-`;
-
-
-if (typeof document !== 'undefined') {
-  const styleSheet = document.createElement('style');
-  styleSheet.textContent = styles;
-  document.head.appendChild(styleSheet);
-}
 
 export default Profile;

@@ -99,23 +99,18 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-zinc-900 via-gray-800 to-zinc-900 text-white px-4 relative overflow-hidden">
-      {/* Background Decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/20 to-red-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/20 to-purple-600/20 rounded-full blur-3xl"></div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-background text-white px-4 relative overflow-hidden">
 
       <div className="relative w-full max-w-md">
         {/* Welcome Header */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-            <UserIcon className="w-10 h-10 text-white" />
+          <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <UserIcon className="w-10 h-10 text-foreground" />
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             Welcome Back
           </h1>
-          <p className="text-gray-400">Sign in to continue to CollabNest</p>
+          <p className="text-muted-foreground">Sign in to continue to CollabNest</p>
         </div>
 
         {/* Login Card */}
@@ -123,9 +118,9 @@ const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
-              <label htmlFor="login-email" className="block text-sm font-medium text-gray-300">Email Address</label>
+              <label htmlFor="login-email" className="block text-sm font-medium text-muted-foreground">Email Address</label>
               <div className="relative">
-                <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   id="login-email"
                   type="email"
@@ -137,7 +132,7 @@ const Login = () => {
                     }
                   })}
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                 />
               </div>
               {errors.email && (
@@ -150,9 +145,9 @@ const Login = () => {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label htmlFor="login-password" className="block text-sm font-medium text-gray-300">Password</label>
+              <label htmlFor="login-password" className="block text-sm font-medium text-muted-foreground">Password</label>
               <div className="relative">
-                <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   id="login-password"
                   type={showPassword ? 'text' : 'password'}
@@ -164,12 +159,12 @@ const Login = () => {
                     }
                   })}
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-12 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-12 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
                 />
                 <button
                   type="button"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-orange-400 transition-colors"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -191,7 +186,7 @@ const Login = () => {
             <div className="flex justify-end">
               <Link 
                 to="/forgot-password" 
-                className="text-sm text-orange-400 hover:text-orange-300 transition-colors hover:underline"
+                className="text-sm text-primary hover:text-primary/80 transition-colors hover:underline"
               >
                 Forgot your password?
               </Link>
@@ -201,7 +196,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -217,16 +212,16 @@ const Login = () => {
           {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-3 bg-gray-800/50 text-gray-400">Or continue with</span>
+              <span className="px-3 bg-muted text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
           {/* Google Login */}
           <div className="flex justify-center">
-            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all hover:scale-[1.01]">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => console.log('Google login failed')}
@@ -238,12 +233,12 @@ const Login = () => {
           </div>
 
           {/* Register Link */}
-          <div className="text-center pt-4 border-t border-gray-600">
-            <p className="text-gray-400">
+          <div className="text-center pt-4 border-t border-border">
+            <p className="text-muted-foreground">
               Don't have an account?{' '}
               <Link 
                 to="/register" 
-                className="text-orange-400 hover:text-orange-300 font-semibold transition-colors hover:underline"
+                className="text-primary hover:text-primary/80 font-semibold transition-colors hover:underline"
               >
                 Create Account
               </Link>
@@ -253,7 +248,7 @@ const Login = () => {
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             {/* Protected by industry-standard security */}
           </p>
         </div>

@@ -125,31 +125,31 @@ const TaskReportDashboard = () => {
   const statusConfig = {
     todo: {
       icon: ClockIcon,
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/20',
+      color: 'text-primary',
+      bg: 'bg-primary/20',
       border: 'border-blue-500/30',
-      gradient: 'from-blue-500 to-indigo-600'
+      gradient: 'bg-primary/80'
     },
     inprogress: {
       icon: PlayIcon,
       color: 'text-yellow-400',
       bg: 'bg-yellow-500/20',
       border: 'border-yellow-500/30',
-      gradient: 'from-yellow-500 to-orange-600'
+      gradient: 'bg-yellow-500'
     },
     done: {
       icon: CheckCircleIcon,
       color: 'text-green-400',
       bg: 'bg-green-500/20',
       border: 'border-green-500/30',
-      gradient: 'from-green-500 to-emerald-600'
+      gradient: 'bg-green-500'
     }
   };
 
   const priorityConfig = {
     low: { color: 'text-green-400', bg: 'bg-green-500/20', border: 'border-green-500/30' },
     medium: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30' },
-    high: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30' }
+    high: { color: 'text-red-400', bg: 'bg-destructive/20', border: 'border-red-500/30' }
   };
 
   // Get array of users for carousel navigation
@@ -197,67 +197,67 @@ const TaskReportDashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-          <ChartBarIcon className="w-5 h-5 text-white" />
+        <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+          <ChartBarIcon className="w-5 h-5 text-foreground" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-foreground">
             Analytics & Reports
           </h1>
-          <p className="text-gray-400">Comprehensive task insights and team performance</p>
+          <p className="text-muted-foreground">Comprehensive task insights and team performance</p>
         </div>
       </div>
 
       {/* Main Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Tasks */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm font-medium">Total Tasks</p>
-              <p className="text-3xl font-bold text-white mt-1">{totalTasks}</p>
+              <p className="text-muted-foreground text-sm font-medium">Total Tasks</p>
+              <p className="text-3xl font-bold text-foreground mt-1">{totalTasks}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <ChartPieIcon className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-primary/20 border border-primary/30 rounded-xl flex items-center justify-center">
+              <ChartPieIcon className="w-6 h-6 text-primary" />
             </div>
           </div>
         </div>
 
         {/* Completion Rate */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm font-medium">Completion Rate</p>
+              <p className="text-muted-foreground text-sm font-medium">Completion Rate</p>
               <p className="text-3xl font-bold text-green-400 mt-1">{completionRate}%</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-              <CheckCircleIcon className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-green-500/20 border border-green-500/30 rounded-xl flex items-center justify-center">
+              <CheckCircleIcon className="w-6 h-6 text-green-400" />
             </div>
           </div>
         </div>
 
         {/* In Progress */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm font-medium">In Progress</p>
+              <p className="text-muted-foreground text-sm font-medium">In Progress</p>
               <p className="text-3xl font-bold text-yellow-400 mt-1">{inProgressRate}%</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center">
-              <BoltIcon className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-yellow-500/20 border border-yellow-500/30 rounded-xl flex items-center justify-center">
+              <BoltIcon className="w-6 h-6 text-yellow-400" />
             </div>
           </div>
         </div>
 
         {/* Overdue Tasks */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm font-medium">Overdue Tasks</p>
+              <p className="text-muted-foreground text-sm font-medium">Overdue Tasks</p>
               <p className="text-3xl font-bold text-red-400 mt-1">{overdueTasks.length}</p>
             </div>
-            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-              <ExclamationTriangleIcon className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 bg-destructive/20 border border-red-500/30 rounded-xl flex items-center justify-center">
+              <ExclamationTriangleIcon className="w-6 h-6 text-red-400" />
             </div>
           </div>
         </div>
@@ -266,12 +266,12 @@ const TaskReportDashboard = () => {
       {/* Status and Priority Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Status Breakdown */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <ChartBarIcon className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-muted border border-border rounded-lg flex items-center justify-center">
+              <ChartBarIcon className="w-4 h-4 text-foreground" />
             </div>
-            <h2 className="text-xl font-bold text-white">Tasks by Status</h2>
+            <h2 className="text-xl font-bold text-foreground">Tasks by Status</h2>
           </div>
           
           <div className="space-y-4">
@@ -285,18 +285,18 @@ const TaskReportDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Icon className={`w-5 h-5 ${config.color}`} />
-                      <span className="text-white font-medium capitalize">
+                      <span className="text-foreground font-medium capitalize">
                         {status === 'inprogress' ? 'In Progress' : status === 'todo' ? 'To Do' : status}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-white font-bold text-lg">{count}</span>
+                      <span className="text-foreground font-bold text-lg">{count}</span>
                       <span className={`text-sm ml-2 ${config.color}`}>({percentage}%)</span>
                     </div>
                   </div>
-                  <div className="mt-3 bg-gray-700/50 rounded-full h-2">
+                  <div className="mt-3 bg-muted rounded-full h-2 overflow-hidden">
                     <div 
-                      className={`bg-gradient-to-r ${config.gradient} h-2 rounded-full transition-all duration-500`}
+                      className={`${config.gradient} h-2 rounded-full transition-all duration-500`}
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
@@ -307,12 +307,12 @@ const TaskReportDashboard = () => {
         </div>
 
         {/* Priority Breakdown */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-              <FlagIcon className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-muted border border-border rounded-lg flex items-center justify-center">
+              <FlagIcon className="w-4 h-4 text-foreground" />
             </div>
-            <h2 className="text-xl font-bold text-white">Tasks by Priority</h2>
+            <h2 className="text-xl font-bold text-foreground">Tasks by Priority</h2>
           </div>
           
           <div className="space-y-4">
@@ -326,14 +326,14 @@ const TaskReportDashboard = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="text-lg">{icons[priority]}</span>
-                      <span className="text-white font-medium capitalize">{priority} Priority</span>
+                      <span className="text-foreground font-medium capitalize">{priority} Priority</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-white font-bold text-lg">{count}</span>
+                      <span className="text-foreground font-bold text-lg">{count}</span>
                       <span className={`text-sm ml-2 ${config.color}`}>({percentage}%)</span>
                     </div>
                   </div>
-                  <div className="mt-3 bg-gray-700/50 rounded-full h-2">
+                  <div className="mt-3 bg-muted rounded-full h-2 overflow-hidden">
                     <div 
                       className={`${config.bg.replace('/20', '')} h-2 rounded-full transition-all duration-500`}
                       style={{ width: `${percentage}%` }}
@@ -347,16 +347,16 @@ const TaskReportDashboard = () => {
       </div>
 
       {/* User Task Distribution with Carousel - Only for admins/coordinators */}
-       {(myRole === 'admin' || myRole === 'coordinator') && userArray.length > 0 && (
-              <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl">
+        {(myRole === 'admin' || myRole === 'coordinator') && userArray.length > 0 && (
+              <div className="bg-card border border-border rounded-2xl p-6 shadow-sm mt-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                      <UserIcon className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 bg-primary/20 border border-primary/30 rounded-lg flex items-center justify-center">
+                      <UserIcon className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Team Performance Overview</h2>
-                      <p className="text-gray-400 text-sm">
+                      <h2 className="text-xl font-bold text-foreground">Team Performance Overview</h2>
+                      <p className="text-muted-foreground text-sm">
                         Showing {getCurrentUsers().length} of {userArray.length} team members
                       </p>
                     </div>
@@ -401,7 +401,7 @@ const TaskReportDashboard = () => {
                               onClick={() => setCurrentUserIndex(i)}
                               className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors ${
                                 i === currentUserIndex
-                                  ? 'bg-indigo-500 text-white'
+                                  ? 'bg-primary text-white'
                                   : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
                               }`}
                             >
@@ -428,15 +428,15 @@ const TaskReportDashboard = () => {
                     const userCompletionRate = tasks.length > 0 ? ((completedTasks / tasks.length) * 100).toFixed(1) : 0;
                     
                     return (
-                      <div key={userId} className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-5 hover:bg-gray-700/50 transition-all duration-200">
+                      <div key={userId} className="bg-muted border border-border rounded-xl p-5 hover:border-primary/50 transition-all duration-200">
                         {/* User Header */}
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                            <UserIcon className="w-5 h-5 text-white" />
+                          <div className="w-10 h-10 bg-background border border-border rounded-full flex items-center justify-center">
+                            <UserIcon className="w-5 h-5 text-foreground" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-bold text-white truncate">{userName}</h3>
-                            <p className="text-gray-400 text-sm">{tasks.length} total tasks</p>
+                            <h3 className="font-bold text-foreground truncate">{userName}</h3>
+                            <p className="text-muted-foreground text-sm">{tasks.length} total tasks</p>
                           </div>
                           {/* Performance Indicator */}
                           <div className={`w-3 h-3 rounded-full ${
@@ -455,11 +455,11 @@ const TaskReportDashboard = () => {
                             <p className="text-yellow-400 font-bold text-lg">{inProgressTasks}</p>
                             <p className="text-gray-300 text-xs">In Progress</p>
                           </div>
-                          <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3 text-center">
-                            <p className="text-blue-400 font-bold text-lg">{todoTasks}</p>
+                          <div className="bg-primary/20 border border-blue-500/30 rounded-lg p-3 text-center">
+                            <p className="text-primary font-bold text-lg">{todoTasks}</p>
                             <p className="text-gray-300 text-xs">To Do</p>
                           </div>
-                          <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-center">
+                          <div className="bg-destructive/20 border border-red-500/30 rounded-lg p-3 text-center">
                             <p className="text-red-400 font-bold text-lg">{overdueTasks}</p>
                             <p className="text-gray-300 text-xs">Overdue</p>
                           </div>
@@ -468,25 +468,25 @@ const TaskReportDashboard = () => {
                         {/* Completion Rate with Better Visual */}
                         <div className="mb-4">
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-gray-300 text-sm">Completion Rate</span>
+                            <span className="text-muted-foreground text-sm">Completion Rate</span>
                             <div className="flex items-center gap-2">
                               <span className={`font-semibold ${
-                                userCompletionRate >= 80 ? 'text-green-400' :
-                                userCompletionRate >= 50 ? 'text-yellow-400' : 'text-red-400'
+                                userCompletionRate >= 80 ? 'text-green-500' :
+                                userCompletionRate >= 50 ? 'text-yellow-500' : 'text-red-500'
                               }`}>
                                 {userCompletionRate}%
                               </span>
-                              {userCompletionRate >= 80 && <span className="text-green-400">🏆</span>}
-                              {userCompletionRate >= 50 && userCompletionRate < 80 && <span className="text-yellow-400">⚡</span>}
-                              {userCompletionRate < 50 && overdueTasks > 0 && <span className="text-red-400">⚠️</span>}
+                              {userCompletionRate >= 80 && <span className="text-green-500">🏆</span>}
+                              {userCompletionRate >= 50 && userCompletionRate < 80 && <span className="text-yellow-500">⚡</span>}
+                              {userCompletionRate < 50 && overdueTasks > 0 && <span className="text-red-500">⚠️</span>}
                             </div>
                           </div>
-                          <div className="bg-gray-700/50 rounded-full h-3">
+                          <div className="bg-card rounded-full h-3 border border-border overflow-hidden">
                             <div 
                               className={`h-3 rounded-full transition-all duration-500 ${
-                                userCompletionRate >= 80 ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
-                                userCompletionRate >= 50 ? 'bg-gradient-to-r from-yellow-500 to-orange-600' :
-                                'bg-gradient-to-r from-red-500 to-red-600'
+                                userCompletionRate >= 80 ? 'bg-green-500' :
+                                userCompletionRate >= 50 ? 'bg-yellow-500' :
+                                'bg-red-500'
                               }`}
                               style={{ width: `${userCompletionRate}%` }}
                             ></div>
@@ -496,7 +496,7 @@ const TaskReportDashboard = () => {
                         {/* View All Tasks Button */}
                         <button
                           onClick={() => openTaskCarousel({ userId, userName, tasks, completedTasks, inProgressTasks, todoTasks, overdueTasks })}
-                          className="w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105"
+                          className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.01] shadow-sm"
                         >
                           <EyeIcon className="w-4 h-4" />
                           View All Tasks ({tasks.length})
@@ -541,28 +541,28 @@ const TaskReportDashboard = () => {
       {/* Task Carousel Modal */}
       {selectedUserTasks && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-800 border border-gray-700 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
+          <div className="bg-card border border-border rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6">
+            <div className="bg-muted border-b border-border p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                    <UserIcon className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 bg-background border border-border rounded-full flex items-center justify-center">
+                    <UserIcon className="w-5 h-5 text-foreground" />
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="text-xl font-bold text-foreground">
                       {selectedUserTasks.userName}'s Tasks
                     </h2>
-                    <p className="text-indigo-100 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {selectedUserTasks.tasks.length} total tasks
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={closeTaskCarousel}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  className="p-2 hover:bg-background rounded-lg transition-colors border border-transparent hover:border-border"
                 >
-                  <span className="text-white text-xl">×</span>
+                  <span className="text-muted-foreground text-xl">×</span>
                 </button>
               </div>
             </div>
@@ -642,7 +642,7 @@ const TaskReportDashboard = () => {
                             {selectedUserTasks.tasks[currentTaskIndex].labels.map((label, idx) => (
                               <span
                                 key={idx}
-                                className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 px-2 py-1 rounded-full text-xs text-indigo-300"
+                                className="bg-indigo-500/20 border border-indigo-500/30 px-2 py-1 rounded-full text-xs text-indigo-300"
                               >
                                 #{label}
                               </span>
@@ -663,7 +663,7 @@ const TaskReportDashboard = () => {
                           onClick={() => setCurrentTaskIndex(index)}
                           className={`p-3 rounded-lg border text-left transition-all ${
                             index === currentTaskIndex
-                              ? 'bg-indigo-500/20 border-indigo-500/50'
+                              ? 'bg-primary/20 border-indigo-500/50'
                               : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
                           }`}
                         >

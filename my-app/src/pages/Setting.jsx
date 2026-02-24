@@ -78,32 +78,27 @@ const Setting = () => {
   return (
     <DashboardLayout> 
       {/* Removed the full-screen div that was blocking the layout */}
-      <div className="relative min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-800 to-zinc-900 text-white">
-        {/* Background Decoration */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-        </div>
+      <div className="relative min-h-screen bg-background text-foreground">
 
         <div className="relative max-w-4xl mx-auto px-4 py-12">
           {/* Header */}
           <div className="text-center mb-12">
             {/* <Link
               to="/"
-              className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-6"
             >
               <ArrowLeftIcon className="w-4 h-4" />
               Back to Dashboard
             </Link> */}
             
-            <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-              <CogIcon className="w-10 h-10 text-white" />
+            <div className="w-20 h-20 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+              <CogIcon className="w-10 h-10 text-muted-foreground" />
             </div>
             
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-4">
+            <h1 className="text-4xl font-bold text-foreground mb-4">
               Settings
             </h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-muted-foreground text-lg">
               Customize your CollabNest experience (Under Development)
             </p>
           </div>
@@ -112,8 +107,8 @@ const Setting = () => {
           <div className="mb-8">
             <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-white text-sm font-bold">⚠️</span>
+                <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">⚠️</span>
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
@@ -147,8 +142,8 @@ const Setting = () => {
             {/* Profile Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <UserIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <UserIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
               </div>
@@ -157,21 +152,21 @@ const Setting = () => {
                 <div className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">Full Name</label>
                       <input
                         type="text"
                         value={user.name}
                         readOnly
-                        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">Email Address</label>
                       <input
                         type="email"
                         value={user.email}
                         readOnly
-                        className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -189,20 +184,20 @@ const Setting = () => {
             {/* Notification Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
-                  <BellIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <BellIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Notification Preferences (Under Development)</h2>
               </div>
 
               <div className="space-y-4">
                 {Object.entries(notifications).map(([key, value]) => (
-                  <div key={key} className="flex items-center justify-between py-3 border-b border-gray-700 last:border-b-0">
+                  <div key={key} className="flex items-center justify-between py-3 border-b border-slate-700 last:border-b-0">
                     <div>
                       <h4 className="text-white font-medium capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </h4>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-muted-foreground text-sm">
                         {key === 'email' && 'Receive notifications via email'}
                         {key === 'push' && 'Browser push notifications'}
                         {key === 'taskReminders' && 'Get reminded about upcoming deadlines'}
@@ -212,7 +207,7 @@ const Setting = () => {
                     <button
                       onClick={() => handleNotificationChange(key)}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        value ? 'bg-orange-500' : 'bg-gray-600'
+                        value ? 'bg-orange-500' : 'bg-slate-600'
                       }`}
                     >
                       <span
@@ -229,15 +224,15 @@ const Setting = () => {
             {/* Privacy Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-                  <ShieldCheckIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <ShieldCheckIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Privacy & Security</h2>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">Profile Visibility</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-3">Profile Visibility</label>
                   <div className="grid grid-cols-3 gap-3">
                     {['public', 'team', 'private'].map((option) => (
                       <button
@@ -246,7 +241,7 @@ const Setting = () => {
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                           privacy.profileVisibility === option
                             ? 'bg-orange-500 text-white'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            : 'bg-slate-700 text-muted-foreground hover:bg-slate-600'
                         }`}
                       >
                         {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -255,15 +250,15 @@ const Setting = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between py-3 border-b border-gray-700">
+                <div className="flex items-center justify-between py-3 border-b border-slate-700">
                   <div>
                     <h4 className="text-white font-medium">Show Activity Status</h4>
-                    <p className="text-gray-400 text-sm">Let others see when you're online</p>
+                    <p className="text-muted-foreground text-sm">Let others see when you're online</p>
                   </div>
                   <button
                     onClick={() => handlePrivacyChange('activityStatus', !privacy.activityStatus)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      privacy.activityStatus ? 'bg-orange-500' : 'bg-gray-600'
+                      privacy.activityStatus ? 'bg-orange-500' : 'bg-slate-600'
                     }`}
                   >
                     <span
@@ -277,12 +272,12 @@ const Setting = () => {
                 <div className="flex items-center justify-between py-3">
                   <div>
                     <h4 className="text-white font-medium">Data Sharing</h4>
-                    <p className="text-gray-400 text-sm">Share usage data to improve the service</p>
+                    <p className="text-muted-foreground text-sm">Share usage data to improve the service</p>
                   </div>
                   <button
                     onClick={() => handlePrivacyChange('dataSharing', !privacy.dataSharing)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                      privacy.dataSharing ? 'bg-orange-500' : 'bg-gray-600'
+                      privacy.dataSharing ? 'bg-orange-500' : 'bg-slate-600'
                     }`}
                   >
                     <span
@@ -298,22 +293,22 @@ const Setting = () => {
             {/* Appearance Settings */}
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center">
-                  <PaintBrushIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <PaintBrushIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Appearance & Display</h2>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">Theme</label>
+                  <label className="block text-sm font-medium text-muted-foreground mb-3">Theme</label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => handleAppearanceChange('theme', 'dark')}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                         appearance.theme === 'dark'
                           ? 'bg-orange-500 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          : 'bg-slate-700 text-muted-foreground hover:bg-slate-600'
                       }`}
                     >
                       <MoonIcon className="w-5 h-5" />
@@ -324,7 +319,7 @@ const Setting = () => {
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                         appearance.theme === 'light'
                           ? 'bg-orange-500 text-white'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          : 'bg-slate-700 text-muted-foreground hover:bg-slate-600'
                       }`}
                     >
                       <SunIcon className="w-5 h-5" />
@@ -335,11 +330,11 @@ const Setting = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Language</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">Language</label>
                     <select
                       value={appearance.language}
                       onChange={(e) => handleAppearanceChange('language', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     >
                       <option value="en">English</option>
                       <option value="es">Spanish</option>
@@ -348,11 +343,11 @@ const Setting = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Timezone</label>
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">Timezone</label>
                     <select
                       value={appearance.timezone}
                       onChange={(e) => handleAppearanceChange('timezone', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     >
                       <option value="UTC">UTC</option>
                       <option value="EST">Eastern Time</option>
@@ -367,8 +362,8 @@ const Setting = () => {
             {/* Danger Zone */}
             <div className="bg-red-900/20 border border-red-500/30 rounded-2xl shadow-2xl p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                  <TrashIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                  <TrashIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Danger Zone</h2>
               </div>
@@ -392,7 +387,7 @@ const Setting = () => {
 
           {/* Save Changes Button */}
           <div className="flex justify-center mt-8">
-            <button className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+            <button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-8 rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm">
               Save Changes
             </button>
           </div>
@@ -401,9 +396,9 @@ const Setting = () => {
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-lg p-6 max-w-md mx-4">
+            <div className="bg-muted rounded-lg p-6 max-w-md mx-4">
               <h3 className="text-xl font-bold text-white mb-4">Confirm Account Deletion</h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Are you absolutely sure you want to delete your account? This action cannot be undone.
               </p>
               <div className="flex gap-3">
@@ -415,7 +410,7 @@ const Setting = () => {
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                  className="bg-slate-600 hover:bg-slate-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>

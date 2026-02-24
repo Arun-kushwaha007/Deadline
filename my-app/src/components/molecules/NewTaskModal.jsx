@@ -75,7 +75,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
     },
     high: { 
       color: 'text-red-400', 
-      bg: 'bg-red-500/20', 
+      bg: 'bg-destructive/20', 
       border: 'border-red-500/30',
       emoji: '🔴',
       label: 'High Priority'
@@ -85,8 +85,8 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
   // Status configuration
   const statusConfig = {
     todo: { 
-      color: 'text-blue-400', 
-      bg: 'bg-blue-500/20', 
+      color: 'text-primary', 
+      bg: 'bg-primary/20', 
       border: 'border-blue-500/30',
       icon: ClockIcon,
       label: 'To Do'
@@ -355,39 +355,34 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-green-500/10 to-blue-600/10 rounded-full blur-3xl"></div>
-      </div>
 
-      <div className="relative bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden">
+      <div className="relative bg-muted border border-border rounded-2xl shadow-sm w-full max-w-3xl max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+        <div className="bg-primary/10 border-b border-border p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
                 {taskToEdit ? (
-                  <FlagIcon className="w-5 h-5 text-white" />
+                  <FlagIcon className="w-5 h-5 text-primary" />
                 ) : (
-                  <PlusIcon className="w-5 h-5 text-white" />
+                  <PlusIcon className="w-5 h-5 text-primary" />
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-primary">
                   {viewOnly ? 'View Task' : taskToEdit ? 'Edit Task' : 'Create New Task'}
                 </h2>
-                <p className="text-blue-100 text-sm">
+                <p className="text-muted-foreground text-sm">
                   {viewOnly ? 'Task details' : taskToEdit ? 'Update task information' : 'Add a new task to your workflow'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              className="p-2 hover:bg-accent rounded-lg transition-colors"
               aria-label="Close modal"
             >
-              <XMarkIcon className="w-5 h-5 text-white" />
+              <XMarkIcon className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -397,7 +392,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Task Title */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+              <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <FlagIcon className="w-4 h-4" />
                 Task Title *
               </label>
@@ -407,7 +402,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 disabled={viewOnly}
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               />
               {errors.title && (
                 <p className="text-red-400 text-sm flex items-center gap-1">
@@ -419,7 +414,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
             {/* Task Description */}
             <div className="space-y-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+              <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <SparklesIcon className="w-4 h-4" />
                 Description *
               </label>
@@ -429,7 +424,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={viewOnly}
-                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none disabled:opacity-50 disabled:cursor-not-allowed"
               />
               {errors.description && (
                 <p className="text-red-400 text-sm flex items-center gap-1">
@@ -443,7 +438,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Organization Dropdown */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <BuildingOfficeIcon className="w-4 h-4" />
                   Organization *
                 </label>
@@ -455,7 +450,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                     setAssigneeSearch('');
                   }}
                   disabled={currentUserOrganizationsStatus === 'loading' || currentUserOrganizationsStatus === 'failed' || viewOnly}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <option value="">Select Organization</option>
                   {currentUserOrganizationsStatus === 'succeeded' &&
@@ -466,7 +461,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                     ))}
                 </select>
                 {currentUserOrganizationsStatus === 'loading' && (
-                 <p className="text-blue-400 text-sm flex items-center gap-2">
+                 <p className="text-primary text-sm flex items-center gap-2">
                    <span className="w-3 h-3 border border-blue-400/30 border-t-blue-400 rounded-full animate-spin"></span>
                    Loading organizations...
                  </p>
@@ -484,7 +479,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
               {/* Due Date */}
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <CalendarDaysIcon className="w-4 h-4" />
                   Due Date *
                 </label>
@@ -493,7 +488,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
                   disabled={viewOnly}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 {errors.dueDate && (
                   <p className="text-red-400 text-sm flex items-center gap-1">
@@ -508,7 +503,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Priority Selection */}
               <div className="space-y-3">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <FlagIcon className="w-4 h-4" />
                   Priority *
                 </label>
@@ -522,12 +517,12 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                       className={`w-full p-3 rounded-lg border transition-all text-left ${
                         priority === key
                           ? `${config.bg} ${config.border} ring-2 ring-blue-500/50`
-                          : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
+                          : 'bg-slate-700/30 border-border/30 hover:bg-slate-600/30'
                       } ${viewOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <div className="flex items-center gap-3">
                         <span className="text-lg">{config.emoji}</span>
-                        <span className={`font-medium ${priority === key ? 'text-white' : 'text-gray-300'}`}>
+                        <span className={`font-medium ${priority === key ? 'text-white' : 'text-muted-foreground'}`}>
                           {config.label}
                         </span>
                       </div>
@@ -544,7 +539,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
               {/* Status Selection */}
               <div className="space-y-3">
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <CheckCircleIcon className="w-4 h-4" />
                   Status
                 </label>
@@ -558,12 +553,12 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                       className={`w-full p-3 rounded-lg border transition-all text-left ${
                         status === key
                           ? `${config.bg} ${config.border} ring-2 ring-blue-500/50`
-                          : 'bg-gray-700/30 border-gray-600/30 hover:bg-gray-600/30'
+                          : 'bg-slate-700/30 border-border/30 hover:bg-slate-600/30'
                       } ${viewOnly ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <div className="flex items-center gap-3">
-                        <config.icon className={`w-4 h-4 ${status === key ? config.color : 'text-gray-400'}`} />
-                        <span className={`font-medium ${status === key ? 'text-white' : 'text-gray-300'}`}>
+                        <config.icon className={`w-4 h-4 ${status === key ? config.color : 'text-muted-foreground'}`} />
+                        <span className={`font-medium ${status === key ? 'text-white' : 'text-muted-foreground'}`}>
                           {config.label}
                         </span>
                       </div>
@@ -575,7 +570,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
 
             {/* Assignee Section */}
             <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+              <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <UserIcon className="w-4 h-4" />
                 Assign To * {organizationId && `(${availableMembersCount} members available)`}
               </label>
@@ -587,8 +582,8 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
               )}
               
               {membersLoading && (
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-                 <p className="text-blue-400 text-sm flex items-center gap-2">
+                <div className="bg-primary/10 border border-blue-500/30 rounded-lg p-3">
+                 <p className="text-primary text-sm flex items-center gap-2">
                    <span className="w-4 h-4 border-2 border-blue-400/30 border-t-blue-400 rounded-full animate-spin"></span>
                    Loading organization members...
                  </p>
@@ -603,11 +598,11 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                     value={assigneeSearch}
                     onChange={(e) => setAssigneeSearch(e.target.value)}
                     disabled={assignee?._id === 'everyone' || availableMembersCount === 0 || viewOnly}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   
                   {assigneeSearch && filteredMembers.length > 0 && (
-                    <div className="border border-gray-600/50 rounded-lg max-h-32 overflow-y-auto bg-gray-800/50">
+                    <div className="border border-border/50 rounded-lg max-h-32 overflow-y-auto bg-muted">
                       {filteredMembers.map((user) => (
                         <div
                           key={user._id}
@@ -617,20 +612,20 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                               setAssigneeSearch('');
                             }
                           }}
-                          className="px-4 py-3 hover:bg-gray-700/50 cursor-pointer border-b border-gray-700/30 last:border-b-0 flex items-center gap-3"
+                          className="px-4 py-3 hover:bg-slate-700/50 cursor-pointer border-b border-slate-700/30 last:border-b-0 flex items-center gap-3"
                         >
-                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                            <UserIcon className="w-4 h-4 text-white" />
+                          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <UserIcon className="w-4 h-4 text-primary-foreground" />
                           </div>
-                          <span className="text-white">{user.name}</span>
+                          <span className="text-foreground">{user.name}</span>
                         </div>
                       ))}
                     </div>
                   )}
                   
                   {assigneeSearch && filteredMembers.length === 0 && availableMembersCount > 0 && (
-                    <div className="bg-gray-700/30 rounded-lg p-3">
-                      <p className="text-gray-400 text-sm">No members found in this organization</p>
+                    <div className="bg-slate-700/30 rounded-lg p-3">
+                      <p className="text-muted-foreground text-sm">No members found in this organization</p>
                     </div>
                   )}
 
@@ -642,7 +637,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                         setAssigneeSearch('');
                       }}
                       disabled={availableMembersCount === 0}
-                      className="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+                      className="text-sm text-primary hover:text-blue-300 hover:underline transition-colors"
                     >
                       <UsersIcon className="w-4 h-4 inline mr-1" />
                       Assign to Everyone in Organization
@@ -653,7 +648,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                             {assignee._id === 'everyone' ? (
                               <UsersIcon className="w-4 h-4 text-white" />
                             ) : (
@@ -685,8 +680,8 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
               )}
               
               {organizationId && !membersLoading && availableMembersCount === 0 && (
-                <div className="bg-gray-700/30 rounded-lg p-3">
-                  <p className="text-gray-400 text-sm">No members available in this organization.</p>
+                <div className="bg-slate-700/30 rounded-lg p-3">
+                  <p className="text-muted-foreground text-sm">No members available in this organization.</p>
                 </div>
               )}
               
@@ -702,7 +697,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                          {/* Labels */}
                          <div className="space-y-2">
-                           <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                           <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                              <TagIcon className="w-4 h-4" />
                              Labels
                            </label>
@@ -712,16 +707,16 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                              value={labels}
                              onChange={(e) => setLabels(e.target.value)}
                              disabled={viewOnly}
-                             className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                             className="w-full px-4 py-3 bg-slate-700/50 border border-border/50 rounded-lg text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                            />
-                           <p className="text-xs text-gray-400">
+                           <p className="text-xs text-muted-foreground">
                              Use commas to separate multiple labels
                            </p>
                          </div>
            
                          {/* Assigned By */}
                          <div className="space-y-2">
-                           <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                           <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                              <UserIcon className="w-4 h-4" />
                              Assigned By
                            </label>
@@ -730,15 +725,15 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                                type="text"
                                value={assignedBy}
                                disabled={true} // Always disabled
-                               className="w-full px-4 py-3 bg-gray-600/50 border border-gray-500/50 rounded-lg text-gray-300 cursor-not-allowed opacity-75"
+                               className="w-full px-4 py-3 bg-slate-600/50 border border-gray-500/50 rounded-lg text-muted-foreground cursor-not-allowed opacity-75"
                              />
                              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                               <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                 <UserIcon className="w-3 h-3 text-white" />
+                               <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                                 <UserIcon className="w-3 h-3 text-primary-foreground" />
                                </div>
                              </div>
                            </div>
-                           <p className="text-xs text-gray-400">
+                           <p className="text-xs text-muted-foreground">
                              Automatically set to current user
                            </p>
                          </div>
@@ -746,7 +741,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
            
                        {/* Visibility Settings */}
                        <div className="space-y-3">
-                         <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+                         <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                            <EyeIcon className="w-4 h-4" />
                            Visibility
                          </label>
@@ -755,15 +750,15 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                            <button
                              type="button"
                              disabled={true} // Disabled since it's always selected
-                             className="p-4 rounded-lg border bg-blue-500/20 border-blue-500/30 ring-2 ring-blue-500/50 cursor-default"
+                             className="p-4 rounded-lg border bg-primary/20 border-blue-500/30 ring-2 ring-blue-500/50 cursor-default"
                            >
                              <div className="flex items-center gap-3">
-                               <EyeIcon className="w-5 h-5 text-blue-400" />
+                               <EyeIcon className="w-5 h-5 text-primary" />
                                <div className="text-left">
                                  <div className="font-medium text-white">
                                    Public
                                  </div>
-                                 <div className="text-xs text-gray-400">
+                                 <div className="text-xs text-muted-foreground">
                                    All org members can see
                                  </div>
                                </div>
@@ -771,26 +766,26 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                            </button>
                            
                            {/* Private Option - Disabled */}
-                           <div className="p-4 rounded-lg border bg-gray-700/30 border-gray-600/30 opacity-50 cursor-not-allowed relative">
+                           <div className="p-4 rounded-lg border bg-slate-700/30 border-border/30 opacity-50 cursor-not-allowed relative">
                              <div className="flex items-center gap-3">
-                               <EyeSlashIcon className="w-5 h-5 text-gray-500" />
+                               <EyeSlashIcon className="w-5 h-5 text-muted-foreground" />
                                <div className="text-left">
-                                 <div className="font-medium text-gray-500">
+                                 <div className="font-medium text-muted-foreground">
                                    Private
                                  </div>
-                                 <div className="text-xs text-gray-500">
+                                 <div className="text-xs text-muted-foreground">
                                    Coming in next version
                                  </div>
                                </div>
                              </div>
                           
-                             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                             <div className="absolute -top-2 -right-2 bg-muted-foreground text-white text-xs px-2 py-1 rounded-full font-medium">
                                Soon
                              </div>
                            </div>
                          </div>
-                         <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-                           <p className="text-blue-400 text-sm flex items-center gap-2">
+                         <div className="bg-primary/10 border border-blue-500/30 rounded-lg p-3">
+                           <p className="text-primary text-sm flex items-center gap-2">
                              <EyeIcon className="w-4 h-4" />
                              Currently all tasks are public within the organization. Private tasks will be available in the next version.
                            </p>
@@ -798,13 +793,13 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                        </div>
             {/* Subtasks Section */}
             <div className="space-y-3">
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-300">
+              <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 <CheckCircleIcon className="w-4 h-4" />
                 Subtasks
               </label>
               <div className="space-y-3">
                 {subtasks.map((subtask, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 bg-gray-700/30 rounded-lg border border-gray-600/30">
+                  <div key={idx} className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-lg border border-border/30">
                     <input
                       type="text"
                       placeholder={`Subtask ${idx + 1}`}
@@ -815,7 +810,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                         )
                       }
                       disabled={viewOnly}
-                      className="flex-1 px-3 py-2 bg-gray-800/50 border border-gray-600/50 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 px-3 py-2 bg-muted border border-border/50 rounded-md text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     {!viewOnly && (
                       <button
@@ -823,7 +818,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                         onClick={() =>
                           setSubtasks((prev) => prev.filter((_, i) => i !== idx))
                         }
-                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-md transition-colors"
+                        className="p-2 text-red-400 hover:text-red-300 hover:bg-destructive/10 rounded-md transition-colors"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>
@@ -834,7 +829,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                   <button
                     type="button"
                     onClick={() => setSubtasks([...subtasks, { title: '', done: false }])}
-                    className="w-full p-3 border-2 border-dashed border-gray-600/50 rounded-lg text-gray-400 hover:text-gray-300 hover:border-gray-500/50 transition-colors flex items-center justify-center gap-2"
+                    className="w-full p-3 border-2 border-dashed border-border/50 rounded-lg text-muted-foreground hover:text-muted-foreground hover:border-gray-500/50 transition-colors flex items-center justify-center gap-2"
                   >
                     <PlusIcon className="w-4 h-4" />
                     Add Subtask
@@ -844,11 +839,11 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-6 border-t border-gray-700/50">
+            <div className="flex gap-3 pt-6 border-t border-slate-700/50">
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-6 py-3 bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 font-medium rounded-lg transition-all duration-200"
+                className="flex-1 px-6 py-3 bg-slate-700/50 hover:bg-slate-600/50 text-muted-foreground font-medium rounded-lg transition-all duration-200"
               >
                 {viewOnly ? 'Close' : 'Cancel'}
               </button>
@@ -856,7 +851,7 @@ const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || '{}');
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg"
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 disabled:bg-muted-foreground text-primary-foreground font-medium rounded-lg transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-sm"
                 >
                   {loading ? (
                     <>

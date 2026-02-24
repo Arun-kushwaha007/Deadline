@@ -56,7 +56,7 @@ function App() {
               <div className="flex border-l border-zinc-200 dark:border-zinc-700">
                 <button
                   onClick={() => toast.dismiss(t.id)}
-                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring dark:text-primary dark:hover:text-indigo-300"
                 >
                   Close
                 </button>

@@ -39,7 +39,7 @@ const AssignTaskModal = ({ orgId, closeModal }) => {
           ))}
         </select>
         <div className="flex justify-end gap-2">
-          <button className="px-4 py-2 bg-gray-300 rounded" onClick={closeModal}>Cancel</button>
+          <button className="px-4 py-2 bg-slate-300 rounded" onClick={closeModal}>Cancel</button>
           <button className="px-4 py-2 bg-indigo-600 text-white rounded" onClick={handleAssign}>Assign</button>
         </div>
       </div>

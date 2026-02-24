@@ -5,14 +5,14 @@ import SkipNavLink from '../common/SkipNavLink';
 
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex h-screen bg-white text-black dark:bg-zinc-950 dark:text-white transition-colors duration-300">
+    <div className="flex h-screen bg-background text-foreground transition-colors duration-300">
       <SkipNavLink />
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Topbar />
         <main
           id="main-content"
-          className="flex-1 p-6 md:overflow-auto bg-gray-50 dark:bg-zinc-900 transition-colors duration-300"
+          className="flex-1 p-1 md:overflow-auto bg-muted transition-colors duration-300"
           role="main"
         >
           {children}

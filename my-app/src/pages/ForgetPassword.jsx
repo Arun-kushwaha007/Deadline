@@ -26,10 +26,10 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white px-4">
-      <div className="w-full max-w-md bg-gray-800 text-white rounded-2xl shadow-2xl p-8 space-y-6">
-        <h2 className="text-3xl font-bold text-center text-orange-500">Forgot Your Password?</h2>
-        <p className="text-sm text-gray-400 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white px-4">
+      <div className="w-full max-w-md bg-muted text-white rounded-2xl shadow-2xl p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-center text-primary">Forgot Your Password?</h2>
+        <p className="text-sm text-muted-foreground text-center">
           Enter your registered email, and we'll send you instructions to reset your password.
         </p>
 
@@ -39,7 +39,7 @@ const ForgotPassword = () => {
               type="email"
               placeholder="Email"
               {...register('email', { required: true })}
-              className="w-full px-4 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="w-full px-4 py-2 rounded-lg bg-slate-700 text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             {errors.email && (
               <p className="text-red-400 text-sm mt-1">*Email* is mandatory</p>
@@ -54,7 +54,7 @@ const ForgotPassword = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-muted-foreground">
           Remembered your password?{' '}
           <Link
             to="/login"

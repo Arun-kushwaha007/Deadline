@@ -7,7 +7,7 @@ const ChatBubble = ({ message, sender }) => {
         className={`max-w-xs p-3 rounded-lg text-sm ${
           isUser
             ? 'bg-primary text-white rounded-br-none'
-            : 'bg-gray-700 text-white rounded-bl-none'
+            : 'bg-slate-700 text-white rounded-bl-none'
         }`}
       >
         {message}

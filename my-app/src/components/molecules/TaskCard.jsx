@@ -41,32 +41,32 @@ export default function TaskCard({
       border: 'border-green-500/30',
       text: 'text-green-400',
       icon: '🟢',
-      gradient: 'from-green-500/10 to-green-600/10'
+      gradient: 'bg-green-500/5'
     },
     medium: {
       bg: 'bg-yellow-500/20',
       border: 'border-yellow-500/30',
       text: 'text-yellow-400',
       icon: '🟡',
-      gradient: 'from-yellow-500/10 to-yellow-600/10'
+      gradient: 'bg-yellow-500/5'
     },
     high: {
-      bg: 'bg-red-500/20',
+      bg: 'bg-destructive/20',
       border: 'border-red-500/30',
       text: 'text-red-400',
       icon: '🔴',
-      gradient: 'from-red-500/10 to-red-600/10'
+      gradient: 'bg-red-500/5'
     }
   };
 
   // Visibility configuration
   const visibilityConfig = {
     public: {
-      color: 'text-blue-400',
+      color: 'text-primary',
       icon: '👁️'
     },
     private: {
-      color: 'text-purple-400',
+      color: 'text-primary',
       icon: '🔒'
     }
   };
@@ -88,10 +88,10 @@ export default function TaskCard({
 
   const ActionButton = ({ icon: Icon, label, onClick, variant = 'default' }) => {
     const variants = {
-      default: 'text-gray-400 hover:text-gray-300 hover:bg-gray-700/50',
-      primary: 'text-blue-400 hover:text-blue-300 hover:bg-blue-500/20',
+      default: 'text-muted-foreground hover:text-muted-foreground hover:bg-slate-700/50',
+      primary: 'text-primary hover:text-blue-300 hover:bg-primary/20',
       warning: 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20',
-      danger: 'text-red-400 hover:text-red-300 hover:bg-red-500/20'
+      danger: 'text-red-400 hover:text-red-300 hover:bg-destructive/20'
     };
 
     const handleButtonClick = (e) => {
@@ -193,12 +193,12 @@ export default function TaskCard({
   return (
     <div
       className={`
-        relative group bg-gradient-to-br from-gray-800/90 to-gray-900/90 
-        backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-xl 
+        relative group bg-card
+        backdrop-blur-sm border border-border rounded-2xl shadow-sm 
         transition-all duration-300 cursor-pointer overflow-hidden
         ${expanded 
-          ? 'p-6 scale-[1.02] shadow-2xl border-gray-600/60 z-20' 
-          : 'p-4 hover:scale-[1.01] hover:shadow-lg hover:border-gray-600/40'
+          ? 'p-6 scale-[1.02] shadow-2xl border-border/60 z-20' 
+          : 'p-4 hover:scale-[1.01] hover:shadow-lg hover:border-border/40'
         }
         ${isOverdue ? 'ring-2 ring-red-500/30' : ''}
         ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'}
@@ -207,7 +207,6 @@ export default function TaskCard({
         minHeight: expanded ? 'auto' : '120px', 
         minWidth: '280px', 
         maxWidth: '380px',
-        backgroundImage: expanded ? `linear-gradient(135deg, ${priorityStyle.gradient})` : ''
       }}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
@@ -218,21 +217,21 @@ export default function TaskCard({
     >
  
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
       </div>
 
   
       <div className="relative flex justify-between items-start mb-3">
         <div className="flex-1 min-w-0">
-          <h3 className={`font-bold text-white leading-tight ${
+          <h3 className={`font-bold text-foreground leading-tight ${
             expanded ? 'text-lg mb-2' : 'text-base truncate'
           }`}>
             {title}
           </h3>
           
           {!expanded && description && (
-            <p className="text-sm text-gray-400 truncate">{description}</p>
+            <p className="text-sm text-muted-foreground truncate">{description}</p>
           )}
         </div>
 
@@ -249,7 +248,7 @@ export default function TaskCard({
           )}
 
           {/* Expand/Collapse Indicator */}
-          <div className="text-gray-500">
+          <div className="text-muted-foreground">
             {expanded ? 
               <ChevronDownIcon className="w-4 h-4" /> : 
               <ChevronRightIcon className="w-4 h-4" />
@@ -259,11 +258,11 @@ export default function TaskCard({
       </div>
 
  
-      <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+      <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
         <div className="flex items-center gap-3">
           {dueDate && (
             <span className={`flex items-center gap-1 ${
-              isOverdue ? 'text-red-400' : isDueSoon ? 'text-yellow-400' : 'text-gray-400'
+              isOverdue ? 'text-red-400' : isDueSoon ? 'text-yellow-400' : 'text-muted-foreground'
             }`}>
               <CalendarIcon className="w-3 h-3" />
               {formatDate(dueDate)}
@@ -286,18 +285,18 @@ export default function TaskCard({
 
 
       {!expanded && assignedBy && (
-        <div className="flex items-center gap-2 text-xs text-gray-400 mb-2">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
           <UserCircleIcon className="w-3 h-3" />
-          <span className="text-gray-500">by</span>
+          <span className="text-muted-foreground">by</span>
           <span className="text-blue-300 font-medium">{assignedBy}</span>
         </div>
       )}
 
 
       {totalSubtasks > 0 && !expanded && (
-        <div className="w-full bg-gray-700 rounded-full h-1.5 mb-3">
+        <div className="w-full bg-slate-700 rounded-full h-1.5 mb-3">
           <div 
-            className="bg-gradient-to-r from-blue-500 to-purple-600 h-1.5 rounded-full transition-all duration-300"
+            className="bg-primary h-1.5 rounded-full transition-all duration-300"
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
@@ -308,7 +307,7 @@ export default function TaskCard({
           {/* Description */}
           {description && (
             <div className="mb-4">
-              <p className="text-sm text-gray-300 leading-relaxed">{description}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
             </div>
           )}
 
@@ -316,14 +315,14 @@ export default function TaskCard({
           {labels.length > 0 && (
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-2">
-                <TagIcon className="w-4 h-4 text-gray-400" />
-                <span className="text-xs font-medium text-gray-400">Labels</span>
+                <TagIcon className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs font-medium text-muted-foreground">Labels</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {labels.map((label, idx) => (
                   <span
                     key={idx}
-                    className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-medium text-indigo-300"
+                    className="bg-indigo-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-medium text-indigo-300"
                   >
                     #{label}
                   </span>
@@ -337,10 +336,10 @@ export default function TaskCard({
             {dueDate && (
               <div className={`flex items-center gap-2 p-2 rounded-lg ${
                 isOverdue 
-                  ? 'bg-red-500/10 border border-red-500/20 text-red-300' 
+                  ? 'bg-destructive/10 border border-red-500/20 text-red-300' 
                   : isDueSoon 
                   ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-300'
-                  : 'bg-gray-700/50 text-gray-300'
+                  : 'bg-slate-700/50 text-muted-foreground'
               }`}>
                 <CalendarIcon className="w-4 h-4" />
                 <span>Due: {formatDate(dueDate)}</span>
@@ -349,7 +348,7 @@ export default function TaskCard({
             )}
             
             {createdAt && (
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-muted-foreground">
                 <ClockIcon className="w-4 h-4" />
                 <span>Created: {formatDate(createdAt)}</span>
               </div>
@@ -358,28 +357,28 @@ export default function TaskCard({
 
  
           {(assignee?.name || assignedBy) && (
-            <div className="mb-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
+            <div className="mb-4 p-4 bg-primary/10 rounded-lg border border-border">
               <div className="flex items-center gap-2 mb-3">
-                <UserIcon className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-medium text-blue-300">Assignment Details</span>
+                <UserIcon className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Assignment Details</span>
               </div>
               <div className="space-y-2 text-sm">
                 {assignee?.name && (
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                       <UserIcon className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-400">Assigned to:</span> 
-                    <span className="text-white font-medium">{assignee.name}</span>
+                    <span className="text-muted-foreground">Assigned to:</span> 
+                    <span className="text-foreground font-medium">{assignee.name}</span>
                   </div>
                 )}
                 {assignedBy && (
                   <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                       <UserCircleIcon className="w-3 h-3 text-white" />
                     </div>
-                    <span className="text-gray-400">Assigned by:</span> 
-                    <span className="text-blue-300 font-medium">{assignedBy}</span>
+                    <span className="text-muted-foreground">Assigned by:</span> 
+                    <span className="text-primary font-medium">{assignedBy}</span>
                   </div>
                 )}
               </div>
@@ -391,17 +390,17 @@ export default function TaskCard({
             <div className="mb-4">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircleIcon className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm font-medium text-gray-300">Subtasks</span>
+                  <CheckCircleIcon className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-medium text-muted-foreground">Subtasks</span>
                 </div>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-muted-foreground">
                   {completedSubtasks}/{totalSubtasks} completed
                 </span>
               </div>
               
-              <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
+              <div className="w-full bg-slate-700 rounded-full h-2 mb-3">
                 <div 
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full transition-all duration-500"
+                  className="bg-green-500 h-2 rounded-full transition-all duration-500"
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
@@ -413,7 +412,7 @@ export default function TaskCard({
                     className={`flex items-center gap-3 p-2 rounded-lg transition-all ${
                       subtask.done 
                         ? 'bg-green-500/10 border border-green-500/20' 
-                        : 'bg-gray-700/30 border border-gray-600/30'
+                        : 'bg-slate-700/30 border border-border/30'
                     }`}
                   >
                     <input
@@ -424,8 +423,8 @@ export default function TaskCard({
                     />
                     <span className={`text-sm flex-1 ${
                       subtask.done 
-                        ? 'text-gray-400 line-through' 
-                        : 'text-gray-200'
+                        ? 'text-muted-foreground line-through' 
+                        : 'text-slate-200'
                     }`}>
                       {subtask.title}
                     </span>
@@ -438,7 +437,7 @@ export default function TaskCard({
           {/* Action Buttons */}
           <div 
             ref={actionButtonsRef}
-            className="action-buttons-container flex justify-end gap-2 pt-4 border-t border-gray-700/50 relative z-50"
+            className="action-buttons-container flex justify-end gap-2 pt-4 border-t border-slate-700/50 relative z-50"
             onPointerDown={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
@@ -470,7 +469,7 @@ export default function TaskCard({
       )}
 
 
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+      <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
     </div>
   );
 }

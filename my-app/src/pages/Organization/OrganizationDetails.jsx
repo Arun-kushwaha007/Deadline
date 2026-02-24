@@ -42,7 +42,6 @@ const OrganizationDetails = () => {
     error: orgError,
   } = useSelector((state) => state.organization);
 
-  const [darkMode, setDarkMode] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ name: '' });
   const [showAllMembers, setShowAllMembers] = useState(false);
@@ -60,9 +59,7 @@ const OrganizationDetails = () => {
   const isPrivileged = myRole === 'admin' || myRole === 'coordinator';
   const isAdmin = myRole === 'admin';
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
+
 
   useEffect(() => {
     if (orgId) {
@@ -143,15 +140,15 @@ const OrganizationDetails = () => {
   if (orgLoading || !selectedOrganization || selectedOrganization._id !== orgId) {
     return (
       <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <div className="w-16 h-16 bg-muted border border-border rounded-full flex items-center justify-center mx-auto mb-6 ">
               <BuildingOfficeIcon className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">
               {orgError ? 'Error Loading Organization' : 'Loading Organization...'}
             </h2>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               {orgError 
                 ? `${orgError.message || orgError}`
                 : 'Please wait while we fetch the details'
@@ -168,21 +165,16 @@ const OrganizationDetails = () => {
 
   const getRoleConfig = (role) => {
     const configs = {
-      admin: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30', icon: '👑' },
+      admin: { color: 'text-red-400', bg: 'bg-destructive/20', border: 'border-red-500/30', icon: '👑' },
       coordinator: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', icon: '⭐' },
-      member: { color: 'text-blue-400', bg: 'bg-blue-500/20', border: 'border-blue-500/30', icon: '👤' }
+      member: { color: 'text-primary', bg: 'bg-blue-500/20', border: 'border-blue-500/30', icon: '👤' }
     };
     return configs[role] || configs.member;
   };
 
   return (
     <DashboardLayout>
-        <div className="min-h-screen bg-gradient-to-br from-zinc-900 via-gray-800 to-zinc-900 text-white">
-          
-            <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
-              <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-              <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-orange-500/10 to-red-600/10 rounded-full blur-3xl"></div>
-            </div>
+        <div className="min-h-screen bg-background text-foreground">
 
         <div className="relative p-6">
           {/* Project Disclaimer */}
@@ -219,11 +211,11 @@ const OrganizationDetails = () => {
           </div> */}
 
           {/* Organization Header */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8 mb-8">
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-8 mb-8">
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <BuildingOfficeIcon className="w-8 h-8 text-white" />
+                <div className="w-12 h-12 bg-muted border border-border rounded-2xl flex items-center justify-center shadow-sm">
+                  <BuildingOfficeIcon className="w-6 h-6 text-foreground" />
                 </div>
                 <div>
                   {isEditing ? (
@@ -232,21 +224,21 @@ const OrganizationDetails = () => {
                       name="name"
                       value={editData.name}
                       onChange={handleChange}
-                      className="text-4xl font-bold bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="text-4xl font-bold bg-muted border border-border rounded-lg px-4 py-2 text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Organization name..."
                     />
                   ) : (
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    <h1 className="text-2xl font-bold text-foreground">
                       {selectedOrganization.name}
                     </h1>
                   )}
                   <div className="flex items-center gap-2 mt-2">
-                    <UsersIcon className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-400 text-sm">
+                    <UsersIcon className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground text-sm">
                       {selectedOrganization.members.length} members
                     </span>
-                    {/* <span className="text-gray-600">•</span>
-                    <span className="text-gray-400 text-sm">
+                    {/* <span className="text-muted-foreground">•</span>
+                    <span className="text-muted-foreground text-sm">
                       {selectedOrganization.tasks?.length || 0} tasks
                     </span> */}
                   </div>
@@ -257,7 +249,7 @@ const OrganizationDetails = () => {
                 {isPrivileged && (
                   <button
                     onClick={handleAddMember}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
                   >
                     <UserPlusIcon className="w-4 h-4" />
                     Add Member
@@ -269,14 +261,14 @@ const OrganizationDetails = () => {
                     <div className="flex gap-2">
                       {/* <button
                         onClick={handleSave}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                       >
                         <CheckIcon className="w-4 h-4" />
                         Save
                       </button> */}
                       <button
                         onClick={handleEditToggle}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
                       >
                         <XMarkIcon className="w-4 h-4" />
                         Cancel
@@ -285,7 +277,7 @@ const OrganizationDetails = () => {
                   ) : (
                     <button
                       onClick={handleEditToggle}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
                     >
                       <PencilIcon className="w-4 h-4" />
                       Edit
@@ -295,7 +287,7 @@ const OrganizationDetails = () => {
                 {isAdmin && !isEditing && (
                   <button
                     onClick={handleDeleteOrganizationClick}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
                     title="Delete Organization"
                   >
                     <TrashIcon className="w-4 h-4" />
@@ -309,10 +301,10 @@ const OrganizationDetails = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setActiveView('kanban')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-[1.01] ${
                   activeView === 'kanban'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                    ? 'bg-primary text-primary-foreground shadow-lg'
+                    : 'bg-slate-700/50 text-muted-foreground hover:bg-slate-600/50'
                 }`}
               >
                 <ViewColumnsIcon className="w-4 h-4" />
@@ -320,10 +312,10 @@ const OrganizationDetails = () => {
               </button>
               <button
                 onClick={() => setActiveView('calendar')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-[1.01] ${
                   activeView === 'calendar'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50'
+                    ? 'bg-primary text-primary-foreground shadow-lg'
+                    : 'bg-slate-700/50 text-muted-foreground hover:bg-slate-600/50'
                 }`}
               >
                 <CalendarIcon className="w-4 h-4" />
@@ -334,14 +326,14 @@ const OrganizationDetails = () => {
 
           {/* Tasks Section */}
           <div className="mb-8">
-            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+            <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
               {activeView === 'kanban' && (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <ViewColumnsIcon className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                      <ViewColumnsIcon className="w-5 h-5 text-foreground" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white">Tasks - Kanban Board</h2>
+                    <h2 className="text-xl font-bold text-foreground">Tasks - Kanban Board</h2>
                   </div>
                   <KanbanBoard
                     tasks={selectedOrganization.tasks || []}
@@ -353,10 +345,10 @@ const OrganizationDetails = () => {
               {activeView === 'calendar' && (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-600 rounded-full flex items-center justify-center">
-                      <CalendarIcon className="w-5 h-5 text-white" />
+                    <div className="w-10 h-10 bg-primary/10 border border-primary/20 rounded-full flex items-center justify-center">
+                      <CalendarIcon className="w-5 h-5 text-primary" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white">Tasks - Calendar View</h2>
+                    <h2 className="text-2xl font-bold text-foreground">Tasks - Calendar View</h2>
                   </div>
                   <OrgCalendarView />
                 </>
@@ -364,11 +356,10 @@ const OrganizationDetails = () => {
             </div>
           </div>
 
-          {/* Task Report Dashboard */}
           <div className="mb-8">
-            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+            <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
               <div className="flex items-center gap-3 mb-6">
-                {/* <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                {/* <div className="w-10 h-10 bg-gradient-to-r bg-primary rounded-full flex items-center justify-center">
                   <ChartBarIcon className="w-5 h-5 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-white">Analytics & Reports</h2> */}
@@ -380,13 +371,13 @@ const OrganizationDetails = () => {
           </div>
 
           {/* Members Section */}
-          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8">
+          <div className="bg-card border border-border rounded-2xl shadow-sm p-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
-                  <UserGroupIcon className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                  <UserGroupIcon className="w-5 h-5 text-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Team Members</h2>
+                <h2 className="text-2xl font-bold text-foreground">Team Members</h2>
               </div>
               
               {myRole && (
@@ -403,7 +394,7 @@ const OrganizationDetails = () => {
                                   <></>
                                   // <button
                                   //   onClick={handleAddMember}
-                                  //   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                  //   className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                   // >
                                   //   <UserPlusIcon className="w-4 h-4" />
                                   //   Add Member
@@ -415,14 +406,14 @@ const OrganizationDetails = () => {
                                     <div className="flex gap-2">
                                       {/* <button
                                         onClick={handleSave}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-lg"
                                       >
                                         <CheckIcon className="w-4 h-4" />
                                         Save
                                       </button> */}
                                       <button
                                         onClick={handleEditToggle}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-muted hover:bg-muted/80 text-foreground font-semibold rounded-lg transition-all duration-200 shadow-sm"
                                       >
                                         <XMarkIcon className="w-4 h-4" />
                                         Cancel
@@ -431,7 +422,7 @@ const OrganizationDetails = () => {
                                   ) : (
                                     <button
                                       onClick={handleEditToggle}
-                                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                      className="inline-flex items-center gap-2 px-4 py-2 bg-warning bg-orange-500 hover:bg-orange-600/90 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm"
                                     >
                                       <PencilIcon className="w-4 h-4" />
                                       Edit
@@ -451,15 +442,15 @@ const OrganizationDetails = () => {
                 return (
                   <div
                     key={member.userId?._id || member._id}
-                    className="bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 hover:border-gray-600/50 transition-all duration-200"
+                    className="bg-muted border border-slate-700/50 rounded-xl p-4 hover:border-border/50 transition-all duration-200"
                   >
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full flex items-center justify-center">
+                        <div className="w-10 h-10 bg-muted/50 rounded-full flex items-center justify-center border border-border text-foreground">
                           <span className="text-lg">{roleConfig.icon}</span>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white">
+                          <h3 className="font-semibold text-foreground">
                             {member.userId?.name || 'Unknown'}
                           </h3>
                           <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${roleConfig.bg} ${roleConfig.border} ${roleConfig.color}`}>
@@ -487,7 +478,7 @@ const OrganizationDetails = () => {
             {hasMoreMembers && (
               <button
                 onClick={() => setShowAllMembers(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-200 hover:scale-[1.01] shadow-sm"
               >
                 <EyeIcon className="w-4 h-4" />
                 View All Members ({selectedOrganization.members.length})
@@ -499,19 +490,19 @@ const OrganizationDetails = () => {
         {/* Members Modal */}
         {showAllMembers && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-            <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl">
+            <div className="bg-muted border border-slate-700 rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                    <UserGroupIcon className="w-5 h-5 text-white" />
+                  <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
+                    <UserGroupIcon className="w-5 h-5 text-foreground" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white">All Team Members</h2>
+                  <h2 className="text-2xl font-bold text-foreground">All Team Members</h2>
                 </div>
                 <button
                   onClick={() => setShowAllMembers(false)}
-                  className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                  className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
                 >
-                  <XMarkIcon className="w-5 h-5 text-gray-400" />
+                  <XMarkIcon className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
               
@@ -521,15 +512,15 @@ const OrganizationDetails = () => {
                   return (
                     <div
                       key={member.userId?._id || member._id}
-                      className="bg-gray-700/50 border border-gray-600/50 rounded-lg p-4 hover:border-gray-500/50 transition-all duration-200"
+                      className="bg-slate-700/50 border border-border/50 rounded-lg p-4 hover:border-gray-500/50 transition-all duration-200"
                     >
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center border border-border text-foreground">
                             <span className="text-sm">{roleConfig.icon}</span>
                           </div>
                           <div>
-                            <h3 className="font-medium text-white">
+                            <h3 className="font-medium text-foreground">
                               {member.userId?.name || 'Unknown'}
                             </h3>
                             <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium border ${roleConfig.bg} ${roleConfig.border} ${roleConfig.color}`}>
@@ -556,7 +547,7 @@ const OrganizationDetails = () => {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={() => setShowAllMembers(false)}
-                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
+                  className="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors duration-200"
                 >
                   Close
                 </button>
