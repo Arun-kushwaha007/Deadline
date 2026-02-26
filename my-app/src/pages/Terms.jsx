@@ -30,7 +30,7 @@ const Terms = () => {
         </div>
 
         {/* Content Card */}
-        <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl p-8 space-y-8">
+        <div className="bg-card border border-border rounded-2xl shadow-sm p-8 space-y-8">
           
           {/* Introduction */}
           <section>
@@ -49,19 +49,19 @@ const Terms = () => {
 
 {/* Disclaimer Section */}
 <div className="mb-8">
-  <div className="bg-amber-900/20 border border-amber-500/30 rounded-xl p-6 backdrop-blur-sm">
+  <div className="bg-amber-900/10 dark:bg-amber-900/20 border border-amber-500/20 dark:border-amber-500/30 rounded-xl p-6">
     <div className="flex items-start gap-3">
       <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
         <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">⚠️</span>
       </div>
       <div className="space-y-2">
-        <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
-        <p className="text-amber-200 text-sm leading-relaxed">
+        <h3 className="text-amber-800 dark:text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
+        <p className="text-amber-700 dark:text-amber-200 text-sm leading-relaxed">
           <strong>Note:</strong> This is a project by  <a 
               href="https://github.com/Arun-kushwaha007" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-amber-100 font-medium hover:text-amber-50 underline decoration-amber-300 hover:decoration-amber-200 transition-all duration-200"
+              className="text-amber-900 dark:text-amber-100 font-medium hover:text-amber-800 dark:hover:text-amber-50 underline decoration-amber-500 dark:decoration-amber-300 hover:decoration-amber-400 dark:hover:decoration-amber-200 transition-all duration-200"
             >
               Arun Kushwaha
             </a>
@@ -69,11 +69,11 @@ const Terms = () => {
           for user acknowledgment and educational purposes as part of a development project demonstration.
         </p>
         <div className="flex items-center gap-2 mt-3">
-          <span className="text-amber-400 text-xs">📚 Educational Project</span>
-          <span className="text-amber-500">•</span>
-          <span className="text-amber-400 text-xs">🚧 Demo Purposes</span>
-          <span className="text-amber-500">•</span>
-          <span className="text-amber-400 text-xs">👨‍💻 Portfolio Work</span>
+          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">📚 Educational Project</span>
+          <span className="text-amber-400 dark:text-amber-500">•</span>
+          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">🚧 Demo Purposes</span>
+          <span className="text-amber-400 dark:text-amber-500">•</span>
+          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">👨💻 Portfolio Work</span>
         </div>
       </div>
     </div>
@@ -90,8 +90,8 @@ const Terms = () => {
             <p className="text-muted-foreground leading-relaxed mb-4">
               By creating an account or using our services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.
             </p>
-            <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-              <p className="text-blue-200 text-sm">
+            <div className="bg-blue-500/10 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-lg p-4">
+              <p className="text-blue-800 dark:text-blue-200 text-sm">
                 <strong>Important:</strong> These terms constitute a legally binding agreement between you and CollabNest.
               </p>
             </div>
@@ -128,9 +128,9 @@ const Terms = () => {
               <p>You agree not to use CollabNest for any unlawful purpose or in any way that could damage, disable, or impair the service.</p>
               
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
-                  <h4 className="text-red-300 font-semibold mb-2">Prohibited Activities:</h4>
-                  <ul className="text-red-200 text-sm space-y-1">
+                <div className="bg-red-500/10 dark:bg-red-900/20 border border-red-200 dark:border-red-500/30 rounded-lg p-4">
+                  <h4 className="text-red-800 dark:text-red-300 font-semibold mb-2">Prohibited Activities:</h4>
+                  <ul className="text-red-700 dark:text-red-200 text-sm space-y-1">
                     <li>• Harassment or abuse of other users</li>
                     <li>• Sharing malicious content or malware</li>
                     <li>• Violating intellectual property rights</li>
@@ -138,9 +138,9 @@ const Terms = () => {
                   </ul>
                 </div>
                 
-                <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-4">
-                  <h4 className="text-green-300 font-semibold mb-2">Encouraged Uses:</h4>
-                  <ul className="text-green-200 text-sm space-y-1">
+                <div className="bg-green-500/10 dark:bg-green-900/20 border border-green-200 dark:border-green-500/30 rounded-lg p-4">
+                  <h4 className="text-green-800 dark:text-green-300 font-semibold mb-2">Encouraged Uses:</h4>
+                  <ul className="text-green-700 dark:text-green-200 text-sm space-y-1">
                     <li>• Collaborative team projects</li>
                     <li>• Professional communication</li>
                     <li>• Educational activities</li>
@@ -199,8 +199,8 @@ const Terms = () => {
               </div>
               <h2 className="text-2xl font-bold text-foreground">Limitation of Liability</h2>
             </div>
-            <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
-              <p className="text-yellow-200 text-sm leading-relaxed">
+            <div className="bg-amber-500/10 dark:bg-yellow-900/20 border border-amber-200 dark:border-yellow-500/30 rounded-lg p-4">
+              <p className="text-amber-800 dark:text-yellow-200 text-sm leading-relaxed">
                 CollabNest is provided "as is" without warranties of any kind. We shall not be liable for any indirect, 
                 incidental, special, consequential, or punitive damages resulting from your use of the service.
               </p>

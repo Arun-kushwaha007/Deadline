@@ -120,7 +120,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-white px-4 relative overflow-hidden">
+    <div className="min-h-screen py-6 flex items-center justify-center bg-background text-white px-4 relative overflow-hidden">
 
       <div className="relative w-full max-w-md">
         {/* Welcome Header - Orange/Red Theme */}
@@ -295,7 +295,7 @@ const Register = () => {
 
           {/* Google Login */}
           <div className="flex justify-center">
-            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all hover:scale-[1.01]">
+            <div className="bg-white rounded-lg p-1 shadow-lg hover:shadow-xl transition-all ">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => alert('Google registration failed')}
