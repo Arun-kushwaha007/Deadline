@@ -111,14 +111,14 @@ const Setting = () => {
                   <span className="text-amber-600 dark:text-amber-400 text-sm font-bold">⚠️</span>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-amber-300 font-semibold text-lg">Project Disclaimer</h3>
-                  <p className="text-amber-200 text-sm leading-relaxed">
+                  <h3 className="text-amber-300 dark:text-amber-400 font-semibold text-lg">Project Disclaimer</h3>
+                  <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                     <strong>Note:</strong> This is a project by{' '}
                     <a 
                       href="https://github.com/Arun-kushwaha007" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-amber-100 font-medium hover:text-amber-50 underline decoration-amber-300 hover:decoration-amber-200 transition-all duration-200"
+                      className="text-amber-700 dark:text-amber-100 font-medium hover:text-amber-600 dark:hover:text-amber-50 underline decoration-amber-500 hover:decoration-amber-400 transition-all duration-200"
                     >
                       Arun Kushwaha
                     </a>
@@ -145,7 +145,7 @@ const Setting = () => {
                 <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
                   <UserIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
+                <h2 className="text-2xl font-bold text-foreground">Profile Settings</h2>
               </div>
 
               {user && (
@@ -157,7 +157,7 @@ const Setting = () => {
                         type="text"
                         value={user.name}
                         readOnly
-                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -166,13 +166,13 @@ const Setting = () => {
                         type="email"
                         value={user.email}
                         readOnly
-                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                        className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                       />
                     </div>
                   </div>
                   
                   <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-                    <p className="text-blue-200 text-sm">
+                    <p className="text-amber-800 text-sm">
                       <strong>Note:</strong> Profile editing is currently disabled in this demo version. 
                       In a full implementation, you would be able to update your profile information here.
                     </p>
@@ -187,14 +187,14 @@ const Setting = () => {
                 <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
                   <BellIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Notification Preferences (Under Development)</h2>
+                <h2 className="text-2xl font-bold text-foreground">Notification Preferences (Under Development)</h2>
               </div>
 
               <div className="space-y-4">
                 {Object.entries(notifications).map(([key, value]) => (
                   <div key={key} className="flex items-center justify-between py-3 border-b border-slate-700 last:border-b-0">
                     <div>
-                      <h4 className="text-white font-medium capitalize">
+                      <h4 className="text-foreground font-medium capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </h4>
                       <p className="text-muted-foreground text-sm">
@@ -227,7 +227,7 @@ const Setting = () => {
                 <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
                   <ShieldCheckIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Privacy & Security</h2>
+                <h2 className="text-2xl font-bold text-foreground">Privacy & Security</h2>
               </div>
 
               <div className="space-y-6">
@@ -252,7 +252,7 @@ const Setting = () => {
 
                 <div className="flex items-center justify-between py-3 border-b border-slate-700">
                   <div>
-                    <h4 className="text-white font-medium">Show Activity Status</h4>
+                    <h4 className="text-foreground font-medium">Show Activity Status</h4>
                     <p className="text-muted-foreground text-sm">Let others see when you're online</p>
                   </div>
                   <button
@@ -262,7 +262,7 @@ const Setting = () => {
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      className={`inline-block h-4 w-4 transform rounded-full bg-foreground transition-transform ${
                         privacy.activityStatus ? 'translate-x-6' : 'translate-x-1'
                       }`}
                     />
@@ -271,7 +271,7 @@ const Setting = () => {
 
                 <div className="flex items-center justify-between py-3">
                   <div>
-                    <h4 className="text-white font-medium">Data Sharing</h4>
+                    <h4 className="text-foreground font-medium">Data Sharing</h4>
                     <p className="text-muted-foreground text-sm">Share usage data to improve the service</p>
                   </div>
                   <button
@@ -296,7 +296,7 @@ const Setting = () => {
                 <div className="w-10 h-10 bg-muted border border-border rounded-full flex items-center justify-center">
                   <PaintBrushIcon className="w-5 h-5 text-muted-foreground" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Appearance & Display</h2>
+                <h2 className="text-2xl font-bold text-foreground">Appearance & Display</h2>
               </div>
 
               <div className="space-y-6">
@@ -334,7 +334,7 @@ const Setting = () => {
                     <select
                       value={appearance.language}
                       onChange={(e) => handleAppearanceChange('language', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     >
                       <option value="en">English</option>
                       <option value="es">Spanish</option>
@@ -347,7 +347,7 @@ const Setting = () => {
                     <select
                       value={appearance.timezone}
                       onChange={(e) => handleAppearanceChange('timezone', e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-white focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                      className="w-full px-4 py-3 rounded-lg bg-muted border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                     >
                       <option value="UTC">UTC</option>
                       <option value="EST">Eastern Time</option>
@@ -365,13 +365,13 @@ const Setting = () => {
                 <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
                   <TrashIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Danger Zone</h2>
+                <h2 className="text-2xl font-bold text-foreground">Danger Zone</h2>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-red-900/30 border border-red-500/40 rounded-lg p-4">
-                  <h4 className="text-red-300 font-semibold mb-2">Delete Account</h4>
-                  <p className="text-red-200 text-sm mb-4">
+                  <h4 className="text-red-600 dark:text-red-300 font-semibold mb-2">Delete Account</h4>
+                  <p className="text-red-700 dark:text-red-200 text-sm mb-4">
                     Once you delete your account, there is no going back. Please be certain.
                   </p>
                   <button
@@ -397,7 +397,7 @@ const Setting = () => {
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-muted rounded-lg p-6 max-w-md mx-4">
-              <h3 className="text-xl font-bold text-white mb-4">Confirm Account Deletion</h3>
+              <h3 className="text-xl font-bold text-foreground mb-4">Confirm Account Deletion</h3>
               <p className="text-muted-foreground mb-6">
                 Are you absolutely sure you want to delete your account? This action cannot be undone.
               </p>

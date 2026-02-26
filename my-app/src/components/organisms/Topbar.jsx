@@ -302,7 +302,7 @@ const Topbar = () => {
             className="transition-transform duration-200 hover:scale-105"
           >
             <img
-              src={ logoDark}
+              src={theme === 'dark' ? logoDark : logoLight}
               alt="CollabNest"
               className="h-10 object-contain cursor-pointer"
             />
@@ -535,9 +535,9 @@ const Topbar = () => {
           {/* Header with close button */}
           <div className="flex items-center justify-between p-4 border-b border-border">
             <img
-              src={logoDark}
+              src={theme === 'dark' ? logoDark : logoLight}
               alt="CollabNest"
-              className="h-8 object-contain"
+              className="h-10 object-contain cursor-pointer"
             />
             <button
               onClick={() => setShowMobileMenu(false)}
