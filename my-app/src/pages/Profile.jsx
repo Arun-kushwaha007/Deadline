@@ -561,7 +561,7 @@ useEffect(() => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
+                      className={` items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-medium ${
                         activeTab === tab.id
                           ? 'bg-primary text-primary-foreground shadow-sm transform scale-105'
                           : 'text-muted-foreground hover:text-foreground dark:hover:text-slate-200 hover:bg-accent'
@@ -739,7 +739,7 @@ useEffect(() => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => setShowEditModal(false)}
-                    className="flex-1 px-6 py-4 bg-muted0 hover:bg-slate-600 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
+                    className="flex-1 px-6 py-4 bg-muted hover:bg-muted/80 text-foreground rounded-2xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-[1.01]"
                   >
                     Cancel
                   </button>
