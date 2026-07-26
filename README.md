@@ -26,6 +26,7 @@
 
 <p align="center">
   <a href="https://collab-nest-home.vercel.app/" target="_blank">Live Site</a> •
+ <a href="https://github.com/Arun-kushwaha007/CollabNest-Home.git" target="_blank">Home page Repo</a> •
   <a href="#features">Features</a> •
   <a href="#architecture">Architecture</a> •
   <a href="CONTRIBUTING.md">Contributing</a>
