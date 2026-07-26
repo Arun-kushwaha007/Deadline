@@ -1,5 +1,19 @@
 {
-  "dependencies": {
-    "crypto": "^1.0.1"
+  "name": "collabnest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CollabNest - Next-Generation Real-Time Collaborative Workspace Platform",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix my-app run dev\"",
+    "dev:frontend": "npm --prefix my-app run dev",
+    "dev:backend": "npm --prefix server run dev",
+    "build": "npm --prefix my-app run build && npm --prefix server run build",
+    "build:frontend": "npm --prefix my-app run build",
+    "build:backend": "npm --prefix server run build",
+    "lint": "npm --prefix my-app run lint",
+    "install:all": "npm install && npm --prefix my-app install && npm --prefix server install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
