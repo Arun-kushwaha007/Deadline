@@ -1,6 +1,3 @@
-
-
-
 /my-app/node_modules
 /server/node_modules
 /server/benchmarks/node_modules
@@ -11,6 +8,7 @@
 /server/.env.local
 /my-app/.env 
 /my-app/.env.production
+firebase-config.json
 
 /server/benchmarks/artillery/users.csv
 /server/benchmarks/artillery/reports/venv
