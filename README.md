@@ -29,7 +29,7 @@
  <a href="https://github.com/Arun-kushwaha007/CollabNest-Home.git" target="_blank">Home page Repo</a> •
   <a href="#features">Features</a> •
   <a href="#architecture">Architecture</a> •
-  <a href="CONTRIBUTING.md">Contributing</a>
+  <a href="CONTRIBUTING.md">Contributing</a> •
   <a href="#documentation">Documentation</a> •
   
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-F7DF1E?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://coff.ee/arunkushwaha)
