@@ -1,12 +1,13 @@
 {
-  "name": "my-app",
+  "name": "collabnest-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "bench:lighthouse": "bash benchmarks/lighthouse/run-lighthouse.sh"
   },
@@ -37,8 +38,6 @@
     "react-router": "^7.5.0",
     "react-router-dom": "^7.5.0",
     "recharts": "^3.0.2",
-    "redis": "^4.7.0",
-    "resend": "^4.5.1",
     "socket.io-client": "^4.8.1",
     "uuid": "^11.1.0"
   },

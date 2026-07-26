@@ -26,8 +26,11 @@ const app = express();
 const server = http.createServer(app);
 
 // Redis Setup
+const redisUrl = process.env.REDIS_URL || 
+  (process.env.REDIS_HOST ? `redis://default:${process.env.REDIS_PASSWORD || ''}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT || 6379}` : 'redis://localhost:6379');
+
 const redisClient = createClient({
-  url: `redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  url: redisUrl.startsWith('redis://') || redisUrl.startsWith('rediss://') ? redisUrl : `redis://${redisUrl}`,
 });
 redisClient.connect().catch(err => console.error('❌ Redis connection error:', err));
 
@@ -40,16 +43,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Socket.IO Setup
 const allowedOrigins = [
   'http://localhost:5173', // Local development frontend
+  'http://localhost:3000',
   'https://deadline-pobb.onrender.com',
   'https://collabnest-iota.vercel.app',
-  'http://localhost:3000'
+  'https://collab-nest-home.vercel.app'
 ];
 
-
 if (process.env.CLIENT_ORIGIN) {
-  if (!allowedOrigins.includes(process.env.CLIENT_ORIGIN)) {
-    allowedOrigins.push(process.env.CLIENT_ORIGIN);
-  }
+  const origins = process.env.CLIENT_ORIGIN.split(',').map(o => o.trim());
+  origins.forEach(origin => {
+    if (origin && !allowedOrigins.includes(origin)) {
+      allowedOrigins.push(origin);
+    }
+  });
 }
 
 const corsOptions = {

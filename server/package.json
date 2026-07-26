@@ -6,20 +6,26 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "echo \"No build step required\"",
+    "build": "echo \"No build step required for Express server\"",
+    "lint": "node --check index.js",
     "bench:artillery": "artillery run benchmarks/artillery/baseline.yml --output benchmarks/reports/artillery-baseline.json && artillery run benchmarks/artillery/ws.yml --output benchmarks/reports/artillery-ws.json",
     "bench:autocannon": "node benchmarks/autocannon/spike.js && node benchmarks/autocannon/sustained.js",
     "bench:db": "node benchmarks/db-bench.js",
     "bench:ci": "npm run bench:artillery && npm run bench:autocannon && npm run bench:db"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "express",
+    "socket.io",
+    "redis",
+    "mongodb",
+    "collabnest"
+  ],
+  "author": "Arun Kushwaha",
+  "license": "MIT",
+  "description": "CollabNest backend API & WebSocket server",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
     "firebase-admin": "^13.4.0",
@@ -37,6 +43,7 @@
     "node": ">=18.x"
   },
   "devDependencies": {
-    "artillery": "^2.0.26"
+    "artillery": "^2.0.26",
+    "nodemon": "^3.1.9"
   }
 }

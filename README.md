@@ -1,49 +1,43 @@
 <div align="center">
 
 # CollabNest
-### Next-Generation Collaborative Workspace Platform
+### Next-Generation Collaborative Workspace & Team Productivity Platform
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.3+-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
-  <img src="https://img.shields.io/badge/Vite-5.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/Firebase-FF6B35?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase">
-  <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.io">
-  <img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="Redux">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/React-19.0+-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
+  <img src="https://img.shields.io/badge/Vite-6.2+-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Firebase-11.9+-FF6B35?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase">
+  <img src="https://img.shields.io/badge/Socket.io-4.8+-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.io">
+  <img src="https://img.shields.io/badge/Redux_Toolkit-2.6+-764ABC?style=for-the-badge&logo=redux&logoColor=white" alt="Redux">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4.0+-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
-  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express">
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js">
-  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis">
-  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT">
+  <img src="https://img.shields.io/badge/MongoDB-8.0+-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB">
+  <img src="https://img.shields.io/badge/Express.js-4.18+-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express">
+  <img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Redis-4.7+-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/license/Arun-kushwaha007/Deadline?style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/github/stars/Arun-kushwaha007/Deadline?style=for-the-badge" alt="Stars">
-  <img src="https://img.shields.io/github/forks/Arun-kushwaha007/Deadline?style=for-the-badge" alt="Forks">
-  <img src="https://img.shields.io/github/issues/Arun-kushwaha007/Deadline?style=for-the-badge" alt="Issues">
+  A comprehensive full-stack collaboration platform designed for modern engineering teams, organizations, and projects with real-time updates, intelligent push notifications, Kanban workflows, and granular access control.
 </p>
 
 <p align="center">
-  A comprehensive MERN-Stack collaboration platform designed for modern teams with advanced real-time features, intelligent notifications, and seamless user experience.
-</p>
-
-<p align="center">
-  Built with cutting-edge technologies including React 18+, Vite 5, Firebase Cloud Messaging, Socket.io, Redux Toolkit, Tailwind CSS, Google OAuth 2.0, MongoDB, Express.js, Node.js, and Redis caching for lightning-fast performance.
-</p>
-
-<p align="center">
-  <a href="#demo">Demo</a> •
-  <a href="#quick-start">Quick Start</a> •
+  <a href="https://collab-nest-home.vercel.app/" target="_blank">Live Site</a> •
+ <a href="https://github.com/Arun-kushwaha007/CollabNest-Home.git" target="_blank">Home page Repo</a> •
   <a href="#features">Features</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="CONTRIBUTING.md">Contributing</a> •
   <a href="#documentation">Documentation</a> •
-  <a href="#contributing">Contributing</a>
+  
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-F7DF1E?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://coff.ee/arunkushwaha)
+
 </p>
 
 </div>
+
 
 ---
 # System Architecture Diagram  
