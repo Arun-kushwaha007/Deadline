@@ -4,6 +4,7 @@
 /my-app/node_modules
 /server/node_modules
 /server/benchmarks/node_modules
+/node_modules
 
 /my-app/.env
 /server/.env
